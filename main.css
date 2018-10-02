@@ -1,0 +1,28 @@
+.CodeMirror {
+    font-size: 18px;
+    border: 2px solid #aaaaaa;
+    height: auto;
+}
+
+body {
+    background-color: #eeeeee;
+}
+
+h3 {
+    color: #455565;
+    font-family: sohneweb,-apple-system,BlinkMacSystemFont,Söhne,helvetica neue,Helvetica,Arial,sans-serif;
+    font-size: 1.5em;
+    padding-top: 8px;
+}
+
+.main {
+    padding-top: 8px;
+    padding-bottom: 24px;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+a, a:visited {
+    color: #222222;
+    font-family: sohneweb,-apple-system,BlinkMacSystemFont,Söhne,helvetica neue,Helvetica,Arial,sans-serif;
+}

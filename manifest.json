@@ -1,0 +1,26 @@
+{
+  "name": "AWS Console Recorder",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "description": "Record AWS console actions.",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background":  {
+    "scripts": ["bg.js"]
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "browser_action": {
+    "browser_style": false,
+    "default_icon": {
+      "128": "icon-128.png"
+    }
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "debugger",
+    "*://*.console.aws.amazon.com/*"
+  ]
+}
