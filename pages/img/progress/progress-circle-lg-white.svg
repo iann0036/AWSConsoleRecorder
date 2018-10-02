@@ -1,0 +1,13 @@
+<!-- Pages Progressbar -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 50 50" >
+	
+<g transform="translate(25,25) rotate(-90)">  
+     <circle  style="stroke: #ffffff; fill:none; stroke-width: 6px; stroke-linecap: round" stroke-dasharray="110" stroke-dashoffset="0" cx="0" cy="0" r="20">
+         <animate attributeName="stroke-dashoffset" values="360;140" dur="2.2s" keyTimes="0;1" calcMode="spline" fill="freeze" keySplines="0.41,0.314,0.8,0.54" repeatCount="indefinite" begin="0"/>
+         <animateTransform attributeName="transform" type="rotate" values="0;274;360" keyTimes="0;0.74;1" calcMode="linear" dur="2.2s" repeatCount="indefinite" begin="0"/>
+     </circle>
+</g>
+
+</svg>
+

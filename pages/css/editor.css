@@ -1,0 +1,14 @@
+/*------------------------------------------------------------------
+Pages Editor
+Optional File
+------------------------------------------------------------------ */
+body::selection {
+	background: #fef8ae; /* Safari */
+	}
+body::-moz-selection {
+	background: #fef8ae; /* Firefox */
+}
+body{
+	color:#62605a;
+	font-size: 13.5px;
+}

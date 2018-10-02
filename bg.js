@@ -4,12 +4,24 @@ var outputs = [];
 var blocking = false;
 var declared_services;
 var compiled;
+var go_first_output;
 
 function ensureInitDeclaredBoto3(service, region) {
     if (!declared_services['boto3'].includes(service)) {
         declared_services['boto3'].push(service);
         return `
 ${service}_client = boto3.client('${service}', region_name='${region}')
+
+`;
+    }
+    return '';
+}
+
+function ensureInitDeclaredGo(service, region) {
+    if (!declared_services['go'].includes(service)) {
+        declared_services['go'].push(service);
+        return `
+${service}svc := ${service}.New(session.New(&aws.Config{Region: aws.String("${region}")}))
 
 `;
     }
@@ -29,9 +41,14 @@ function processBoto3Parameter(param, spacing) {
     if (typeof param == "string")
         return `'${param}'`;
     if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
         param.forEach(paramitem => {
             paramitems.push(processBoto3Parameter(paramitem, spacing + 4));
         });
+
         return `[
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
 ` + ' '.repeat(spacing + 4)) + `
@@ -41,6 +58,7 @@ function processBoto3Parameter(param, spacing) {
         Object.keys(param).forEach(function (key) {
             paramitems.push(key + "=" + processBoto3Parameter(param[key], spacing + 4));
         });
+
         return `{
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
 ` + ' '.repeat(spacing + 4)) + `
@@ -48,6 +66,28 @@ function processBoto3Parameter(param, spacing) {
     }
     
     return `'${param}' # unprocessable parameter type ` + (typeof param);
+}
+
+function processGoParameter(paramkey, param, spacing) {
+    var paramitems = [];
+
+    if (typeof param == "boolean") {
+        if (param)
+            return "aws.Bool(true)";
+        return "aws.Bool(false)";
+    }
+    if (typeof param == "number")
+        return `aws.Int64(${param})`;
+    if (typeof param == "string")
+        return `aws.String('${param}')`;
+    if (Array.isArray(param)) {
+        return "";
+    }
+    if (typeof param == "object") {
+        return "";
+    }
+    
+    return `aws.String('${param}') // unprocessable parameter type ` + (typeof param);
 }
 
 function outputMapBoto3(service, method, options, region, was_blocked) {
@@ -66,6 +106,28 @@ function outputMapBoto3(service, method, options, region, was_blocked) {
 
     output += `response = ${service}_client.${method}(${params})${was_blocked ? ' # blocked' : ''}
 `
+
+    return output;
+}
+
+function outputMapGo(service, method, options, region, was_blocked) {
+    var output = ensureInitDeclaredGo(service, region);
+    var params = '';
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            var optionvalue = processGoParameter(option, options[option], 4);
+            params += `
+    ${option}:  ${optionvalue},`;
+        }
+        params += `
+`;
+    }
+
+    output += `_, err ${go_first_output ? ':' : ''}= ${service}svc.${method}(&${service}.${method}Input{${params}})${was_blocked ? ' // blocked' : ''}
+`
+
+    go_first_output = false;
 
     return output;
 }
@@ -116,7 +178,7 @@ chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         if (message.action == "getCompiledOutputs") {
             sendResponse(compileOutputs());
-            outputs = []; // TODO: Remove this possibly
+            //outputs = []; // TODO: Remove this possibly
         }
         if (message.action == "setBlockingOn") {
             blocking = true;
@@ -138,8 +200,18 @@ function compileOutputs() {
     if (!outputs.length) {
         return {
             'boto3': '# No recorded actions yet',
+            'go': '// No recorded actions yet',
             'cli': '# No recorded actions yet'
         };
+    }
+
+    var services = {
+        'go': []
+    }
+    for (var i=0; i<outputs.length; i++) {
+        if (!services['go'].includes(outputs[i].service)) {
+            services['go'].push(outputs[i].service);
+        }
     }
 
     var region = outputs[0].region;
@@ -148,18 +220,30 @@ function compileOutputs() {
 
 import boto3
 `,
+        'go': `// go get -u github.com/aws/aws-sdk-go/...
+
+package main
+
+import (
+${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${service}"`).join(`
+`)}
+)
+`,
         'cli': `# pip install awscli --upgrade --user
 
 `
     }
     declared_services = {
-        'boto3': []
+        'boto3': [],
+        'go': []
     }
+    go_first_output = true;
 
     compiled['raw'] = JSON.stringify(outputs);
 
     for (var i=0; i<outputs.length; i++) {
         compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
+        compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.go, outputs[i].region, outputs[i].was_blocked);
         compiled['cli'] += outputMapCli(outputs[i].service, outputs[i].method.cli, outputs[i].options.cli, outputs[i].region, outputs[i].was_blocked);
     }
 
@@ -169,6 +253,7 @@ import boto3
 function analyseRequest(details) {
     var reqParams = {
         'boto3': {},
+        'go': {},
         'cli': {}
     };
     var requestBody = null;

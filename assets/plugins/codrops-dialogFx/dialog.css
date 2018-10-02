@@ -1,0 +1,49 @@
+.dialog,
+.dialog__overlay {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.dialog {
+	position: fixed;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.dialog__overlay {
+	position: absolute;
+	z-index: 1;
+	background: rgba(55, 58, 71, 0.9);
+	opacity: 0;
+	-webkit-transition: opacity 0.3s;
+	transition: opacity 0.3s;
+	-webkit-backface-visibility: hidden;
+}
+
+.dialog--open .dialog__overlay {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.dialog__content {
+	width: 50%;
+	max-width: 560px;
+	min-width: 290px;
+	background: #fff;
+	padding: 4em;
+	text-align: center;
+	position: relative;
+	z-index: 5;
+	opacity: 0;
+}
+
+.dialog--open .dialog__content {
+	pointer-events: auto;
+}

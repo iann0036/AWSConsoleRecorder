@@ -1,0 +1,334 @@
+/* Horizontal Menu
+------------------------------------
+*/
+.horizontal-app-menu {
+    @include flexbox();
+    @include flex-column();
+    &.fixed-header{
+        overflow: hidden;
+        .header {
+            position: relative;
+        }
+        .page-container{
+        overflow: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        }
+    }
+    //Header
+    .header {
+        display: block;
+        height: auto;
+        border-bottom: none;
+        background-color:$color-menu;
+        color: $color-menu-light;
+        -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        .header-inner{
+            height: 60px;
+            background-color:transparent;
+            position: relative;
+            color: $color-menu-light;
+        }
+        .header-lg-height{
+            height: $header-lg-height;
+        }
+        .header-md-height{
+            height: $header-md-height;
+        }
+        .header-sm-height{
+            height: $header-sm-height;
+        }
+        .search-link {
+            color: $color-menu-light;
+        }
+        .header-inner {
+            .brand.inline {
+                position: relative;
+                border-right:1px solid #40444d;
+                padding-right:15px;
+                margin-right:0px;
+                width: auto;
+                & > img {
+                    width: auto;
+                }
+            }
+        }
+        .notification-list {
+            border: none;
+        }
+        .title-bar{
+            padding-bottom: 18px;
+        }
+        .page-title{
+            color: $color-menu-light;
+            font-size: 21px;
+            line-height: 21px;
+            font-weight: normal;
+            margin-bottom: 0;
+            margin-left:15px;
+        }
+        .pg{
+            color: $color-menu-light;
+            display: block;
+        }
+    }
+    //Main Menu Bar
+    .menu-bar{
+        @include flexbox();
+        @include flex-row();
+        position: relative;
+        color: $color-menu-light;
+        //Globals Nav Items
+        ul{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            border-radius:3px;
+            li  a {
+                .arrow{
+                    position: relative;
+                    @include flex-inline();
+                    align-items:center;
+                    padding-left:15px;
+                    width: 23px;
+                    &:before{
+                        font-size: 16px;
+                        font-family: FontAwesome;
+                        height: auto;
+                        content: "\f104";
+                        font-weight: 300;
+                        text-shadow: none;
+                        position: relative;
+                        top: 2px;
+                        @include rotate(-90deg);
+                        @include transition(all 0.12s ease);
+                    }
+                }
+            }
+            li{
+                line-height: 24px;
+                .sub-menu{
+                    padding: 0;
+                    left:50%;
+                    top: 0;
+                    position: absolute;
+                    visibility: hidden;
+                    opacity: 0;
+                    min-width: calc(100% + 4px);
+                    padding: 18px $menu-padding;
+                    background: #fff;
+                    z-index: 1;
+                    position: absolute;
+                    @include box-shadow(0px 0px 16px 0px rgba(0, 0, 0, 0.08));
+                    @include translate3d(15px, 0, 0);
+                    @include transition(all 0.15s ease-in);
+                    li a{
+                        min-width: 50px;
+                        width: 100%;
+                        padding: 4px 0;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: block;
+                     }
+                }
+                &:hover{
+                    & > .sub-menu{
+                        visibility: visible;
+                        opacity: 1;
+                        @include translate3d(34%, 0, 0);
+                    }
+                }
+            }
+        }
+        //Level One
+        & > ul {
+            @include flexbox();
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+            & > li {
+        -webkit-box-flex: 1;
+            -ms-flex: 1 0 auto;
+                flex: 1 0 auto;
+                @include flex-inline();
+                align-items:center;
+                padding: 0;
+                position: relative;
+                &:hover:not(.open){
+                    & > a{
+                        color: $color-menu-link-hover;
+                    }
+                }
+                &:first-child{
+                    & > a{
+                        padding-left:0;
+                    }
+                }
+                &:last-child{
+                    & > a {
+                        padding-right:0;
+                    }
+                }
+                & > a{
+                    padding: 0 20px;
+                }
+                & > ul{
+                    display: none;
+                    opacity: 0;
+                    list-style: none;
+                    border: 0;
+                    top: -7px;
+                    left:-4px;
+                    min-width: calc(100% + 4px);
+                    padding: 0 $menu-padding;
+                    padding-top: 60px;
+                    padding-bottom: 18px;
+                    background: #fff;
+                    z-index: 1;
+                    position: absolute;
+                    @include box-shadow(0px 0px 16px 0px rgba(0, 0, 0, 0.08));
+                }
+                &.open{
+                    //Level two and below
+                    & > ul{
+                        display: block;
+                        &:before{
+                            content: '';
+                            position: absolute;
+                            height: 1px;
+                            top: $navbar-width + 7px;
+                            width: calc(100% - #{$menu-padding} * 2);
+                            background-color: $form-control-border-color;
+                        }
+                        & > li{
+                            padding-left: 0;
+                            @include translate3d(0, -10px, 0);
+                            opacity: 0;
+                            transition: all 0.18s ease;
+                            border-bottom: none;
+                            &  > a{
+                                min-width: 50px;
+                                width: 100%;
+                                padding: 4px 0;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                @include flexbox();
+                                -webkit-box-pack: justify;
+                                -webkit-justify-content: space-between;
+                                -ms-flex-pack: justify;
+                                justify-content: space-between;
+                                & > .arrow:before{
+                                    @include rotate(180deg);
+                                }
+                            }
+                            &:last-child{
+                                &  > a{
+                                padding-bottom: 0;
+                                }
+                            }
+                        }
+
+                    }
+                    & > a{
+                        @include translate3d(0, -10px, 0);
+                        opacity: 0;
+                        transition: all 0.18s ease !important;
+                    }
+                }
+                &.opening{
+                    & > ul{
+                        opacity: 1;
+                        &  > li {
+                             @include translate3d(0, 0, 0);
+                             opacity: 1;
+                        }
+                    }
+                    & > a{
+                        position: relative;
+                        z-index: 10;
+                        @include translate3d(0, 0, 0);
+                        opacity: 1;
+                    }
+                }
+                &.closing{
+                    & > ul{
+                        opacity: 0;
+                        &  > li {
+                            @include translate3d(0, -10px, 0);
+                            opacity: 0;
+                        }
+                    }
+                    & > a{
+                        @include translate3d(0, -10px, 0);
+                        opacity: 0;
+                    }
+                }
+            }
+            li > a{
+                color: $color-menu-light;
+            }
+        }
+    }
+    .secondary-sidebar{
+        margin-left:-25px;
+        border: 1px solid $form-control-border-color;
+    }
+    //Add 30px offset
+    .inner-content{
+      margin-left:225px;
+    }
+    .content{
+        -ms-flex: 1;
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        -ms-box-flex: 1;
+        box-flex: 1;
+    }
+    .page-container{
+        padding-left:0;
+        .page-content-wrapper .content{
+            padding-top: 0;
+        }
+    }
+    .ghost-nav-dropdown{
+        top: -7px;
+        left:-4px;
+        background: #fff;
+        z-index: 1000;
+        position: absolute;
+        @include box-shadow(0px 0px 16px 0px rgba(0, 0, 0, 0.08));
+        @include border-radius(3px);
+        transition: all 0.18s ease-in;
+    }
+
+    //calendar overwrites
+    .calendar {
+        .calendar-header{
+            background-color: transparent;
+            padding-left:0;
+            position: relative;
+            left:-20px;
+        }
+        .options{
+            padding-left:0;
+        }
+        .months .month:first-child{
+            padding-left:0;
+        }
+        .weeks-wrapper{
+            margin-left:0;
+            padding-left:0;
+        }
+        .week-dragger{
+            margin-left:0;
+        }
+        .calendar-container .grid{
+            overflow: hidden;
+        }
+    }
+}

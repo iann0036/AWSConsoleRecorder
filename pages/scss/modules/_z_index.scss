@@ -1,0 +1,33 @@
+// Pages z-index values
+//
+// Define all the z-index values used throughout the theme,
+// in this file to prevent any conflicts that can arise by
+// using arbitrary values
+// --------------------------------------------------
+// Copyright Reserved Revox - 2014
+
+// z-index scale
+$zIndex-1:   100;
+$zIndex-2:   200;
+$zIndex-3:   300;
+$zIndex-4:   400;
+$zIndex-5:   500;
+$zIndex-6:   600;
+$zIndex-7:   700;
+$zIndex-8:   800;
+$zIndex-9:   900;
+$zIndex-10: 1000;
+
+//TODO: add all components
+// z-index applications
+
+
+$zIndex-sidebar : $zIndex-10;
+$zIndex-tooltips : $zIndex-10;
+$zIndex-quickview: $zIndex-10;
+@zIndex-horizontal-menu-mobile: @zIndex-10;
+$zIndex-notifications : $zIndex-9;
+$zIndex-navbar : $zIndex-8;
+$zIndex-dropdown : $zIndex-7;
+$zIndex-dropdownMask : $zIndex-6;
+$zIndex-portlet : $zIndex-6;

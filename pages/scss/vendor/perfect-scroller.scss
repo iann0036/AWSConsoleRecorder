@@ -1,0 +1,93 @@
+[data-simplebar] {
+    position: relative !important;
+    z-index: 0 !important;
+    overflow: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    /* Trigger native scrolling for mobile, if not supported, plugin is used. */
+  }
+  
+  [data-simplebar="init"] {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
+  
+  .simplebar-scroll-content {
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    min-width: 100% !important;
+    -webkit-box-sizing: content-box !important;
+    box-sizing: content-box !important;
+  }
+  
+  .simplebar-content {
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    -webkit-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+    min-height: 100% !important;
+  }
+  
+  .simplebar-track {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 11px;
+  }
+  
+  .simplebar-scrollbar {
+    position: absolute;
+    right: 2px;
+    width: 4px;
+    min-height: 10px;
+    transition:width 0.2s ease;
+    &:before {
+      position: absolute;
+      content: "";
+      background-color: #697686;
+      opacity: 0.3;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      -webkit-transition: opacity 0.2s linear;
+      transition: opacity 0.2s linear;
+    }
+    &:hover, &:active{
+        width: 7px;
+    }
+  }
+  
+  .simplebar-track {
+    &:hover .simplebar-scrollbar:before, .simplebar-scrollbar.visible:before {
+      /* When hovered, remove all transitions from drag handle */
+      opacity: 0.5;
+      -webkit-transition: opacity 0 linear;
+      transition: opacity 0 linear;
+    }
+    &.vertical {
+      top: 0;
+      .simplebar-scrollbar:before {
+        top: 2px;
+        bottom: 2px;
+      }
+    }
+    &.horizontal {
+      left: 0;
+      width: auto;
+      height: 11px;
+      .simplebar-scrollbar {
+        &:before {
+          height: 100%;
+          left: 2px;
+          right: 2px;
+        }
+        right: auto;
+        top: 2px;
+        height: 7px;
+        min-height: 0;
+        min-width: 10px;
+        width: auto;
+      }
+    }
+  }

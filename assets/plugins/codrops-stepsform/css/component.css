@@ -1,0 +1,266 @@
+.simform {
+	position: relative;
+	margin: 0 auto;
+	padding: 2em 0;
+	max-width: 860px;
+	width: 100%;
+	text-align: left;
+	font-size: 2.5em;
+}
+
+.simform .submit {
+	display: none;
+}
+
+/* Question list style */
+.simform ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+	-webkit-transition: height 0.4s;
+	transition: height 0.4s;
+}
+
+.simform ol:before {
+	content: '';
+	background-color: rgba(0,0,0,0.1);
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 2.35em;
+}
+
+.questions li {
+	z-index: 100;
+	position: relative;
+	visibility: hidden;
+	height: 0;
+	-webkit-transition: visibility 0s 0.4s, height 0s 0.4s;
+	transition: visibility 0s 0.4s, height 0s 0.4s;
+}
+
+.questions li.current,
+.no-js .questions li {
+	visibility: visible;
+	height: auto;
+	-webkit-transition: none;
+	transition: none;
+}
+
+/* Labels */
+.questions li > span {
+	display: block;
+	overflow: hidden;
+}
+
+.questions li > span label {
+	display: block;
+	-webkit-transition: -webkit-transform 0.4s;
+	transition: transform 0.4s;
+	-webkit-transform: translateY(-100%);
+	transform: translateY(-100%);
+}
+
+.questions li.current > span label,
+.no-js .questions li > span label {
+	-webkit-transition: none;
+	transition: none;
+	-webkit-transform: translateY(0);
+	transform: translateY(0);
+}
+
+.show-next .questions li.current > span label {
+	-webkit-animation: moveUpFromDown 0.4s both;
+	animation: moveUpFromDown 0.4s both;
+}
+
+@-webkit-keyframes moveUpFromDown {
+	from { -webkit-transform: translateY(100%); }
+	to { -webkit-transform: translateY(0); }
+}
+
+@keyframes moveUpFromDown {
+	from { -webkit-transform: translateY(100%); transform: translateY(100%); }
+	to { -webkit-transform: translateY(0); transform: translateY(0); }
+}
+
+/* Input field */
+.questions input {
+	display: block;
+	margin: 0.3em 0 0 0;
+	padding: 0.5em 1em 0.5em 0.7em;
+	width: calc(100% - 2em);
+	border: none;
+	background: transparent;
+	color: rgba(0,0,0,0.8);
+	font-size: 1em;
+	line-height: 1;
+	opacity: 0;
+	-webkit-transition: opacity 0.3s;
+	transition: opacity 0.3s;
+}
+
+.questions .current input,
+.no-js .questions input {
+	opacity: 1;
+}
+
+.questions input:focus,
+.simform button:focus {
+	outline: none;
+}
+
+/* Progress bar */
+.simform .progress {
+	width: 0%;
+	height: 2px;
+	background: rgba(0,0,0,0.3);
+	-webkit-transition: width 0.4s ease-in-out;
+	transition: width 0.4s ease-in-out;
+	border-radius: 0;
+}
+
+.simform .progress::before {
+	position: absolute;
+	top: auto;
+	width: 100%;
+	height: inherit;
+	background: rgba(0,0,0,0.05);
+	content: '';
+}
+
+/* Number indicator */
+.simform .number {
+	position: absolute;
+	right: 0;
+	overflow: hidden;
+	margin: 0.4em 0;
+	width: 3em;
+	font-weight: 700;
+	font-size: 0.4em;
+}
+
+.simform .number:after {
+	position: absolute;
+	left: 50%;
+	content: '/';
+	opacity: 0.4;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+.simform .number span {
+	float: right;
+	width: 40%;
+	text-align: center;
+}
+
+.simform .number .number-current {
+	float: left;
+}
+
+.simform .number-next {
+	position: absolute;
+	left: 0;
+}
+
+.simform.show-next .number-current {
+	-webkit-transition: -webkit-transform 0.4s;
+	transition: transform 0.4s;
+	-webkit-transform: translateY(-100%);
+	transform: translateY(-100%);
+}
+
+.simform.show-next .number-next {
+	-webkit-animation: moveUpFromDown 0.4s both;
+	animation: moveUpFromDown 0.4s both;
+}
+
+/* Error and final message */
+.simform .error-message,
+.simform .final-message {
+	position: absolute;
+	visibility: hidden;
+	opacity: 0;
+	-webkit-transition: opacity 0.4s;
+	transition: opacity 0.4s;
+}
+
+.simform .error-message {
+	padding: 0.4em 3.5em 0 0;
+	width: 100%;
+	color: rgba(0,0,0,0.7);
+	font-style: italic;
+	font-size: 0.4em;
+}
+
+.final-message {
+	top: 50%;
+	left: 0;
+	padding: 0.5em;
+	width: 100%;
+	text-align: center;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.error-message.show,
+.final-message.show {
+	visibility: visible;
+	opacity: 1;
+}
+
+.final-message.show {
+	-webkit-transition-delay: 0.5s;
+	transition-delay: 0.5s;
+}
+
+/* Final hiding of form / showing message */
+.simform-inner.hide {
+	visibility: hidden;
+	opacity: 0;
+	-webkit-transition: opacity 0.3s, visibility 0s 0.3s;
+	transition: opacity 0.3s, visibility 0s 0.3s;
+}
+
+/* No JS Fallback */
+.no-js .simform {
+	font-size: 1.75em;
+}
+
+.no-js .questions li {
+	padding: 0 0 2em;
+}
+
+.no-js .simform .submit {
+	display: block;
+	float: right;
+	padding: 10px 20px;
+	border: none;
+	background: rgba(0,0,0,0.3);
+	color: rgba(0,0,0,0.4);
+}
+
+.no-js .simform .controls {
+	display: none;
+}
+
+/* Remove IE clear cross */
+input[type=text]::-ms-clear {
+    display: none;
+}
+
+/* Adjust form for smaller screens */
+@media screen and (max-width: 44.75em) {
+	.simform {
+		font-size: 1.8em;
+	}
+}
+
+@media screen and (max-width: 33.5625em) {
+	.simform {
+		font-size: 1.2em;
+	}
+}

@@ -1,0 +1,139 @@
+/*------------------------------------------------------------------
+Pages Widget Market Place
+Optional File
+------------------------------------------------------------------ */
+.jumbotron h2{
+	font-size: 35px;
+	line-height: 43px;
+	font-weight: 500 !important;
+}
+.dialog__overlay{
+	background: rgba(0, 0, 0, 0.9) !important;
+}
+.dialog__content{
+	background: transparent;
+	border: 0;
+	width: 100% !important;
+	max-width: 100% !important;
+	min-width: 100% !important
+}
+
+.dialog--open .item-description{
+	display: block;
+}
+
+.item-description{
+	z-index: 1000;
+	position: fixed;
+	background: #fff;
+	bottom: 0;
+	height: auto;
+	left: 0;
+	right: 0;
+	display: none;
+}
+.item-details .close{
+	color: #fff;
+	font-size: 20px !important;
+	opacity: 1;
+}
+.item-details .close:focus, .close:hover{
+	color: #fff;
+}
+
+iframe body{
+	background: transparent;
+}
+.item-details .dialog__content{
+	border: 0px !important; 
+}
+body.dashboard{
+	height: calc(100% - 81px)
+}
+body.dashboard, body.dashboard .page-container{
+	background-color: transparent !important
+}
+.widget-detail{
+	background: rgba(0,0,0,0.7);
+	opacity: 0;
+	top: 0;
+    -webkit-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+
+.widget-detail .overlayer-wrapper{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0
+}
+/* WIDGET MANAGER */
+#widget-filter{
+  font-size: 18px;
+}
+#widget-filter:focus{
+    background: none;
+    border: none;
+}
+#widgetDetails .progress-circle-indeterminate{
+    position: absolute;
+    left: 50%;
+    margin-left: -19px;
+    top: 50%;
+    margin-top: -19px;
+}
+.widgets-container {
+    margin: 0 auto;
+}
+#widget-preview{
+  display: block;
+}
+.widget-item {
+    overflow: hidden;
+    cursor: default;
+    margin-bottom: 10px;
+    position: relative;
+    width: 270px;
+    height: 270px;
+}
+.widget-item:hover {
+	cursor: pointer;
+}
+.widget-item:hover .widget-detail{
+	opacity: 1;
+}
+.widget-item[data-width="1"] {
+        width: 270px;
+    }
+.widget-item[data-width="2"] {
+        width: 570px;
+    }
+.widget-item[data-height="1"] {
+        height: 270px;
+    }
+.widget-item[data-height="2"] {
+        height: 490px;
+}
+
+.widget-item .wm-logo{
+	position: absolute;
+	top: 40%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.transparent input{
+	background: transparent; 
+}
+.b-transparent{
+	border-color: rgba(0,0,0,0.1) !important;
+}
+
+.market-hero{
+    background: url("../../assets/img/widget-hero.png");
+    width: 100%;
+    height: 100%;
+    background-position: 900px;
+    background-repeat: no-repeat;
+}

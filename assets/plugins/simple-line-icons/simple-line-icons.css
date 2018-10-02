@@ -1,0 +1,526 @@
+@font-face {
+	font-family: 'Simple-Line-Icons';
+	src:url('fonts/Simple-Line-Icons.eot');
+	src:url('fonts/Simple-Line-Icons.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Simple-Line-Icons.woff') format('woff'),
+		url('fonts/Simple-Line-Icons.ttf') format('truetype'),
+		url('fonts/Simple-Line-Icons.svg#Simple-Line-Icons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'Simple-Line-Icons';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="sl-"] {
+*/
+.sl-user-female, .sl-user-follow, .sl-user-following, .sl-user-unfollow, .sl-trophy, .sl-screen-smartphone, .sl-screen-desktop, .sl-plane, .sl-notebook, .sl-moustache, .sl-mouse, .sl-magnet, .sl-energy, .sl-emotsl-smile, .sl-disc, .sl-cursor-move, .sl-crop, .sl-credit-card, .sl-chemistry, .sl-user, .sl-speedometer, .sl-social-youtube, .sl-social-twitter, .sl-social-tumblr, .sl-social-facebook, .sl-social-dropbox, .sl-social-dribbble, .sl-shield, .sl-screen-tablet, .sl-magic-wand, .sl-hourglass, .sl-graduation, .sl-ghost, .sl-game-controller, .sl-fire, .sl-eyeglasses, .sl-envelope-open, .sl-envelope-letter, .sl-bell, .sl-badge, .sl-anchor, .sl-wallet, .sl-vector, .sl-speech, .sl-puzzle, .sl-printer, .sl-present, .sl-playlist, .sl-pin, .sl-picture, .sl-map, .sl-layers, .sl-handbag, .sl-globe-alt, .sl-globe, .sl-frame, .sl-folder-alt, .sl-film, .sl-feed, .sl-earphones-alt, .sl-earphones, .sl-drop, .sl-drawer, .sl-docs, .sl-directions, .sl-direction, .sl-diamond, .sl-cup, .sl-compass, .sl-call-out, .sl-call-in, .sl-call-end, .sl-calculator, .sl-bubbles, .sl-briefcase, .sl-book-open, .sl-basket-loaded, .sl-basket, .sl-bag, .sl-action-undo, .sl-action-redo, .sl-wrench, .sl-umbrella, .sl-trash, .sl-tag, .sl-support, .sl-size-fullscreen, .sl-size-actual, .sl-shuffle, .sl-share-alt, .sl-share, .sl-rocket, .sl-question, .sl-pie-chart, .sl-pencil, .sl-note, .sl-music-tone-alt, .sl-music-tone, .sl-microphone, .sl-loop, .sl-logout, .sl-login, .sl-list, .sl-like, .sl-home, .sl-grid, .sl-graph, .sl-equalizer, .sl-dislike, .sl-cursor, .sl-control-start, .sl-control-rewind, .sl-control-play, .sl-control-pause, .sl-control-forward, .sl-control-end, .sl-calendar, .sl-bulb, .sl-bar-chart, .sl-arrow-up, .sl-arrow-right, .sl-arrow-left, .sl-arrow-down, .sl-ban, .sl-bubble, .sl-camcorder, .sl-camera, .sl-check, .sl-clock, .sl-close, .sl-cloud-download, .sl-cloud-upload, .sl-doc, .sl-envelope, .sl-eye, .sl-flag, .sl-folder, .sl-heart, .sl-info, .sl-key, .sl-link, .sl-lock, .sl-lock-open, .sl-magnifier, .sl-magnifier-add, .sl-magnifier-remove, .sl-paper-clip, .sl-paper-plane, .sl-plus, .sl-pointer, .sl-power, .sl-refresh, .sl-reload, .sl-settings, .sl-star, .sl-symbol-female, .sl-symbol-male, .sl-target, .sl-volume-1, .sl-volume-2, .sl-volume-off, .sl-users {
+	font-family: 'Simple-Line-Icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+.sl-user-female:before {
+	content: "\e000";
+}
+.sl-user-follow:before {
+	content: "\e002";
+}
+.sl-user-following:before {
+	content: "\e003";
+}
+.sl-user-unfollow:before {
+	content: "\e004";
+}
+.sl-trophy:before {
+	content: "\e006";
+}
+.sl-screen-smartphone:before {
+	content: "\e010";
+}
+.sl-screen-desktop:before {
+	content: "\e011";
+}
+.sl-plane:before {
+	content: "\e012";
+}
+.sl-notebook:before {
+	content: "\e013";
+}
+.sl-moustache:before {
+	content: "\e014";
+}
+.sl-mouse:before {
+	content: "\e015";
+}
+.sl-magnet:before {
+	content: "\e016";
+}
+.sl-energy:before {
+	content: "\e020";
+}
+.sl-emotsl-smile:before {
+	content: "\e021";
+}
+.sl-disc:before {
+	content: "\e022";
+}
+.sl-cursor-move:before {
+	content: "\e023";
+}
+.sl-crop:before {
+	content: "\e024";
+}
+.sl-credit-card:before {
+	content: "\e025";
+}
+.sl-chemistry:before {
+	content: "\e026";
+}
+.sl-user:before {
+	content: "\e005";
+}
+.sl-speedometer:before {
+	content: "\e007";
+}
+.sl-social-youtube:before {
+	content: "\e008";
+}
+.sl-social-twitter:before {
+	content: "\e009";
+}
+.sl-social-tumblr:before {
+	content: "\e00a";
+}
+.sl-social-facebook:before {
+	content: "\e00b";
+}
+.sl-social-dropbox:before {
+	content: "\e00c";
+}
+.sl-social-dribbble:before {
+	content: "\e00d";
+}
+.sl-shield:before {
+	content: "\e00e";
+}
+.sl-screen-tablet:before {
+	content: "\e00f";
+}
+.sl-magic-wand:before {
+	content: "\e017";
+}
+.sl-hourglass:before {
+	content: "\e018";
+}
+.sl-graduation:before {
+	content: "\e019";
+}
+.sl-ghost:before {
+	content: "\e01a";
+}
+.sl-game-controller:before {
+	content: "\e01b";
+}
+.sl-fire:before {
+	content: "\e01c";
+}
+.sl-eyeglasses:before {
+	content: "\e01d";
+}
+.sl-envelope-open:before {
+	content: "\e01e";
+}
+.sl-envelope-letter:before {
+	content: "\e01f";
+}
+.sl-bell:before {
+	content: "\e027";
+}
+.sl-badge:before {
+	content: "\e028";
+}
+.sl-anchor:before {
+	content: "\e029";
+}
+.sl-wallet:before {
+	content: "\e02a";
+}
+.sl-vector:before {
+	content: "\e02b";
+}
+.sl-speech:before {
+	content: "\e02c";
+}
+.sl-puzzle:before {
+	content: "\e02d";
+}
+.sl-printer:before {
+	content: "\e02e";
+}
+.sl-present:before {
+	content: "\e02f";
+}
+.sl-playlist:before {
+	content: "\e030";
+}
+.sl-pin:before {
+	content: "\e031";
+}
+.sl-picture:before {
+	content: "\e032";
+}
+.sl-map:before {
+	content: "\e033";
+}
+.sl-layers:before {
+	content: "\e034";
+}
+.sl-handbag:before {
+	content: "\e035";
+}
+.sl-globe-alt:before {
+	content: "\e036";
+}
+.sl-globe:before {
+	content: "\e037";
+}
+.sl-frame:before {
+	content: "\e038";
+}
+.sl-folder-alt:before {
+	content: "\e039";
+}
+.sl-film:before {
+	content: "\e03a";
+}
+.sl-feed:before {
+	content: "\e03b";
+}
+.sl-earphones-alt:before {
+	content: "\e03c";
+}
+.sl-earphones:before {
+	content: "\e03d";
+}
+.sl-drop:before {
+	content: "\e03e";
+}
+.sl-drawer:before {
+	content: "\e03f";
+}
+.sl-docs:before {
+	content: "\e040";
+}
+.sl-directions:before {
+	content: "\e041";
+}
+.sl-direction:before {
+	content: "\e042";
+}
+.sl-diamond:before {
+	content: "\e043";
+}
+.sl-cup:before {
+	content: "\e044";
+}
+.sl-compass:before {
+	content: "\e045";
+}
+.sl-call-out:before {
+	content: "\e046";
+}
+.sl-call-in:before {
+	content: "\e047";
+}
+.sl-call-end:before {
+	content: "\e048";
+}
+.sl-calculator:before {
+	content: "\e049";
+}
+.sl-bubbles:before {
+	content: "\e04a";
+}
+.sl-briefcase:before {
+	content: "\e04b";
+}
+.sl-book-open:before {
+	content: "\e04c";
+}
+.sl-basket-loaded:before {
+	content: "\e04d";
+}
+.sl-basket:before {
+	content: "\e04e";
+}
+.sl-bag:before {
+	content: "\e04f";
+}
+.sl-action-undo:before {
+	content: "\e050";
+}
+.sl-action-redo:before {
+	content: "\e051";
+}
+.sl-wrench:before {
+	content: "\e052";
+}
+.sl-umbrella:before {
+	content: "\e053";
+}
+.sl-trash:before {
+	content: "\e054";
+}
+.sl-tag:before {
+	content: "\e055";
+}
+.sl-support:before {
+	content: "\e056";
+}
+.sl-size-fullscreen:before {
+	content: "\e057";
+}
+.sl-size-actual:before {
+	content: "\e058";
+}
+.sl-shuffle:before {
+	content: "\e059";
+}
+.sl-share-alt:before {
+	content: "\e05a";
+}
+.sl-share:before {
+	content: "\e05b";
+}
+.sl-rocket:before {
+	content: "\e05c";
+}
+.sl-question:before {
+	content: "\e05d";
+}
+.sl-pie-chart:before {
+	content: "\e05e";
+}
+.sl-pencil:before {
+	content: "\e05f";
+}
+.sl-note:before {
+	content: "\e060";
+}
+.sl-music-tone-alt:before {
+	content: "\e061";
+}
+.sl-music-tone:before {
+	content: "\e062";
+}
+.sl-microphone:before {
+	content: "\e063";
+}
+.sl-loop:before {
+	content: "\e064";
+}
+.sl-logout:before {
+	content: "\e065";
+}
+.sl-login:before {
+	content: "\e066";
+}
+.sl-list:before {
+	content: "\e067";
+}
+.sl-like:before {
+	content: "\e068";
+}
+.sl-home:before {
+	content: "\e069";
+}
+.sl-grid:before {
+	content: "\e06a";
+}
+.sl-graph:before {
+	content: "\e06b";
+}
+.sl-equalizer:before {
+	content: "\e06c";
+}
+.sl-dislike:before {
+	content: "\e06d";
+}
+.sl-cursor:before {
+	content: "\e06e";
+}
+.sl-control-start:before {
+	content: "\e06f";
+}
+.sl-control-rewind:before {
+	content: "\e070";
+}
+.sl-control-play:before {
+	content: "\e071";
+}
+.sl-control-pause:before {
+	content: "\e072";
+}
+.sl-control-forward:before {
+	content: "\e073";
+}
+.sl-control-end:before {
+	content: "\e074";
+}
+.sl-calendar:before {
+	content: "\e075";
+}
+.sl-bulb:before {
+	content: "\e076";
+}
+.sl-bar-chart:before {
+	content: "\e077";
+}
+.sl-arrow-up:before {
+	content: "\e078";
+}
+.sl-arrow-right:before {
+	content: "\e079";
+}
+.sl-arrow-left:before {
+	content: "\e07a";
+}
+.sl-arrow-down:before {
+	content: "\e07b";
+}
+.sl-ban:before {
+	content: "\e07c";
+}
+.sl-bubble:before {
+	content: "\e07d";
+}
+.sl-camcorder:before {
+	content: "\e07e";
+}
+.sl-camera:before {
+	content: "\e07f";
+}
+.sl-check:before {
+	content: "\e080";
+}
+.sl-clock:before {
+	content: "\e081";
+}
+.sl-close:before {
+	content: "\e082";
+}
+.sl-cloud-download:before {
+	content: "\e083";
+}
+.sl-cloud-upload:before {
+	content: "\e084";
+}
+.sl-doc:before {
+	content: "\e085";
+}
+.sl-envelope:before {
+	content: "\e086";
+}
+.sl-eye:before {
+	content: "\e087";
+}
+.sl-flag:before {
+	content: "\e088";
+}
+.sl-folder:before {
+	content: "\e089";
+}
+.sl-heart:before {
+	content: "\e08a";
+}
+.sl-info:before {
+	content: "\e08b";
+}
+.sl-key:before {
+	content: "\e08c";
+}
+.sl-link:before {
+	content: "\e08d";
+}
+.sl-lock:before {
+	content: "\e08e";
+}
+.sl-lock-open:before {
+	content: "\e08f";
+}
+.sl-magnifier:before {
+	content: "\e090";
+}
+.sl-magnifier-add:before {
+	content: "\e091";
+}
+.sl-magnifier-remove:before {
+	content: "\e092";
+}
+.sl-paper-clip:before {
+	content: "\e093";
+}
+.sl-paper-plane:before {
+	content: "\e094";
+}
+.sl-plus:before {
+	content: "\e095";
+}
+.sl-pointer:before {
+	content: "\e096";
+}
+.sl-power:before {
+	content: "\e097";
+}
+.sl-refresh:before {
+	content: "\e098";
+}
+.sl-reload:before {
+	content: "\e099";
+}
+.sl-settings:before {
+	content: "\e09a";
+}
+.sl-star:before {
+	content: "\e09b";
+}
+.sl-symbol-female:before {
+	content: "\e09c";
+}
+.sl-symbol-male:before {
+	content: "\e09d";
+}
+.sl-target:before {
+	content: "\e09e";
+}
+.sl-volume-1:before {
+	content: "\e09f";
+}
+.sl-volume-2:before {
+	content: "\e0a0";
+}
+.sl-volume-off:before {
+	content: "\e0a1";
+}
+.sl-users:before {
+	content: "\e001";
+}

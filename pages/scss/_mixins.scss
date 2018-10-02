@@ -1,0 +1,1020 @@
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// Webkit-style focus
+@mixin tab-focus() {
+  // Default
+  outline: thin dotted #000;
+  // Webkit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+// Center-align a block level element
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Sizing shortcuts
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+@mixin square($size) {
+  @include size($size, $size);
+}
+
+@mixin flexbox(){
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+@mixin flex-inline(){
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+@mixin align-items($argument){
+    -webkit-box-align: $argument;
+    -webkit-align-items: $argument;
+    -ms-flex-align: $argument;
+    align-items: $argument;
+}
+
+@mixin flex-column{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+@mixin flex-row{
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+
+// Placeholder text
+@mixin placeholder($color: $input-color-placeholder) {
+  &:-moz-placeholder            { color: $color; } // Firefox 4-18
+  &::-moz-placeholder           { color: $color; opacity: 1; } // Firefox 19+
+  &:-ms-input-placeholder       { color: $color; } // Internet Explorer 10+
+  &::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
+  &.placeholder                 { color: $color; } // Fallback
+}
+
+// Placeholder text
+@mixin selected($color, $background) {
+  &::selection {
+    background: $background; /* Safari */
+    color: $color;
+  }
+  &::-moz-selection {
+    background: $background; /* Safari */
+    color: $color;
+  }
+}
+
+@mixin placeholder-height($height) {
+  &:-moz-placeholder {
+    line-height: $height;
+  }
+  &::-webkit-input-placeholder {
+    line-height: $height;
+  }
+  &.placeholder {
+    line-height: $height;
+  }
+}
+
+// Text overflow
+// Requires inline-block or block for proper styling
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// CSS image replacement
+@mixin text-hide() {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+@mixin invisible() {
+  visibility:hidden;
+}
+
+//Padding Helper Classes
+@mixin generate-paddings-options-prefix($prefix,$n, $j: 0) {
+  @if $j <= $n {
+    @for $i from $j through $n {
+      $step : $i*5;  
+      .#{$prefix}-p-t-#{$step} {
+        margin-top: ($step*1px) !important;
+      }
+      .#{$prefix}-p-r-#{$step} {
+        margin-right: ($step*1px) !important;
+      }
+      .#{$prefix}-p-l-#{$step} {
+        margin-left: ($step*1px) !important;
+      }
+      .#{$prefix}-p-b-#{$step} {
+        margin-bottom: ($step*1px) !important;
+      }
+      //@include generate-margin-options($n, ($i + 1));
+    }
+  }
+}
+//Margins Helper Classes
+@mixin generate-margin-options-prefix($prefix,$n, $j: 0) {
+  @if $j <= $n {
+    @for $i from $j through $n {
+      $step : $i*5;  
+      .#{$prefix}-m-t-#{$step} {
+        margin-top: ($step*1px) !important;
+      }
+      .#{$prefix}-m-r-#{$step} {
+        margin-right: ($step*1px) !important;
+      }
+      .#{$prefix}-m-l-#{$step} {
+        margin-left: ($step*1px) !important;
+      }
+      .#{$prefix}-m-b-#{$step} {
+        margin-bottom: ($step*1px) !important;
+      }
+      //@include generate-margin-options($n, ($i + 1));
+    }
+  }
+}
+// CSS3 PROPERTIES
+// --------------------------------------------------
+
+@mixin mask($arguments) {
+  -webkit-mask: $arguments;
+          mask: $arguments;
+}
+@mixin box_scale($scale) {
+    -webkit-transform: scale($scale);  
+      -ms-transform: scale($scale); 
+      -moz-transform: scale($scale); 
+          transform: scale($scale); 
+}
+// Single side border-radius
+@mixin border-top-radius($radius) {
+  border-top-right-radius: $radius;
+   border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius) {
+  border-bottom-right-radius: $radius;
+     border-top-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius) {
+  border-bottom-right-radius: $radius;
+   border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius) {
+  border-bottom-left-radius: $radius;
+     border-top-left-radius: $radius;
+}
+@mixin border-radius($radius) {
+   border-radius: $radius;
+   -webkit-border-radius:$radius;
+   -moz-border-radius: $radius;
+}
+// Drop shadows
+@mixin box-shadow($shadow) {
+  -webkit-box-shadow: $shadow; // iOS <4.3 & Android <4.1
+          box-shadow: $shadow;
+}
+
+@mixin animation($properties) {
+  -webkit-animation: $properties;
+     -moz-animation: $properties;
+       -o-animation: $properties;
+          animation: $properties;
+}
+
+// Transitions
+@mixin transition($transition) {
+  -webkit-transition: $transition;
+          transition: $transition;
+}
+@mixin transition-property($transition-property) {
+  -webkit-transition-property: $transition-property;
+          transition-property: $transition-property;
+}
+@mixin transition-delay($transition-delay) {
+  -webkit-transition-delay: $transition-delay;
+          transition-delay: $transition-delay;
+}
+@mixin transition-duration($transition-duration) {
+  -webkit-transition-duration: $transition-duration;
+          transition-duration: $transition-duration;
+}
+@mixin transition-transform($transition) {
+  -webkit-transition: -webkit-transform $transition;
+     -moz-transition: -moz-transform $transition;
+       -o-transition: -o-transform $transition;
+          transition: transform $transition;
+}
+
+// Transformations
+@mixin rotate($degrees) {
+  -webkit-transform: rotate($degrees);
+      -ms-transform: rotate($degrees); // IE9+
+          transform: rotate($degrees);
+}
+@mixin scale($ratio) {
+  -webkit-transform: scale($ratio);
+      -ms-transform: scale($ratio); // IE9+
+          transform: scale($ratio);
+}
+@mixin translate($x, $y) {
+  -webkit-transform: translate($x, $y);
+      -ms-transform: translate($x, $y); // IE9+
+          transform: translate($x, $y);
+}
+@mixin translateY($y) {
+  -webkit-transform: translateY($y);
+      -ms-transform: translateY($y); // IE9+
+          transform: translateY($y);
+}
+@mixin translateX($x) {
+  -webkit-transform: translateX($x);
+      -ms-transform: translateX($x); // IE9+
+          transform: translateX($x);
+}
+@mixin skew($x, $y) {
+  -webkit-transform: skew($x, $y);
+      -ms-transform: skewX($x) skewY($y); // See https://github.com/twbs/bootstrap/issues/4885; IE9+
+          transform: skew($x, $y);
+}
+@mixin translate3d($x, $y, $z) {
+  -webkit-transform: translate3d($x, $y, $z);
+          transform: translate3d($x, $y, $z);
+      -ms-transform:translate($x, $y);
+}
+
+@mixin rotateX($degrees) {
+  -webkit-transform: rotateX($degrees);
+      -ms-transform: rotateX($degrees); // IE9+
+          transform: rotateX($degrees);
+}
+@mixin rotateY($degrees) {
+  -webkit-transform: rotateY($degrees);
+      -ms-transform: rotateY($degrees); // IE9+
+          transform: rotateY($degrees);
+}
+@mixin perspective($perspective) {
+  -webkit-perspective: $perspective;
+     -moz-perspective: $perspective;
+          perspective: $perspective;
+}
+@mixin perspective-origin($perspective) {
+  -webkit-perspective-origin: $perspective;
+     -moz-perspective-origin: $perspective;
+          perspective-origin: $perspective;
+}
+@mixin transform-origin($origin) {
+  -webkit-transform-origin: $origin;
+     -moz-transform-origin: $origin;
+          transform-origin: $origin;
+}
+@mixin transform-style($style) {
+  -webkit-transform-style: $style;
+    -moz-transform-style: $style;
+      transform-style: $style;
+}
+
+// Backface visibility
+// Prevent browsers from flickering when using CSS 3D transforms.
+// Default value is `visible`, but can be changed to `hidden`
+// See git pull https://github.com/dannykeane/bootstrap.git backface-visibility for examples
+@mixin backface-visibility($visibility) {
+  -webkit-backface-visibility: $visibility;
+     -moz-backface-visibility: $visibility;
+          backface-visibility: $visibility;
+}
+
+// Background clip
+@mixin background-clip($clip: border-box) {
+  -webkit-background-clip: $clip;
+     -moz-background-clip: $clip;
+          background-clip: $clip;
+}
+
+// Box sizing
+@mixin box-sizing($boxmodel) {
+  -webkit-box-sizing: $boxmodel;
+     -moz-box-sizing: $boxmodel;
+          box-sizing: $boxmodel;
+}
+
+// User select
+// For selecting text on the page
+@mixin user-select($select) {
+  -webkit-user-select: $select;
+     -moz-user-select: $select;
+      -ms-user-select: $select; // IE10+
+       -o-user-select: $select;
+          user-select: $select;
+}
+
+// Resize anything
+@mixin resizable($direction) {
+  resize: $direction; // Options: horizontal, vertical, both
+  overflow: auto; // Safari fix
+}
+
+// CSS3 Content Columns
+@mixin content-columns($column-count, $column-gap: $grid-gutter-width) {
+  -webkit-column-count: $column-count;
+     -moz-column-count: $column-count;
+          column-count: $column-count;
+  -webkit-column-gap: $column-gap;
+     -moz-column-gap: $column-gap;
+          column-gap: $column-gap;
+}
+
+// Optional hyphenation
+@mixin hyphens($mode: auto) {
+  word-wrap: break-word;
+  -webkit-hyphens: $mode;
+     -moz-hyphens: $mode;
+      -ms-hyphens: $mode; // IE10+
+       -o-hyphens: $mode;
+          hyphens: $mode;
+}
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  // IE8 filter
+  $opacity-ie: ($opacity * 100);
+  filter: alpha(opacity=$opacity-ie);
+}
+
+
+
+// GRADIENTS
+// --------------------------------------------------
+
+#gradient {
+
+  // Horizontal gradient, from left to right
+  //
+  // Creates two color stops, start and end, by specifying a color and position for each color stop.
+  // Color stops are not available in IE9 and below.
+  @mixin horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: -webkit-gradient(linear, $start-percent top, $end-percent top, from($start-color), to($end-color)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(left, color-stop($start-color $start-percent), color-stop($end-color $end-percent)); // Safari 5.1+, Chrome 10+
+    background-image: -moz-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // FF 3.6+
+    background-image:  linear-gradient(to right, $start-color $start-percent, $end-color $end-percent); // Standard, IE10
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down
+  }
+
+  // Vertical gradient, from top to bottom
+  //
+  // Creates two color stops, start and end, by specifying a color and position for each color stop.
+  // Color stops are not available in IE9 and below.
+  @mixin vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: -webkit-gradient(linear, left $start-percent, left $end-percent, from($start-color), to($end-color)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, $start-color, $start-percent, $end-color, $end-percent); // Safari 5.1+, Chrome 10+
+    background-image:  -moz-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // FF 3.6+
+    background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
+  }
+
+  @mixin directional($start-color: #555, $end-color: #333, $deg: 45deg) {
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient($deg, $start-color, $end-color); // Safari 5.1+, Chrome 10+
+    background-image: -moz-linear-gradient($deg, $start-color, $end-color); // FF 3.6+
+    background-image: linear-gradient($deg, $start-color, $end-color); // Standard, IE10
+  }
+  @mixin horizontal-three-colors($start-color: #00b3ee, $mid-color: #7a43b6, $color-stop: 50%, $end-color: #c3325f) {
+    background-image: -webkit-gradient(left, linear, 0 0, 0 100%, from($start-color), color-stop($color-stop, $mid-color), to($end-color));
+    background-image: -webkit-linear-gradient(left, $start-color, $mid-color $color-stop, $end-color);
+    background-image: -moz-linear-gradient(left, $start-color, $mid-color $color-stop, $end-color);
+    background-image: linear-gradient(to right, $start-color, $mid-color $color-stop, $end-color);
+    background-repeat: no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down, gets no color-stop at all for proper fallback
+  }
+  @mixin vertical-three-colors($start-color: #00b3ee, $mid-color: #7a43b6, $color-stop: 50%, $end-color: #c3325f) {
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from($start-color), color-stop($color-stop, $mid-color), to($end-color));
+    background-image: -webkit-linear-gradient($start-color, $mid-color $color-stop, $end-color);
+    background-image: -moz-linear-gradient(top, $start-color, $mid-color $color-stop, $end-color);
+    background-image: linear-gradient($start-color, $mid-color $color-stop, $end-color);
+    background-repeat: no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down, gets no color-stop at all for proper fallback
+  }
+  @mixin radial($inner-color: #555, $outer-color: #333) {
+    background-image: -webkit-gradient(radial, center center, 0, center center, 460, from($inner-color), to($outer-color));
+    background-image: -webkit-radial-gradient(circle, $inner-color, $outer-color);
+    background-image: -moz-radial-gradient(circle, $inner-color, $outer-color);
+    background-image: radial-gradient(circle, $inner-color, $outer-color);
+    background-repeat: no-repeat;
+  }
+  @mixin striped($color: rgba(255,255,255,.15), $angle: 45deg) {
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, $color), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, $color), color-stop(.75, $color), color-stop(.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+    background-image: linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+  }
+}
+
+// Reset filters for IE
+//
+// When you need to remove a gradient background, do not forget to use this to reset
+// the IE filter for IE9 and below.
+@mixin reset-filter() {
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+
+
+// Retina images
+//
+// Short retina mixin for setting background-image and -size
+
+@mixin img-retina($file-1x, $file-2x, $width-1x, $height-1x) {
+  background-image: url("${file-1x}");
+
+  @media
+  only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (   min--moz-device-pixel-ratio: 2),
+  only screen and (     -o-min-device-pixel-ratio: 2/1),
+  only screen and (        min-device-pixel-ratio: 2),
+  only screen and (                min-resolution: 192dpi),
+  only screen and (                min-resolution: 2dppx) {
+    background-image: url("${file-2x}");
+    background-size: $width-1x $height-1x;
+  }
+}
+
+
+// Responsive image
+//
+// Keep images from scaling beyond the width of their parents.
+
+@mixin img-responsive($display: block) {
+  display: $display;
+  max-width: 100%; // Part 1: Set a maximum relative to the parent
+  height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+}
+
+
+// Import the Compass Plugin
+//--------------------------------
+// Normal
+//--------------------------------
+@function blend-normal ($foreground, $background) {
+  $opacity: opacity($foreground);
+  $background-opacity: opacity($background);
+
+  // calculate opacity
+  $bm-red: red($foreground) * $opacity + red($background) * $background-opacity * (1 - $opacity);
+  $bm-green: green($foreground) * $opacity + green($background) * $background-opacity * (1 - $opacity);
+  $bm-blue: blue($foreground) * $opacity + blue($background) * $background-opacity * (1 - $opacity);
+  @return rgb($bm-red, $bm-green, $bm-blue);
+}
+
+//--------------------------------
+// Multiply
+//--------------------------------
+@function blend-multiply ($foreground, $background) {
+  $bm-red: red($background) * red($foreground) / 255;
+  $bm-green: green($background) * green($foreground) / 255;
+  $bm-blue: blue($background) * blue($foreground) / 255;
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Lighten
+//--------------------------------
+@function blend-lighten ($foreground, $background) {
+  $bm-red: blend-lighten-color(red($foreground), red($background));
+  $bm-green: blend-lighten-color(green($foreground), green($background));
+  $bm-blue: blend-lighten-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-lighten-color($foreground, $background) {
+  @if $background > $foreground {
+    $foreground: $background;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Darken
+//--------------------------------
+@function blend-darken ($foreground, $background) {
+  $bm-red: blend-darken-color(red($foreground), red($background));
+  $bm-green: blend-darken-color(green($foreground), green($background));
+  $bm-blue: blend-darken-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-darken-color($foreground, $background) {
+  @if $background < $foreground {
+    $foreground: $background;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Darker Color
+//--------------------------------
+@function blend-darkercolor ($foreground, $background) {
+  $bm-red: red($foreground);
+  $bm-green: green($foreground);
+  $bm-blue: blue($foreground);
+  $background-red: red($background);
+  $background-green: green($background);
+  $background-blue: blue($background);
+
+  @if $background-red * 0.3 + $background-green * 0.59 + $background-blue * 0.11 <= $bm-red * 0.3 + $bm-green * 0.59 + $bm-blue * 0.11 {
+    $bm-red: $background-red;
+    $bm-green: $background-green;
+    $bm-blue: $background-blue;
+  }
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Lighter Color
+//--------------------------------
+@function blend-lightercolor ($foreground, $background) {
+  $bm-red: red($foreground);
+  $bm-green: green($foreground);
+  $bm-blue: blue($foreground);
+  $background-red: red($background);
+  $background-green: green($background);
+  $background-blue: blue($background);
+
+  @if $background-red * 0.3 + $background-green * 0.59 + $background-blue * 0.11 > $bm-red * 0.3 + $bm-green * 0.59 + $bm-blue * 0.11 {
+    $bm-red: $background-red;
+    $bm-green: $background-green;
+    $bm-blue: $background-blue;
+  }
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Linear Dodge
+//--------------------------------
+@function blend-lineardodge ($foreground, $background) {
+  $bm-red: blend-lineardodge-color(red($foreground), red($background));
+  $bm-green: blend-lineardodge-color(green($foreground), green($background));
+  $bm-blue: blend-lineardodge-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-lineardodge-color($foreground, $background) {
+  @if $background + $foreground > 255 {
+    $foreground: 255;
+  }
+  @else {
+    $foreground: $background + $foreground;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Linear Burn
+//--------------------------------
+@function blend-linearburn ($foreground, $background) {
+  $bm-red: blend-linearburn-color(red($foreground), red($background));
+  $bm-green: blend-linearburn-color(green($foreground), green($background));
+  $bm-blue: blend-linearburn-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-linearburn-color($foreground, $background) {
+  @if $background + $foreground < 255 {
+    $foreground: 0;
+  }
+  @else {
+    $foreground: $background + $foreground - 255;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Difference
+//--------------------------------
+@function blend-difference ($foreground, $background) {
+  $bm-red: abs(red($background) - red($foreground));
+  $bm-green: abs(green($background) - green($foreground));
+  $bm-blue: abs(blue($background) - blue($foreground));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Screen
+//--------------------------------
+@function blend-screen ($foreground, $background) {
+  $bm-red: blend-screen-color(red($foreground), red($background));
+  $bm-green: blend-screen-color(green($foreground), green($background));
+  $bm-blue: blend-screen-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-screen-color($foreground, $background) {
+  @return (255 - ( ( (255 - $foreground) * (255 - $background)) / 256));
+}
+
+//--------------------------------
+// Exclusion
+//--------------------------------
+@function blend-exclusion ($foreground, $background) {
+  $bm-red: blend-exclusion-color(red($foreground), red($background));
+  $bm-green: blend-exclusion-color(green($foreground), green($background));
+  $bm-blue: blend-exclusion-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-exclusion-color($foreground, $background) {
+  @return $background - ($background * (2 / 255) - 1) * $foreground;
+}
+
+//--------------------------------
+// Overlay
+//--------------------------------
+@function blend-overlay ($foreground, $background) {
+  $bm-red: blend-overlay-color(red($foreground), red($background));
+  $bm-green: blend-overlay-color(green($foreground), green($background));
+  $bm-blue: blend-overlay-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-overlay-color($foreground, $background) {
+  @if $background <= 255 / 2 {
+    $foreground: (2 * $background * $foreground) / 255;
+  } @else {
+    $foreground: 255 - (255 - 2 * ($background - (255 / 2))) * (255 - $foreground) / 255;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Soft Light
+//--------------------------------
+@function blend-softlight ($foreground, $background) {
+  $bm-red: blend-softlight-color(red($foreground), red($background));
+  $bm-green: blend-softlight-color(green($foreground), green($background));
+  $bm-blue: blend-softlight-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-softlight-color($foreground, $background) {
+  @if $background < 128 {
+    $foreground: (($foreground / 2) + 64) * $background * (2 / 255);
+  } @else {
+    $foreground: 255 - (191 - ($foreground / 2)) * (255 - $background) * (2 / 255);
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Hard Light
+//--------------------------------
+@function blend-hardlight ($foreground, $background) {
+  $bm-red: blend-hardlight-color(red($foreground), red($background));
+  $bm-green: blend-hardlight-color(green($foreground), green($background));
+  $bm-blue: blend-hardlight-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-hardlight-color($foreground, $background) {
+  $tmp-blend: $foreground;
+  @if $tmp-blend < 128 {
+    $foreground: $background * $tmp-blend * (2 / 255);
+  } @else {
+    $foreground: 255 - (255-$background) * (255-$tmp-blend) * (2 / 255);
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Color Dodge
+//--------------------------------
+@function blend-colordodge ($foreground, $background) {
+  $bm-red: blend-colordodge-color(red($foreground), red($background));
+  $bm-green: blend-colordodge-color(green($foreground), green($background));
+  $bm-blue: blend-colordodge-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-colordodge-color($foreground, $background) {
+  $tmp: $background * 256 / (255 - $foreground);
+  @if $tmp > 255 or $foreground == 255 {
+    $foreground: 255;
+  } @else {
+    $foreground: $tmp;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Color Burn
+//--------------------------------
+@function blend-colorburn ($foreground, $background) {
+  $bm-red: blend-colorburn-color(red($foreground), red($background));
+  $bm-green: blend-colorburn-color(green($foreground), green($background));
+  $bm-blue: blend-colorburn-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-colorburn-color($foreground, $background) {
+  $tmp: (255 - ((255 - $background) * 255) / $foreground);
+
+  // TODO: hacked to replicate photoshop
+  @if $foreground == 0 {
+    $foreground: 255;
+  } @elseif $tmp < 0 {
+    $foreground: 0;
+  } @else {
+    $foreground: $tmp;
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Linear Light
+//--------------------------------
+@function blend-linearlight ($foreground, $background) {
+  $bm-red: blend-linearlight-color(red($foreground), red($background));
+  $bm-green: blend-linearlight-color(green($foreground), green($background));
+  $bm-blue: blend-linearlight-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-linearlight-color($foreground, $background) {
+  @if $foreground < 128 {
+    $foreground: blend-linearburn-color($background, 2 * $foreground);
+  } @else {
+    $foreground: blend-lineardodge-color($background, 2 * ($foreground - 128));
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Vivid Light
+//--------------------------------
+@function blend-vividlight ($foreground, $background) {
+  $bm-red: blend-vividlight-color(red($foreground), red($background));
+  $bm-green: blend-vividlight-color(green($foreground), green($background));
+  $bm-blue: blend-vividlight-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+@function blend-vividlight-color($foreground, $background) {
+  @if $foreground < 128 {
+    $foreground: blend-colorburn-color(2 * $foreground, $background);
+  } @else {
+    $foreground: blend-colordodge-color(2 * ($foreground - 128), $background);
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Pin Light
+//--------------------------------
+@function blend-pinlight ($foreground, $background) {
+  $bm-red:   blend-pinlight-color(red($foreground), red($background));
+  $bm-green: blend-pinlight-color(green($foreground), green($background));
+  $bm-blue:  blend-pinlight-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+@function blend-pinlight-color($foreground, $background) {
+  @if $foreground < 128 {
+    $foreground: blend-darken-color($background, 2 * $foreground);
+  } @else {
+    $foreground: blend-lighten-color($background, 2 * ($foreground - 128));
+  }
+  @return $foreground;
+}
+
+//--------------------------------
+// Hard Mix
+//--------------------------------
+@function blend-hardmix ($foreground, $background) {
+  $bm-red: blend-hardmix-color(red($foreground), red($background));
+  $bm-green: blend-hardmix-color(green($foreground), green($background));
+  $bm-blue: blend-hardmix-color(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+@function blend-hardmix-color($foreground, $background) {
+  $tmp: blend-vividlight-color($foreground, $background);
+  @if $tmp < 128 {
+    $foreground: 0;
+  } @else {
+    $foreground: 255;
+  }
+  @return $foreground;
+}
+
+
+// Unique to Photoshop
+
+//--------------------------------
+// Color Blend
+//--------------------------------
+@function blend-colorblend ($foreground, $background) {
+  $foreground-hsv: color-to-hsv($foreground);
+  $background-hsv: color-to-hsv($background);
+
+  $bm-hsv: nth($foreground-hsv, 1), nth($foreground-hsv, 2), nth($background-hsv, 3);
+  $bm-color: hsv-to-color($bm-hsv);
+
+  @return blend-normal(rgba(red($bm-color), green($bm-color), blue($bm-color), opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Dissolve
+//--------------------------------
+@function blend-dissolve ($foreground, $background) {
+  // The Dissolve blend mode acts on transparent and partially transparent pixels
+  // it treats transparency as a pixel pattern and applies a diffusion dither pattern.
+  // @see http://photoblogstop.com/photoshop/photoshop-blend-modes-explained
+  @return $foreground;
+}
+
+//--------------------------------
+// Divide
+//--------------------------------
+@function blend-divide ($foreground, $background) {
+  $bm-red: blend-divide-colors(red($foreground), red($background));
+  $bm-green: blend-divide-colors(green($foreground), green($background));
+  $bm-blue:blend-divide-colors(blue($foreground), blue($background));
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+@function blend-divide-colors($foreground, $background) {
+  @return min((($background / 255) / ($foreground / 255)) * 255, 255);
+}
+
+//--------------------------------
+// Hue
+//--------------------------------
+@function blend-hue ($foreground, $background) {
+  $foreground-hsv: color-to-hsv($foreground);
+  $background-hsv: color-to-hsv($background);
+
+  $bm-hsv: nth($foreground-hsv, 1), nth($background-hsv, 2), nth($background-hsv, 3);
+  $bm-color: hsv-to-color($bm-hsv);
+
+  @return blend-normal(rgba(red($bm-color), green($bm-color), blue($bm-color), opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Luminosity
+//--------------------------------
+@function blend-luminosity ($foreground, $background) {
+  $foreground-hsv: color-to-hsv($foreground);
+  $background-hsv: color-to-hsv($background);
+
+  $bm-hsv: nth($background-hsv, 1), nth($background-hsv, 2), nth($foreground-hsv, 3);
+  $bm-color: hsv-to-color($bm-hsv);
+
+  @return blend-normal(rgba(red($bm-color), green($bm-color), blue($bm-color), opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Saturation
+//--------------------------------
+@function blend-saturation ($foreground, $background) {
+  $foreground-hsv: color-to-hsv($foreground);
+  $background-hsv: color-to-hsv($background);
+
+  $bm-hsv: nth($background-hsv, 1), nth($foreground-hsv, 2), nth($background-hsv, 3);
+  $bm-color: hsv-to-color($bm-hsv);
+
+  @return blend-normal(rgba(red($bm-color), green($bm-color), blue($bm-color), opacity($foreground)), $background);
+}
+
+//--------------------------------
+// Subtract
+//--------------------------------
+@function blend-subtract ($foreground, $background) {
+  $bm-red: max(red($background) - red($foreground), 0);
+  $bm-green: max(green($background) - green($foreground), 0);
+  $bm-blue: max(blue($background) - blue($foreground), 0);
+
+  @return blend-normal(rgba($bm-red, $bm-green, $bm-blue, opacity($foreground)), $background);
+}
+
+//--------------------------------
+// HSL and HSV
+//--------------------------------
+// @see https://gist.github.com/1069204
+@function hsv-to-hsl($h, $s: 0, $v: 0) {
+  @if type-of($h) == 'list' {
+    $v: nth($h, 3);
+    $s: nth($h, 2);
+    $h: nth($h, 1);
+  }
+
+  @if unit($h) == 'deg' {
+    $h: 3.1415 * 2 * ($h / 360deg);
+  }
+  @if unit($s) == '%' {
+    $s: 0 + ($s / 100%);
+  }
+  @if unit($v) == '%' {
+    $v: 0 + ($v / 100%);
+  }
+
+  $ss: $s * $v;
+  $ll: (2 - $s) * $v;
+
+  @if $ll <= 1 and $ll != 0 {
+    $ss: $ss / $ll;
+  } @else if ($ll == 2) {
+    $ss: 0;
+  } @else {
+    $ss: $ss / (2 - $ll);
+  }
+
+  $ll: $ll / 2;
+
+  @return 360deg * $h / (3.1415 * 2), percentage(max(0, min(1, $ss))), percentage(max(0, min(1, $ll)));
+}
+
+@function hsl-to-hsv($h, $ss: 0, $ll: 0) {
+  @if type-of($h) == 'list' {
+    $ll: nth($h, 3);
+    $ss: nth($h, 2);
+    $h: nth($h, 1);
+  } @else if type-of($h) == 'color' {
+    $ll: lightness($h);
+    $ss: saturation($h);
+    $h: hue($h);
+  }
+
+  @if unit($h) == 'deg' {
+    $h: 3.1415 * 2 * ($h / 360deg);
+  }
+  @if unit($ss) == '%' {
+    $ss: 0 + ($ss / 100%);
+  }
+  @if unit($ll) == '%' {
+    $ll: 0 + ($ll / 100%);
+  }
+
+  $ll: $ll * 2;
+
+  @if $ll <= 1 {
+    $ss: $ss * $ll;
+  } @else {
+    $ss: $ss * (2 - $ll);
+  }
+
+  $v: ($ll + $ss) / 2;
+  $s: if($ll + $ss == 0, 0, (2 * $ss) / ($ll + $ss));
+
+  @return 360deg * $h / (3.1415 * 2), percentage(max(0, min(1, $s))), percentage(max(0, min(1, $v)));
+}
+
+@function color-to-hsv($color) {
+  @return hsl-to-hsv($color);
+}
+
+@function hsv-to-color($h, $s: 0, $v: 0) {
+  $hsl: hsv-to-hsl($h, $s, $v);
+  @return hsl(nth($hsl, 1), nth($hsl, 2), nth($hsl, 3));
+}
+

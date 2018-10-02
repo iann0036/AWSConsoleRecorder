@@ -1,0 +1,36 @@
+/*------------------------------------------------------------------
+[13. Treeview]
+*/
+
+span.dynatree-active a{
+	color:@color-master-dark !important; 
+	background-color: transparent !important;
+}
+
+span.dynatree-selected a{
+	color:@color-master-dark !important; 
+	font-style: normal;
+
+}
+ul.dynatree-container a:focus, span.dynatree-focused a:link{
+	background-color: transparent;
+}
+ul.dynatree-container{
+	background-color: transparent;
+	a:hover{
+		color: @color-master;
+		opacity: 0.7;
+		background-color: transparent;
+	}
+}
+
+ul.dynatree-container a{
+	color: @color-master;
+}
+
+span.dynatree-empty, span.dynatree-vline, span.dynatree-connector, span.dynatree-expander, span.dynatree-icon, span.dynatree-checkbox, span.dynatree-radio, span.dynatree-drag-helper-img, #dynatree-drop-marker{
+	height: 17px;
+	position: relative;
+	top: 3px;
+}
+

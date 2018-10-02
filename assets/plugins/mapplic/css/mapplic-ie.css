@@ -1,0 +1,19 @@
+a {
+	outline: none;
+}
+
+a img {
+	border: none;
+}
+
+.im-minimap {
+	border: 1px solid #666;
+}
+
+.im-minimap-overlay {
+	background-image: url(images/alpha50.png);
+}
+
+.im-list-category > a span {
+	background-image: url(images/alpha20.png);	
+}

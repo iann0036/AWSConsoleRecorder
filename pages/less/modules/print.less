@@ -1,0 +1,32 @@
+/*------------------------------------------------------------------
+[29. Print]
+*/
+
+@media print{
+	.header, 
+	.page-sidebar, 
+	.quickview-wrapper, 
+	.overlay {
+		display: none;
+	}
+	.page-container{
+		.padding-left(0);
+	}
+	.page-content-wrapper {
+		.content{
+		border-top:0;
+			.card {
+				border: none;
+				.card-body{
+				padding: 0;
+				}
+			}
+		}
+	}
+	[class^='padding-'],
+	[class*='padding-'], 
+	.table tbody tr td{
+		padding: 10px;
+	}
+
+}

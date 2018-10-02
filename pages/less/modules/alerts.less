@@ -1,0 +1,94 @@
+
+/*------------------------------------------------------------------
+[7. Alerts]
+*/
+.alert {
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    .padding(9px, 19px, 9px, 15px);
+    border-radius: 3px;
+    font-size: 13px;
+    border-width:0;
+    .transition(all 0.2s linear 0s);
+    &.bordered{
+        border-width: 1px;
+    }
+    .link {
+        color: #ce8f22;
+        font-weight: bold;
+    }
+    .alert-heading {
+        color: #ce8f22 !important;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .btn-small {
+        position: relative;
+        top: -3.5px;
+    }
+    .button-set {
+        .btn {
+            position: relative;
+            top: 8px;
+        }
+    }
+    .close {
+        background: url("@{base-img-url}/icons/noti-cross.png") no-repeat scroll 0 0 transparent;
+        background-position: -9px -10px;
+        width: 10px;
+        height: 9px;
+        position: relative;
+        opacity: 0.8;
+        top: 4.5px;
+        .float(right);
+        .margin-left(20px);
+        font-size: 0;
+        &:hover {
+            opacity: 1;
+        }
+    }
+    
+}
+
+/* Alert : Color Options
+------------------------------------
+*/
+.alert-danger, 
+.alert-error{
+    background-color: @color-danger-lighter;
+    color: @color-danger-darker;
+    border-color: @color-danger-darker;
+    .close {
+        background-position: -95px -10px !important;
+    }
+}
+.alert-warning{
+    background-color: @color-warning-lighter;
+    color: @color-warning-darker;
+    border-color: @color-warning-darker;
+}
+.alert-info{
+    background-color: @color-complete-lighter;
+    color: @color-complete-darker;
+    border-color: @color-complete-darker;
+    .close {
+        background-position: -67px -10px !important;
+    }
+}
+.alert-success{
+    background-color: @color-success-lighter;
+    color: @color-success-darker;
+    border-color: @color-success-darker;
+     .close {
+        background-position: -38px -10px !important;
+    }
+}
+.alert-default{
+    background-color: #fff;
+    color: @color-master;
+    border-color: @color-master-light;
+     .close {
+        background-position: -67px -10px !important;
+    }
+}

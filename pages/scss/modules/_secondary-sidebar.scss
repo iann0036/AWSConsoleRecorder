@@ -1,0 +1,242 @@
+/* Secondary Sidebar
+------------------------------------
+*/
+//TODO : add this to theme var
+$secondary-sidebar-width : 250px;
+
+$_sidebar-background-color : blend-multiply($color-menu-light, $color-menu-light);
+$sidebar-background-color : mix($_sidebar-background-color , #000, 80%);
+.toggle-secondary-sidebar{
+    display: none;
+}
+
+.secondary-sidebar {
+    background: $sidebar-background-color;
+    width: $secondary-sidebar-width;
+    float: left;
+    padding-left: 47px;
+    height: 100%;
+    position: fixed;
+    &.not-fixed{
+        position: inherit;
+    }
+    &.open{
+        position: fixed;
+        visibility: hidden;
+        display: block;
+    }
+    .btn-compose {
+        font-family: 'Montserrat';
+        font-size: 13px;
+        font-weight: normal;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+    .menu-title {
+        color: rgba($color-menu-light, .70);
+        font-size: 10.8px;
+        font-family: 'Montserrat';
+        font-weight: normal;
+        letter-spacing: 0.03em;
+    }
+        //Offset by 25px;
+        padding: 20px 0;
+        .menu-title{
+            padding-left:30px;
+        }
+        //With Multiple LEVELS
+        & > ul > li{
+            padding-left:0;
+        }
+        ul{
+            li{
+                a{
+                    @include flexbox();
+                    padding-left: 30px;
+                    padding-right: 30px;
+                    & > .icon-thumbnail{
+                        @include flexbox();
+                        height: auto;
+                        width: auto;
+                        line-height: auto;
+                        & > svg{
+                            -webkit-align-self: center;
+                            -ms-flex-item-align: center;
+                            -ms-grid-row-align: center;
+                            align-self: center;
+                        }
+                    }
+                    &.active{
+                        color: $color-master-dark;
+                    }
+                    & > .title{
+                        width: 100%;
+                        -webkit-align-self: center;
+                        -ms-flex-item-align: center;
+                        -ms-grid-row-align: center;
+                        align-self: center;
+                        &:after{
+                            display: none;
+                        }
+                    }
+                    & > .badge{
+                        -webkit-align-self: center;
+                        -ms-flex-item-align: center;
+                        -ms-grid-row-align: center;
+                        align-self: center;
+                    }
+                    & > .arrow {
+                        &:before {
+                            float: right;
+                            display: inline;
+                            font-size: 16px;
+                            font-family: FontAwesome;
+                            height: auto;
+                            content: "\f104";
+                            font-weight: 300;
+                            text-shadow: none;
+                            @include transition(all 0.12s ease);
+                        }
+                    }
+                }
+                ul {
+                    margin: 0;
+                    padding-top: 7px;
+                    padding-bottom: 5px;
+                    padding-left:7px;
+                    li{
+                        padding: 0;
+                        margin-bottom: 9px;
+                        margin-top: 5px;
+                    }
+                }
+                &.open{
+                    & > a{
+                        color: $color-master-dark;
+                        .arrow:before {
+                            @include rotate(-90deg);
+                        }
+                    }
+                    & > ul{
+                        display: block;
+                    }
+                }
+                & > ul{
+                    display: none;
+                }
+            }
+        }
+    .main-menu {
+        padding-left: 0;
+        & > li{
+            list-style: none;
+
+            &.active{
+                & > a{
+                    color: $color-complete;
+                    &:hover{
+                       color: $color-complete;
+                    }
+                    & > .title{
+                        position: relative;
+                        &:after{
+                            background: $color-complete;
+                            border-radius: 50%;
+                            content: "";
+                            height: 7px;
+                            position: absolute;
+                            right: -14px;
+                            top: 6.5px;
+                            width: 7px;
+                        }
+
+                    }
+                }
+            }
+            a{
+                font-size: 14px;
+                color: $color-menu-light;
+                line-height: 37px;
+                &:hover{
+                    color: #fff;
+                }
+                & > .title{
+                    i{
+                            margin-right: 6px;
+                            opacity: .9;
+                        }
+                }
+            }
+        }
+    }
+    .sub-menu{
+        margin-left: 23px;
+        li{
+            list-style: none;
+            padding: 0;
+            &.active{
+                a{
+                    color: #fff !important;
+                }
+            }
+            a{
+                color: rgba($color-menu-light,.89);
+                line-height: 25px;
+                &:hover{
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .sub-menu li a, .main-menu li a {
+
+        .badge {
+           background: transparent;
+           font-size: 13px;
+           color: $color-menu-light;
+           line-height: 25px;
+        }
+    }
+    &.light{
+        background-color: #fff;
+        border-right: 1px solid $form-control-border-color;
+        .menu-title {
+            color: fade($color-menu-light, 60%);
+            opacity: 1;
+        }
+        .icon-thumbnail{
+            background-color: transparent;
+        }
+        .main-menu {
+            li{
+                a{
+                    &:hover{
+                         color: $color-master-dark;
+                    }
+
+                }
+                &.active{
+                   & >  a{
+                        color: $color-master-dark;
+                    }
+                }
+            }
+        }
+        .sub-menu{
+            margin-top: 5px;
+            li{
+                &.active{
+                    a{
+                        color: $color-master-dark !important;
+                    }
+                }
+                a{
+                    color: fade($color-menu-light,60%);
+                    &:hover{
+                        color: $color-master-dark;
+                    }
+                }
+            }
+        }
+    }
+}

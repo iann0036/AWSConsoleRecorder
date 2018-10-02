@@ -1,0 +1,413 @@
+/* Main Menu Sidebar
+------------------------------------
+*/
+
+body{
+	&.mobile{
+        .sidebar-menu {
+            overflow: scroll;
+             -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-menu > ul {
+            height: auto !important;
+            overflow: visible !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        .page-sidebar .sidebar-menu .menu-items {
+            li{
+                &:hover{
+                    a{
+                        color:$color-menu-light;
+                    }
+                    .icon-thumbnail{
+                        color:$color-menu-light !important;
+                    }
+                }
+                &.active, &.open{
+                    & > a{
+                        color:#fff;
+                    }
+                    & > .icon-thumbnail{
+                        color:#fff;
+                    }
+                }
+            }
+        }
+        .drager{
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+    &.sidebar-visible{
+        .page-sidebar{
+            .scroll-element{
+                visibility: visible;
+            }
+            .menu-items {
+                .icon-thumbnail{
+                    @include translate3d(-14px,0,0);
+                }
+            }
+            .sidebar-header .sidebar-header-controls{
+                @include translate3d(48px,0,0);
+            }
+        }
+
+    }
+}
+
+.page-sidebar{
+    width: $layout-sidepanel-width;
+    background-color:$color-menu;
+    z-index: $zIndex-sidebar;
+    left:$layout-sidepanel-width-collapsed - $layout-sidepanel-width;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    right: auto;
+    overflow: hidden;
+-webkit-transition: -webkit-transform 400ms cubic-bezier($menu-bezier);
+   -moz-transition: -moz-transform 400ms cubic-bezier($menu-bezier);
+     -o-transition: -o-transform 400ms cubic-bezier($menu-bezier);
+        transition: transform 400ms cubic-bezier($menu-bezier);
+-webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    a,button {
+        color:$color-menu-light;
+        &:hover,&:active{
+            color:$color-menu-link-hover;
+            background-color: transparent !important;
+            &:focus{
+                color:$color-menu-link-hover;
+            }
+        }
+        &:visited,&:focus{
+           color:$color-menu-light;
+        }
+    }
+    button.sidebar-slide-toggle{
+        //BS 4 fixes
+        &.active{
+            color:$color-menu-light;
+            &:focus{
+                background: transparent;
+            }
+        }
+    }
+    .scroll-element{
+        visibility: hidden;
+    }
+    .sidebar-header{
+        /* Side-bar header */
+        display: block;
+        height: $layout-header-height;
+        line-height:$layout-header-height;
+        background-color:$color-menu-darker;
+        border-bottom: 1px solid mix($color-menu-darker, #000, 90%);
+        color: $color-white;
+        width: 100%;
+        padding: 0 20px;
+        padding-left: 30px;
+        clear: both;
+        z-index: 10;
+        position: relative;
+        .sidebar-header-controls{
+            display: inline-block;
+            -webkit-transition: -webkit-transform 0.4s cubic-bezier($menu-bezier);
+            transition: transform 0.4s cubic-bezier($menu-bezier);
+            -webkit-backface-visibility: hidden;
+        }
+        .sidebar-slide-toggle i{
+            @include transition(all 0.12s ease);
+        }
+        .sidebar-slide-toggle.active i{
+             @include rotate(-180deg);
+        }
+    }
+    .close-sidebar{
+        position: absolute;
+        right: 19px;
+        top: 14px;
+        padding: 9px;
+        z-index: 1;
+        & > i{
+            color: rgba(255,255,255,0.57);
+        }
+    }
+    .sidebar-overlay-slide{
+        /* Side-bar Top Slider */
+        width: 100%;
+        height: 100%;
+        background-color:$color-menu-darker;
+        display:block;
+        z-index: 9;
+        padding: $layout-header-height+20 20px 20px 20px;
+        &.from-top{
+            top:-100%;
+            position: absolute;
+            @include transition(all .2s ease);
+            &.show{
+                @include translate(0,100%);
+            }
+        }
+    }
+    .sidebar-menu{
+        /* Side-bar Menu */
+        height: calc(100% - 50px);
+        position: relative;
+        width: 100%;
+        .outer-tab-nav-section {
+            display: inline-block;
+            width: 45px;
+            position: absolute;
+            height: 100%;
+            background-color: #0aa699 !important;
+        }
+         .menu-items {
+            /* Side-bar Menut Items */
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            height: calc(100% - 10px);
+            width: 100%;
+            li{
+                &:hover, &.open, &.active{
+                    & > .icon-thumbnail{
+                        color: $color-menu-link-hover;
+                    }
+                    & > a{
+                        color: $color-menu-link-hover;
+                    }
+                }
+                & > a{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 65%;
+                }
+            }
+            & > li {
+                display: block;
+                padding:0;
+                clear: right;
+
+                &:after, &:before{
+                    display: table;
+                    content: " ";
+                    clear: both;
+                }
+
+                & > a {
+                    font-family: Arial, sans-serif;
+                    display: inline-block;
+                    padding-left: 32px;
+                    min-height: $menu-icon-size;
+                    line-height: $menu-icon-size;
+                    font-size: 14px;
+                    clear: both;
+                    &.open {
+                        background: #313131;
+                    }
+                    & > .arrow {
+                        float: right;
+                        padding-right: 30px;
+                        &:before {
+                            float: right;
+                            display: inline;
+                            font-size: 16px;
+                            font-family: FontAwesome;
+                            height: auto;
+                            content: "\f104";
+                            font-weight: 300;
+                            text-shadow: none;
+                            @include transition(all 0.12s ease);
+                        }
+                        &.open {
+                            &:before {
+                                @include rotate(-90deg);
+                            }
+                        }
+                    }
+                    & > .badge {
+                        margin-top: 12px;
+                    }
+                    & > .title{
+                        float: left;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        width: 65%;
+                    }
+                    & > .details{
+                        font-size: 12px;
+                        opacity: 0.4;
+                        display: block;
+                        clear: both;
+                    }
+                    &.detailed{
+                        & > .title{
+                            line-height: 28px;
+                        }
+                        & > .details{
+                            line-height: 16px;
+                        }
+                    }
+                }
+                &.active {
+                    & > ul {
+                        &.sub-menu {
+                            display: block;
+                        }
+                    }
+                }
+                & > .icon-thumbnail{
+                    &:first-letter {
+                        text-transform: uppercase;
+                    }
+                }
+                & > ul {
+                    &.sub-menu {
+                        & > li {
+                            ul {
+                                &.sub-menu {
+                                    li {
+                                        padding-left: 10px;
+                                        padding-right: 3px
+                                    }
+                                    .icon-thumbnail {
+                                        width: 25px;
+                                        height: 25px;
+                                        line-height: 25px;
+                                        font-size: 10px;
+                                    }
+                                }
+                            }
+                        }
+                        li {
+                            & > a {
+                                & > .arrow {
+                                    &:before {
+                                        float: right;
+                                        margin-top: 1px;
+                                        margin-right: 20px;
+                                        display: inline;
+                                        font-size: 16px;
+                                        font-family: FontAwesome;
+                                        height: auto;
+                                        content: "\f104";
+                                        font-weight: 300;
+                                        text-shadow: none;
+                                        @include transition(all 0.12s ease);
+                                    }
+                                    &.open {
+                                        &:before {
+                                            float: right;
+                                            margin-top: 1px;
+                                            margin-right: 18px;
+                                            display: inline;
+                                            font-family: FontAwesome;
+                                            height: auto;
+                                            font-size: 16px;
+                                            @include rotate(-90deg);
+                                            font-weight: 300;
+                                            text-shadow: none;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+                ul {
+                    &.sub-menu {
+                        display: none;
+                        list-style: none;
+                        clear: both;
+                        margin: 0 0 10px 0;
+                        background-color: $color-menu-dark;
+                        padding: 18px 0 10px 0;
+                        & > li {
+                            background: none;
+                            padding: 0px 20px 0 40px;
+                            margin-top: 1px;
+                            &:hover{
+                                & > .icon-thumbnail{
+                                    color: $color-menu-link-hover;
+                                }
+                            }
+                            & > a {
+                                display: inline-block;
+                                padding: 5px 0px;
+                                font-size: 13px;
+                                font-family: Arial, sans-serif;
+                                white-space: normal;
+                            }
+                            .icon-thumbnail {
+                                width: 30px;
+                                height: 30px;
+                                line-height: 30px;
+                                margin: 0;
+                                background-color: $color-menu;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .muted {
+            color: #576775;
+            opacity:.45;
+        }
+    }
+    .icon-thumbnail [class^="bg-"], [class*="bg-"]{
+        color: #fff;
+    }
+}
+[data-toggle-pin="sidebar"]{
+    & > i:before{
+        content: "\f10c";
+    }
+}
+/* Sidebar icon holder
+------------------------------------
+*/
+.icon-thumbnail {
+    display: inline-block;
+    background: $color-menu-dark;
+    height: $menu-icon-size;
+    width: $menu-icon-size;
+    line-height: $menu-icon-size;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    left: 0;
+    float: right;
+    margin-right: 14px;
+    color:$color-menu-light;
+    font-size: 16px;
+    -webkit-transition: -webkit-transform 0.4s cubic-bezier($menu-bezier);
+    transition: transform 0.4s cubic-bezier($menu-bezier);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    font-family : $base-font-family;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%;
+    font-weight: bold;
+    & > i{
+        font-size: 14px;
+    }
+    & > svg{
+        width: auto;
+        height: auto;
+        display: inline;
+    }
+}
+

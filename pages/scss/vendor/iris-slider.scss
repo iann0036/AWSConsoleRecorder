@@ -1,0 +1,188 @@
+$slider-background-color : mix($color-master, #fff, 12%);
+
+/* Ion Range Slider
+https://github.com/IonDen/ion.rangeSlider
+--------------------------------------------------
+*/
+.irs-line-mid, .irs-line-left, .irs-line-right, .irs-bar, .irs-bar-edge, .irs-slider{
+	background-image: none;	
+}
+.irs-bar{
+	background: $color-danger;
+}
+.irs-wrapper{
+	.irs-line{
+		background-color: $color-master-light;
+	}
+	.irs-line-mid, .irs-line-left, .irs-line-right, .irs-diapason, .irs-slider{
+		background: none;
+	}
+	.irs-diapason{
+		background-color:$color-danger;
+		@include transition(all 0.3s ease);
+
+	}
+	.irs-from, .irs-to, .irs-single{
+		background: $color-danger;
+	}
+	.irs-slider{
+		
+		&.from:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: $color-danger;
+		}	
+		&.to:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: $color-danger;
+		}
+		&.single:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: $color-danger;		
+		}
+	}
+	.irs-from:after, .irs-to:after, .irs-single:after{
+		border-top-color: $color-danger;
+	}
+	&.success{
+		.irs-diapason{
+			background-color:$color-success;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: $color-success;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: $color-success;
+			}	
+			&.to:before{
+				background-color: $color-success;
+			}
+			&.single:before{
+				background-color: $color-success;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+				border-top-color: $color-success;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: $color-success;
+		}
+	}
+	&.primary{
+		.irs-diapason{
+			background-color:$color-primary;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: $color-primary;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: $color-primary;
+			}	
+			&.to:before{
+				background-color: $color-primary;
+			}
+			&.single:before{
+				background-color: $color-primary;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: $color-primary;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: $color-primary;
+		}
+	}
+	&.warning{
+		.irs-diapason{
+			background-color:$color-warning;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: $color-warning;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: $color-warning;
+			}	
+			&.to:before{
+				background-color: $color-warning;
+			}
+			&.single:before{
+				background-color: $color-warning;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: $color-warning;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: $color-warning;
+		}
+	}
+	&.complete{
+		.irs-diapason{
+			background-color:$color-complete;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: $color-complete;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: $color-complete;
+			}	
+			&.to:before{
+				background-color: $color-complete;
+			}
+			&.single:before{
+				background-color: $color-complete;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: $color-complete;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: $color-complete;
+		}
+	}
+	&.danger{
+		.irs-diapason{
+			background-color:$color-danger;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: $color-danger;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: $color-danger;
+			}	
+			&.to:before{
+				background-color: $color-danger;
+			}
+			&.single:before{
+				background-color: $color-danger;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: $color-danger;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: $color-danger;
+		}
+	}
+}

@@ -1,0 +1,414 @@
+/*------------------------------------------------------------------
+[4. Cards]
+*/
+
+.card{
+    .box-shadow(none);
+    .border-radius(1px);
+    .transition(all .2s ease);
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+    word-wrap: none;
+    .card-header{
+        background: transparent;
+        border-radius:0px;
+        border-bottom:0px;
+        padding: @panel-heading-padding;
+        position: relative;
+        z-index: 3;
+        min-height: 48px;
+        &.separator:after {
+                    content:"";
+                    height:1px;
+                    background:rgba(0,0,0,0.08);
+                    left:16px;
+                    right:16px;
+                    position:absolute;
+                    bottom:0;
+        }
+        & + .card-body{
+            padding-top: 0;
+        }
+        .card-title{
+            font-family: 'Montserrat';
+            text-transform: uppercase;
+            display: inline-block;
+            letter-spacing: 0.06em;
+            font-size: 10.5px;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            line-height: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-text-stroke:0px;
+            filter: alpha(opacity=40);
+            .transition(opacity .3s ease);
+            & + .card-body{
+
+            }
+        }
+        .card-controls{
+            .float(right);
+            margin-top: -3px;
+            ul{
+                margin: 0;
+                padding: 0;
+                li{
+                    display: inline-block;
+                    list-style: none;
+                    line-height: 0;
+                }
+            }
+            &:after{
+                content:"";
+                  display:table;
+                  clear:both;
+            }
+        }
+        &.card-header-hover{
+            .card-title{
+                opacity: .4;
+            }
+            &:hover{
+                .card-title{
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    &.card-default{
+        border:1px solid @panel-border-color;
+        //Used for colored panels
+        & >.card-header{
+            color: #333;
+        }
+    }
+    &.card-bordered{
+        border:1px solid fade(@color-master-light, 70%);
+    }
+    &.card-borderless{
+        border:none;
+    }
+    &.card-condensed{
+        .card-header{
+            padding: @panel-condensed-heading-padding;
+            min-height: 30px;
+            .card-title{
+              opacity: .4;
+            }
+        }
+        .card-body{
+            padding: @panel-condensed-body-padding;
+        }
+    }
+    &.card-hover{
+        .card-header .card-title{
+            opacity: .4;
+        }
+        &:hover{
+            .card-header .card-title{
+                opacity: 1;
+            }
+        }
+    }
+    &.card-transparent{
+        background: transparent;
+        border:none;
+        .box-shadow(none);
+        .card-body{
+            background: transparent;
+        }
+    }
+    &.full-height{
+        height: calc(~'100%');
+        .card-body{
+            height: auto;
+            width: 100%;
+            height: 100%;
+        }
+    }
+    &.card-featured {
+        .box-shadow(-1px 1px 3px 0px rgba(121, 129, 135, 0.14));
+        width: calc(~'100% - 50px');
+        .float(right);
+        .card-title {
+            h4 {
+                font-family: 'Montserrat';
+                font-size: 16px;
+                text-transform: uppercase;
+                color: @color-master-lighter;
+
+            }
+        }
+        .card-body {
+            h3 {
+                line-height: 34px;
+                font-size: 26px;
+            }
+        }
+        .footer {
+            .username {
+                line-height: 8px;
+                padding-top: 10px;
+                font-size: 16px;
+            }
+            .buttons {
+                li {
+                    display: inline;
+                    list-style: none;
+                    font-weight: bold;
+                    .margin-left(20px);
+                    &:first-child {
+                        .margin-left(0);
+                    }
+                }
+                .heart {
+                    color: @color-danger;
+
+                }
+                .comment {
+                    color: @color-master;
+                }
+            }
+        }
+        .ribbon {
+            width: 38px;
+            height: 38px;
+            .margin-left(-39px);
+            .float(left);
+            .box-shadow( inset -3px 0px 3px 0px rgba(0,0,0,0.14) );
+            &.green {
+                background: @color-complete;
+
+            }
+            &.blue {
+                background: @color-success;
+
+            }
+        }
+    }
+    &.hover-fill:hover{
+        background:@color-master-lighter;
+    }
+    &.hover-stroke{
+        &:hover{
+            border:1px solid @color-master-light;
+        }
+    }
+
+    .card-body{
+        padding: @panel-padding;
+        //overflow-y: auto;
+        &.no-padding{
+            .row{
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        &.no-bottom-padding{
+            padding-bottom: 0;
+        }
+        &.no-top-padding{
+            padding-top: 0;
+        }
+        .title{
+            margin-top:0px;
+        }
+        &.scrollable{
+            margin-bottom: @panel-padding;
+        }
+    }
+}
+
+
+/* Portlets
+------------------------------------
+*/
+.card-progress{
+    background: rgba(255,255,255,.8);
+    bottom: 0;
+    left: 0;
+    position: absolute !important;
+    right: 0;
+    top: 0;
+    display: none;
+    z-index: 2;
+}
+.card-progress > .progress,
+.card-progress > .progress.progress-small{
+    height: 3px;
+}
+.card-progress > .progress-circle-indeterminate,
+.card-progress > .card-bar-indeterminate{
+    display: block;
+    left: 50%;
+    .margin-left(-17px);
+    margin-top: -17px;
+    position: absolute;
+    top: 50%;
+}
+.card-progress > .progress-circle-indeterminate{
+    width: 35px;
+    height: 35px;
+}
+.card-maximized{
+    position: fixed !important;
+    .left(@layout-sidepanel-width);
+    top: @layout-header-height - 1px;
+    bottom: 0;
+    right: 0;
+    z-index: @zIndex-portlet;
+    margin: 0;
+    width: auto;
+}
+
+/* Pages notification holder */
+.card .pgn-wrapper{
+    position: absolute;
+    z-index: @zIndex-portlet + 2;
+    .left(0) !important;
+    top:0 !important;
+}
+
+.card-header a:not(.btn){
+    color: @color-master !important;
+    opacity: .4;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    &.card-refresh{
+        .transition(opacity .3s ease);
+        &.refreshing{
+            opacity: 1;
+        }
+
+    }
+}
+.card-header {
+    .dropdown-menu {
+        .dropdown-item{
+            padding: 0 20px !important;
+            &:hover{
+                opacity: 1;
+                background-color: transparent;
+            }
+        }
+    }
+    a[data-toggle]:hover{
+        opacity: 1;
+    }
+}
+
+.card-icon{
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "pages-icon";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-transform: none;
+}
+.card-icon-close:before{
+    content: "\e60a";
+}
+.card-icon-maximize:before{
+    content: "\e634";
+}
+.card-icon-refresh:before{
+    content: "\e600";
+}
+.card-icon-collapse:before{
+    content: "\e62c";
+}
+
+.card-icon-settings:before{
+    content: "\e655";
+}
+.card-icon-refresh-lg-master,
+.card-icon-refresh-lg-white{
+    width: 15px;
+    height: 15px;
+    display: block;
+    background-size: cover;
+     .transition(opacity .3s ease);
+    &.fade{
+        opacity: 0.1;
+    }
+}
+.card-icon-refresh-lg-master{
+    background-image:url('@{base-img-url}/progress/progress-circle-lg-master-static.svg');
+}
+
+.card-icon-refresh-lg-white{
+    background-image:url('@{base-img-url}/progress/progress-circle-lg-white-static.svg');
+}
+
+.card-icon-refresh-lg-master-animated,
+.card-icon-refresh-lg-white-animated{
+    width: 15px;
+    height: 15px;
+    display: block;
+    background-size: cover;
+    opacity: 0;
+    .transition(opacity .3s ease);
+    &.active{
+        opacity: 1
+    }
+}
+.card-icon-refresh-lg-master-animated{
+    background-image:url('@{base-img-url}/progress/progress-circle-lg-master.svg');
+}
+.card-icon-refresh-lg-white-animated{
+    background-image:url('@{base-img-url}/progress/progress-circle-lg-white.svg');
+}
+
+
+/* For demo purpose only */
+.card-scroll{
+    height: 100px;
+}
+.sortable .card-header {
+    cursor: move;
+}
+/* To prevent lag while dragging */
+.ui-sortable-handle{
+    transition: max-height 0.3s ease 0s;
+}
+.sortable .grid .grid-title {
+    cursor: move;
+}
+.ui-sortable {
+    min-height: 0px !important;
+}
+.ui-sortable-placeholder {
+    border: 1px dotted black;
+    visibility: visible !important;
+    height: 100% !important;
+    * {
+        visibility: hidden;
+    }
+}
+.sortable-box-placeholder {
+    background-color: @color-master-lighter;
+    border: 1px dashed @color-master-light;
+    display: block;
+    margin-top: 0px !important;
+    margin-bottom: 24px !important;
+    * {
+        visibility: hidden;
+    }
+}
+.sortable .card{
+    transition: none;
+}
+.sortable-column{
+    padding-bottom: 100px;
+}
+.demo-card-scrollable{
+   height:158px
+}
+
+.card-body {
+    padding: 15px;
+}

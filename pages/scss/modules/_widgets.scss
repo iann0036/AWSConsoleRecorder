@@ -1,0 +1,379 @@
+/*------------------------------------------------------------------
+[27. Widgets]
+*/
+.widget {
+  position: relative;
+  & > div {
+    position: relative;
+    z-index: 1;
+  }
+  &:after {
+    background-size: cover;
+    content: " ";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 0;
+    opacity: .69;
+  }
+}
+.widget-1 {
+  &:after {
+    background-image: url("#{$assets-url}/img/dashboard/pages_hero.jpg");
+    background-size: cover;
+    content: " ";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 0;
+    opacity: .69;
+  }
+  &:before {
+    background-image: url('#{$base-img-url}/linear_gradient.png');
+    background-repeat: repeat-x;
+    content: " ";
+    left: 0;
+    right: 0;
+    height: 325px;
+    bottom: 0;
+    position: absolute;
+    z-index: 1;
+  }
+  & > .card-body {
+    // padding: 54px 37px 37px 37px;
+    .company:nth-child(2) > div {
+      display: table;
+      margin: 0 auto;
+      width: 127px;
+    }
+  }
+  & > .card-body > * {
+    z-index: 1;
+  }
+  & > .card-body > *:not(.pull-bottom) {
+    position: relative;
+  }
+  & > .card-body .pull-bottom {
+    padding: 0 49px 56px 42px;
+  }
+  span.label {
+    color: #fff;
+    background: rgba(255, 255, 255, .3);
+  }
+}
+.widget-2 {
+  &:after {
+    background-image: url("#{$assets-url}/img/social/person-cropped.jpg");
+  }
+}
+.widget-3 {
+  a{text-decoration: none;
+  }
+  .pg-map {
+    font-size: 30px;
+  }
+  .widget-3-fav {
+    background: rgba(0, 0, 0, 0.07);
+    vertical-align: middle;
+    padding: 6px 11px;
+    display: block;
+  }
+}
+
+.widget-4{
+  .row-sm-height:nth-child(1){
+    height:30px;
+  }
+  .row-sm-height:nth-child(2){
+    height:30px;
+  }
+}
+.widget-4-chart {
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  &.line-chart .tick text,
+  .line-chart .nvd3 .nv-axis .nv-axisMaxMin text {
+    transform: translate(-10px, -32px);
+  }
+  .nvtooltip .nv-pointer-events-none {
+    thead {
+      display: none;
+    }
+    tbody {
+      .nv-pointer-events-none .key {
+        display: none;
+      }
+    }
+  }
+}
+.widget-5-chart-container {
+  overflow: hidden
+}
+.widget-5-chart {
+  height: auto;
+  width: auto;
+  bottom: 20px;
+  position: absolute;
+  right: 20px;
+  left: 20px;
+  top: 40px;
+}
+.widget-6 {
+  background: mix($color-master,
+  #fff,
+  69%);
+  .label {
+    background: rgba(0, 0, 0, .3);
+    color: rgba(255, 255, 255, .67);
+  }
+}
+.widget-7 {
+  .slide-back{
+    .row-sm-height:nth-child(1){
+      height: 60%;
+    }
+    .row-sm-height:nth-child(2){
+      height: 40%;
+    }
+  }
+}
+.widget-7-chart {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  &.line-chart[data-points="true"] .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    stroke-opacity: 1;
+  }
+  .nvd3 circle.nv-point:nth-child(4) {
+    fill: $color-danger !important;
+    stroke: $color-danger !important;
+  }
+}
+.widget-8{
+  height:145px;
+  .row-xs-height:first-child{
+    height:41px
+  }
+}
+.widget-8-chart {
+  height: 100px;
+  width: 50%;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  .line-chart[data-points="true"] .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    stroke-opacity: 0.3;
+  }
+  .line-chart .nvd3 .nv-groups path.nv-line {
+    stroke-opacity: 0.15;
+  }
+  .nvtooltip{
+    display: none;
+  }
+}
+
+.widget-9{
+  height:145px;
+  .row-xs-height:first-child{
+    height:26px;
+  }
+  .progress{
+    background:rgba(0,0,0,.1);
+  }
+}
+.widget-10{
+    height:145px;
+}
+.widget-11 {
+  sup {
+    margin-right: -4px;
+  }
+  .widget-11-table{
+    height:380px; 
+    tr td:first-child{
+      width: 40%;
+    }
+  }
+}
+.widget-11-2 {
+  sup {
+    margin-right: -4px;
+  }
+  .widget-11-2-table{
+    height:273px;
+  }
+}
+
+.widget-12 {
+  .list-inline {
+    a{padding: 3px 4px;
+      border-radius: 3px;
+      opacity: .7;
+    }
+    .active a {
+      opacity: 1;
+    }
+  }
+  .nvd3-line svg{
+    height:316px;
+  }
+  .company-stat-boxes  .close{
+    line-height:0;
+  }
+  .widget-12-search{
+    margin-top: -3px;
+  }
+  @media (max-width: 992px){
+    flex: none;
+  }
+}
+.widget-14 {
+    .row-xs-height:nth-child(1){
+        height: 30px
+    }
+    .row-xs-height:nth-child(2){
+        height: 120px
+    }
+    .row-xs-height:nth-child(3){
+        height: 297px
+    }
+}
+.widget-14-chart_y_axis {
+  position: absolute;
+  top: 0;
+  background: rgba(255,  255,  255, .8);
+  bottom: 0;
+  width: 35px;
+  left: 0;
+  z-index: 2;
+  .rickshaw_graph .y_ticks path,
+  .rickshaw_graph .x_ticks_d3 path {
+    fill: none;
+    stroke: none;
+  }
+  .rickshaw_graph .y_ticks text,
+  .rickshaw_graph .x_ticks_d3 text {
+    opacity: 0.35;
+    font-family: 'Montserrat';
+    font-size: 11px;
+  }
+  .y_ticks.plain g:first-child {
+    opacity: 0 !important;
+  }
+}
+.widget-14-chart-legend .ui-sortable li {
+  padding-right: 0;
+  .action {
+    display: none;
+  }
+  &:last-child {
+    margin-top: 7px;
+  }
+}
+
+.widget-15{
+    #widget-15-tab-1 > div{
+        height:170px;
+    }
+}
+.widget-15-2{
+    height:469px;
+    #widget-15-2-tab-1 .full-width{
+        height:180px;
+    }
+}
+.widget-16-header .pull-left:last-child{
+    width:69%;
+}
+.widget-16-chart {
+    height:100px;
+  &.line-chart[data-stroke-width="2"] .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    stroke-width: 2px;
+  }
+}
+
+.widget-17{
+    height:467px;
+    .widget-17-weather{
+        width:90%
+    }
+}
+.widget-18-post {
+    height:342px;
+  background: url('#{$assets-url}/img/social/quote.jpg');
+  background-position: center center;
+  background-size: cover
+}
+.widget-19-post {
+    height:237px;
+  background: #00A79A;
+  img {
+    top: 50%;
+    margin-top: -70px
+  }
+}
+.btn-circle-arrow {
+  border: 1px solid #fff;
+  border-radius: 100px;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+  i {
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -5px;
+    margin-top: -4px;
+  }
+}
+
+/*** Large screens ***/
+@media only screen and (min-width:1824px) {
+  // Dashboard
+  .ar-3-2:before {
+    padding-top: calc(55% - 5px) !important;
+  }
+  .ar-2-3:before {
+    padding-top: calc(135% - 5px) !important;
+  }
+}
+@media (max-width:991px) {
+  .card {
+    height: auto !important;
+  }
+  .widget-8,
+  .widget-9,
+  .widget-10 {
+    height: 180px !important;
+  }
+}
+@media (max-width:480px) {
+  .widget-1-wrapper {
+    height: 340px;
+  }
+}
+
+@media (max-width: 420px) {
+    .widgets-container{
+        margin-top: 80px;
+    }
+}
+
+@media (max-width: 610px) {
+    .widget-item, .widgets-container {
+        width: 100% !important;
+    }
+}

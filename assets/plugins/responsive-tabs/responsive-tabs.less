@@ -1,0 +1,76 @@
+// responsive-tabs.less
+// Additional styles to handle a responsive version of tabbed navigation
+// ---------------------------------------------------------------------
+
+
+// First up are adjustments needed for small screen mode
+
+@media (max-width: 767px) {
+    body {
+      	padding: 0;
+    }
+    .tabbable.responsive .nav-tabs {
+      	font-size: 16px;
+    }
+    .tabbable.responsive .nav-tabs ul {
+      	margin: 0;
+    }
+    .tabbable.responsive .nav-tabs li {
+      	// box-sizing seems like the cleanest way to make sure width includes padding
+      	.box-sizing(border-box); 
+      	display: inline-block; 
+      	width: 100%; 
+      	height: 44px;
+      	line-height: 44px; 
+      	padding: 0 15px;
+      	border: 1px solid #ddd;
+      	overflow: hidden;
+    }
+    .tabbable.responsive .nav-tabs > li > a {
+      	border-style: none;
+      	display: inline-block;
+      	margin: 0;
+      	padding: 0;
+    }
+    // include hover and active styling for links to override bootstrap defaults
+    .tabbable.responsive .nav-tabs > li > a:hover {
+      	border-style: none; 
+      	background-color: transparent;
+    }
+    .tabbable.responsive .nav-tabs > li > a:active,
+    .tabbable.responsive .nav-tabs > .active > a,
+    .tabbable.responsive .nav-tabs > .active > a:hover {
+      	border-style: none;
+    }
+}
+
+// Now some example styles for the extra elements we add (in small screen mode)
+// Feel free to adjust to suit
+
+.tabbable.responsive .nav-tabs > li > a.tab-control,
+.tabbable.responsive .nav-tabs > li > span.tab-control-spacer {
+    float: left;
+    width: 36px;
+    height: 36px;
+    margin-top: 4px;
+    font-size: 56px;
+    font-weight: 100;
+    line-height: 26px;
+    color: #fff;
+    text-align: center;
+    background: #444;
+    .border-radius(18px);
+    }
+.tabbable.responsive .nav-tabs > li > a.tab-control.right,
+.tabbable.responsive .nav-tabs > li > span.tab-control-spacer.right {
+    float: right;
+}
+.tabbable.responsive .nav-tabs > li > a.tab-control:hover {
+    color: @white;
+    background: @grayDark;
+}
+.tabbable.responsive .nav-tabs > li > span.tab-control-spacer {
+    line-height: 28px;
+    color: transparent;
+    background: transparent;
+}

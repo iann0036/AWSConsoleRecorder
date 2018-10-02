@@ -1,0 +1,224 @@
+/*------------------------------------------------------------------
+[30. Demo : Only for demo pursposes]
+*/
+
+
+@builder-options-width : 260px;
+@builder-options-header-height :102px;
+@assets-img-url:'../../assets/img/';
+
+.builder{
+    width: 423px;
+    .right(-423px);
+    & > div{
+        height:calc(~'100% - 12px');
+    }
+    [data-action]{
+        &.active:before{
+            background-image: url('@{assets-img-url}/demo/tick.svg');
+            width: 23px;
+            height: 23px;
+            content: '';
+            position: absolute;
+            top: 84px;
+            right: -10px;
+            z-index: 10;
+        }
+    }
+    a{
+        position: relative;
+        display: block;
+        width: 100%;
+        color:mix(@color-master, #fff, 60%);
+        & > img{
+            opacity: 0.33;
+            .transition(opacity 0.1s linear);
+        }
+
+        &.active{
+            color:@color-master;
+             & > img{
+                opacity: 0.87;
+             }
+        }
+        
+        &:hover{
+            color:mix(@color-master, #fff, 80%);
+             & > img{
+                opacity: 0.7;
+             }
+        }
+        &.btn-toggle-layout{
+            &.active{
+                &:before{
+                     background-image: url('@{assets-img-url}/demo/tick.svg');
+                     width: 23px;
+                     height: 23px;
+                     content: '';
+                     position: absolute;
+                    top: 84px;
+                    .right(-10px);
+                    z-index: 10;
+                }
+            }
+        }
+    }
+    .builder-footer{
+        right:0;
+        left:0;
+        z-index: 10;
+    }
+    .theme-selector.active:before{
+        top: 54px;
+        .right(10px);
+    }
+    .nav-tabs {
+        background-color: transparent;
+        padding: 0;
+        & > li > a{
+            min-width: 99px;
+            padding: 16px 0;
+        }
+    }
+    .nav-tabs ~ .tab-content{
+        position: relative;
+        .padding-right(0px);
+        height: 100%;
+        top:0;
+        background-color: #fff;
+        .tab-pane{
+             height: 100%;
+             overflow-x: hidden !important;
+            .scrollable{
+                padding-top: 27px;
+                height: ~'calc(100% - 47px)';
+                overflow-x: hidden !important;
+             }
+        }
+
+    }
+    .builder-close{
+        position: absolute;
+        .right(36px);
+        top: 20px;
+        padding: 7px;
+        width: auto;
+        z-index: 10;
+    }
+    .builder-toggle{
+        position: absolute;
+        width: 54px;
+        height: 50px;
+        top: 20%;
+        left: -48px;
+        text-align: center;
+        line-height: 50px;
+        cursor: pointer;
+    }
+    &:before{
+        position: absolute;
+        content: '';
+        width: 48px;
+        height: 50px;
+        background-color: #fff;
+        top:20%;
+       .left(-47px);
+        box-shadow:0 0 9px rgba(191,191,191,.36);
+        .border-left(1px solid rgba(222,227,231,.56));
+        .border-left-radius(4px);
+    }
+    &:after{
+        position: absolute;
+        content: '';
+        background-color: #fff;
+        width: 5px;
+        height: 50px;
+        .left(0);
+        top: 20%;
+    }
+    .btn-toggle-theme{
+         & > img{
+            opacity: 1 !important;
+        }
+         p{
+            line-height: 18px;
+        }     
+    }
+}
+.rtl {
+    .builder .builder-toggle{
+        left: auto;
+        right: -48px;
+    }
+}
+.content-builder{
+    display: none;
+    &.active{
+        display: block;
+    }
+    .placeholder{
+        position: relative;
+        &:after{
+            content: "Content goes here";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin-top: -10px;
+            right: 0;
+            text-align: center;
+            font-size: 26px;
+            opacity: .16;
+            color: @color-master;
+        }
+    }
+}
+.previewer{
+    height: 35px;
+}
+
+/* Demo Widths For GIF Animations 
+------------------------------------
+*/
+.demo-bg-hinted{
+    background-color: #939393
+}
+.demo-fs-23{
+    font-size:23px !important;
+}
+.demo-mw-50{
+    max-width: 50px;
+}
+.demo-mw-300{
+    max-width: 300px;
+}
+.demo-mw-350{
+    max-width: 350px;
+}
+.demo-mw-400{
+    max-width: 400px;
+}
+.demo-mw-500{
+    max-width: 500px;
+}
+.demo-mw-600{
+    max-width: 600px;
+}
+.demo-container{
+    height: 2000px;
+}
+
+/* Views page */
+.view-iframe-wrapper{
+    width: 100%;
+    height: 255px;
+    background: #fff;
+    position: relative;
+    iframe{
+        width: 100%;
+        height: 100%;
+        padding: 45px 45px 0 45px;
+        @media (max-width:1200px){
+            padding: 0;
+        }
+    }
+}

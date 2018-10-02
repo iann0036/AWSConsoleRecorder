@@ -1,0 +1,44 @@
+/* Overlay Search
+------------------------------------
+*/
+.overlay{
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  background:rgba(255,255,255,.95);
+  z-index:1010;
+  padding-left: 64px;
+  overflow:auto;
+  .inline-block{
+    display:inline-block;
+  }
+  .overlay-brand{
+    margin-left: 7px;
+  }
+  & > div{
+    width:100%;
+    height:260px;
+    display:block;
+    overflow:hidden;
+  }
+  .has-results{
+    overflow: visible;
+  }
+  .overlay-search{
+    font-weight:700;
+    font-size: 77px;
+    height: 100px;
+    letter-spacing: -1.925px;
+    line-height: 100px;
+    width:100%;
+    padding-left:0 !important;
+  }
+  .overlay-close{
+  position:absolute;
+  right:20px;
+  top:5px;
+  }
+
+}

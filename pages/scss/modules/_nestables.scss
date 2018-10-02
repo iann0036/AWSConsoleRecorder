@@ -1,0 +1,84 @@
+/*------------------------------------------------------------------
+[14. Nesstables]
+*/
+
+.dd-handle{
+	border-color: fade-out($color-master-light, .3);
+	color:$color-master;
+	&:hover{
+		background-color: $color-master-lightest
+	}
+}
+
+.dark {
+	.dd-handle{
+	color:$color-master;
+	background: $color-master-lighter;
+		&:hover{
+			background-color: $color-master-lightest
+		}
+	}
+	.dd-placeholder{
+		background-color:$color-master-light;
+	}
+
+}
+
+.dd3-content{
+	background:#fff;
+	border-color: fade-out($color-master-light, .3);
+	color:$color-master;
+	&:hover{
+		background-color: $color-master-lightest
+	}
+}
+
+.dd3-handle{
+	background:transparent;
+	text-indent: 9999px;
+	&:before{
+		font-family: 'pages-icon';
+		color:$color-master;
+		content:"\e660";
+		font-size: 11px;
+		top: 5px;
+	}
+}
+
+.dd-placeholder{
+	background:$color-master-lighter;
+	border-color: fade-out($color-master, .65);
+}
+
+.dd-empty{
+	background-image:none;
+	background:$color-master-lighter;
+	border-color: fade-out($color-master, .5);
+}
+.dd-item > button{
+	font-size: 11px;
+	&:before{
+	font-family: 'pages-icon';
+	content: "\e63b";
+	}
+}
+.dd-item > button[data-action="collapse"]:before{
+	font-family: 'pages-icon';
+	content: "\e635";
+}
+
+
+
+/* Responsive Handlers : Nestables
+------------------------------------
+*/
+@media only screen and (min-width: 700px) { 
+	.dd {
+		width: 100%;
+	}
+	.nestable-lists{
+		.dd{
+			float: left;
+		}
+	}
+}

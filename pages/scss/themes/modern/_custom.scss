@@ -1,0 +1,107 @@
+// Pages Modern Theme
+// --------------------------------------------------
+// Copyright Reserved Revox - 2014
+// --------------------------------------------------
+
+// Import Vars
+@import "var";
+
+// START Theme Overwrite
+.horizontal-app-menu .header{
+  background: #fff;
+}
+.horizontal-app-menu .header .header-inner{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.horizontal-app-menu .header .header-inner .brand.inline{
+  padding-right: 45px;
+  margin-right: 20px;
+}
+.horizontal-app-menu .header .header-icon{
+  color: #fff;
+}
+.horizontal-app-menu .header .search-link{
+  color: #fff;
+}
+.horizontal-app-menu .menu-bar > ul > li.open > a{
+  opacity: 1;
+  transition: none;
+  transform: none;
+}
+.horizontal-app-menu .menu-bar > ul > li:first-child > a{
+  padding-left: 4px;
+}
+.horizontal-app-menu .menu-bar ul li a .arrow{
+  padding-left: 7px;
+}
+.header {
+  .bubble{
+    background-color: $color-danger;
+  }
+}
+.menu-bar{
+  border-bottom: 1px solid rgba(0,0,0,.13);
+  ul{
+    li {
+      &.active{
+        border-bottom: 2px solid $color-primary;
+        a{
+          opacity: .87;
+        }
+      }
+      a{
+        opacity: .6;
+        color: #000;
+      }
+    }
+  }
+}
+@media (min-width: 992px){
+  .horizontal-app-menu {
+    .menu-bar{
+      & > ul {
+        & > li{
+          margin: 0 12px;
+          &:first-child{
+            margin-left: 0;
+          }
+          & > a{
+            padding: 0 4px;
+          }
+          & > ul{
+            left: -21px;
+          }
+        }
+      }
+    }
+    .ghost-nav-dropdown {
+      left: -21px;
+    }
+  }
+}
+
+.jumbotron{
+  padding-top: 20px;
+}
+
+@media (max-width:979px){
+.horizontal-app-menu {
+  .header {
+    padding-left: 0;
+    .header-inner{
+      padding-left: 15px;
+      padding-right: 15px;
+      .brand.inline{
+        padding: 0;
+          margin: 0;
+          margin-left: 35px;
+      }
+    }
+  }
+  .menu-bar ul li a{
+    padding-right: 20px !important;
+  }
+ }
+}
+// END Theme Overwrite

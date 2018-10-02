@@ -1,0 +1,81 @@
+/*------------------------------------------------------------------
+[3. Chat]
+*/
+
+/* Chat Components
+--------------------------------------------------
+*/
+
+@chat-list-height:60px;
+@alert-list-height:45px;
+.chat-view{
+	.chat-inner{
+		padding: 15px;
+		overflow-x: hidden;
+		height: calc(~'100% - 103px');
+	}
+	.message{
+		margin-bottom: 10px;
+		line-height: 30px;
+	}
+	.profile-img-wrapper{
+		height: 28px;
+		width: 28px;
+	}
+	.chat-bubble{
+		position:relative;
+		border-radius:12px;
+		padding: 4px 12px;
+		font-size: 14px;
+		line-height: 16px;
+		.margin(5px, 0px, 0, 5px);
+		max-width: 60%;
+		white-space: normal;
+		& > p{
+			margin: 0;
+		}
+		&.from-me {
+			background:@color-complete-lighter;
+			color:@color-master-dark;
+			opacity: 0.8; 
+			.float(right);
+			border: 1px solid rgba(0, 0, 0, 0.07);
+		}
+		&.from-them {
+			color:@color-master-dark;
+			opacity: 0.8; 
+			background:@color-master-lighter;
+			position:relative;
+			opacity: 0.8; 
+		  	.float(left);
+		  	border: 1px solid mix(@color-complete-darker, #fff, 7%);
+
+		}
+	}
+	.chat-input{
+		border: 0;
+		height: 45px;
+		&:focus,&:active{
+			background-color: #fff;
+		}
+	}
+	.user-controls{
+		padding-top:12px;
+	}
+}
+/* Chat User List
+--------------------------------------------------
+*/
+.chat-user-list{
+	& > a {
+		height: @chat-list-height;
+	}
+}
+/* Alert List
+--------------------------------------------------
+*/
+.alert-list{
+	& > a {
+		height: @alert-list-height;
+	}
+}

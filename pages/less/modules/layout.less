@@ -1,0 +1,160 @@
+/*------------------------------------------------------------------
+[1. Core Layout]
+*/
+html {
+    height: 100%;
+}
+/* Body Triggers for layout options
+------------------------------------------------------------------
+*/
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: @color-master-lightest;
+    direction: @direction;
+    -moz-osx-font-smoothing: grayscale;
+    &.fixed-header {
+        .header {
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+    }
+    &.no-header{
+        .page-container .page-content-wrapper .content{
+            padding-top: 0px;
+        }
+        .header{
+            border-bottom-color: transparent;
+        }
+    }
+    &.dashboard{
+        background: @dashboard-background;
+        .page-container{
+            background: @dashboard-background;
+        }
+    }
+    &.rtl{
+        [class^="col-"], [class*="col-"] {
+          .float(left);
+        }
+    }
+    &.menu-pin{
+        .overlay{
+            padding-left:0;
+            .overlay-brand{
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+
+
+/* Page Container
+------------------------------------
+*/
+.page-container {
+    width:100%;
+    height:100%;
+    .padding-left(@layout-sidepanel-width-collapsed);
+    .page-content-wrapper{
+        min-height: 100%;
+        position: relative;
+        .content {
+            /* Content holder */
+            z-index: 10;
+            padding-top: @layout-header-height;
+            padding-bottom: 69px;
+             min-height: 100%;
+            .transition(all 0.3s ease);
+            &.full-width{
+                width: 100%;
+            }
+            .content-inner{
+                display: inline-block;
+                vertical-align: top;
+                height: 100%;
+                .padding-left(30px);
+                position: relative;
+            }
+            &:only-child{
+                padding-bottom:0px;
+            }
+            &.overlay-footer{
+                padding-bottom:0px;
+            }
+        }
+        .footer{
+            /* Footer */
+            width: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            .transition(left 0.3s ease);
+            &.fixed{
+                position: fixed;
+            }
+        }
+    }
+}
+.page-title{
+    margin-top: 0px;
+}
+
+.group-container {
+	  white-space: nowrap !important;
+	.single-group {
+	  vertical-align: top;
+	  display: inline-block;
+	  white-space: normal;
+	  }
+}
+
+.jumbotron{
+    position: relative;
+    overflow: hidden;
+    display: block;
+    padding: 0;
+        .inner{
+            position: relative;
+            z-index: 2;
+        }
+        &.lg{
+            height: 600px;
+        }
+
+    background-color: @color-master-lighter;
+    .cover-photo{
+        width: 100%;
+        height: inherit;
+        overflow: hidden;
+        .transition(opacity .3s ease);
+        background-size: cover;
+        background-color: @color-success;
+        img{
+            display:none;
+        }
+    }
+    h1 {
+        font-size: 44px;
+    }
+}
+
+/* Other overides */
+.container-fluid {
+    padding-left: 30px;
+    padding-right: 30px;
+    position: relative;
+}
+
+.copyright{
+    padding: 25px 0;
+    border-top: 1px solid fade(@color-master,7%);
+}
+
+.pager{
+    margin: 0;
+}

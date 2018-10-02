@@ -1,0 +1,53 @@
+.error-number{
+    font-family: 'Montserrat';
+    font-size: 90px;
+    line-height: 90px;
+}
+.error-container-innner{
+    margin-left: auto;
+    margin-right: auto;
+    width: 360px;
+}
+.error-container{
+    margin-top: -100px;
+    width: 38%;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape){
+    .error-page{
+        .error-container{
+            width: auto;
+        }
+    }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    .error-page{
+        .error-container{
+            width: auto;
+        }
+    }
+}
+
+
+@media (max-width: 767px) {
+  .error-container{
+    width:auto;
+  }
+}
+
+@media (max-width: 480px) {
+    .error-page{
+        padding: 15px;
+        .error-container{
+            margin-top: 30px;
+            width: auto;
+        }
+        .pull-bottom{
+            position: relative;
+        }
+    }
+    .error-container-innner{
+        width: auto;
+    }
+}

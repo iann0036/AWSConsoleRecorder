@@ -1,0 +1,763 @@
+/*------------------------------------------------------------------
+[5. Typography]
+*/
+
+/* Standard elements
+--------------------------------------------------
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600');
+
+html{
+    font-size: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+body{
+    color: @color-master;
+    font-family : @base-font-family;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+}
+/* Headings 
+------------------------------------
+*/
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+    margin: 10px 0;
+    font-family : @base-font-family;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%;
+    font-weight: 300;
+    color: @color-master-dark;
+}
+h1 {
+    font-size: 44px;
+    line-height: 55px;
+    letter-spacing: -0.08px;
+}
+h2 {
+    font-size: 31px;
+    line-height: 40px;
+}
+h3 {
+    font-size: 27px;
+    line-height: 35px;
+}
+h4 {
+    font-size: 22px;
+    line-height: 31.88px;
+}
+h5{
+    font-size: 18px;
+    line-height: 25.88px;
+}
+h3 small, 
+h4 small, 
+h5 small {
+    font-weight: 300;
+}
+h1.block, 
+h2.block, 
+h3.block, 
+h4.block, 
+h5.block, 
+h6.block {
+    padding-bottom: 10px;
+}
+/* Lins and Others
+------------------------------------
+*/
+a {
+    text-shadow: none !important;
+    color: @color-primary-dark;
+    transition: color 0.1s linear 0s,background-color 0.1s linear 0s,opacity 0.2s linear 0s !important;
+}
+a:focus, a:hover, a:active {
+    color: @color-primary;
+}
+a,a:focus, a:hover, a:active {
+    outline: 0 !important;
+    text-decoration: none;
+}
+a[ng-click] {
+    cursor: pointer;
+}
+br {
+   line-height: normal;
+   clear: both;
+}
+code{
+    color:@color-danger-dark;
+    background-color: @color-master-lighter;
+    &:hover {
+        background-color: @color-danger-lighter;
+    }
+}
+p {
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+    line-height: 22px;
+    margin: 0px 0px 10px 0px;
+    font-style: normal;
+    white-space: normal;
+}
+small, 
+.small{
+    line-height: 18px;
+    font-size: 85%;
+}
+label {
+    &.inline {
+        display: inline-block;
+        position: relative;
+        top: 0px;
+        font-size: 13px;
+    }
+}
+ul,ol {
+    margin-bottom: 10px;
+    & > li {
+        .padding-left(3px);
+        line-height: 24px;
+    }
+    &.lg-icon{
+        & > li {
+            font-size: 21px;
+            & span {
+                font-size: 14px;
+            }
+        }
+    }
+    &.no-style{
+        list-style: none;
+        .padding-left(5px);
+    }
+}
+address {
+    margin-bottom: 0px;
+    a{
+        color:@color-master;
+    }
+}
+blockquote {
+    padding: 0 0 0 18px;
+    border-left:0;
+    &:before{
+        content: '';
+        font-family: FontAwesome;
+        content: "\f10d";
+        .margin-right(13px);
+        .float(left);
+    }
+    p {
+        font-size: 16px;
+    }
+    small {
+        line-height: 29px;
+        color: #8b91a0;
+        .padding-left(30px);
+        &:before {
+            content: "";
+        }
+    }
+    &.pull-right {
+        border-right:0;
+        &:before{
+            float: right;
+            content: '';
+            font-family: FontAwesome;
+            content: "\f10d";
+            margin-left: 13px;
+            margin-right: 0;
+        }
+        small {
+            padding-right: 30px;
+            &:after {
+                content: "";
+            }
+        }
+    }
+}
+hr{
+  border-color:@color-master-light;
+  &.double{
+    border-width:2px;
+  }
+  &.dotted{
+    border-style:dotted none none;
+  }
+}
+
+/* Font Sizes 
+------------------------------------
+*/
+
+.small-text {
+    font-size: 12px !important;
+}
+.normal-text {
+    font-size: 13px !important;
+}
+.large-text {
+    font-size: 15px !important;
+}
+
+/* Font Weights
+------------------------------------
+ */
+
+.normal {
+    font-weight: normal;
+}
+.semi-bold {
+    font-weight: 400 !important;
+}
+.bold {
+    font-weight: bold !important;
+}
+.light {
+    font-weight: 300 !important;
+}
+
+
+/* Misc 
+------------------------------------
+*/
+
+.logo {
+    margin: 18px 14px;
+}
+.all-caps {
+    text-transform: uppercase;
+}
+.muted {
+    color: lighten(@color-master,50%);
+}
+.hint-text{
+    opacity: .7;
+}
+.no-decoration{
+    text-decoration:none !important;
+}
+/* Monochrome Colors
+------------------------------------
+ */
+
+.bg-master{
+    background-color: @color-master;
+}
+.bg-master-light{
+    background-color: @color-master-light;
+}
+.bg-master-lighter{
+    background-color: @color-master-lighter;
+}
+.bg-master-lightest{
+    background-color: @color-master-lightest;
+}
+.bg-master-dark{
+    background-color: @color-master-dark;
+}
+.bg-master-darker{
+    background-color: @color-master-darker;
+}
+.bg-master-darkest{
+    background-color: @color-master-darkest;
+}
+
+/* Contextual Colors
+------------------------------------
+*/
+
+/* Primary
+------------------------------------
+*/
+.bg-primary {
+    background-color: @color-primary !important;
+}
+.bg-primary-dark {
+    background-color: @color-primary-dark;
+}
+.bg-primary-darker {
+    background-color: @color-primary-darker;
+}
+.bg-primary-light {
+    background-color: @color-primary-light;
+}
+.bg-primary-lighter {
+    background-color: @color-primary-lighter;
+}
+
+/* Complete 
+------------------------------------
+*/
+.bg-complete {
+    background-color: @color-complete;
+}
+.bg-complete-dark {
+    background-color: @color-complete-dark;
+}
+.bg-complete-darker {
+    background-color: @color-complete-darker;
+}
+.bg-complete-light {
+    background-color: @color-complete-light;
+}
+.bg-complete-lighter {
+    background-color: @color-complete-lighter;
+}
+
+/* Success 
+------------------------------------
+*/
+.bg-success {
+    background-color: @color-success !important;
+}
+.bg-success-dark {
+    background-color: @color-success-dark;
+}
+.bg-success-darker {
+    background-color: @color-success-darker;
+}
+.bg-success-light {
+    background-color: @color-success-light;
+}
+.bg-success-lighter {
+    background-color: @color-success-lighter;
+}
+
+/* Info
+------------------------------------
+*/
+.bg-info{
+    background-color: @color-info !important;
+}
+.bg-info-dark{
+    background-color: @color-info-dark;
+}
+.bg-info-darker{
+    background-color: @color-info-darker;
+}
+.bg-info-light{
+    background-color: @color-info-light;
+}
+.bg-info-lighter{
+    background-color: @color-info-lighter;
+}
+
+/* Danger 
+------------------------------------
+*/
+.bg-danger {
+    background-color: @color-danger !important;
+}
+.bg-danger-dark {
+    background-color: @color-danger-dark;
+}
+.bg-danger-darker {
+    background-color: @color-danger-darker;
+}
+.bg-danger-light {
+    background-color: @color-danger-light;
+}
+.bg-danger-lighter {
+    background-color: @color-danger-lighter;
+}
+
+/* Warning
+------------------------------------
+ */
+.bg-warning {
+    background-color: @color-warning !important;
+}
+.bg-warning-dark {
+    background-color: @color-warning-dark;
+}
+.bg-warning-darker {
+    background-color: @color-warning-darker;
+}
+.bg-warning-light {
+    background-color: @color-warning-light;
+}
+.bg-warning-lighter {
+    background-color: @color-warning-lighter;
+}
+
+/* More Color Options
+------------------------------------
+*/
+
+/* Menu 
+------------------------------------
+*/
+.bg-menu-dark{
+    background-color: @color-menu-dark;
+}
+.bg-menu{
+    background-color: @color-menu;
+}
+.bg-menu-light{
+    background-color: @color-menu-light;
+}
+
+/* Gradients
+------------------------------------
+*/
+.gradient-grey {
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 75%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 75%);
+}
+.gradient-black {
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 75%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 75%);
+}
+
+/* Other Colors
+------------------------------------
+*/
+.bg-white{
+    background-color: #fff;
+}
+.bg-transparent{
+    background-color: transparent !important;
+}
+
+/* Text Colors */
+.link{
+    opacity: .7;
+    &:hover{
+        opacity: 1;
+    }
+}
+.text-master{
+    color : @color-master !important;
+}
+.text-master-light{
+    color : @color-master-light !important;
+}
+.text-black {
+    color: @color-master-dark !important;
+}
+.text-white {
+    color: #fff !important;
+}
+.text-complete{
+    color: @color-complete !important;
+}
+.text-success {
+    color: @color-success !important;
+}
+.text-info {
+    color: @color-info !important;
+}
+.text-warning {
+    color: @color-warning !important;
+}
+.text-warning-dark{
+    color: @color-warning-dark !important;
+}
+
+.text-danger {
+    color: @color-danger !important;
+}
+.text-primary{
+    color: @color-primary !important;
+}
+
+/* Text Aligngments
+------------------------------------
+*/
+
+.text-right {
+    .text-align(right) !important;
+}
+.text-left {
+    .text-align(left) !important;
+}
+.text-center {
+    text-align: center !important;
+}
+
+/* Labels
+------------------------------------
+*/
+
+.label {
+    padding: 3px 9px;
+    font-size: 11px;
+    line-height: 1;
+    text-shadow: none;
+    background-color: @color-master-light;
+    font-weight: 600;
+    color: @color-master;
+    border-radius: .25em;
+}
+.label-success {
+    background-color: @color-success;
+    color: #fff;
+}
+.label-warning{
+    background-color: @color-warning;
+    color: #fff;
+}
+.label-important, .label-danger {
+    background-color: @color-danger;
+    color: #fff;
+}
+.label-info{
+    background-color: @color-complete;
+    color: #fff;
+}
+.label-inverse {
+    background-color: @color-complete-dark;
+    color: #fff;
+}
+.label-white {
+    background-color: #fff;
+    color: @color-master;
+}
+
+/* Font Sizes
+------------------------------------
+*/
+.fs-10{
+    font-size: 10px !important;
+}
+.fs-11{
+    font-size: 10.5px !important;
+}
+.fs-12{
+    font-size: 12px !important;
+}
+.fs-13{
+    font-size: 13px !important;
+}
+.fs-14{
+    font-size: 14px !important;
+}
+.fs-15{
+    font-size: 15px !important;
+}
+.fs-16{
+    font-size: 16px !important;
+}
+
+/* Line-heights
+------------------------------------
+*/
+.lh-normal{
+    line-height: normal;
+}
+.lh-10{
+    line-height: 10px;
+}
+.lh-11{
+    line-height: 11px;
+}
+.lh-12{
+    line-height: 12px;
+}
+.lh-13{
+    line-height: 13px;
+}
+.lh-14{
+    line-height: 14px;
+}
+.lh-15{
+    line-height: 15px;
+}
+.lh-16{
+    line-height: 16px;
+}
+
+/* Font Faces
+------------------------------------
+*/
+
+.font-arial{
+    font-family:  Arial, sans-serif !important;
+}
+.font-montserrat{
+    font-family: 'Montserrat' !important;
+}
+.font-georgia{
+    font-family: Georgia !important;
+}
+.font-heading{
+    font-family : @base-font-family;
+}
+
+/* Wells
+------------------------------------
+*/
+.well {
+    background-color: @color-master-light;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none;
+    background-image: none;
+    &.well-large {
+        padding: 24px;
+        width: auto;
+    }
+    &.well-small {
+        padding: 13px;
+        width: auto;
+    }
+    &.green {
+        background-color: @color-complete;
+        color:  @color-white ;
+        border: none;
+    }
+}
+.overflow-ellipsis{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.jumbotron {
+    .border-radius(0);
+    p{
+        font-size: 14px;
+        font-weight: normal;
+        margin-bottom: inherit;
+        &.small{
+            font-size: 85%;
+        }
+    }
+}
+
+
+/* Responsive Handlers : Typo
+------------------------------------
+*/
+
+@media (max-width: 1400px) { 
+
+    body, p{
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+
+    h1 {
+        font-size: 33px;
+        line-height: 44px;
+        letter-spacing: -0.08px;
+    }
+    h2 {
+        font-size: 28px;
+        line-height: 40px;
+    }
+    h3 {
+        font-size: 24px;
+        line-height: 35.88px;
+    }
+    h4 {
+        font-size: 18px;
+        line-height: 33.88px;
+    }
+    h5{
+        font-size: 16px;
+        line-height: 25.88px;
+    }
+    small, .small{
+         font-size: 89%;
+         line-height: 17px;
+    }
+
+}
+
+
+/* For Windows : Fixes 
+------------------------------------
+*/
+.windows {
+    body, 
+    p{
+        font-size: 13px;
+        letter-spacing: normal;
+    }
+    h3{
+        font-size: 29px;
+        line-height: 33px;
+    }
+    h4{
+        font-size: 23px;
+        line-height: 32px;
+    }
+    h5{
+        font-size: 19px;
+        line-height: 28px;
+        font-weight: normal;
+    }
+    h1, 
+    h2, 
+    h3, 
+    h4, 
+    h5{
+        letter-spacing: normal;
+
+    }
+
+    .jumbotron p{
+        font-size: 13px;
+        &.small{
+            font-size: 85%;
+        }
+    }
+    small, 
+    .small{
+        font-size: 89%;
+    }
+
+
+}
+
+.alert {
+    & > p, & > ul {
+        margin-bottom: 0;
+    }
+}
+.table{
+    & > tbody{
+        & > tr{
+            & > td, & > th{
+                line-height: 1.42857143;
+            }
+        }
+    }
+    & > tfoot{
+        & > tr{
+            & > td, & > th{
+                line-height: 1.42857143;
+            }
+        }
+    }
+    & > thead{
+        & > tr{
+            & > td, & > th{
+                line-height: 1.42857143;
+            }
+        }
+    }
+}

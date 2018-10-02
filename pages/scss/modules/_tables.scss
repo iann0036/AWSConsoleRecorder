@@ -1,0 +1,251 @@
+/*------------------------------------------------------------------
+[16. Tables and Datatables]
+*/
+
+/* Generic Tables 
+------------------------------------
+*/
+.table {
+    margin-bottom: 0;
+    margin-top: 5px;
+    thead {
+        tr {
+            th {
+                text-transform: uppercase;
+                font-weight: 500;
+                font-family:'Montserrat';
+                font-size: 10.5px;
+                letter-spacing: 0.06em;
+                padding-top: 14px;
+                padding-bottom: 14px;
+                vertical-align: middle;
+                border-bottom: 1px solid fade-out($color-master-light, .3);
+                color:fade-out($color-master-dark, .65);
+                border-top: none;
+                &[class*='sorting_']:not([class='sorting_disabled']){
+                    color:$color-master-dark;
+                }
+                &:first-child {
+                    padding-left: 18px !important;
+                }
+                .btn {
+                    margin-top: -20px;
+                    margin-bottom: -20px;
+                }
+            }
+        }
+    }
+    tbody {
+        tr {
+            td {
+                background: #fff;
+                border-bottom: 1px solid fade-out($color-master-light, .3);
+                border-top: 0px;
+                padding:20px;
+                font-size: 13.5px;
+                .btn-tag {
+                    background:fade-out($color-master-dark, .93);
+                    display: inline-block;
+                    margin: 5px;
+                    border-radius: 4px;
+                    padding: 5px;
+                    color: #62605a !important;
+                    &:hover {
+                        background:fade-out($color-master-dark, .85);
+                    }
+                }
+                &[class*='sorting_'] {
+                    color:#000;
+                }
+                .checkbox label::after{
+                    left: 0.5px;
+                }
+            }
+            &.selected td {
+                background: $color-warning-lighter;
+            }
+        }
+    }
+    &.table-hover {
+        tbody {
+            tr {
+                &:hover td {
+                    background: $color-complete-lighter !important;
+                }
+                &.selected:hover td{
+                    background: $color-warning-lighter !important;
+                }
+            }
+        }
+    }
+    &.table-striped {
+        tbody {
+            tr {
+                td {
+                    background: $body-background !important;
+                }
+                &:nth-child(2n+1) td {
+                    background: #fff !important;
+                }
+            }
+        }
+    }
+    &.table-borderless{
+         tbody {
+            tr {
+                td {
+                   border-top: 0;
+                }
+            }
+        }       
+    }
+    &.table-condensed {
+        table-layout: fixed;
+        thead {
+            tr {
+                th {
+                    padding-left: 20px;
+                    padding-right: 20px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                }
+            }
+        }
+        thead tr th, tbody tr td, tbody tr td *:not(.dropdown-default){
+            white-space: nowrap;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &.reset-overflow *{
+                overflow: initial !important;
+            }
+        }
+        &.table-detailed {
+            & > tbody > tr {
+                &.shown {
+                    & > td {
+                        background: $color-warning-lighter;
+                        &:first-child:before {
+                            @include rotate(90deg);
+                        }
+                    }
+                    & + tr {
+                        & > td {
+                            background: fade-out($body-background, .6);
+                            padding: 0px 40px;
+                            .table-inline{
+                                margin-top: 13px;
+                                margin-bottom: 13px;
+                                background: transparent;
+                                tr,td{
+                                background: transparent;
+                                font-weight: 600;
+                                }
+                            }
+                        }
+                    }
+                }
+                &.row-details{
+                     & > td {
+                        &:first-child:before {
+                            content: '';
+                            display: none;
+                        }
+                    }
+                }
+                & > td {
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    &:first-child:before {
+                        content:"\f054";
+                        display: inline-block;
+                        margin-right: 8px;
+                        font-size: 8px;
+                        top: -1px;
+                        position: relative;
+                        font-family: 'FontAwesome';
+                        @include transition(all 0.12s linear);
+                    }
+                }
+            }
+            .table-inline {
+                td {
+                    border: none;
+                    text-align: left;
+                }
+            }
+        }
+    }
+    &.table-borderless{
+        & > tbody{
+            & > tr{
+                & > td{
+                    border-bottom: 0px;
+                }
+            }
+        }
+    }
+}
+.fht-table {
+    margin-bottom: 0 !important;
+}
+
+
+@media (max-width: 767px) {
+    .table-responsive{
+        border: 1px solid #ddd;
+    }
+}
+
+/* Demo classes */
+.demo-table-search{
+    thead th{
+        &:nth-child(1){
+            width: 20%;
+        }
+        &:nth-child(2){
+            width: 22%;
+        }
+        &:nth-child(3){
+            width: 24%;
+        }
+        &:nth-child(4){
+            width: 15%;
+        }
+        &:nth-child(5){
+            width: 19%;
+        }
+    }
+}
+
+.demo-table-dynamic {
+    thead th{
+        &:nth-child(1){
+            width: 25%;
+        }
+        &:nth-child(2){
+            width: 30%;
+        }
+        &:nth-child(3){
+            width: 20%;
+        }
+        &:nth-child(4){
+            width: 25%;
+        }
+    }
+}
+
+.table-invoice{
+    th{
+        border-top: 0;
+    }
+}
+
+@import '../vendor/datatable.scss';

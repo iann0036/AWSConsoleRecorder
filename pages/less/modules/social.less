@@ -1,0 +1,452 @@
+/*------------------------------------------------------------------
+[19. Social App]
+*/
+
+.social-wrapper,
+.social{
+    height: 100%;
+    width: 100%;
+}
+
+/* Cover
+------------------------------------
+*/
+
+.social-wrapper .social .jumbotron{
+    height: 60vh;
+    padding-top: 0;
+}
+.social-wrapper .social .cover-photo {
+    position: relative;
+    margin: 0 auto;
+    overflow-x: hidden;
+    &:before{
+        background-image: url("@{base-img-url}/linear_gradient.png");
+        background-repeat: repeat-x;
+        bottom: 0;
+        content: " ";
+        height: 270px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        z-index: 1;
+    }
+    .pull-bottom{
+        z-index: 2;
+    }
+}
+ .cover-img-container {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.cover-img-container .cover-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+/* Feed
+------------------------------------
+*/
+
+.social-user-profile{
+    width: 52px;
+    & > .thumbnail-wrapper{
+        float: none;
+    }
+}
+
+.social-wrapper .social .feed {
+    overflow-y: hidden;
+    width: 100%;
+
+    & > .day {
+        white-space: normal;
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+
+        &:after {
+            feed:'';
+            display: block;
+            clear: both;
+        }
+        &:hover {
+            & > .timeline:after {
+                background: @color-complete;
+            }
+        }
+    }
+}
+
+/* Social Cards
+------------------------------------
+*/
+
+.social-card {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    background: #FFF;
+    .float(left);
+    position: relative;
+    border-radius: 4px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    margin-bottom: 20px;
+    width: 300px;
+    border:1px solid @color-master-light;
+    .circle {
+        position: absolute;
+        .right(20px);
+        top: 20px;
+        display: block;
+        border-radius: 50%;
+        border:2px solid @color-master-lighter;
+        width: 9px;
+        height: 9px;
+        background: @color-info-light;
+        z-index: 1;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    &.full-width{
+        width: 100% !important
+    }
+    &.status {
+        background: @color-complete-lighter;
+        border-radius: 4px;
+        padding: 15px 25px;
+        .box-sizing(border-box);
+        border:1px solid transparent;
+        &:hover,&.hover {
+            border-color: @color-info-lighter !important;
+        }
+        h5 {
+            font-size: 12px;
+            margin: 0;
+            .time {
+                color: #fff;
+            }
+        }
+        h2 {
+            color: @color-master-dark;
+            font-size: 25px;
+            line-height: 32px;
+            margin: 0;
+            font-weight: normal;
+        }
+        .reactions {
+            color: @color-master-lighter;
+            opacity: .45;
+            font-size: 12px;
+            padding: 0;
+            margin: 5px 0 0;
+            padding: 0;
+            li {
+                display: inline-block;
+                list-style: none;
+                padding: 0;
+            }
+        }
+        .circle {
+            width: 9px;
+            height: 9px;
+            border: none;
+            background: @color-complete;
+        }
+    }
+    .card-header, .card-footer {
+        background-color: @color-white;
+        .transition(background .2s ease);
+    }
+    &.share {
+        .card-header {
+            padding: 15px 15px 12px;
+            border-bottom:1px solid @color-master-light;
+            border-top-right-radius: 2px;
+            border-top-left-radius: 2px;
+            &:hover {
+                background: @color-complete-lighter;
+                border-color:@color-complete-lighter;
+                cursor: pointer;
+                h6 {
+                    opacity: .6;
+                }
+            }
+            &.last{
+                border-bottom: none;
+            }
+            .user-pic {
+                .float(left);
+                border-radius: 50%;
+                overflow: hidden;
+                .margin-right(10px);
+                & > img {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+            h5 {
+                font-weight: bold;
+                font-size: 14px;
+                margin: 0;
+                line-height: 22.7px;
+                font-family: arial;
+                letter-spacing: -0.006em;
+                margin-top: -3px;
+            }
+            h6 {
+                font-size: 12px;
+                margin: 0;
+                opacity: .45;
+                font-family: arial;
+                opacity: .45;
+            }
+        }
+        .card-description {
+            padding:12px 16px 11px;
+            font-size: 14px;
+            line-height: 21px;
+            margin: 0;
+            p {
+                margin-bottom: 4px;
+            }
+            &:hover {
+            }
+            .via {
+                opacity: .45;
+                display: block;
+                font-size: 12px;
+                font-family: arial;
+            }
+        }
+        .card-content{
+            position: relative;
+            .buttons{
+                .left(17px);
+                padding: 0;
+                position: absolute;
+                top: 10px;
+                li {
+                    display: inline-block;
+                    list-style: none;
+                    .margin-right(10px);
+                    a{
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .card-feed {
+            overflow: hidden;
+            position: relative;
+            max-height: 400px;
+            &:hover {
+                .buttons {
+                    opacity: 1;
+                }
+            }
+            .buttons {
+                position: absolute;
+                top: 5px;
+                .right(0);
+                opacity: 0;
+                li {
+                    display: inline-block;
+                    list-style: none;
+                    a {
+                        color: #fff;
+                        opacity: 0.8;
+                        padding: 5px;
+                    }
+                }
+            }
+            & > * {
+                max-width: 100%;
+            }
+        }
+        .card-footer {
+            padding: 14px 16px 11px;
+            font-size: 12px !important;
+            &:hover {
+                background: @color-complete-lighter;
+                cursor: pointer;
+                .reactions, .time {
+                    opacity: .8;
+                }
+            }
+            .time {
+                .float(left);
+                opacity: .45;
+                font-family: arial;
+                margin-top: 1px;
+            }
+            .reactions {
+                .float(right);
+                margin:0;
+                padding: 0;
+                opacity: .45;
+                li {
+                    display: inline-block;
+                    list-style: none;
+                    a {
+                        color: inherit;
+                    }
+                }
+            }
+        }
+        .card-description, .card-feed, .card-footer {
+            border-color: transparent;
+            border-style: solid;
+        }
+        .card-description {
+            border-width: 1px;
+        }
+        .card-feed {
+            border-width: 0 1px;
+            margin-top: -2px;
+        }
+        .card-footer {
+            border-width: 0 1px 1px 1px;
+        }
+        &.share-other {
+            .card-description {
+                padding-bottom: 0;
+            }
+            .card-footer {
+                padding-top: 0;
+                border-radius: 0;
+                &:hover {
+                    background: #fff;
+                }
+            }
+            .card-header {
+                border-top:1px solid @color-complete-lighter;
+            }
+            .circle {
+                background: @color-warning;
+            }
+        }
+    }
+    &.col1 {
+        width: 300px;
+    }
+    &.col2 {
+        width: 620px;
+    }
+    &.col3 {
+        width: 920px;
+    }
+    img {
+        width: 100%;
+    }
+}
+/* Step Form : Status */
+.simform{
+    .margin-left(0);
+    padding:0;
+    position: static;
+    margin-bottom: 20px;
+    .error-message{
+        padding-top: 29px !important;
+        .padding-left(22px);
+    }
+    .final-message, .error-message{
+        margin: 0 !important;
+        font-size: 15px;
+        opacity: 0.5;
+        display: none;
+        margin-top: 19px;
+        position: static;
+        .text-align(left);
+        .translate(0,0);
+    }
+    ol:before {
+        background: transparent;
+    }
+    .questions li{
+        overflow: hidden;
+        &.current{
+            position: relative;
+            input{
+                font-size:14px;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+        }
+        & > span{
+            width: 100%;
+            label{
+                font-size: 12px;
+                opacity: .55;
+                font-weight: 300;
+                .transition(opacity .2s ease);
+            }
+        }
+    }
+    .questions input{
+        background: transparent !important;
+        height: 30px;
+    }
+    .questions .current input,
+    .no-js .questions input {
+        background: transparent;
+        border: none;
+    }
+    .controls {
+        position: absolute;
+        top:0;
+        .left(0);
+        width: 100%;
+        .next, .number{
+            display: none !important;
+        }
+    }
+    .progress{
+        &:before{
+            background:none;
+        }
+    }
+    .show{
+        display: block;
+    }
+}
+
+
+/* Responsive Handlers: Social App
+------------------------------------
+*/
+
+@media (min-width: 991px) and (max-width: 1070px) {
+    .day .card:first-child{
+        .col-md-4:first-child{
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .col-md-4:nth-child(2), .col-md-4:nth-child(3){
+            width: 50%;
+        }
+
+    }
+}
+@media (max-width: 667px) {
+   .social-wrapper .social .feed {
+
+    & > .day {
+
+        & > .card{
+            width: 100% !important;
+        }
+    }
+}
+}

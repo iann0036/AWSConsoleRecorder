@@ -1,0 +1,660 @@
+/*------------------------------------------------------------------
+[11. Tabs & Accordians]
+*/
+
+/* Tabs
+------------------------------------
+*/
+.nav-tabs {
+  position: relative;
+  & > li {
+    padding-left: 0;
+    padding-right: 0;
+    & > a.active {
+      &:hover,
+      &:focus {
+        border-color: @color-master-light;
+        color: @color-master;
+        background-color: @color-master-light;
+      }
+    }
+    & > a {
+      display: block;
+      border-radius: 0;
+      padding: 13px 20px;
+      .margin-right(0);
+      font-family: 'Montserrat';
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: fade(@color-master,
+      70%);
+      font-size: 10.5px;
+      min-width: 70px;
+      text-transform: uppercase;
+      border-color: transparent;
+      position: relative;
+      line-height: 1.7em;
+      &:hover,
+      &:focus {
+        background: transparent;
+        border-color: transparent;
+        color: @color-master;
+      }
+      .tab-icon {
+        .margin-right(6px);
+      }
+    }
+  }
+  & ~ .tab-content {
+    overflow: hidden;
+    padding: 15px;
+    & > .tab-pane {
+      &.slide-left,
+      &.slide-right {
+        .transition(all .3s ease) !important;
+        &.sliding {
+          opacity: 0 !important;
+        }
+        &.active {
+          .translate3d(0, 0, 0);
+          opacity: 1;
+        }
+      }
+      &.slide-left.sliding {
+        .translate3d(10%, 0, 0) !important;
+      }
+      &.slide-right.sliding {
+        .translate3d(-10%, 0, 0) !important;
+      }
+    }
+  }
+  // POSITIONG OPTIONS
+  &.nav-tabs-left,
+  &.nav-tabs-right {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    //Old Browsers
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    &:after {
+      border-bottom: 0px;
+    }
+    & > li {
+      float: none;
+    }
+  }
+  &.nav-tabs-left {
+    float: left;
+    padding-right:0;
+    & ~ .tab-content {
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      //IE10 Fix
+     -ms-flex: 1;
+     -ms-flex-negative:0;
+    }
+  }
+  &.nav-tabs-right {
+    float: right;
+    padding-right: 0;
+    & ~ .tab-content {
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      //IE10 Fix
+     -ms-flex: 1;
+     -ms-flex-negative:0;
+    }
+  }
+}
+
+/* Tabs : Simple 
+------------------------------------
+*/
+
+.nav-tabs-simple {
+  border-bottom: 0px;
+  &:after {
+    content:'';
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: absolute;
+    bottom: -2px;
+    z-index: 120;
+    left: 0;
+  }
+  & > li {
+    margin-bottom: 0;
+    & > a{
+      &:after {
+        position: absolute;
+        .transition(all 0.1s linear 0s);
+        -webkit-backface-visibility: hidden;
+        width: 100%;
+        display: block;
+        background-color: @color-danger;
+        height: 0px;
+        content: '';
+        left: 0;
+        z-index: 125;
+        top: 100%;
+        .nav-tabs-primary& {
+          background-color: @color-primary;
+        }
+        .nav-tabs-success& {
+          background-color: @color-success;
+        }
+        .nav-tabs-complete& {
+          background-color: @color-complete;
+        }
+        .nav-tabs-danger& {
+          background-color: @color-danger;
+        }
+        .nav-tabs-warning& {
+          background-color: @color-warning;
+        }
+        .nav-tabs-info& {
+          background-color: @color-info;
+        }
+      }
+      &.active  {
+        &:hover,
+        &:focus {
+          background-color: transparent;
+          border-color: transparent;
+        }
+      }
+      &.active,
+      &:hover {
+        &:after {
+          height: 3px;
+        }
+      }
+    }
+  }
+  // POSITIONG OPTIONS
+  &.nav-tabs-left,
+  &.nav-tabs-right {
+    &:after {
+      border-bottom: 0px;
+    }
+    & > li {
+      & > a:after {
+        width: 0px;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+      }
+      & > a{
+        &.active,
+        &:hover{
+          &:after {
+            width: 3px;
+          }
+        }
+      }
+    }
+    & ~ .tab-content {
+    }
+  }
+  &.nav-tabs-left {
+    & > li > a:after {
+      right: 0;
+      left: auto;
+    }
+  }
+  &.nav-tabs-right {
+    & > li > a:after {
+      left: 0;
+    }
+  }
+}
+
+/* Tabs : Line Triangles
+------------------------------------
+*/
+
+.nav-tabs-linetriangle {
+  border-bottom: 0;
+  &:after {
+    content:'';
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: absolute;
+    bottom: -1px;
+    z-index: 100;
+    left: 0;
+  }
+  & > li {
+    & > a{
+      &.active {
+        background: transparent;
+        box-shadow: none;
+        border-color: transparent;
+        &:hover,
+        &:focus,
+        &:active {
+          border-color: transparent;
+          background-color: transparent;
+        }
+        &:after,
+        &:before {
+          border: medium solid transparent;
+          content: "";
+          height: 0;
+          left: 50%;
+          pointer-events: none;
+          position: absolute;
+          width: 0;
+          z-index: 120;
+          top: 98%;
+        }
+        &:after {
+          border-top-color: @body-background;
+          border-width: 10px;
+          .margin-left(-10px);
+        }
+        &:before {
+          border-top-color: rgba(0, 0, 0, 0.2);
+          border-width: 11px;
+          .margin-left(-11px);
+        }
+      }
+      span {
+        font-size: 1em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &:hover,
+      &:focus {
+        overflow: visible;
+        .transition( color 0.2s ease 0s);
+      }
+    }
+  }
+  & ~ .tab-content {
+    background: #fff;
+  }
+  // POSITIONG OPTIONS
+  &.nav-tabs-left {
+    &.nav-tabs {
+      &:after {
+        border-bottom: none;
+      }
+      & > li > a{
+        &.active {
+          &:before {
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+            border-left: 11px solid rgba(0, 0, 0, 0.2);
+          }
+          &:after {
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid @body-background;
+            margin-top: 1px;
+            .margin-right(2px);
+          }
+          &:after,
+          &:before {
+            top: auto;
+            right: -22px;
+            left: auto;
+          }
+        }
+      }
+    }
+  }
+  &.nav-tabs-right {
+    &.nav-tabs {
+      &:after {
+        border-bottom: none;
+      }
+      & > li > a{
+          &.active {
+            &:before {
+              border-top: 11px solid transparent;
+              border-bottom: 11px solid transparent;
+              border-right: 11px solid rgba(0, 0, 0, 0.2);
+            }
+            &:after {
+              border-top: 10px solid transparent;
+              border-bottom: 10px solid transparent;
+              border-right: 10px solid @body-background;
+              margin-top: 1px;
+              .margin-left(-9px);
+            }
+            &:after,
+            &:before {
+              top: auto;
+              left: -11px;
+              right: auto;
+            }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width:58em) {
+  .nav-tabs-linetriangle {
+    font-size: 0.6em;
+  }
+}
+
+/* Tabs : Fill-up 
+------------------------------------
+*/
+
+.nav-tabs-fillup {
+  .backface-visibility(hidden);
+  .perspective(1000);
+  & > li {
+    overflow: hidden;
+    & > a {
+      .backface-visibility(hidden);
+      .transition(color 0.3s ease 0s);
+      background: transparent;
+      &:after {
+        .backface-visibility(hidden);
+        background: none repeat scroll 0 0 @color-success;
+        border: 1px solid @color-success;
+        content: "";
+        height: calc(~'100% + 1px');
+        left: 0;
+        position: absolute;
+        top: 0;
+        -webkit-transform: translate3d(0,
+        100%,
+        0px);
+        transform: translate3d(0,
+        100%,
+        0px);
+        -webkit-transition: -webkit-transform 0.3s ease 0s;
+        transition: transform 0.3s ease 0s;
+        width: 100%;
+        z-index: -1;
+        .nav-tabs-primary& {
+          background: none repeat scroll 0 0 @color-primary;
+          border: 1px solid @color-primary;
+        }
+        .nav-tabs-success& {
+          background: none repeat scroll 0 0 @color-success;
+          border: 1px solid @color-success;
+        }
+        .nav-tabs-complete& {
+          background: none repeat scroll 0 0 @color-complete;
+          border: 1px solid @color-complete;
+        }
+        .nav-tabs-warning& {
+          background: none repeat scroll 0 0 @color-warning;
+          border: 1px solid @color-warning;
+        }
+        .nav-tabs-danger& {
+          background: none repeat scroll 0 0 @color-danger;
+          border: 1px solid @color-danger;
+        }
+        .nav-tabs-info& {
+          background: none repeat scroll 0 0 @color-info;
+          border: 1px solid @color-info;
+        }
+      }
+      span {
+        .backface-visibility(hidden);
+        -webkit-transform: translate3d(0px, 5px, 0px);
+        transform: translate3d(0px, 5px, 0px);
+        -webkit-transition: -webkit-transform 0.5s ease 0s;
+        transition: transform 0.5s ease 0s;
+        display: block;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+      &.active {
+        z-index: 100;
+        color: #fff;
+        &:hover,
+        &:focus {
+          border-color: transparent;
+          background: transparent;
+          color: #fff;
+        }
+        &:after {
+          .translate3d(0px, 0px, 0px);
+        }
+        span {
+          .translate3d(0px, -5px, 0px);
+        }
+      }
+    }
+  }
+  .icon:before {
+    .translate3d(0px, 5px, 0px);
+    .transition(transform 0.5s ease 0s);
+    display: block;
+    margin: 0;
+  }
+  & ~ .tab-content {
+    background: #fff;
+  }
+  // POSITIONG OPTIONS
+  &.nav-tabs-left,
+  &.nav-tabs-right {
+    border-bottom: none;
+    &:after {
+      border-bottom: none;
+    }
+    & > li {
+      & > a {
+        &:after {
+          width: calc(~'100% + 1px');
+          height: 100%;
+        }
+      }
+      &.active {
+        a{&:after {
+            .translate3d(0px, 0px, 0px);
+          }
+        }
+      }
+    }
+  }
+  &.nav-tabs-left {
+    & > li {
+      & > a {
+        &:after {
+          .translate3d(100%, 0, 0);
+        }
+        span {
+          .translate3d(5px, 0, 0px);
+        }
+      }
+      &.active {
+        a{span {
+            .translate3d(-5px, 0, 0px);
+          }
+        }
+        .icon:before {
+          .translate3d(-5px, 0, 0px);
+        }
+      }
+    }
+  }
+  &.nav-tabs-right {
+    & > li {
+      & > a {
+        &:after {
+          .translate3d(-100%, 0, 0);
+          left: -1px;
+        }
+        span {
+          .translate3d(-5px, 0, 0px);
+        }
+      }
+      &.active {
+        a{span {
+            .translate3d(5px, 0, 0px);
+          }
+        }
+        .icon:before {
+          .translate3d(5px, 0, 0px);
+        }
+      }
+    }
+  }
+}
+
+.nav-tabs-header{
+  overflow: scroll;
+  width: 100%;
+  .nav-tabs{
+    width:auto;
+    white-space: nowrap;
+     & > li{
+        display:inline-block;
+        float: inherit;
+      }
+  }
+  &.nav-tabs-linetriangle{
+    height:54px;
+    overflow-y: hidden;
+    &:after{
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      width: 100%;
+      position: relative;
+      bottom: 3px;
+      z-index: 120;    
+      content: "";
+      clear: both;    
+    }
+    &  ~ .tab-content{
+      position: relative;
+      top:-12px;
+    }
+  }
+}
+.nav-tabs-header ~ .tab-content{
+  overflow: hidden;
+  padding: 15px;
+}
+.nav-tab-dropdown .cs-select{
+  width: 100% !important;
+  max-width: 100%;
+  .cs-placeholder{
+    height: 48px;
+    padding: 12px 34px 15px 15px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    font-size: 10.5px;
+    text-transform: uppercase;
+  }
+  .cs-backdrop{
+    border:1px solid transparent;
+    border-bottom: 1px solid @form-control-border-color;
+  }
+}
+
+/* Panel Groups
+------------------------------------
+*/
+
+.card-group {
+  margin-bottom: 18px;
+  &.horizontal{
+    display: block;
+    .card+.card{
+      border-left:1px solid @panel-border-color;
+    }
+  }
+  .card-header {
+    padding: 13px 18px 10px 22px;
+    &.collapsed {
+      background-color: #fff;
+    }
+    & + .card-collapse {
+      .card-body {
+        border: 0;
+      }
+    }
+    .card-title {
+      width: 100%;
+      & > a {
+        color: @color-master;
+        font-size: 13px;
+        font-weight: normal;
+        display: block;
+        opacity: 1;
+        &:hover {
+          color: @color-master !important;
+          &:after {
+            color: @color-master !important;
+          }
+        }
+        &:after {
+          font-family: 'FontAwesome';
+          content: "\f056";
+          position: absolute;
+          .right(13px);
+          top: 36%;
+          color: @color-master;
+        }
+        &.collapsed {
+          color: fade(@color-master,
+          70%);
+          opacity: 1;
+          &:after {
+            content: "\f055";
+            color: fade(@color-master, 70%);
+          }
+        }
+      }
+    }
+  }
+  .card {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 0;
+    -ms-flex: 1 0 0;
+    flex: 1 0 0;
+    & + .card {
+      margin-top: 2px;
+    }
+    .card-body {
+      height: auto;
+    }
+  }
+}
+.nav-pills {
+  > li {
+    &:first-child{
+      padding-left: 0;
+    }
+    // Links rendered as pills
+    > a {
+      color: @color-master;
+    }
+    // Active state
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @color-master;
+        background-color: @color-master-light;
+      }
+    }
+  }
+
+}
+@media (max-width:767px) {
+
+  .nav.nav-tabs.nav-stack-sm {
+    li {
+      float: none;
+    }
+    &.nav-tabs-linetriangle > li.active > a:after,
+    &.nav-tabs-linetriangle > li.active > a:before {
+      display: none;
+    }
+  }
+}

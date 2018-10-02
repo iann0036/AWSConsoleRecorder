@@ -1,0 +1,130 @@
+@import "core.scss";
+@import '~angular-tree-component/dist/angular-tree-component.css';
+$base-img-url :"../../../assets/";
+  
+.toggle-children {
+    z-index: 1;
+    background-image: url("#{$base-img-url}/vendor/tree-icons.gif");
+    background-position: 0px -99px;
+    width: 12px;
+    height: 10px;
+    background-size: auto;
+    transition: transform .2s ease;
+  }
+
+  .toggle-children-wrapper-collapsed {
+      .toggle-children{
+        transform: rotate(0deg);
+      }
+}
+
+tree-node-expander {
+    min-width: 16px;
+}
+
+.tree-node{
+    .node-content-wrapper{
+        padding-left: 26px;
+        position: relative;
+        &:before{
+            position: absolute;
+            background-image: url("#{$base-img-url}/vendor/tree-icons.gif");
+            background-position: 0px -17px;
+            width: 15px;
+            height: 14px;
+            background-size: auto;
+            content: '';
+            left: 4px;
+        }        
+    }
+    &.tree-node-leaf{
+        .node-content-wrapper{
+            padding-left: 20px;
+            position: relative;
+        &:before{
+            position: absolute;
+            background-image: url("#{$base-img-url}/vendor/tree-icons.gif");
+            background-position: 0px 0px;
+            width: 14px;
+            height: 14px;
+            background-size: auto;
+            content: '';
+            left: 0;
+        }
+        }
+    }
+}
+//Bold Styling for document node
+.bold-node-text{
+    .tree-node{
+       .node-content-wrapper{
+            span{
+                font-weight: bold;
+            }
+        }
+        &.tree-node-leaf .node-content-wrapper{
+            span{
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+.node-content-wrapper-active{
+    &.node-content-wrapper-focused{
+        background-color: transparent;
+        border:0;
+    }
+    color:$color-master-dark;
+    .node-content-wrapper:hover{
+        box-shadow: none;
+        background: none;
+    }
+}
+.node-content-wrapper{
+    transition: all .2s ease;
+    &:hover{
+    background: none;
+    box-shadow: none;
+    opacity: 0.7;
+    }
+}
+
+//Single Level Parent Node with folder icon - rest document icon
+.level1-document-icon-only{
+    [class*=tree-node-level-]:not(.tree-node-leaf){
+        .node-content-wrapper{
+            span{
+                font-weight: normal;
+            }
+            &:before{
+            background-position: 0px 0px;
+            }
+        }
+    }
+    .tree-node-level-1:not(.tree-node-leaf){
+        & > tree-node-wrapper > .node-wrapper > .node-content-wrapper:before{
+            background-position: 0px -17px;
+        }
+    }
+}
+
+//Checkbox
+
+.reverse {
+    tree-node-checkbox {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+    tree-node-expander {
+        -webkit-box-ordinal-group: 1;
+        -ms-flex-order: 0;
+        order: 0;
+    }
+    .node-content-wrapper {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+}

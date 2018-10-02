@@ -1,0 +1,369 @@
+/*------------------------------------------------------------------
+[17. Charts]
+*/
+.line-chart{
+    .nvd3 line.nv-guideline{
+        /* Vertical bar on hover in interactive chart */
+        stroke-width:30px;
+        stroke-opacity:.04;
+        stroke : #000;
+    }
+    
+    .nvd3 .nv-groups path.nv-area{
+        /*  filled area */
+         fill-opacity : .1;
+    }
+    .nvd3 .nv-groups path.nv-line{
+        /*  Line */
+        stroke-opacity:.3;
+    }
+    .nvd3 .nv-axis line{
+        /*  grid lines */
+        stroke-opacity: .5;
+    }
+    
+    &[data-x-grid="false"]{
+        .nv-x .tick line { 
+            display: none; 
+        }  
+    } 
+    &[data-y-grid="false"]{
+        .nv-y .tick line { 
+            display: none; 
+        }  
+    } 
+    .domain{
+        /* domain */
+        opacity: 0;
+    }
+
+    &[data-points="true"]{
+        .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+            /* Toggle points */
+            fill-opacity: 1;
+            stroke-opacity: .5;
+        }
+    } 
+
+    .nvtooltip table td.legend-color-guide div{
+        border-radius: 100px;
+    }
+    thead .nv-pointer-events-none strong{
+         color: lighten(@color-master,30%);
+    }
+    .nv-pointer-events-none{
+        
+        font-size: 12px;
+        
+        .value.nv-pointer-events-none{
+            font-family: 'Montserrat';  
+           font-weight: normal;
+           font-size: 11px;
+            color: lighten(@color-master,30%);
+        }
+    }
+    .nvtooltip table{
+        .margin(12px, 10px, 14px, 15px);
+    }
+    .nvtooltip.xy-tooltip.nv-pointer-events-none{
+        border-color : rgba(0, 0, 0, 0.12);
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+    
+     &[data-stroke-width="1"]{
+        .nvd3 .nv-groups path.nv-line{
+            /* Line widths */
+            stroke-width:1px;
+        }
+        .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point{
+            /* Line widths */
+            stroke-width:2px;
+        }
+    }
+    &[data-stroke-width="2"]{
+        .nvd3 .nv-groups path.nv-line{
+            stroke-width:2px;
+        }
+        .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point{
+            stroke-width:3px;
+        }
+    }
+    &[data-stroke-width="3"]{
+        .nvd3 .nv-groups path.nv-line{
+            stroke-width:3px;
+        }
+        .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point{
+            stroke-width:4px;
+        }
+    }
+
+    .tick text,  .nvd3 .nv-axis .nv-axisMaxMin text{
+        fill: fade(@color-master, 50%);
+        font-family: "Montserrat";
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: normal;
+    }
+   
+
+    .nvd3.nv-scatter .nv-groups .nv-point.hover, 
+    .nvd3 .nv-groups .nv-point.hover{
+        fill: inherit !important;
+        stroke: inherit !important;
+    }
+}
+
+
+/* Line widths
+------------------------------------
+*/
+.nvd3 line.nv-guideline,
+.nvd3 .nv-groups path.nv-line,
+.nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    .line-chart[data-line-color="master"] &{
+        stroke: @color-master;
+    }
+    .line-chart[data-line-color="success"] &{
+        stroke: @color-success;
+    }
+    .line-chart[data-line-color="primary"] &{
+        stroke: @color-primary;
+    }
+    .line-chart[data-line-color="info"] &{
+        stroke: @color-info;
+    }
+    .line-chart[data-line-color="complete"] &{
+        stroke: @color-complete;
+    }
+    .line-chart[data-line-color="warning"] &{
+        stroke: @color-warning;
+    }
+    .line-chart[data-line-color="danger"] &{
+        stroke: @color-danger;
+    }
+    .line-chart[data-line-color="white"] &{
+        stroke: #fff;
+    }
+     .line-chart[data-line-color="black"] &{
+        stroke: #000;
+    }
+}
+
+
+/* Area Fill colors
+------------------------------------
+*/
+.nvd3 .nv-groups path.nv-area{
+    .line-chart[data-area-color="master"] &{
+        fill: @color-master;
+    }
+    .line-chart[data-area-color="success"] &{
+        fill: @color-success;
+    }
+    .line-chart[data-area-color="info"] &{
+        fill: @color-info;
+    }
+    .line-chart[data-area-color="complete"] &{
+        fill: @color-complete;
+    }
+    .line-chart[data-area-color="primary"] &{
+        fill: @color-primary;
+    }
+    .line-chart[data-area-color="warning"] &{
+        fill: @color-warning;
+    }
+    .line-chart[data-area-color="danger"] &{
+        fill: @color-danger;
+    }
+    .line-chart[data-area-color="white"] &{
+        fill: #fff;
+    }
+    .line-chart[data-area-color="black"] &{
+        fill: #000;
+    }
+} 
+
+/* Point fill colors
+------------------------------------
+*/
+ .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point{
+    .line-chart[data-point-color="master"] &{
+        fill : @color-master;
+    }
+     .line-chart[data-point-color="success"] &{
+        fill : @color-success;
+    }
+     .line-chart[data-point-color="info"] &{
+        fill : @color-info;
+    }
+     .line-chart[data-point-color="complete"] &{
+        fill : @color-complete;
+    }
+     .line-chart[data-point-color="primary"] &{
+        fill : @color-primary;
+    }
+     .line-chart[data-point-color="warning"] &{
+        fill : @color-warning;
+    }
+     .line-chart[data-point-color="danger"] &{
+        fill : @color-danger;
+    }
+     .line-chart[data-point-color="white"] &{
+        fill : #fff;
+    }
+ }
+    
+#nvd3-line, 
+#nvd3-line2, 
+#nvd3-area{
+    svg{
+        height: 500px;
+    }
+}
+/* Rickshaw Charts
+------------------------------------
+*/
+.rickshaw-chart{
+    &.rickshaw_graph .detail{
+            .padding-left(15px);
+            transform: translateX(-15px);
+            width: 30px;
+            background: rgba(0,0,0,.04);
+            .right(-15px);
+
+            .item, .x_label{
+                transform: translateX(15px);
+            }
+            &:after{
+                content: "";
+                width: 1px;
+                background: rgba(0,0,0,.2);
+                height: 100%;
+                display: block;
+            }
+        }
+        .y_grid .tick.major line{
+            stroke-dasharray: 3px, 5px;
+            opacity: .7;
+        }
+
+}
+
+.rickshaw-chart  {
+  &.rickshaw_graph {
+
+      .detail .x_label { display: none }
+        .detail .item { line-height: 1.4; padding: 0.5em }
+        .detail_swatch { .float(right); display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
+        .detail .date { font-size:11px; color: #a0a0a0; opacity: .5; }
+
+  }
+}
+
+#tab-rickshaw-realtime{
+    #rickshaw-realtime{
+        
+    }
+    #rickshaw-realtime_y_axis {
+        position: absolute;
+        top: 0;
+        background: rgba(255,255,255,.8);
+        bottom: 0;
+        width: 40px;
+        .left(0);
+        z-index: 1;
+        .rickshaw_graph .y_ticks path, .rickshaw_graph .x_ticks_d3 path{
+            fill: none;
+           stroke: none;
+        }
+        .rickshaw_graph .y_ticks text, .rickshaw_graph .x_ticks_d3 text{
+            opacity: 0.35;
+            font-family: 'Montserrat';
+            font-size: 11px;
+
+        }
+    }
+}
+
+#tab-rickshaw-bars{
+    #rickshaw-stacked-bars{
+    
+        &.rickshaw_graph .detail .dot{
+            border-radius: 50px;
+        }
+        &.rickshaw_graph .detail .x_label { display: none }
+        &.rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+        .detail_swatch { .float(right); display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
+        &.rickshaw_graph .detail .date { font-size:11px; color: #a0a0a0; opacity: .5; }
+    }
+}
+
+#tab-rickshaw-slider{
+
+    #rickshaw-slider{
+        height:500px
+    }
+     .rickshaw_graph .x_grid_d3 .tick{
+    stroke-opacity: 0;
+  }
+  .rickshaw_graph .y_ticks path, .rickshaw_graph .x_ticks_d3 path{
+    stroke: none;
+  }
+  .rickshaw_graph .y_ticks text, .rickshaw_graph .x_ticks_d3 text{
+            font-family: 'Montserrat';
+            font-size: 11px;
+        }
+  .rickshaw_range_slider_preview {
+    .frame{
+        opacity: 0;
+    }
+    .left_handle, .right_handle{
+        fill: #000;
+        fill-opacity: 0.1 !important;
+    }
+  }
+  .slider{
+    position: absolute;
+    top:0;
+    height:93px;
+    overflow: hidden;
+  }
+  .chart{
+    position: absolute;
+    bottom: 40px;
+    top: 150px;
+    .left(33px);
+    .right(0);
+    width: auto;
+    .x_tick.plain .title{
+       font-family: 'Montserrat';
+            font-size: 11px; 
+    }
+  }
+  .y_axis{
+    bottom: 0;
+    position: absolute;
+    top: 150px;
+    width: 40px;
+    .left(-6px);
+  }
+
+  .rickshaw_graph .x_tick{
+    border-color: transparent;
+    .title{
+      bottom: -24px;
+      .left(-15px);
+    }
+  }
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top:0;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}

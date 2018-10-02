@@ -1,0 +1,145 @@
+
+.horizontal-app-menu{
+	.map-controls{
+		left: 0;
+		top: 15px;
+	}
+}
+.mapplic-container {
+	width: 100%;
+	background-color: transparent;
+	.mapplic-fullscreen-button {
+		left: auto;
+		right: 154px;
+		bottom: 0;
+		top: auto;
+	}
+	.mapplic-clear-button {
+		visibility: hidden;
+	}
+}
+.mapplic-tooltip:before {
+	content: "Location";
+	font-size: 12px;
+	margin: 0;
+	line-height: normal;
+	opacity: .7;
+	color: $color-master;
+}
+.mapplic-tooltip-close {
+	opacity: .5;
+	background: none;
+	&:after {
+		content: "\e60a";
+		font-family: 'pages-icon';
+		font-size: 12px;
+		position: relative;
+		top: -2px;
+		color: $color-master;
+		opacity: .7;
+	}
+}
+.mapplic-tooltip-title {
+	display: none;
+}
+.mapplic-tooltip-content {
+	margin-top: 5px;
+}
+.mapplic-tooltip {
+	max-width: 150px;
+	padding: 10px 12px;
+	border-radius: 4px;
+}
+.mapplic-tooltip-description {
+	font-weight: bold;
+	color: $color-master;
+}
+.mapplic-tooltip-description strong {
+	color: $color-danger;
+	margin-right: 2px;
+}
+.map-controls {
+	position: absolute;
+	left: 50px;
+	top: 80px;
+	z-index: 1;
+	select{
+		width: 240px;
+	}
+}
+.mapplic-pin {
+	background-image: url('#{$assets-url}/img/maps/marker-master.svg');
+	background-size: contain;
+	&.pulse {
+		background-image: url('#{$assets-url}/img/maps/pulse-master.svg');
+		&.green {
+			background-image: url('#{$assets-url}/img/maps/pulse-success.svg');
+		}
+		&.blue {
+			background-image: url('#{$assets-url}/img/maps/pulse-complete.svg');
+		}
+		&.purple {
+			background-image: url('#{$assets-url}/img/maps/pulse-primary.svg');
+		}
+		&.yellow {
+			background-image: url('#{$assets-url}/img/maps/pulse-warning.svg');
+		}
+		&.red {
+			background-image: url('#{$assets-url}/img/maps/pulse-danger.svg');
+		}
+	}
+	&.pulse-alt {
+		background-image: url('#{$assets-url}/img/maps/pulse-alt-master.svg');
+		&.green {
+			background-image: url('#{$assets-url}/img/maps/pulse-alt-success.svg');
+		}
+		&.blue {
+			background-image: url('#{$assets-url}/img/maps/pulse-alt-complete.svg');
+		}
+		&.purple {
+			background-image: url('#{$assets-url}/img/maps/pulse-alt-primary.svg');
+		}
+		&.yellow {
+			background-image: url('#{$assets-url}/img/maps/pulse-alt-warning.svg');
+		}
+		&.red {
+			background-image: url('#{$assets-url}/img/maps/pulse-alt-danger.svg');
+		}
+	}
+	&.marker {
+		background-image: url('#{$assets-url}/img/maps/marker-master.svg');
+		&.green {
+			background-image: url('#{$assets-url}/img/maps/marker-success.svg');
+		}
+		&.blue {
+			background-image: url('#{$assets-url}/img/maps/marker-complete.svg');
+		}
+		&.purple {
+			background-image: url('#{$assets-url}/img/maps/marker-primary.svg');
+		}
+		&.yellow {
+			background-image: url('#{$assets-url}/img/maps/marker-warning.svg');
+		}
+		&.red {
+			background-image: url('#{$assets-url}/img/maps/marker-danger.svg');
+		}
+	}
+	&.marker-alt {
+		background-image: url('#{$assets-url}/img/maps/marker-alt-master.svg');
+		&.green {
+			background-image: url('#{$assets-url}/img/maps/marker-alt-success.svg');
+		}
+		&.blue {
+			background-image: url('#{$assets-url}/img/maps/marker-alt-complete.svg');
+		}
+		&.purple {
+			background-image: url('#{$assets-url}/img/maps/marker-alt-primary.svg');
+		}
+		&.yellow {
+			background-image: url('#{$assets-url}/img/maps/marker-alt-warning.svg');
+		}
+		&.red {
+			background-image: url('#{$assets-url}/img/maps/marker-alt-danger.svg');
+		}
+	}
+}

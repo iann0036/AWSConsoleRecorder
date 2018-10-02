@@ -1,0 +1,292 @@
+/* Header
+------------------------------------
+*/
+.header{
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    height: @layout-header-height;
+    width: 100%;
+    .padding(0, 20px, 0, 0);
+    z-index: @zIndex-navbar;
+    background-color: #fff;
+    border-bottom: 1px solid fade(@color-master-light, 70%);
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+     -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    a{
+        color: @color-master;
+        &:hover,&:active,&:focus{
+            color: @color-master;
+        }
+    }
+    //Used only in Boxed layout
+    .header-inner{
+        height: inherit;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+         -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
+    &.transparent {
+        background-color: transparent !important;
+    }
+    .brand {
+        vertical-align: middle;
+        width: @layout-sidepanel-width;
+        text-align: center;
+    }
+	.bubble{
+		border-radius:100%;
+		height:12px;
+		width:12px;
+		background-color:@color-danger;
+		color:@color-white;
+		position:absolute;
+		top:-6px;
+		.float(right);
+		.right(-5px);
+	}
+    .notification-list{
+        display:inline-block;
+        line-height: 23px;
+    }
+    .search-link{
+        display:inline-block;
+        .margin-left(15px);
+        color : @color-master;
+        opacity: .7;
+        font-size:14px;
+        vertical-align: middle;
+        line-height: 12px;
+        font-family:@base-font-family;
+        i{
+            .margin-right(15px);
+            font-size:16px;
+            vertical-align: middle;
+        }
+        &:hover{
+           opacity: 1;
+        }
+    }
+    .pg{
+        font-size: 16px;
+    }
+    ul{
+        li{
+            line-height: 12px;
+            vertical-align: middle;
+        }
+    }
+    .dropdown{
+        line-height: 12px;
+    }
+    .dropdown-menu{
+        margin-top: 10px;
+    }
+}
+
+
+/* Bootstrap navbar
+------------------------------------
+*/
+.navbar{
+    min-height: 50px;
+    position: relative;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    top: -1px;
+}
+.navbar-nav > li {
+    & > a{
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
+
+.nav > li> a {
+        padding: 10px 15px;
+}
+
+.navbar-default{
+    background-color: @color-white;
+    .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+    background-color:transparent;
+    }
+    .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+          background-color:transparent;
+    }
+
+}
+
+.navbar-toggle{
+    border-radius: 0;
+    background-color: transparent !important;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: @color-master;
+}
+
+.nav-collapse {
+    &.collapse {
+        height: 100%  !important;
+    }
+}
+
+.navbar-center, .navbar-center > li{
+     float:none;
+  display:inline-block;
+  *display:inline; /* ie7 fix */
+  *zoom:1; /* hasLayout ie7 trigger */
+  vertical-align: top;
+}
+
+.navbar-nav{
+    li a{
+        min-width: 50px;
+    }
+}
+
+/* Header Responsive Classes
+------------------------------------
+*/
+
+@media only screen and (min-width: 980px) {
+    body{
+        &.menu-pin{
+            .header .brand{
+                width: 245px;
+            }
+        }
+        &.menu-behind{
+            .header .brand{
+                width: 200px;
+                .text-align(left);
+                .padding-left(20px);
+            }
+        }
+        &.box-layout{
+            background-color:@color-white;
+            & > .container,
+            & > .full-height > .container{
+            height: 100%;
+            padding: 0;
+            background-color: @color-master-lightest;
+            }
+            .header{
+            background-color:transparent;
+            border: 0;
+            padding: 0;
+                & > .container {
+                background-color: #fff;
+                border-bottom: 1px solid rgba(230, 230, 230, 0.7);
+                padding: 0 20px 0 0;
+                height: 100%;
+              }
+            }
+
+        }
+    }
+
+    .header {
+        .brand{
+            position: relative;
+        }
+       .user-info-wrapper {
+            .user-details {
+                .user-name {
+                    font-size: 16px;
+                }
+                .user-other {
+                    font-size: 10px;
+                }
+            }
+            .user-pic {
+                position: relative;
+                top: -6px;
+            }
+        }
+    }
+
+    .notification-panel{
+        width: 400px;
+    }
+
+}
+
+@media (max-width: 991px) {
+    body{
+        &.box-layout{
+            .header{
+                & > .container {
+                    padding: 0;
+                    .pull-right .sm-action-bar{
+                        .right(0);
+                    }
+              }
+            }
+        }
+        &.horizontal-app-menu{
+            .header{
+                & > .container{
+                    padding: 0;
+                }
+            }
+        }
+    }
+    .header {
+        padding: 0 15px;
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,.07);
+        .header-inner{
+            text-align: center;
+            .mark-email{
+                left: 45px;
+                position: absolute;
+                top: 23px;
+            }
+            .quickview-link{
+                position: absolute;
+                right: 0;
+                top: 12px;
+            }
+        }
+        .brand{
+            width: auto;
+        }
+
+        & > .pull-left,  & > .pull-right{
+            position: relative;
+        }
+         & > .pull-right{
+            .sm-action-bar{
+                .right(0);
+            }
+         }
+    }
+}
+//Windows Rendering
+.windows{
+    .header .search-link{
+        font-size: 15px;
+    }
+}

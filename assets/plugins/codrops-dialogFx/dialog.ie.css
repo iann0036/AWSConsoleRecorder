@@ -1,0 +1,21 @@
+.dialog {
+	display:none;
+
+}
+.dialog.dialog--open{
+	display: block;
+}
+.dialog--open .dialog__overlay {
+	opacity: 1;
+}
+
+.dialog__content {
+	opacity: 1;
+}
+
+.dialog--open .dialog__content {
+	position: absolute;
+	left: 50%;
+	margin-left: -424px;
+	margin-top: 5%;
+}

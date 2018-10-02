@@ -1,0 +1,150 @@
+/*------------------------------------------------------------------
+[20. Email App]
+*/
+
+
+/* Email Components
+--------------------------------------------------
+*/
+.compose-wrapper{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    background: @color-white;
+    border-top: 1px solid @color-master-lighter;
+    z-index: 101;
+    .compose-email{
+        font-size: 24px;
+    }
+}
+
+.email-composer{
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    background: #fff;
+    .email-toolbar-wrapper .wysihtml5-toolbar{
+        background: @color-master-lighter;
+        border-bottom:1px solid @color-master-light;
+        position: relative;
+        border-top: none;
+    }
+    .email-body-wrapper{
+        border-bottom:1px solid @color-master-light;
+        margin-bottom: 20px;
+    }
+    .bootstrap-tagsinput{
+        margin: 0;
+        padding: 0;
+    }
+    & > .row{
+        margin-left: -30px;
+        margin-right: -30px;
+    }
+}
+
+.split-view .split-details .email-content-wrapper{
+    background: #fff;
+    height: 100%;
+    width: auto;
+    overflow: auto;
+    .actions-wrapper{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 50px;
+        z-index: @zIndex-navbar - 1;
+    }
+    .email-content{
+        margin:0 auto;
+        width: 600px;
+        display: block;
+        padding-top: 62px;
+        padding-bottom: 70px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .email-content-header{
+            .sender{
+                .name{
+                    font-size: 15px;
+                    color: @color-info;
+                }
+                .datetime{
+                    color: @color-master;
+                    opacity: .45;
+                    font-family: arial;
+                }
+            }
+            .subject{
+                font-family: arial;
+                color: @color-info;
+                font-size:15.2px;
+                line-height: 17px;
+            }
+            .fromto{
+                .btn-xs{
+                    border-radius: 13px;
+                }
+            }
+        }
+        .email-content-body p{
+            line-height: 23px;
+            color: @body-color;
+            letter-spacing: 0.001em;
+        }
+        .email-reply{
+            min-height:200px;
+        }
+        .editor-wrapper{
+            border: 1px solid rgba(0,0,0,.05);
+            .wysihtml5-sandbox{
+                max-height: 150px;
+                min-height: 130px !important;
+                width: 100% !important;
+            }
+        }
+
+    }
+}
+/* Email App Top Header
+--------------------------------------------------
+*/
+.header-wrapper-email{
+    font-size: 14.92px;
+    .dropdown > .btn{
+        color:@color-complete;
+    }
+    .btn:hover{
+        text-decoration: none;
+    }
+}
+
+/* Responsive Handler : Email App
+--------------------------------------------------
+*/
+@media (max-width: 768px){
+    .email-content .wysiwyg5-wrapper{
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 1024px){
+    .email-composer{
+        .margin-left(0);
+    }
+}
+
+.email-composer{
+    .email-toolbar-wrapper{
+        .dropdown{
+            .dropdown-toggle{
+                &::after{
+                    display: none;
+                }
+            }
+        }
+    }
+}

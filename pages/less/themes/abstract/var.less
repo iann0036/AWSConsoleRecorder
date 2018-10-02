@@ -1,0 +1,166 @@
+// Pages Abstract Theme  
+// --------------------------------------------------
+// Copyright Reserved Revox - 2014
+// --------------------------------------------------
+
+@base-img-url: "../../img";
+@assets-url: "../../../assets";
+// Global Color 
+// --------------------------------------------------
+// Base Grey Guided Color * change only @base-light
+// --------------------------------------------------
+
+//Base Grey Color
+@color-master: #575757;
+
+// Lighter Grey colors
+@color-master-light:mix(@color-master, #fff, 15%);
+@color-master-lighter:mix(@color-master, #fff, 10%);
+@color-master-lightest:mix(@color-master, #fff, 3%);
+
+// Darker Grey colors
+@color-master-dark:mix(@color-master, #000, 45%);
+@color-master-darker:mix(@color-master, #000, 27%);
+@color-master-darkest:mix(@color-master, #000, 20%);
+
+
+@base-font-family: -apple-system, BlinkMacSystemFont,  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell","Fira Sans", "Droid Sans", "Helvetica Neue",sans-serif;
+
+// Menu Vars
+// --------------------------------------------------
+//Menu Animation Curve
+@menu-bezier:.05, .74, .27, .99;
+@menu-icon-size:40px;
+@color-menu :#3b3a48;
+@color-menu-dark :mix(@color-menu, #000, 77%);
+@color-menu-darker :mix(@color-menu, #000, 90%);
+
+//Generating Menu font color
+@menu-mix-temp : mix(@color-menu, #fff, 92%);
+@menu :hardlight(#fff, @menu-mix-temp);
+//Menu Font Color
+@color-menu-light :@menu;
+@color-menu-link-hover:#fff;
+
+// Body
+// --------------------------------------------------
+@body-background: @color-master-lightest;
+@body-color: @color-master;
+@body-font-family : @base-font-family;
+@body-font-size : 13px;
+
+// Layout
+// --------------------------------------------------
+@layout-header-height:60px;
+@layout-mobile-header-height:48px;
+@layout-mobile-logo-scale:0.8;
+@layout-sidepanel-width-collapsed : 70px;
+@layout-sidepanel-width:280px;
+@layout-sidepanel-pin-width:250px;
+@layout-right-quickview-width: 285px;
+@layout-user-profile-margin:25px;
+@layout-container-fixed-lg: 1700px;
+@secondary-sidebar-width : 250px;
+
+@layout-gutter-sm : 5px;
+
+//Horizontal Dropdown
+//---------------------------------------------------
+@navbar-width:45px;
+@menu-padding:25px;
+
+@header-lg-height:60px;
+@header-md-height:50px;
+@header-sm-height:45px;
+
+// Panels
+@panel-border-color: rgba(230, 230, 230, 0.7);
+@panel-padding: 20px;
+@panel-heading-padding: @panel-padding @panel-padding 7px @panel-padding;
+@panel-heading-min-height: 48px;
+@panel-condensed-heading-padding: 13px 13px 0 13px;
+@panel-condensed-body-padding: 13px;
+@panel-condensed-heading-min-height: 48px;
+
+//Forms
+@form-group-height: 54px;
+@form-control-border-color: fade(@color-black, 7%);
+
+//Dashboard
+@dashboard-background : #f0f0f0;
+
+@color-white: #fff;
+@color-black: #000;
+
+@color-success: #00cea0;
+@color-complete : #2979fb;
+@color-primary: #6462e6;
+@color-warning: #fece40;
+@color-danger: #f13d5b;
+@color-info: #363c52;
+
+//Mixing Color varriable for creating both light and dark colors
+@mix-percentage-dark: 81%;
+@mix-percentage-darker: 60%;
+@mix-percentage-light: 80%;
+@mix-percentage-lighter: 20%;
+
+//Lighter colors
+@color-success-light: mix(@color-success, @color-white, @mix-percentage-light);
+@color-success-lighter: mix(@color-success, @color-white, @mix-percentage-lighter);
+
+@color-complete-light: mix(@color-complete, @color-white, @mix-percentage-light);
+@color-complete-lighter: mix(@color-complete, @color-white, @mix-percentage-lighter);
+
+@color-primary-light: mix(@color-primary, @color-white, @mix-percentage-light);
+@color-primary-lighter: mix(@color-primary, @color-white, @mix-percentage-lighter);
+
+@color-warning-light: mix(@color-warning, @color-white, @mix-percentage-light);
+@color-warning-lighter: mix(@color-warning, @color-white, @mix-percentage-lighter);
+
+@color-danger-light: mix(@color-danger, @color-white, @mix-percentage-light);
+@color-danger-lighter: mix(@color-danger, @color-white, @mix-percentage-lighter);
+
+@color-info-light: mix(@color-info, @color-white, @mix-percentage-light);
+@color-info-lighter: mix(@color-info, @color-white, @mix-percentage-lighter);
+
+//Darker colors
+@color-success-dark: mix(@color-success, @color-black, @mix-percentage-dark);
+@color-success-darker: mix(@color-success, @color-black, @mix-percentage-darker);
+
+@color-complete-dark: mix(@color-complete, @color-black, @mix-percentage-dark);
+@color-complete-darker: mix(@color-complete, @color-black, @mix-percentage-darker);
+
+@color-primary-dark: mix(@color-primary, @color-black, @mix-percentage-dark);
+@color-primary-darker: mix(@color-primary, @color-black, @mix-percentage-darker);
+
+@color-warning-dark: mix(@color-warning, @color-black, @mix-percentage-dark);
+@color-warning-darker: mix(@color-warning, @color-black, @mix-percentage-darker);
+
+@color-danger-dark: mix(@color-danger, @color-black, @mix-percentage-dark);
+@color-danger-darker: mix(@color-danger, @color-black, @mix-percentage-darker);
+
+@color-info-dark: mix(@color-info, @color-black, @mix-percentage-dark);
+@color-info-darker: mix(@color-info, @color-black, @mix-percentage-darker);
+
+
+// Components
+// --------------------------------------------------
+//## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
+
+//@padding-base-vertical:     6px;
+@padding-base-horizontal:   17px;
+
+// @padding-lg-vertical:    28px;
+@padding-lg-horizontal:  28px;
+
+// @padding-sm-vertical:    5px;
+@padding-sm-horizontal:  16px;
+
+@padding-xs-vertical:       2px;
+@padding-xs-horizontal:     9px;
+
+
+@zIndex-navbar : @zIndex-9;
+@zIndex-sidebar : @zIndex-10;
+@zIndex-tooltips : @zIndex-10;

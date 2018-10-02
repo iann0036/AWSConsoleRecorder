@@ -1,0 +1,1 @@
+Please include classie.js before calling this plugin.

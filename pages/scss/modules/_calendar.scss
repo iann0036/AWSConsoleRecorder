@@ -1,0 +1,730 @@
+/*------------------------------------------------------------------
+[21. Calendar App]
+*/
+
+$cell-height : 80;
+body.overflow-hidden{
+	overflow: hidden;
+}
+
+/*
+Calendar
+--------------------------------------------------
+Header / .calendar-header
+Years / .years .year
+Months / .months
+Weeks / .weeks-wrapper .week
+Grid / .calendar-container
+Events / .event-container
+*/
+.calendar{
+	height: 100%;
+	.drager{
+		overflow: hidden;
+		.scroll-element{
+			display: none;
+		}
+	}
+	&.month{
+		padding-left:5px;
+		.options .date{
+			margin-bottom: 22px;
+		}
+		.week-dragger{
+			display: none;
+		}
+		.calendar-container{
+			border-top: 1px solid $color-master-light;
+			padding-top: 0;
+			height:calc(100% - 169px);
+			.view .tble{
+				width: 100%;
+				.thead .tcell .weekday{
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+	.calendar-header{
+			height: 43px;
+			background-color:$color-master-lightest;
+			line-height: 43px;
+			padding-left:60px;
+		& > .drager{
+			width:calc(100% - 141px);
+			border-right:1px solid rgba(0, 0, 0, 0.33);
+			line-height: 35px;
+		}
+		.years{
+			width: auto;
+			list-style: none;
+			white-space: nowrap;
+			margin-top: 5px;
+			.year{
+				display: inline-block;
+				width: 69px;
+				text-align: center;
+				white-space: nowrap;
+				font-family : $base-font-family;
+				& > a{
+					color: rgba(0, 0, 0, 0.5);
+					position: relative;
+					&.active{
+						color: #000;
+					}
+					&.has-event{
+						&:before{
+							position: absolute;
+							content: '\25CF';
+							width: 100%;
+							font-size: 8px;
+							line-height: 6px;
+							text-align: center;
+							color:  rgba(0, 0, 0, 0.44);
+						}
+					}
+				}
+			}
+		}
+	}
+	.options{
+		padding-left:60px;
+		margin-top: 15px;
+		.months{
+			width: auto;
+			white-space: nowrap;
+			height: 43px;
+			line-height: 43px;
+			.month{
+				min-width: 30px;
+				max-width: 100px;
+				padding: 0 10px;
+				display: inline-block;
+				& > a{
+					position: relative;
+					color: rgba(0, 0, 0, 0.28);
+					&:hover{
+						color: rgba(0, 0, 0, 0.33);
+					}
+					&.active{
+						color: rgba(0, 0, 0, 1);
+					}
+					&.has-event{
+						&:before{
+							position: absolute;
+							content: '\25CF';
+							top: -6px;
+							width: 100%;
+							font-size: 8px;
+							line-height: 6px;
+							text-align: center;
+							color:  rgba(0, 0, 0, 0.33);
+						}
+					}
+				}
+			}
+		}
+		.date{
+			margin-bottom: 20px;
+		}
+	}
+	.week-dragger{
+		border-bottom: 1px solid #e6e6e6;
+		margin-left:-20px;
+	}
+	.weeks-wrapper{
+		width: auto;
+		white-space: nowrap;
+		padding-left:10px;
+		padding-bottom: 12px;
+		margin-bottom: 5px;
+		margin-left: 20px;
+		.week{
+			display: inline-block;
+			position: relative;
+			padding-left:30px;
+			padding-right:30px;
+			&:first-child{
+				padding-left:4px;
+			}
+			&:last-child{
+				padding-left:0px;
+			}
+			&:before{
+				content: '';
+				position: absolute;
+				right:-20px;
+				bottom: 6px;
+				height: 20px;
+				width: 20px;
+				border-left:1px dotted rgba(0, 0, 0, 0.3);
+			}
+			&.active{
+				.day-wrapper .week-date{
+					.day{
+						& > a{
+						color: rgba(0, 0, 0, 0.6);	
+						}
+					}
+
+				}
+			}
+			.day-wrapper{
+				display: inline-block;
+				.week-date{
+					text-align: center;
+					width: 21px;
+					height: 21px;
+					margin: 6px;
+					border-radius:99px;
+					&.current-date{
+						background-color: $color-master-light;
+					}
+					&.active{
+						background-color: $color-success;
+						.day > a{
+							font-weight: bold;
+							opacity: 1;
+							color: #fff;
+						}
+					}
+					.day > a{
+						letter-spacing: -0.01em;
+					}
+				}
+				.week-day{
+					text-align: center;
+				}
+				.day{
+					display: inline-block;
+					text-align: center;
+					position: relative;
+					z-index: 10;
+					padding: 1px 0;
+					font-size: 12px;
+					color: rgba(0, 0, 0, 0.3);
+					& > a{
+						position: relative;
+						width: 100%;
+						display: block;
+						text-align: center;
+						color: rgba(0, 0, 0, 0.3);
+						opacity: 0.7;
+						font-weight: 600;
+						&.has-event{
+							&:before{
+								position: absolute;
+								content: '\25CF';
+								top: -10px;
+								width: 100%;
+								font-size: 8px;
+								line-height: 6px;
+								text-align: center;
+								color:$color-success;
+							}
+						}
+					}
+
+					&.week-header{
+						text-transform: uppercase;
+						text-align: center;
+						font-family: 'Montserrat';
+						letter-spacing: 0.06em;
+            			font-size: 10.5px;	
+					}
+				}
+			}
+		}
+	}
+	.calendar-container{
+		position: relative;
+		height: calc(100% - 200px);
+		padding-top: 10px;
+		.view{
+			&.month-view{
+				.tble .trow .tcell{
+					position: relative;
+					height: 20%;
+					clear: both;
+					.cell-inner{
+						.holder{
+						position: absolute;
+						top: 37px;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						}
+					}
+					&.active{
+						background: #fff;
+						.cell-inner{
+							background-color: #fef8e7;
+						}
+					}
+					&.not{
+						background-color: $color-master-lightest;
+					}
+					&.drop-target{
+						.cell-inner{
+							background-color: $color-master-lightest;
+						}
+					}
+					.cell-inner:only-child, .cell-inner{
+						height: 100%;
+						border-bottom: 1px solid $color-master-light;
+						position: relative;
+					}
+					.month-date{
+						position: relative;
+						text-align: center;
+						margin-top: 10px;
+						margin-right: 6px;
+						width: 25px;
+						height: 25px;
+						padding-top: 2px;
+						margin: 6px;
+						float: right;
+						display: block;
+						z-index:1;
+						border-radius:99px;
+						&.current-date{
+							background-color: $color-master-light;
+						}
+						&.active{
+							background-color: $color-success;
+							font-weight: bold;
+							opacity: 1;
+							color: #fff;
+						}
+					}
+					.event-container{
+						height: 30px;
+						position: relative !important;
+						min-height: 30px !important;
+						.event-inner{
+						 	padding: 8px;
+						}
+					}
+				}
+				.ghost-element{
+					height: 30px;
+    				position: relative;
+    				width: 100%;
+				}
+				.grid .tble{
+					height: 100%;
+					width: 100%;	
+				}
+				.event-container .event-title{
+					font-size: 12px;
+				}
+			}
+			&.day-view .tble{
+				white-space: nowrap;
+				.thead{
+					white-space: nowrap;
+					overflow: hidden;
+					display: inline-block;
+				}
+				.tcell{
+					display: none;
+					max-width: 100%;
+					width: 100%;
+					&.active{
+						display: inline-block;
+					}		
+				}
+				.trow{
+					display: block;
+					height: 80px;
+					.tcell.active{
+						background-color:#fff;
+					}
+				}
+			}
+			width: 100%;
+			height: 100%;
+			white-space: nowrap;
+			-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;
+			//DEFAULT WEEKVIEW WITH 30 min Slot
+			.tble{
+				display: inline-table;
+				width: calc(100% - 50px);
+				vertical-align: top;
+				position: relative;
+				.thead{
+					display: table-row;
+					width: 100%;
+					background: #fff;
+					.tcell{
+						padding: 10px;
+						height: $cell-height/2 * 1px;
+						position: relative;
+						.weekday{
+							font-size: 12px;
+							display: inline-block;
+							color: rgba(0, 0, 0, 0.51);
+						}
+						.weekdate{
+							font-size: 14px;
+							display: inline-block;
+							margin-right:10px;
+							color: rgba(0, 0, 0, 0.77);
+						}
+						&.active{
+							.weekdate, .weekday{
+							color:rgba(0, 0, 0, 1);
+							}
+						}
+						&:before{
+							content: '';
+							border-bottom: 1px solid $color-master-light;
+							width: calc(100% - 18px);
+							position: absolute;
+							bottom: 0;
+						}
+						.event-bubble{
+							display: inline-block;
+							width: 8px;
+							height: 8px;
+							margin-left:5px;
+							float:right;
+							border-radius:30px;
+						}
+					}
+				}
+				.tcell{
+					display: table-cell;
+					height: $cell-height * 1px;
+					max-width: 14.2857%;
+					width: 14.2857%;
+				}
+				.trow{
+					display:table-row;
+					.tcell{
+						background: #fff;
+						padding: 0 10px;
+						.cell-inner{
+							height: $cell-height/2 * 1px;
+							position: relative;
+							&:first-child{
+								border-bottom: 1px dotted $color-master-light;
+							}
+							&:last-child{
+								border-bottom: 1px solid $color-master-light;
+							}
+							&:only-child{
+								height: 40px;
+								border-bottom: 0;
+							}
+						}
+						&.active{
+							background-color: #fef8e7;
+							& > *{
+								border-color: rgba(0, 0, 0, 0.1) !important;
+							}
+						}
+						&.disable{
+							background-color: $color-master-lightest;
+						}	
+					}
+				}
+				.loading{
+					left: 10px;
+				}
+			}
+		}
+		.loading{
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background-color: rgba(255, 255, 255, 0.5);
+			z-index: 100;
+		}
+		.pgn-wrapper{
+			position: absolute;
+		}
+		.even-holder{
+			position: absolute;
+			display: table;
+			width: calc(100% - 50px);
+			height: calc(100% - 25px);
+			.event-placeholder{
+				height: 100%;
+				width: 14.2857%;
+				display: table-cell;
+			}
+		}
+		.event-container{
+			width: 100%;
+			height: 40px;
+			position: absolute !important;
+			z-index: 10;
+			overflow: hidden;
+			margin-bottom: 5px;
+			min-height: 40px !important;
+			transition:width .16s ease;
+			.event-inner{
+				padding: 15px;
+				&:before{
+					position: absolute;
+					width: 8px;
+					height: 8px;
+					content: '';
+					background-color: rgba(255, 255, 255,0.8);
+					border-radius: 999px;
+					right:14px;
+					top: 11px;
+				}
+			}
+			.time-wrap{
+				line-height: 12px;
+				text-align:left;
+				color: rgba(0, 0, 0, 0.77);
+				overflow: hidden;
+    			text-overflow: ellipsis;
+			}
+			.event-start-time, .event-end-time{
+				font-size: 12px;
+				color: rgba(0, 0, 0, 0.44);
+			}
+			.event-title{
+				font-size: 14px;
+				line-height: 15px;
+				margin-bottom: 8px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.resizable-handle{
+				position: absolute;
+				opacity: 1;
+				z-index: 3;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 8px;
+				overflow: hidden;
+				line-height: 8px;
+				font-size: 11px;
+				font-family: monospace;
+				text-align: center;
+				cursor: s-resize;
+				&:after {
+				content: "=";
+				color: rgba(0, 0, 0, 0.44);
+				}
+			}
+			&.dragging{
+				z-index: 100;
+			}
+		}
+		.grid{
+			display: block;
+			overflow: scroll;
+			height: calc(100% - 40px);
+			-webkit-overflow-scrolling: touch;
+			//Time Slots
+			&.slot-60{
+				.tble .trow .tcell .cell-inner{
+					height: $cell-height * 1px;
+					border-bottom: 1px solid $color-master-light;
+				}
+			}
+			&.slot-15{
+				.tble .trow .tcell {
+					height: 100/4 * 1px;
+					.cell-inner{
+						height: 100/4 * 1px;
+						border-bottom: 1px dotted $color-master-light;
+						&:last-child{
+							border-bottom: 1px solid $color-master-light;
+						}
+					}
+				}
+				.time-slot-wrapper .time-slot{
+					height: 100px;
+				}
+			}
+		}
+		.allday-cell{
+			height: $cell-height/2 * 1px;
+			display: inline-block;
+			width: 50px;
+			float:left;
+		}
+	}
+	.time-slot-wrapper{
+		display: inline-block;
+		width: 50px;
+		float:left;
+		height: 100%;
+		.time-slot{
+			display: block;
+			height: $cell-height*1px;
+			width: 100%;
+			background: #fff;
+			&:first-child{
+				span{
+					display: none;
+				}
+			}
+			& > span{
+				float:right;
+				font-size: 12px;
+				position: relative;
+				top: -15%;
+				color: rgba(0, 0, 0, 0.46);
+				font-weight: bold;
+				font-size: 11px;
+				letter-spacing: 0.06em;
+            	font-size: 10.5px;
+            	font-family: 'Montserrat';
+				right:5px;
+			}
+		}
+	}
+
+}
+.calendar-event{
+	width: 330px;
+	right:-330px;
+	.scrollable{
+		height: 100%;
+	}
+}
+.date-selector{
+	cursor: pointer;
+}
+
+/*
+Responsive Util
+*/
+@media (max-width: 991px) {
+.calendar{
+	background-color: #fff;
+	.calendar-header{
+		display: none;
+	}
+	.options{
+		margin-top:0;
+		padding-left:10px;
+		.months{
+			line-height: 21px;
+			padding-top: 14px;
+		}
+		.date{
+			margin-bottom: 10px;
+		}
+	}
+	.calendar-container {
+		height:100%;
+		.view.week-view .tble{
+			white-space: nowrap;
+			.thead{
+				white-space: nowrap;
+				overflow: hidden;
+				display: inline-block;
+			}
+			.tcell{
+				display: none;
+				max-width: 100%;
+				width: 100%;
+				&.active{
+					display: inline-block;
+					background-color:#fff;
+				}		
+			}
+			.trow{
+				display: block;
+				height: 80px;
+			}
+		}
+		.view.month-view {
+			.allday-cell{
+				display: none;
+			}
+			.grid .tble{
+			padding-left: 0;
+			}
+			.tble {
+				.thead .tcell{
+					padding: 3px;
+					padding-top: 10px;
+				}
+				.trow .tcell{
+					padding: 0 6px;
+				}
+			}
+			.tble .trow .tcell .event-container{
+				@include border-radius(99px);
+				position: absolute !important;
+				height: 16px !important;
+				width: 16px !important;
+				min-height: 16px !important;
+				margin: 0 auto;
+    			left: 0;
+    			right: 0;
+				.event-inner{
+					display: none;
+				}
+			}
+		}
+		&.month{
+			height: calc(100% - 101px);
+		}
+	}
+	.weeks-wrapper{
+		margin-bottom: 0;
+	}
+	&.month{
+		padding-left:0;
+		.calendar-container{
+			height: calc(100% - 108px);
+		}
+	}
+}
+.calendar-event{
+	width: 240px;
+	right:-240px;
+}
+.months-drager{
+	margin-left:16px;
+	margin-right:36px;
+	border-right:1px solid $color-master-light;
+	padding-top: 0;
+}
+.horizontal-app-menu {
+	.months-drager{
+		margin-left:0;
+		margin-right:0;
+		width: 100%;
+	}
+	.calendar {
+		.weeks-wrapper .week:first-child{
+			padding-left: 0;
+		}
+		.calendar-container .allday-cell{
+			width: 38px;
+		}
+		.time-slot-wrapper .time-slot{
+			width: 38px;
+		}
+	}
+}
+}
+@media (max-width: 640px) {
+	.calendar.month .calendar-container .view .tble .thead .tcell {
+		text-align: center;
+		&:before{
+			width: 100%;
+		}
+		.weekday{
+			width: 11px;
+		    overflow: hidden;
+		    letter-spacing: 4px;
+		    font-weight: bold;
+		}
+	}
+}

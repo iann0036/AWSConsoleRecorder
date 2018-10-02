@@ -1,0 +1,148 @@
+/* SPLIT VIEW FOR EMAIL and APPS
+------------------------------------
+*/
+
+.split-view{
+    position: relative;
+    height: 100%;
+    .split-list {
+        .float(left);
+        width: 360px;
+        background: #fff;
+        height: 100%;
+        overflow-y: auto;
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+        border-right: 1px solid @color-master-light;
+        .transition(all .5s ease);
+        .list-view-fake-header{
+            font-size: 10.8px !important;
+            line-height:normal !important;
+        }
+        &.slideLeft{
+            .translate(-100%, 0);
+        }
+        .list-refresh{
+            position: absolute;
+            .right(18px);
+            top: 4px;
+            color: @color-master;
+            opacity: .34;
+            z-index: 101;
+            i{
+                font-size: 11px;
+            }
+        }
+        .list-view-fake-header, .list-view-group-header{
+            background: @color-master-lighter;
+            height: 28px;
+            color: fade(@color-master, 70%);
+            font-family: 'Montserrat';
+            text-transform: uppercase;
+            font-size: 10.8px;
+            .padding-left(12px);
+            padding-top: 6px;
+            letter-spacing: 0.07em;
+            width: 100%;
+        }
+
+        .item {
+            height: 111px;
+            list-style: none;
+            position: relative;
+            border-bottom: 1px solid fade(@color-master-light, 70%);
+            cursor: pointer;
+            .inline {
+                width: 230px;
+
+                & > * {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    font-family: arial;
+                }
+            }
+            .recipients {
+                letter-spacing: 0.01em;
+                padding-bottom: 2px;
+            }
+            .checkbox{
+                .float(left);
+                clear: left;
+                display: none;
+                max-width: 32px;
+            }
+            .subject {
+                font-family: 'Helvetica';
+                font-size: 14.33px;
+                color: @color-info;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                height: 38px;
+                display: -webkit-box;
+                white-space: normal;
+                line-height: 18px;
+            }
+            .body {
+                // color: #75828e;
+                font-size: 12.6px;
+                opacity: .52;
+                height: 22px;
+            }
+            .datetime {
+                color: @color-master-darkest;
+                font-family: arial;
+                font-size: 11.1px;
+                position: absolute;
+                .right(20px);
+                top: 15px;
+                opacity: 0.46;
+            }
+        }
+    }
+
+    .split-details {
+        position: relative;
+        overflow: auto;
+        height: 100%;
+        .no-result{
+           bottom: 0;
+            left: 0;
+            margin-top: -34px;
+            opacity: 0.5;
+            position: absolute;
+            right: 0;
+            text-align:center;
+            top: 50%;
+        }
+        .actions{
+            height: 50px;
+            .float(left);
+            li{
+                list-style: none;
+                position: relative;
+                &:last-child:after{
+                    display: none;
+                }
+                &:after{
+                    content: "";
+                    height: 14px;
+                    position: absolute;
+                    .right(-4px);
+                    top: 18px;
+                    width: 1px;
+                    background: rgba(0,0,0,.07);
+                }
+                a{
+                    font-size: 13.1px;
+                    color: @color-master;
+                    font-weight: 600;
+                    padding: 0 13px;
+                    line-height: 50px;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+    }
+}

@@ -1,0 +1,92 @@
+/*------------------------------------------------------------------
+[23. Lock Screen]
+*/
+
+.lock-container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+}
+
+.lock-screen-wrapper {
+    .credentials {
+        margin-top: -84px;
+        position: absolute;
+        top: 50%;
+        .thumbnail-wrapper {
+            width: 53px;
+            height: 53px;
+        }
+        .logged {
+            opacity: .21;
+            margin-top: -5px !important;
+        }
+        .name {
+            opacity: .69;
+            margin-top: -5px !important;
+            font-size: 36px;
+            height: 45px;
+            overflow: hidden;
+        }
+    }
+    .terms-wrapper {
+        & > div {
+            display: table;
+        }
+        .terms {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .logo-terms {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            .brand {
+                left: 50%;
+                margin-left: -21px;
+                margin-top: -5px;
+                position: absolute;
+                top: 50%;
+            }
+        }
+    }
+}
+
+/* Responsive Handlers : Lockscreen 
+------------------------------------
+*/
+@media (max-width: 767px) {
+    .lock-container{
+        width: 80%;
+    }
+    .lock-screen-wrapper {
+        .credentials {
+            form {
+                margin-top: 15px;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+
+    .lock-screen-wrapper {
+        .credentials {
+            margin: 0;
+            position: static;
+            margin-top: 100px;
+            width: 100%;
+            .float(left);
+            clear: both;
+            & > div {
+                text-align: center;
+            }
+            .thumbnail-wrapper {
+                float: none;
+                margin: 0 auto;
+            }
+        }        
+    }
+}

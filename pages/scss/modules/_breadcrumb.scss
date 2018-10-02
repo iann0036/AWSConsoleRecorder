@@ -1,0 +1,66 @@
+/* Breadcrumbs
+------------------------------------
+*/
+.breadcrumb {
+        font-family: 'Montserrat';
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        border-radius: 0px;
+        box-shadow: none;
+        background-color: transparent;
+        padding: 15px 0;
+        margin: 0;
+        border: none;
+        text-transform:uppercase;
+        &.breadcrumb-alt{
+          padding: 8px 0;
+          text-transform: none;
+          a{
+            letter-spacing: normal;
+            color: #000;
+            font-size: 12px !important;
+          }
+          & > .breadcrumb-item,
+          & > .breadcrumb-item.active  {
+            letter-spacing: normal;
+            opacity: .46;
+            color: #000;
+            font-size: 12px !important;
+          }
+        }
+        a {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-size: 10.5px !important;
+            letter-spacing: 0.06em;
+            font-weight: 400;
+            color: #7b7d82;
+        }
+        .breadcrumb-item {
+            float:left;
+            padding-left:0px;
+        }
+        & > .breadcrumb-item{
+            & + .breadcrumb-item{
+                &:before {
+                    padding: 0 5px;
+                    color: #515050;
+                    font-family: FontAwesome;
+                    content: "\f105";
+                    font-size: 12px;
+                    font-weight:bold;
+                }
+            }
+            &.active{
+                font-weight: 500;
+                color: #0090d9;
+                margin-left: 5px;
+                margin-right: 5px;
+                font-size: 10.5px !important;
+                letter-spacing: 0.06em;
+                &:before {
+                    padding-right: 10px;
+                }
+            }
+        }
+}

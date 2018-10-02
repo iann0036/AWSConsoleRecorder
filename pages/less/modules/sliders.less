@@ -1,0 +1,314 @@
+/*------------------------------------------------------------------
+[12. Sliders]
+*/
+
+@slider-background-color : mix(@color-master, #fff, 12%);
+
+/* Ion Range Slider
+https://github.com/IonDen/ion.rangeSlider
+--------------------------------------------------
+*/
+.irs-line-mid, .irs-line-left, .irs-line-right, .irs-bar, .irs-bar-edge, .irs-slider{
+	background-image: none;	
+}
+.irs-bar{
+	background: @color-danger;
+}
+.irs-wrapper{
+	.irs-line{
+		background-color: @color-master-light;
+	}
+	.irs-line-mid, .irs-line-left, .irs-line-right, .irs-diapason, .irs-slider{
+		background: none;
+	}
+	.irs-diapason{
+		background-color:@color-danger;
+		.transition(all 0.3s ease);
+
+	}
+	.irs-from, .irs-to, .irs-single{
+		background: @color-danger;
+	}
+	.irs-slider{
+		
+		&.from:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: @color-danger;
+		}	
+		&.to:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: @color-danger;
+		}
+		&.single:before{
+			top: -2%;
+			left: 37%;
+			width: 16%;
+			height: 100%;
+			background: rgba(0,0,0,0.0);
+			background-color: @color-danger;		
+		}
+	}
+	.irs-from:after, .irs-to:after, .irs-single:after{
+		border-top-color: @color-danger;
+	}
+	&.success{
+		.irs-diapason{
+			background-color:@color-success;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: @color-success;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: @color-success;
+			}	
+			&.to:before{
+				background-color: @color-success;
+			}
+			&.single:before{
+				background-color: @color-success;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+				border-top-color: @color-success;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: @color-success;
+		}
+	}
+	&.primary{
+		.irs-diapason{
+			background-color:@color-primary;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: @color-primary;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: @color-primary;
+			}	
+			&.to:before{
+				background-color: @color-primary;
+			}
+			&.single:before{
+				background-color: @color-primary;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: @color-primary;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: @color-primary;
+		}
+	}
+	&.warning{
+		.irs-diapason{
+			background-color:@color-warning;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: @color-warning;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: @color-warning;
+			}	
+			&.to:before{
+				background-color: @color-warning;
+			}
+			&.single:before{
+				background-color: @color-warning;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: @color-warning;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: @color-warning;
+		}
+	}
+	&.complete{
+		.irs-diapason{
+			background-color:@color-complete;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: @color-complete;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: @color-complete;
+			}	
+			&.to:before{
+				background-color: @color-complete;
+			}
+			&.single:before{
+				background-color: @color-complete;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: @color-complete;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: @color-complete;
+		}
+	}
+	&.danger{
+		.irs-diapason{
+			background-color:@color-danger;
+		}
+		.irs-from, .irs-to, .irs-single{
+			background: @color-danger;
+		}
+		.irs-slider{
+			&.from:before{
+				background-color: @color-danger;
+			}	
+			&.to:before{
+				background-color: @color-danger;
+			}
+			&.single:before{
+				background-color: @color-danger;		
+			}
+		}
+		.irs-from:after, .irs-to:after, .irs-single:after{
+			border-top-color: @color-danger;
+		}
+		// v.2.0.1
+		.irs-bar{
+			background-color: @color-danger;
+		}
+	}
+}
+
+/* noUiSlider
+http://refreshless.com/nouislider/
+--------------------------------------------------
+*/
+.noUi-target{
+	border-radius:0px;
+	border: 0;
+	box-shadow: none;
+	direction: ltr;
+	&.bg-complete{
+		.noUi-connect{
+			background-color: @color-complete
+		}
+	}
+	&.bg-success{
+		.noUi-connect{
+			background-color: @color-success
+		}
+	}
+	&.bg-warning{
+		.noUi-connect{
+			background-color: @color-warning
+		}
+	}
+	&.bg-danger{
+		.noUi-connect{
+			background-color: @color-danger
+		}
+	}
+	&.bg-info{
+		.noUi-connect{
+			background-color: @color-info
+		}
+
+	}
+	&.bg-primary{
+		.noUi-connect{
+			background-color: @color-primary
+		}
+		
+	}
+	&.noUi-connect{
+		box-shadow: none;
+	}
+}
+.noUi-handle{
+	border-radius:999px;
+	box-shadow:none;
+	&:before, &:after{
+		display:none;
+	}
+}
+.noUi-horizontal {
+	height: 4px;
+	.noUi-handle{
+	width: 18px;
+	height: 18px;
+	left: -15px;
+	border: 1px solid mix(@color-master, #fff, 23%);
+	top: -7px;
+	.transition(all 0.2s ease);
+		&:hover{
+			border: 1px solid mix(@color-master, #fff, 40%);
+		}
+		&:active{
+			.scale(1.3);
+			border: 1px solid mix(@color-master, #fff, 23%);
+		}
+		&:focus{
+			.scale(1.3);
+			border: 1px solid mix(@color-master, #fff, 23%);
+		}
+	}
+}
+.disable-hover-scale{
+	.noUi-handle{
+		&:active{
+			.scale(1);
+		}
+		&:focus{
+			.scale(1);
+		}		
+	}
+}
+.vertical-slider{
+	height: 150px;
+}
+.noUi-vertical {
+	width: 4px;
+	.noUi-handle{
+	width: 18px;
+	height: 18px;
+	border: 1px solid mix(@color-master, #fff, 23%);
+	.transition(all 0.2s ease);
+		&:hover{
+			border: 1px solid mix(@color-master, #fff, 40%);
+		}
+		&:active{
+			.scale(1.3);
+			border: 1px solid mix(@color-master, #fff, 23%);
+		}
+		&:focus{
+			.scale(1.3);
+			border: 1px solid mix(@color-master, #fff, 23%);
+		}
+	}
+}	
+.noUi-base{
+	padding: 5px 0;
+}
+.noUi-origin{
+	border-radius: 0px;
+	bottom: 5px;
+}
+.noUi-connect{
+	box-shadow:none;
+}
+.noUi-background{
+	background:@slider-background-color !important;
+	box-shadow: none;
+}
