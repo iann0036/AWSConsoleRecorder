@@ -34,6 +34,7 @@
     <script src="lib/codemirror/mode/shell/shell.js"></script>
     <script src="lib/codemirror/mode/go/go.js"></script>
     <script src="lib/codemirror/mode/javascript/javascript.js"></script>
+    <script src="lib/codemirror/mode/yaml/yaml.js"></script>
   </head>
   <body class="horizontal-menu horizontal-app-menu ">
     <!-- START HEADER -->
@@ -61,6 +62,7 @@
                 <button id="boto3_menubtn" class="btn btn-primary m-t-10" style="width: 140px;"><span class="bold">Boto3 (Python)</span></button>
                 <button id="cli_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">AWS CLI</span></button>
                 <button id="go_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">Go SDK (v1)</span></button>
+                <button id="cfn_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">CloudFormation</span></button>
                 <button id="raw_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">Raw (Debug)</span></button>
                 <div style="float: right;">
                   <button id="settings_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><i class="fa fa-cogs"></i> <span class="bold">Settings</span></button>
@@ -73,6 +75,7 @@
           <div class=" container    container-fixed-lg">
             <!-- BEGIN PlACE PAGE CONTENT HERE -->
             <div id='boto3_container'>
+                <!--<button id="copy_boto3" style="z-index: 100; position: absolute; right: 180px; top: 100px;" type="button" class="btn btn-default active"><i class="fa fa-copy"></i></button>-->
                 <textarea id='boto3'></textarea>
             </div>
             <div id='cli_container' style="display: none;">
@@ -81,6 +84,9 @@
             <div id='go_container' style="display: none;">
                 <textarea id='go'></textarea>
             </div>
+            <div id='cfn_container' style="display: none;">
+                <textarea id='cfn'></textarea>
+            </div>
             <div id='raw_container' style="display: none;">
                 <textarea id='raw'></textarea>
             </div>
@@ -88,8 +94,14 @@
               <h3 style="padding-bottom: 16px;">Settings</h3>
               <div class="checkbox check-primary">
                   <input type="checkbox" value="0" id="blocking">
-                  <label for="blocking">Block Mutable Requests</label>
-                </div>
+                  <label for="blocking"><span class="bold">Block Mutable Requests</span></label>
+              </div>
+              <div class="checkbox check-primary">
+                  <input type="checkbox" value="0" id="correlate">
+                  <label for="correlate"><span class="bold">Correlate Events</span></label>
+              </div>
+              <br />
+              <button id="cleardata_btn" class="btn btn-danger m-t-10"><span class="bold">Clear Recording Data</span></button>
             </div>
             <br /><br />
             <!-- END PLACE PAGE CONTENT HERE -->

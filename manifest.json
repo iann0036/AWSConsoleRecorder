@@ -1,5 +1,5 @@
 {
-  "name": "AWS Console Recorder",
+  "name": "Console Recorder",
   "version": "0.1.0",
   "manifest_version": 2,
   "description": "Record AWS console actions.",
@@ -21,6 +21,7 @@
     "webRequestBlocking",
     "tabs",
     "debugger",
+    "notifications",
     "*://*.console.aws.amazon.com/*"
   ]
 }

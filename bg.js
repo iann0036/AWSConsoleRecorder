@@ -1,10 +1,26 @@
 // awscr@ian.mn
 
 var outputs = [];
+var tracked_resources = [];
 var blocking = false;
 var declared_services;
 var compiled;
 var go_first_output;
+
+function notifyBlocked() {
+    console.log("Calling notify");
+    chrome.notifications.create(null, {
+        type: "basic",
+        title: "Console Recorder",
+        message: "An AWS console request was blocked.",
+        iconUrl: "icon-128.png",
+        buttons: [
+            {
+                'title': 'View Outputs'
+            }
+        ]
+    });
+}
 
 function ensureInitDeclaredBoto3(service, region) {
     if (!declared_services['boto3'].includes(service)) {
@@ -26,6 +42,44 @@ ${service}svc := ${service}.New(session.New(&aws.Config{Region: aws.String("${re
 `;
     }
     return '';
+}
+
+function processCfnParameter(param, spacing) {
+    var paramitems = [];
+
+    if (typeof param == "boolean") {
+        if (param)
+            return '"true"';
+        return '"false"';
+    }
+    if (typeof param == "number")
+        return `${param}`;
+    if (typeof param == "string")
+        return `"${param}"`;
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            paramitems.push(processCfnParameter(paramitem, spacing + 4));
+        });
+
+        return `
+` + ' '.repeat(spacing + 2) + "- " + paramitems.join(`
+` + ' '.repeat(spacing + 2) + "- ")
+    }
+    if (typeof param == "object") {
+        Object.keys(param).forEach(function (key) {
+            paramitems.push(key + ": " + processCfnParameter(param[key], spacing + 4));
+        });
+
+        return `
+` + ' '.repeat(spacing + 4) + paramitems.join(`
+` + ' '.repeat(spacing + 4))
+    }
+    
+    return `'${param}' # unprocessable parameter type ` + (typeof param);
 }
 
 function processBoto3Parameter(param, spacing) {
@@ -96,9 +150,11 @@ function outputMapBoto3(service, method, options, region, was_blocked) {
 
     if (Object.keys(options).length) {
         for (option in options) {
-            var optionvalue = processBoto3Parameter(options[option], 4);
-            params += `
-    ${option}=${optionvalue},`
+            if (options[option] !== undefined) {
+                var optionvalue = processBoto3Parameter(options[option], 4);
+                params += `
+    ${option}=${optionvalue},`;
+            }
         }
         params = params.substring(0, params.length - 1) + `
 `; // remove last comma
@@ -116,9 +172,11 @@ function outputMapGo(service, method, options, region, was_blocked) {
 
     if (Object.keys(options).length) {
         for (option in options) {
-            var optionvalue = processGoParameter(option, options[option], 4);
-            params += `
-    ${option}:  ${optionvalue},`;
+            if (options[option] !== undefined) {
+                var optionvalue = processGoParameter(option, options[option], 4);
+                params += `
+        ${option}:  ${optionvalue},`;
+            }
         }
         params += `
 `;
@@ -128,6 +186,42 @@ function outputMapGo(service, method, options, region, was_blocked) {
 `
 
     go_first_output = false;
+
+    return output;
+}
+
+function genRandomChars() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz";
+  
+    for (var i = 0; i < 6; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
+
+function outputMapCfn(service, type, options, region, was_blocked) {
+    var output = '';
+    var params = '';
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            if (options[option] !== undefined) {
+                var optionvalue = processCfnParameter(options[option], 12);
+                params += `
+            ${option}: ${optionvalue}`;
+            }
+        }
+        params += `
+`;
+    }
+
+    var resource_name = service + genRandomChars();
+
+    output += `    ${resource_name}:${was_blocked ? ' # blocked' : ''}
+        Type: "${type}"
+        Properties:${params}
+`
 
     return output;
 }
@@ -178,7 +272,6 @@ chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         if (message.action == "getCompiledOutputs") {
             sendResponse(compileOutputs());
-            //outputs = []; // TODO: Remove this possibly
         }
         if (message.action == "setBlockingOn") {
             blocking = true;
@@ -191,17 +284,22 @@ chrome.runtime.onMessage.addListener(
         if (message.action == "getBlockingStatus") {
             sendResponse(blocking);
         }
+        if (message.action == "clearData") {
+            outputs = [];
+            tracked_resources = [];
+            sendResponse(true);
+        }
     }
 );
 
 function compileOutputs() {
-    console.log(outputs);
-
     if (!outputs.length) {
         return {
             'boto3': '# No recorded actions yet',
             'go': '// No recorded actions yet',
-            'cli': '# No recorded actions yet'
+            'cfn': '# No recorded actions yet',
+            'cli': '# No recorded actions yet',
+            'raw': ''
         };
     }
 
@@ -229,6 +327,12 @@ ${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${service}"
 `)}
 )
 `,
+        'cfn': `${tracked_resources.length == 0 ? '# No resources created in recording' : `AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+    Generator: "console-recorder"
+Description: ""
+Resources:
+`}`,
         'cli': `# pip install awscli --upgrade --user
 
 `
@@ -239,12 +343,19 @@ ${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${service}"
     }
     go_first_output = true;
 
-    compiled['raw'] = JSON.stringify(outputs);
+    compiled['raw'] = JSON.stringify({
+        'outputs': outputs,
+        'tracked_resources': tracked_resources
+    });
 
     for (var i=0; i<outputs.length; i++) {
         compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
         compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.go, outputs[i].region, outputs[i].was_blocked);
         compiled['cli'] += outputMapCli(outputs[i].service, outputs[i].method.cli, outputs[i].options.cli, outputs[i].region, outputs[i].was_blocked);
+    }
+
+    for (var i=0; i<tracked_resources.length; i++) {
+        compiled['cfn'] += outputMapCfn(tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked);
     }
 
     return compiled;
@@ -254,6 +365,7 @@ function analyseRequest(details) {
     var reqParams = {
         'boto3': {},
         'go': {},
+        'cfn': {},
         'cli': {}
     };
     var requestBody = null;
@@ -305,7 +417,7 @@ function analyseRequest(details) {
         }
 
         if ('imageType' in jsonRequestBody) {
-            if (!'filters' in jsonRequestBody)
+            if (jsonRequestBody['filters'] === undefined)
                 jsonRequestBody['filters'] = [];
             jsonRequestBody.filters['imageType'] = jsonRequestBody.imageType;
         }
@@ -468,9 +580,12 @@ function analyseRequest(details) {
         reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
         reqParams.cli['--description'] = jsonRequestBody.groupDescription;
         reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+        reqParams.cfn['GroupDescription'] = jsonRequestBody.groupDescription;
+        reqParams.cfn['GroupName'] = jsonRequestBody.groupName;
         if ('vpcId' in jsonRequestBody) {
             reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
             reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+            reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
         }
 
         outputs.push({
@@ -485,8 +600,18 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
-        if (blocking)
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SecurityGroup',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
             return {cancel: true};
+        }
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=authorizeIngress\?/g)) {
@@ -528,8 +653,10 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
-        if (blocking)
+        if (blocking) {
+            notifyBlocked();
             return {cancel: true};
+        }
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.RunInstances\?/g)) {
@@ -547,6 +674,21 @@ function analyseRequest(details) {
         reqParams.boto3['TagSpecification'] = jsonRequestBody.TagSpecifications;
         reqParams.boto3['EbsOptimized'] = jsonRequestBody.EbsOptimized;
         reqParams.boto3['BlockDeviceMapping'] = jsonRequestBody.BlockDeviceMappings;
+
+        reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
+        reqParams.cfn['MaxCount'] = jsonRequestBody.MaxCount;
+        reqParams.cfn['MinCount'] = jsonRequestBody.MinCount;
+        reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
+        reqParams.cfn['SecurityGroupId'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
+        reqParams.cfn['Placement'] = jsonRequestBody.Placement;
+        reqParams.cfn['Monitoring'] = jsonRequestBody.Monitoring;
+        reqParams.cfn['DisableApiTermination'] = jsonRequestBody.DisableApiTermination;
+        reqParams.cfn['InstanceInitiatedShutdownBehavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        reqParams.cfn['CreditSpecification'] = jsonRequestBody.CreditSpecification;
+        reqParams.cfn['TagSpecification'] = jsonRequestBody.TagSpecifications;
+        reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.cfn['BlockDeviceMapping'] = jsonRequestBody.BlockDeviceMappings;
 
         reqParams.cli['--image-id'] = jsonRequestBody.ImageId;
         if (jsonRequestBody.MaxCount == jsonRequestBody.MinCount) {
@@ -585,8 +727,18 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
-        if (blocking)
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Instance',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
             return {cancel: true};
+        }
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=terminateInstances\?/g)) {
@@ -605,8 +757,10 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
-        if (blocking)
+        if (blocking) {
+            notifyBlocked();
             return {cancel: true};
+        }
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribeLaunchTemplates\?/g)) {

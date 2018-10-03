@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cli_editor, raw_editor;
+var boto3_editor, go_editor, cfn_editor, cli_editor, raw_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -26,6 +26,18 @@ window.onload = function(){
         go_editor.getDoc().setValue(response['go']);
         setTimeout(function() {
             go_editor.refresh();
+        },1);
+
+        cfn_editor = CodeMirror.fromTextArea(document.getElementById('cfn'), {
+            lineNumbers: true,
+            lineWrapping: true,
+            mode: "yaml",
+            theme: "material",
+            indentUnit: 4
+        });
+        cfn_editor.getDoc().setValue(response['cfn']);
+        setTimeout(function() {
+            cfn_editor.refresh();
         },1);
 
         cli_editor = CodeMirror.fromTextArea(document.getElementById('cli'), {
@@ -76,80 +88,72 @@ document.getElementById('blocking').onchange = function(evt) {
     }
 };
 
-document.getElementById('boto3_menubtn').onclick = function(evt) {
-    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+document.getElementById('cleardata_btn').onclick = function(evt) {
+    chrome.runtime.sendMessage(null, {
+        "action": "clearData"
+    }, null, function(result){
+        location.reload();
+    });
+};
+
+function resetMenu() {
+    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('cfn_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('raw_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
-    document.getElementById('boto3_container').style = "";
+    document.getElementById('boto3_container').style = "display: none;";
     document.getElementById('cli_container').style = "display: none;";
     document.getElementById('go_container').style = "display: none;";
+    document.getElementById('cfn_container').style = "display: none;";
     document.getElementById('raw_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
+}
+
+document.getElementById('boto3_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('boto3_container').style = "";
 
     boto3_editor.refresh();
 };
 
 document.getElementById('cli_menubtn').onclick = function(evt) {
-    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    resetMenu();
     document.getElementById('cli_menubtn').setAttribute("class", "btn btn-primary m-t-10");
-    document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
-
-    document.getElementById('boto3_container').style = "display: none;";
     document.getElementById('cli_container').style = "";
-    document.getElementById('go_container').style = "display: none;";
-    document.getElementById('raw_container').style = "display: none;";
-    document.getElementById('settings_container').style = "display: none;";
 
     cli_editor.refresh();
 };
 
 document.getElementById('go_menubtn').onclick = function(evt) {
-    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    resetMenu();
     document.getElementById('go_menubtn').setAttribute("class", "btn btn-primary m-t-10");
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
-
-    document.getElementById('boto3_container').style = "display: none;";
-    document.getElementById('cli_container').style = "display: none;";
     document.getElementById('go_container').style = "";
-    document.getElementById('raw_container').style = "display: none;";
-    document.getElementById('settings_container').style = "display: none;";
 
     go_editor.refresh();
 };
 
-document.getElementById('raw_menubtn').onclick = function(evt) {
-    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-primary m-t-10");
-    document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
+document.getElementById('cfn_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('cfn_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('cfn_container').style = "";
 
-    document.getElementById('boto3_container').style = "display: none;";
-    document.getElementById('cli_container').style = "display: none;";
-    document.getElementById('go_container').style = "display: none;";
+    cfn_editor.refresh();
+};
+
+document.getElementById('raw_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-primary m-t-10");
     document.getElementById('raw_container').style = "";
-    document.getElementById('settings_container').style = "display: none;";
 
     raw_editor.refresh();
 };
 
 document.getElementById('settings_menubtn').onclick = function(evt) {
-    document.getElementById('boto3_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    resetMenu();
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-primary m-t-10");
-
-    document.getElementById('boto3_container').style = "display: none;";
-    document.getElementById('cli_container').style = "display: none;";
-    document.getElementById('go_container').style = "display: none;";
-    document.getElementById('raw_container').style = "display: none;";
     document.getElementById('settings_container').style = "";
 };
