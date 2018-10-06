@@ -47,6 +47,8 @@ ${service}svc := ${service}.New(session.New(&aws.Config{Region: aws.String("${re
 function processCfnParameter(param, spacing) {
     var paramitems = [];
 
+    if (param === undefined || param === null)
+        return undefined;
     if (typeof param == "boolean") {
         if (param)
             return '"true"';
@@ -79,12 +81,14 @@ function processCfnParameter(param, spacing) {
 ` + ' '.repeat(spacing + 4))
     }
     
-    return `'${param}' # unprocessable parameter type ` + (typeof param);
+    return undefined;
 }
 
 function processBoto3Parameter(param, spacing) {
     var paramitems = [];
 
+    if (param === undefined || param === null)
+        return undefined;
     if (typeof param == "boolean") {
         if (param)
             return "True";
@@ -100,7 +104,10 @@ function processBoto3Parameter(param, spacing) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processBoto3Parameter(paramitem, spacing + 4));
+            var item = processBoto3Parameter(paramitem, spacing + 4);
+            if (item !== undefined) {
+                paramitems.push(item);
+            }
         });
 
         return `[
@@ -110,7 +117,10 @@ function processBoto3Parameter(param, spacing) {
     }
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
-            paramitems.push(key + "=" + processBoto3Parameter(param[key], spacing + 4));
+            var item = processBoto3Parameter(param[key], spacing + 4);
+            if (item !== undefined) {
+                paramitems.push(key + "=" + processBoto3Parameter(param[key], spacing + 4));
+            }
         });
 
         return `{
@@ -119,12 +129,14 @@ function processBoto3Parameter(param, spacing) {
 ` + ' '.repeat(spacing) + '}';
     }
     
-    return `'${param}' # unprocessable parameter type ` + (typeof param);
+    return undefined;
 }
 
 function processGoParameter(paramkey, param, spacing) {
     var paramitems = [];
 
+    if (param === undefined || param === null)
+        return undefined;
     if (typeof param == "boolean") {
         if (param)
             return "aws.Bool(true)";
@@ -141,7 +153,7 @@ function processGoParameter(paramkey, param, spacing) {
         return "";
     }
     
-    return `aws.String('${param}') // unprocessable parameter type ` + (typeof param);
+    return undefined;
 }
 
 function outputMapBoto3(service, method, options, region, was_blocked) {
@@ -370,7 +382,7 @@ function analyseRequest(details) {
     };
     var requestBody = null;
     var jsonRequestBody = null;
-    var region = 'ap-southeast-2';
+    var region = 'us-west-2';
 
     try {
         requestBody = decodeURIComponent(String.fromCharCode.apply(null, new Uint8Array(details.requestBody.raw[0].bytes)));
@@ -629,15 +641,26 @@ function analyseRequest(details) {
                     'CidrIp': ipRangeObject['cidrIp']
                 });
             });
+            var ipv6RangeObjects = [];
+            ipPermission['ipv6RangeObjects'].forEach(ipv6RangeObject => {
+                ipv6RangeObjects.push({
+                    'Description': ipv6RangeObject['description'],
+                    'CidrIpv6': ipv6RangeObject['CidrIpv6']
+                });
+            });
             reqParams.boto3['IpPermissions'].push({
                 'IpProtocol': ipPermission['ipProtocol'],
                 'FromPort': ipPermission['fromPort'],
-                'ToPort': ipPermission['toPort']
+                'ToPort': ipPermission['toPort'],
+                'IpRanges': ipRangeObjects,
+                'Ipv6Ranges': ipv6RangeObjects
             });
             reqParams.cli['--ip-permissions'].push({
                 'IpProtocol': ipPermission['ipProtocol'],
                 'FromPort': ipPermission['fromPort'],
-                'ToPort': ipPermission['toPort']
+                'ToPort': ipPermission['toPort'],
+                'IpRanges': ipRangeObjects,
+                'Ipv6Ranges': ipv6RangeObjects
             });
         });
 
