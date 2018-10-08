@@ -1,8 +1,5 @@
 // awscr@ian.mn
 
-var outputs = [];
-var tracked_resources = [];
-var blocking = false;
 var declared_services;
 var compiled;
 var go_first_output;
@@ -248,6 +245,10 @@ function outputMapCli(service, method, options, region, was_blocked) {
             });
             delete options['_'];
         }
+        if ('_service' in options) {
+            service = options['_service'];
+            delete options['_service'];
+        }
         for (option in options) {
             if (options[option] === null)
                 params += ` ${option}`
@@ -265,44 +266,6 @@ function outputMapCli(service, method, options, region, was_blocked) {
 
     return output;
 }
-
-chrome.webRequest.onBeforeRequest.addListener(
-    analyseRequest,
-    {urls: ["<all_urls>"]},
-    ["requestBody","blocking"]
-);
-
-chrome.browserAction.onClicked.addListener(
-    function(){
-        chrome.tabs.create({
-            url: chrome.extension.getURL("main.html")
-        });
-    }
-);
-
-chrome.runtime.onMessage.addListener(
-    function(message, sender, sendResponse) {
-        if (message.action == "getCompiledOutputs") {
-            sendResponse(compileOutputs());
-        }
-        if (message.action == "setBlockingOn") {
-            blocking = true;
-            sendResponse(true);
-        }
-        if (message.action == "setBlockingOff") {
-            blocking = false;
-            sendResponse(true);
-        }
-        if (message.action == "getBlockingStatus") {
-            sendResponse(blocking);
-        }
-        if (message.action == "clearData") {
-            outputs = [];
-            tracked_resources = [];
-            sendResponse(true);
-        }
-    }
-);
 
 function compileOutputs() {
     if (!outputs.length) {
@@ -373,6 +336,99 @@ Resources:
     return compiled;
 }
 
+function convertApiToCli(str) {
+    var i = 1;
+    var character = '';
+    var next_char = '';
+    var prev_char = '';
+    var outputstr = str.substring(0,1).toLowerCase();
+    
+    while (i <= str.length) {
+        character = str.charAt(i);
+        next_char = str.charAt(i+1);
+        prev_char = str.charAt(i-1);
+        if (character == character.toUpperCase() && character != "" && (next_char != next_char.toUpperCase() || prev_char != prev_char.toUpperCase())) {
+            outputstr += "-";
+        }
+        outputstr += character.toLowerCase();
+        i++;
+    }
+
+    return outputstr;
+}
+
+function recursiveParamsFromXml(node) {
+    var ret = {};
+
+    for (var child in node.children) {
+        if (node.children[child].tagName) {
+            if (node.children[child].children && node.children[child].children.length > 0) {
+                ret[node.children[child].tagName] = recursiveParamsFromXml(node.children[child]);
+            } else {
+                ret[node.children[child].tagName] = node.children[child].textContent;
+            }
+        }
+    }
+
+    return ret;
+}
+
+function addToParamsFromXml(params, xml) {
+    var xmlobj = new DOMParser().parseFromString(xml, "text/xml");
+    var root = xmlobj.firstChild;
+    var tagname = root.tagName;
+    var value = recursiveParamsFromXml(xmlobj);
+
+    params.boto3[tagname] = value[tagname];
+    params.cli['--' + convertApiToCli(tagname)] = JSON.stringify(value[tagname]);
+
+    return params;
+}
+
+chrome.webRequest.onBeforeRequest.addListener(
+    analyseRequest,
+    {urls: ["<all_urls>"]},
+    ["requestBody","blocking"]
+);
+
+chrome.browserAction.onClicked.addListener(
+    function(){
+        chrome.tabs.create({
+            url: chrome.extension.getURL("main.html")
+        });
+    }
+);
+
+chrome.runtime.onMessage.addListener(
+    function(message, sender, sendResponse) {
+        if (message.action == "getCompiledOutputs") {
+            sendResponse(compileOutputs());
+        }
+        if (message.action == "setBlockingOn") {
+            blocking = true;
+            sendResponse(true);
+        }
+        if (message.action == "setBlockingOff") {
+            blocking = false;
+            sendResponse(true);
+        }
+        if (message.action == "getBlockingStatus") {
+            sendResponse(blocking);
+        }
+        if (message.action == "clearData") {
+            outputs = [];
+            tracked_resources = [];
+            sendResponse(true);
+        }
+    }
+);
+
+/******/
+
+var outputs = [];
+var tracked_resources = [];
+var blocking = false;
+
 function analyseRequest(details) {
     var reqParams = {
         'boto3': {},
@@ -380,13 +436,23 @@ function analyseRequest(details) {
         'cfn': {},
         'cli': {}
     };
-    var requestBody = null;
-    var jsonRequestBody = null;
+    var requestBody = "";
+    var jsonRequestBody = {};
     var region = 'us-west-2';
 
     try {
         requestBody = decodeURIComponent(String.fromCharCode.apply(null, new Uint8Array(details.requestBody.raw[0].bytes)));
         jsonRequestBody = JSON.parse(requestBody);
+
+        // check for string objects
+        for (var prop in jsonRequestBody) {
+            if (typeof jsonRequestBody[prop] == "string") {
+                try {
+                    var parsed = JSON.parse(jsonRequestBody[prop]);
+                    jsonRequestBody[prop] = parsed;
+                } catch(e) {;}
+            }
+        }
     } catch(e) {;}
 
     //--CloudFormation--//
@@ -420,6 +486,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getPrivateImageList\?/g)) {
@@ -456,6 +524,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=searchAmis\?/g)) {
@@ -470,6 +540,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getVpcs\?/g)) {
@@ -483,6 +555,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSubnets\?/g)) {
@@ -496,6 +570,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSdkResources_Hosts\?/g)) {
@@ -520,6 +596,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getInstanceProfileList\?/g)) {
@@ -533,6 +611,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getNetworkInterfaces\?/g)) {
@@ -546,6 +626,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getAvailabilityZones\?/g)) {
@@ -559,6 +641,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSecurityGroups\?/g)) {
@@ -572,6 +656,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getKeyPairList\?/g)) {
@@ -585,6 +671,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=createSecurityGroup\?/g)) {
@@ -624,6 +712,8 @@ function analyseRequest(details) {
             notifyBlocked();
             return {cancel: true};
         }
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=authorizeIngress\?/g)) {
@@ -680,6 +770,8 @@ function analyseRequest(details) {
             notifyBlocked();
             return {cancel: true};
         }
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.RunInstances\?/g)) {
@@ -762,6 +854,8 @@ function analyseRequest(details) {
             notifyBlocked();
             return {cancel: true};
         }
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=terminateInstances\?/g)) {
@@ -784,6 +878,8 @@ function analyseRequest(details) {
             notifyBlocked();
             return {cancel: true};
         }
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribeLaunchTemplates\?/g)) {
@@ -797,6 +893,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.directoryservice.+.DescribeDirectories\?/g)) {
@@ -810,6 +908,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribePlacementGroups\?/g)) {
@@ -823,6 +923,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getCurrentSpotPrice\?/g)) {
@@ -836,6 +938,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTags\?/g)) {
@@ -881,6 +985,8 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTerminationProtection\?/g)) {
@@ -899,28 +1005,677 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+
+        return {};
     }
 
     //--S3--//
 
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy/g)) {
-        if (jsonRequestBody.operation == "ListObjects") {
-            reqParams.boto3['BucketName'] = jsonRequestBody.path;
-            reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
-            reqParams.cli['_'] = [
-                `s3://${jsonRequestBody.path}/${jsonRequestBody.params.prefix}`
-            ]
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "CreateBucket") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams.cfn['BucketName'] = jsonRequestBody.path;
 
-            outputs.push({
-                'region': region,
-                'service': 's3',
-                'method': {
-                    'api': 'ListObjects',
-                    'boto3': 'list_objects',
-                    'cli': 'ls'
-                },
-                'options': reqParams
-            });
-        }
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'CreateBucket',
+                'boto3': 'create_bucket',
+                'cli': 'create-bucket'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 's3',
+            'type': 'AWS::S3::Bucket',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+
+        return {};
+    }
+        
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketVersioning") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketVersioning',
+                'boto3': 'put_bucket_versioning',
+                'cli': 'put-bucket-versioning'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketMetrics") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketMetricsConfiguration',
+                'boto3': 'put_bucket_metrics_configuration',
+                'cli': 'put-bucket-metrics-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketTagging") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketTagging',
+                'boto3': 'put_bucket_tagging',
+                'cli': 'put-bucket-tagging'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketAcl") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketAcl',
+                'boto3': 'put_bucket_acl',
+                'cli': 'put-bucket-acl'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketLogging") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+        reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketLogging',
+                'boto3': 'put_bucket_logging',
+                'cli': 'put-bucket-logging'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "DeleteBucket") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'DeleteBucket',
+                'boto3': 'delete_bucket',
+                'cli': 'delete-bucket'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListObjects") {
+        reqParams.boto3['BucketName'] = jsonRequestBody.path;
+        reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
+        reqParams.cli['_'] = [
+            `s3://${jsonRequestBody.path}/${jsonRequestBody.params.prefix}`
+        ]
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListObjects',
+                'boto3': 'list_objects',
+                'cli': 'ls'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketVersioning") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketVersioning',
+                'boto3': 'get_bucket_versioning',
+                'cli': 'get-bucket-versioning'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketLogging") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketLogging',
+                'boto3': 'get_bucket_logging',
+                'cli': 'get-bucket-logging'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketTagging") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketTagging',
+                'boto3': 'get_bucket_tagging',
+                'cli': 'get-bucket-tagging'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketNotification") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketNotificationConfiguration',
+                'boto3': 'get_bucket_notification_configuration',
+                'cli': 'get-bucket-notification-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketWebsite") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketWebsite',
+                'boto3': 'get_bucket_website',
+                'cli': 'get-bucket-website'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketRequestPayment") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketRequestPayment',
+                'boto3': 'get_bucket_request_payment',
+                'cli': 'get-bucket-request-payment'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAccelerate") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketAccelerateConfiguration',
+                'boto3': 'get_bucket_accelerate_configuration',
+                'cli': 'get-bucket-accelerate-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketDefaultEncryption") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketEncryption',
+                'boto3': 'get_bucket_encryption',
+                'cli': 'get-bucket-encryption'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketReplication") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketReplication',
+                'boto3': 'get_bucket_replication',
+                'cli': 'get-bucket-replication'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketMetrics") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketMetricsConfiguration',
+                'boto3': 'get_bucket_metrics_configuration',
+                'cli': 'get-bucket-metrics-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAnalytics") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketAnalyticsConfiguration',
+                'boto3': 'get_bucket_analytics_configuration',
+                'cli': 'get-bucket-analytics-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetLifecycleConfiguration") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketLifecycleConfiguration',
+                'boto3': 'get_bucket_lifecycle_configuration',
+                'cli': 'get-bucket-lifecycle-configuration'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketCORS") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketCORS',
+                'boto3': 'get_bucket_cors',
+                'cli': 'get-bucket-cors'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketPolicy") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketPolicy',
+                'boto3': 'get_bucket_policy',
+                'cli': 'get-bucket-policy'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAcl") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.cli['_service'] = "s3api";
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetBucketAcl',
+                'boto3': 'get_bucket_acl',
+                'cli': 'get-bucket-acl'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListAllMyBuckets") {
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'ls'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/cloudtrail-proxy$/g) && jsonRequestBody.operation == "DescribeTrails") {
+        reqParams.boto3['includeShadowTrails'] = jsonRequestBody.content.includeShadowTrails;
+        reqParams.boto3['trailNameList'] = jsonRequestBody.content.trailNameList;
+        if (jsonRequestBody.content.includeShadowTrails === true)
+            reqParams.cli['--include-shadow-trails'] = null;
+        else if (jsonRequestBody.content.includeShadowTrails === true)
+            reqParams.cli['--no-include-shadow-trails'] = null;
+        reqParams.cli['--trail-name-list'] = jsonRequestBody.content.trailNameList;
+        
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'DescribeTrails',
+                'boto3': 'describe_trails',
+                'cli': 'describe-trails'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+    
+
+
+    /* Start Auto */
+
+    // medialive
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputs/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'medialive',
+            'method': {
+                'api': 'ListInputs',
+                'boto3': 'list_inputs',
+                'cli': 'list-inputs'
+            },
+            'options': reqParams
+        });
+
+        return {};
+    }
+
+    // guardduty
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListDetectors") {
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListDetectors',
+                'boto3': 'list_detectors',
+                'cli': 'list-detectors'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // config
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describePendingAggregationRequests\?/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribePendingAggregationRequests',
+                'boto3': 'describe_pending_aggregation_requests',
+                'cli': 'describe-pending-aggregation-requests'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+    
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/iam\/listRoles\?/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+    
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listS3Buckets\?/g)) {
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+    
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listSnsTopics\?/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // xray
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetEncryptionConfig&/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetEncryptionConfig',
+                'boto3': 'get_encryption_config',
+                'cli': 'get-encryption-config'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+    
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingRules&/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetSamplingRules',
+                'boto3': 'get_sampling_rules',
+                'cli': 'get-sampling-rules'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingStatisticSummaries&/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetSamplingStatisticSummaries',
+                'boto3': 'get_sampling_statistic_summaries',
+                'cli': 'get-sampling-statistic-summaries'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // opsworks
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeServers\?/g)) {
+        outputs.push({
+            'region': region,
+            'service': 'opsworkscm',
+            'method': {
+                'api': 'DescribeServers',
+                'boto3': 'describe_servers',
+                'cli': 'describe-servers'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+
+    // cloud9
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.contentString.maxResults > 0) {
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'DescribeEnvironmentMemberships',
+                'boto3': 'describe_environment_memberships',
+                'cli': 'describe-environment-memberships'
+            },
+            'options': reqParams
+        });
+        
+        return true;
     }
 }
