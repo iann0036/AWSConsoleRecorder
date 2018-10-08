@@ -1508,12 +1508,10 @@ function analyseRequest(details) {
 
         return {};
     }
-    
-
 
     /* Start Auto */
 
-    // autogen:cloud9.DescribeEnvironmentMemberships
+    // autogen:cloud9:cloud9.DescribeEnvironmentMemberships
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironmentMemberships" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Permissions'] = jsonRequestBody.contentString.permissions;
         reqParams.cli['--permissions'] = jsonRequestBody.contentString.permissions;
@@ -1534,7 +1532,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:cloud9.DescribeEnvironments
+    // autogen:cloud9:cloud9.DescribeEnvironments
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironments" && jsonRequestBody.method == "POST") {
         reqParams.boto3['EnvironmentIds'] = jsonRequestBody.contentString.environmentIds;
         reqParams.cli['--environment-ids'] = jsonRequestBody.contentString.environmentIds;
@@ -1553,7 +1551,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:cloud9.ListEnvironments
+    // autogen:cloud9:cloud9.ListEnvironments
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "listEnvironments" && jsonRequestBody.method == "POST") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
@@ -1572,7 +1570,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:cloud9.UpdateEnvironment
+    // autogen:cloud9:cloud9.UpdateEnvironment
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEC2Remote" && jsonRequestBody.method == "POST" && jsonRequestBody.operation == "updateEnvironment" && jsonRequestBody.method == "POST") {
         reqParams.boto3['EnvironmentId'] = jsonRequestBody.contentString.environmentId;
         reqParams.cli['--environment-id'] = jsonRequestBody.contentString.environmentId;
@@ -1595,7 +1593,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:ec2.DescribeVpcs
+    // autogen:cloud9:ec2.DescribeVpcs
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs" && jsonRequestBody.method == "POST") {
 
         outputs.push({
@@ -1612,7 +1610,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:ec2.DescribeSubnets
+    // autogen:cloud9:ec2.DescribeSubnets
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets" && jsonRequestBody.method == "POST") {
 
         outputs.push({
@@ -1629,7 +1627,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:cloud9.CreateEnvironmentEC2
+    // autogen:cloud9:cloud9.CreateEnvironmentEC2
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "createEnvironmentEC2" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
@@ -1658,7 +1656,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:cloud9.DeleteEnvironment
+    // autogen:cloud9:cloud9.DeleteEnvironment
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "deleteEnvironment" && jsonRequestBody.method == "POST") {
         reqParams.boto3['EnvironmentId'] = jsonRequestBody.contentString.environmentId;
         reqParams.cli['--environment-id'] = jsonRequestBody.contentString.environmentId;
@@ -1677,7 +1675,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:medialive.ListInputSecurityGroups
+    // autogen:medialive:medialive.ListInputSecurityGroups
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET") {
 
         outputs.push({
@@ -1694,7 +1692,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:medialive.ListChannels
+    // autogen:medialive:medialive.ListChannels
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.method == "GET") {
 
         outputs.push({
@@ -1711,7 +1709,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:medialive.CreateInputSecurityGroup
+    // autogen:medialive:medialive.CreateInputSecurityGroup
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.method == "POST") {
         reqParams.boto3['WhitelistRules'] = jsonRequestBody.contentString.whitelistRules;
         reqParams.cli['--whitelist-rules'] = jsonRequestBody.contentString.whitelistRules;
@@ -1730,7 +1728,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:ssm.GetParametersByPath
+    // autogen:medialive:ssm.GetParametersByPath
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/ssm$/g) && jsonRequestBody.operation == "getParametersByPath" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Path'] = jsonRequestBody.contentString.Path;
         reqParams.cli['--path'] = jsonRequestBody.contentString.Path;
@@ -1749,7 +1747,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:iam.ListRoles
+    // autogen:medialive:iam.ListRoles
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
@@ -1766,7 +1764,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:iam.GetRolePolicy
+    // autogen:medialive:iam.GetRolePolicy
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "getRolePolicy") {
 
         outputs.push({
@@ -1783,7 +1781,7 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:medialive.CreateChannel
+    // autogen:medialive:medialive.CreateChannel
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.operation == "createChannels" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
