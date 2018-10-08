@@ -391,12 +391,6 @@ chrome.webRequest.onBeforeRequest.addListener(
     ["requestBody","blocking"]
 );
 
-chrome.webRequest.onBeforeRequest.addListener(
-    analyseRequest,
-    {urls: ["<all_urls>"]},
-    ["requestBody","blocking"]
-);
-
 chrome.browserAction.onClicked.addListener(
     function(){
         chrome.tabs.create({
