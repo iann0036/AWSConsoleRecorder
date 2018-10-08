@@ -391,6 +391,12 @@ chrome.webRequest.onBeforeRequest.addListener(
     ["requestBody","blocking"]
 );
 
+chrome.webRequest.onBeforeRequest.addListener(
+    analyseRequest,
+    {urls: ["<all_urls>"]},
+    ["requestBody","blocking"]
+);
+
 chrome.browserAction.onClicked.addListener(
     function(){
         chrome.tabs.create({
@@ -1507,31 +1513,180 @@ function analyseRequest(details) {
 
     /* Start Auto */
 
-    // medialive
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputs/g)) {
+    // autogen:cloud9.DescribeEnvironmentMemberships
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironmentMemberships" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Permissions'] = jsonRequestBody.contentString.permissions;
+        reqParams.cli['--permissions'] = jsonRequestBody.contentString.permissions;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'DescribeEnvironmentMemberships',
+                'boto3': 'describe_environment_memberships',
+                'cli': 'describe-environment-memberships'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloud9.DescribeEnvironments
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironments" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['EnvironmentIds'] = jsonRequestBody.contentString.environmentIds;
+        reqParams.cli['--environment-ids'] = jsonRequestBody.contentString.environmentIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'DescribeEnvironments',
+                'boto3': 'describe_environments',
+                'cli': 'describe-environments'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloud9.ListEnvironments
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "listEnvironments" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'ListEnvironments',
+                'boto3': 'list_environments',
+                'cli': 'list-environments'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloud9.UpdateEnvironment
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEC2Remote" && jsonRequestBody.method == "POST" && jsonRequestBody.operation == "updateEnvironment" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['EnvironmentId'] = jsonRequestBody.contentString.environmentId;
+        reqParams.cli['--environment-id'] = jsonRequestBody.contentString.environmentId;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'UpdateEnvironment',
+                'boto3': 'update_environment',
+                'cli': 'update-environment'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs" && jsonRequestBody.method == "POST") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets" && jsonRequestBody.method == "POST") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloud9.CreateEnvironmentEC2
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "createEnvironmentEC2" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.contentString.instanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.contentString.instanceType;
+        reqParams.boto3['AutomaticStopTimeMinutes'] = jsonRequestBody.contentString.automaticStopTimeMinutes;
+        reqParams.cli['--automatic-stop-time-minutes'] = jsonRequestBody.contentString.automaticStopTimeMinutes;
+        reqParams.boto3['SubnetId'] = jsonRequestBody.contentString.subnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.contentString.subnetId;
+        reqParams.boto3['ClientRequestToken'] = jsonRequestBody.contentString.clientRequestToken;
+        reqParams.cli['--client-request-token'] = jsonRequestBody.contentString.clientRequestToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'CreateEnvironmentEC2',
+                'boto3': 'create_environment_ec2',
+                'cli': 'create-environment-ec2'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloud9.DeleteEnvironment
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "deleteEnvironment" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['EnvironmentId'] = jsonRequestBody.contentString.environmentId;
+        reqParams.cli['--environment-id'] = jsonRequestBody.contentString.environmentId;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloud9',
+            'method': {
+                'api': 'DeleteEnvironment',
+                'boto3': 'delete_environment',
+                'cli': 'delete-environment'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:medialive.ListInputSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET") {
+
         outputs.push({
             'region': region,
             'service': 'medialive',
             'method': {
-                'api': 'ListInputs',
-                'boto3': 'list_inputs',
-                'cli': 'list-inputs'
-            },
-            'options': reqParams
-        });
-
-        return {};
-    }
-
-    // guardduty
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListDetectors") {
-        outputs.push({
-            'region': region,
-            'service': 'guardduty',
-            'method': {
-                'api': 'ListDetectors',
-                'boto3': 'list_detectors',
-                'cli': 'list-detectors'
+                'api': 'ListInputSecurityGroups',
+                'boto3': 'list_input_security_groups',
+                'cli': 'list-input-security-groups'
             },
             'options': reqParams
         });
@@ -1539,23 +1694,64 @@ function analyseRequest(details) {
         return {};
     }
 
-    // config
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describePendingAggregationRequests\?/g)) {
+    // autogen:medialive.ListChannels
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.method == "GET") {
+
         outputs.push({
             'region': region,
-            'service': 'config',
+            'service': 'medialive',
             'method': {
-                'api': 'DescribePendingAggregationRequests',
-                'boto3': 'describe_pending_aggregation_requests',
-                'cli': 'describe-pending-aggregation-requests'
+                'api': 'ListChannels',
+                'boto3': 'list_channels',
+                'cli': 'list-channels'
             },
             'options': reqParams
         });
         
         return {};
     }
-    
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/iam\/listRoles\?/g)) {
+
+    // autogen:medialive.CreateInputSecurityGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['WhitelistRules'] = jsonRequestBody.contentString.whitelistRules;
+        reqParams.cli['--whitelist-rules'] = jsonRequestBody.contentString.whitelistRules;
+
+        outputs.push({
+            'region': region,
+            'service': 'medialive',
+            'method': {
+                'api': 'CreateInputSecurityGroup',
+                'boto3': 'create_input_security_group',
+                'cli': 'create-input-security-group'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm.GetParametersByPath
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/ssm$/g) && jsonRequestBody.operation == "getParametersByPath" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Path'] = jsonRequestBody.contentString.Path;
+        reqParams.cli['--path'] = jsonRequestBody.contentString.Path;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'GetParametersByPath',
+                'boto3': 'get_parameters_by_path',
+                'cli': 'get-parameters-by-path'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+
         outputs.push({
             'region': region,
             'service': 'iam',
@@ -1569,30 +1765,17 @@ function analyseRequest(details) {
         
         return {};
     }
-    
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listS3Buckets\?/g)) {
+
+    // autogen:iam.GetRolePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "getRolePolicy") {
+
         outputs.push({
             'region': region,
-            'service': 's3',
+            'service': 'iam',
             'method': {
-                'api': 'ListBuckets',
-                'boto3': 'list_buckets',
-                'cli': 'list-buckets'
-            },
-            'options': reqParams
-        });
-        
-        return {};
-    }
-    
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listSnsTopics\?/g)) {
-        outputs.push({
-            'region': region,
-            'service': 'sns',
-            'method': {
-                'api': 'ListTopics',
-                'boto3': 'list_topics',
-                'cli': 'list-topics'
+                'api': 'GetRolePolicy',
+                'boto3': 'get_role_policy',
+                'cli': 'get-role-policy'
             },
             'options': reqParams
         });
@@ -1600,45 +1783,32 @@ function analyseRequest(details) {
         return {};
     }
 
-    // xray
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetEncryptionConfig&/g)) {
-        outputs.push({
-            'region': region,
-            'service': 'xray',
-            'method': {
-                'api': 'GetEncryptionConfig',
-                'boto3': 'get_encryption_config',
-                'cli': 'get-encryption-config'
-            },
-            'options': reqParams
-        });
-        
-        return {};
-    }
-    
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingRules&/g)) {
-        outputs.push({
-            'region': region,
-            'service': 'xray',
-            'method': {
-                'api': 'GetSamplingRules',
-                'boto3': 'get_sampling_rules',
-                'cli': 'get-sampling-rules'
-            },
-            'options': reqParams
-        });
-        
-        return {};
-    }
+    // autogen:medialive.CreateChannel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.operation == "createChannels" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['InputAttachments'] = jsonRequestBody.contentString.inputAttachments;
+        reqParams.cli['--input-attachments'] = jsonRequestBody.contentString.inputAttachments;
+        reqParams.boto3['InputSpecification'] = jsonRequestBody.contentString.inputSpecification;
+        reqParams.cli['--input-specification'] = jsonRequestBody.contentString.inputSpecification;
+        reqParams.boto3['Destinations'] = jsonRequestBody.contentString.destinations;
+        reqParams.cli['--destinations'] = jsonRequestBody.contentString.destinations;
+        reqParams.boto3['EncoderSettings'] = jsonRequestBody.contentString.encoderSettings;
+        reqParams.cli['--encoder-settings'] = jsonRequestBody.contentString.encoderSettings;
+        reqParams.boto3['RequestId'] = jsonRequestBody.contentString.requestId;
+        reqParams.cli['--request-id'] = jsonRequestBody.contentString.requestId;
+        reqParams.boto3['LogLevel'] = jsonRequestBody.contentString.logLevel;
+        reqParams.cli['--log-level'] = jsonRequestBody.contentString.logLevel;
+        reqParams.boto3['RoleArn'] = jsonRequestBody.contentString.roleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.contentString.roleArn;
 
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingStatisticSummaries&/g)) {
         outputs.push({
             'region': region,
-            'service': 'xray',
+            'service': 'medialive',
             'method': {
-                'api': 'GetSamplingStatisticSummaries',
-                'boto3': 'get_sampling_statistic_summaries',
-                'cli': 'get-sampling-statistic-summaries'
+                'api': 'CreateChannel',
+                'boto3': 'create_channel',
+                'cli': 'create-channel'
             },
             'options': reqParams
         });
@@ -1646,36 +1816,4 @@ function analyseRequest(details) {
         return {};
     }
 
-    // opsworks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeServers\?/g)) {
-        outputs.push({
-            'region': region,
-            'service': 'opsworkscm',
-            'method': {
-                'api': 'DescribeServers',
-                'boto3': 'describe_servers',
-                'cli': 'describe-servers'
-            },
-            'options': reqParams
-        });
-        
-        return {};
-    }
-
-
-    // cloud9
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.contentString.maxResults > 0) {
-        outputs.push({
-            'region': region,
-            'service': 'cloud9',
-            'method': {
-                'api': 'DescribeEnvironmentMemberships',
-                'boto3': 'describe_environment_memberships',
-                'cli': 'describe-environment-memberships'
-            },
-            'options': reqParams
-        });
-        
-        return true;
-    }
 }
