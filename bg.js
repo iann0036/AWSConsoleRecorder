@@ -144,9 +144,11 @@ function processGoParameter(paramkey, param, spacing) {
     if (typeof param == "string")
         return `aws.String('${param}')`;
     if (Array.isArray(param)) {
+        return undefined; // TODO
         return "";
     }
     if (typeof param == "object") {
+        return undefined; // TODO
         return "";
     }
     
@@ -179,12 +181,13 @@ function outputMapGo(service, method, options, region, was_blocked) {
     var output = ensureInitDeclaredGo(service, region);
     var params = '';
 
+    console.dir(options);
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined) {
                 var optionvalue = processGoParameter(option, options[option], 4);
                 params += `
-        ${option}:  ${optionvalue},`;
+        ${option}: ${optionvalue},`;
             }
         }
         params += `
@@ -250,13 +253,15 @@ function outputMapCli(service, method, options, region, was_blocked) {
             delete options['_service'];
         }
         for (option in options) {
-            if (options[option] === null)
-                params += ` ${option}`
-            else {
-                var optionvalue = JSON.stringify(options[option]);
-                if (typeof options[option] == "object")
-                    optionvalue = "'" + optionvalue + "'";
-                params += ` ${option} ${optionvalue}`
+            if (options[option] !== undefined) {
+                if (options[option] === null)
+                    params += ` ${option}`
+                else {
+                    var optionvalue = JSON.stringify(options[option]);
+                    if (typeof options[option] == "object")
+                        optionvalue = "'" + optionvalue + "'";
+                    params += ` ${option} ${optionvalue}`
+                }
             }
         }
     }
@@ -325,7 +330,7 @@ Resources:
 
     for (var i=0; i<outputs.length; i++) {
         compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-        compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.go, outputs[i].region, outputs[i].was_blocked);
+        compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
         compiled['cli'] += outputMapCli(outputs[i].service, outputs[i].method.cli, outputs[i].options.cli, outputs[i].region, outputs[i].was_blocked);
     }
 
@@ -422,6 +427,11 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+function getUrlValue(url, key) {
+    var url = new URL(url);
+    return url.searchParams.get(key);
+}
 
 /******/
 
@@ -2049,6 +2059,873 @@ function analyseRequest(details) {
                 'api': 'DeleteFileSystem',
                 'boto3': 'delete_file_system',
                 'cli': 'delete-file-system'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.GetEventSelectors
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/getEventSelectors\?/g)) {
+        reqParams.boto3['TrailName'] = getUrlValue(details.url, 'trailArn');
+        reqParams.cli['--trail-name'] = getUrlValue(details.url, 'trailArn');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'GetEventSelectors',
+                'boto3': 'get_event_selectors',
+                'cli': 'get-event-selectors'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.DescribeTrails
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/resources\/trails\?/g)) {
+        reqParams.boto3['IncludeShadowTrails'] = getUrlValue(details.url, 'includeShadowTrails');
+        reqParams.cli['--include-shadow-trails'] = getUrlValue(details.url, 'includeShadowTrails');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'DescribeTrails',
+                'boto3': 'describe_trails',
+                'cli': 'describe-trails'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.LookupEvents
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/lookupEvents\?/g)) {
+        reqParams.boto3['EndTime'] = getUrlValue(details.url, 'endTime');
+        reqParams.cli['--end-time'] = getUrlValue(details.url, 'endTime');
+        reqParams.boto3['StartTime'] = getUrlValue(details.url, 'startTime');
+        reqParams.cli['--start-time'] = getUrlValue(details.url, 'startTime');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'LookupEvents',
+                'boto3': 'lookup_events',
+                'cli': 'lookup-events'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:sns.ListTopics
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/getSnsTopicNameToArnMapByRegion\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:lambda.ListFunctions
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/listLambdaFunctions\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListFunctions',
+                'boto3': 'list_functions',
+                'cli': 'list-functions'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.CreateTrail
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/subscribe\?/g)) {
+        reqParams.boto3['Name'] = getUrlValue(details.url, 'configName');
+        reqParams.cli['--name'] = getUrlValue(details.url, 'configName');
+        reqParams.boto3['IncludeGlobalServiceEvents'] = getUrlValue(details.url, 'isIncludeGlobalServiceEvents');
+        reqParams.cli['--include-global-service-events'] = getUrlValue(details.url, 'isIncludeGlobalServiceEvents');
+        reqParams.boto3['IsMultiRegionTrail'] = getUrlValue(details.url, 'isMultiRegionTrail');
+        reqParams.cli['--is-multi-region-trail'] = getUrlValue(details.url, 'isMultiRegionTrail');
+        reqParams.boto3['KmsKeyId'] = getUrlValue(details.url, 'kmsKeyId');
+        reqParams.cli['--kms-key-id'] = getUrlValue(details.url, 'kmsKeyId');
+        reqParams.boto3['EnableLogFileValidation'] = getUrlValue(details.url, 'logFileValidation');
+        reqParams.cli['--enable-log-file-validation'] = getUrlValue(details.url, 'logFileValidation');
+        reqParams.boto3['S3BucketName'] = getUrlValue(details.url, 's3BucketName');
+        reqParams.cli['--s3-bucket-name'] = getUrlValue(details.url, 's3BucketName');
+        reqParams.boto3['S3KeyPrefix'] = getUrlValue(details.url, 's3KeyPrefix');
+        reqParams.cli['--s3-key-prefix'] = getUrlValue(details.url, 's3KeyPrefix');
+        reqParams.boto3['SnsTopicName'] = getUrlValue(details.url, 'snsTopicArn');
+        reqParams.cli['--sns-topic-name'] = getUrlValue(details.url, 'snsTopicArn');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'CreateTrail',
+                'boto3': 'create_trail',
+                'cli': 'create-trail'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.GetTrailStatus
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/resources\/status\?/g)) {
+        reqParams.boto3['Name'] = getUrlValue(details.url, 'trailArn');
+        reqParams.cli['--name'] = getUrlValue(details.url, 'trailArn');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'GetTrailStatus',
+                'boto3': 'get_trail_status',
+                'cli': 'get-trail-status'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.ListTags
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/listTags\?/g)) {
+        reqParams.boto3['ResourceIdList'] = [getUrlValue(details.url, 'trailArn')];
+        reqParams.cli['--resource-id-list'] = [getUrlValue(details.url, 'trailArn')];
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'ListTags',
+                'boto3': 'list_tags',
+                'cli': 'list-tags'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.DescribePendingAggregationRequests
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describePendingAggregationRequests\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribePendingAggregationRequests',
+                'boto3': 'describe_pending_aggregation_requests',
+                'cli': 'describe-pending-aggregation-requests'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.DescribeConfigurationRecorders
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listConfigurationRecorders\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribeConfigurationRecorders',
+                'boto3': 'describe_configuration_recorders',
+                'cli': 'describe-configuration-recorders'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.DescribeDeliveryChannels
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listDeliveryChannels\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribeDeliveryChannels',
+                'boto3': 'describe_delivery_channels',
+                'cli': 'describe-delivery-channels'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:iam.ListRoles
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/iam\/listRoles\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:s3.ListBuckets
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listS3Buckets\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:sns.ListTopics
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listSnsTopics\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:iam.CreateServiceLinkedRole
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/createServiceLinkedRole\?/g)) {
+        reqParams.boto3['AWSServiceName'] = 'elasticbeanstalk.amazonaws.com';
+        reqParams.cli['--aws-service-name'] = 'elasticbeanstalk.amazonaws.com';
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateServiceLinkedRole',
+                'boto3': 'create_service_linked_role',
+                'cli': 'create-service-linked-role'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:config:s3.CreateBucket
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/createS3BucketForConfiguration\?/g)) {
+        reqParams.boto3['Bucket'] = jsonRequestBody.s3BucketName;
+        reqParams.cli['--bucket'] = jsonRequestBody.s3BucketName;
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'CreateBucket',
+                'boto3': 'create_bucket',
+                'cli': 'create-bucket'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListDetectors
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListDetectors" && jsonRequestBody.method == "GET") {
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListDetectors',
+                'boto3': 'list_detectors',
+                'cli': 'list-detectors'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetInvitationsCount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetInvitationsCount" && jsonRequestBody.method == "GET") {
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetInvitationsCount',
+                'boto3': 'get_invitations_count',
+                'cli': 'get-invitations-count'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateDetector
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateDetector" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Enable'] = jsonRequestBody.contentString.enable;
+        reqParams.cli['--enable'] = jsonRequestBody.contentString.enable;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateDetector',
+                'boto3': 'create_detector',
+                'cli': 'create-detector'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFindings" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.cli['--finding-criteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.boto3['SortCriteria'] = jsonRequestBody.contentString.sortCriteria;
+        reqParams.cli['--sort-criteria'] = jsonRequestBody.contentString.sortCriteria;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.maxResults;
+        reqParams.boto3['NextToken'] = jsonRequestBody.contentString.nextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.contentString.nextToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListFindings',
+                'boto3': 'list_findings',
+                'cli': 'list-findings'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetMasterAccount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetMasterAccount" && jsonRequestBody.method == "GET") {
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetMasterAccount',
+                'boto3': 'get_master_account',
+                'cli': 'get-master-account'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListMembers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListMembers" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListMembers',
+                'boto3': 'list_members',
+                'cli': 'list-members'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetDetector
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetDetector" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetDetector',
+                'boto3': 'get_detector',
+                'cli': 'get-detector'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetFindingsStatistics
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindingsStatistics" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.cli['--finding-criteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.boto3['FindingStatisticTypes'] = jsonRequestBody.contentString.findingStatisticTypes;
+        reqParams.cli['--finding-statistic-types'] = jsonRequestBody.contentString.findingStatisticTypes;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetFindingsStatistics',
+                'boto3': 'get_findings_statistics',
+                'cli': 'get-findings-statistics'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListFilters
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFilters" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListFilters',
+                'boto3': 'list_filters',
+                'cli': 'list-filters'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateMembers
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateMembers" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['AccountDetails'] = jsonRequestBody.contentString.accountDetails;
+        reqParams.cli['--account-details'] = jsonRequestBody.contentString.accountDetails;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateMembers',
+                'boto3': 'create_members',
+                'cli': 'create-members'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.DeleteMembers
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "DeleteMembers" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['AccountIds'] = jsonRequestBody.contentString.accountIds;
+        reqParams.cli['--account-ids'] = jsonRequestBody.contentString.accountIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'DeleteMembers',
+                'boto3': 'delete_members',
+                'cli': 'delete-members'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListIPSets
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListIPSets',
+                'boto3': 'list_ip_sets',
+                'cli': 'list-ip-sets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListThreatIntelSets
+    // modified for path split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListThreatIntelSets" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListThreatIntelSets',
+                'boto3': 'list_threat_intel_sets',
+                'cli': 'list-threat-intel-sets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:iam.ListPolicyVersions
+    // modified for policyarn split
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListPolicyVersions" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['PolicyArn'] = jsonRequestBody.contentString.match(/PolicyArn\=(.+)\&Version/g)[1];
+        reqParams.cli['--policy-arn'] = jsonRequestBody.contentString.match(/PolicyArn\=(.+)\&Version/g)[1]; // "Action=ListPolicyVersions&PolicyArn=arn:aws:iam::aws:policy/aws-service-role/AmazonGuardDutyServiceRolePolicy&Version=2010-05-08"
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListPolicyVersions',
+                'boto3': 'list_policy_versions',
+                'cli': 'list-policy-versions'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateIPSet" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path;
+        reqParams.cli['--detector-id'] = jsonRequestBody.path;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Location'] = jsonRequestBody.contentString.location;
+        reqParams.cli['--location'] = jsonRequestBody.contentString.location;
+        reqParams.boto3['Format'] = jsonRequestBody.contentString.format;
+        reqParams.cli['--format'] = jsonRequestBody.contentString.format;
+        reqParams.boto3['Activate'] = jsonRequestBody.contentString.activate;
+        reqParams.cli['--activate'] = jsonRequestBody.contentString.activate;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateIPSet',
+                'boto3': 'create_ip_set',
+                'cli': 'create-ip-set'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListIPSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['DetectorId'] =jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListIPSets',
+                'boto3': 'list_ip_sets',
+                'cli': 'list-ip-sets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetIPSet" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['IpSetId'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.path.split("/")[4];
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetIPSet',
+                'boto3': 'get_ip_set',
+                'cli': 'get-ip-set'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.UpdateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateIPSet" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['IpSetId'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.path.split("/")[4];
+        reqParams.boto3['DetectorId'] =jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['Activate'] = jsonRequestBody.contentString.activate;
+        reqParams.cli['--activate'] = jsonRequestBody.contentString.activate;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'UpdateIPSet',
+                'boto3': 'update_ip_set',
+                'cli': 'update-ip-set'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ArchiveFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ArchiveFindings" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['FindingIds'] = jsonRequestBody.contentString.findingIds;
+        reqParams.cli['--finding-ids'] = jsonRequestBody.contentString.findingIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ArchiveFindings',
+                'boto3': 'archive_findings',
+                'cli': 'archive-findings'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.UnarchiveFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UnarchiveFindings" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['FindingIds'] = jsonRequestBody.contentString.findingIds;
+        reqParams.cli['--finding-ids'] = jsonRequestBody.contentString.findingIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'UnarchiveFindings',
+                'boto3': 'unarchive_findings',
+                'cli': 'unarchive-findings'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindings" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['FindingIds'] = jsonRequestBody.contentString.findingIds;
+        reqParams.cli['--finding-ids'] = jsonRequestBody.contentString.findingIds;
+        reqParams.boto3['SortCriteria'] = jsonRequestBody.contentString.sortCriteria;
+        reqParams.cli['--sort-criteria'] = jsonRequestBody.contentString.sortCriteria;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetFindings',
+                'boto3': 'get_findings',
+                'cli': 'get-findings'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:iam.ListAttachedRolePolicies
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListAttachedRolePolicies" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['RoleName'] = jsonRequestBody.contentString.match(/RoleName\=(.+)\&Version/g)[1];;
+        reqParams.cli['--role-name'] = jsonRequestBody.contentString.match(/RoleName\=(.+)\&Version/g)[1];;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListAttachedRolePolicies',
+                'boto3': 'list_attached_role_policies',
+                'cli': 'list-attached-role-policies'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateSampleFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateSampleFindings" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateSampleFindings',
+                'boto3': 'create_sample_findings',
+                'cli': 'create-sample-findings'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.UpdateDetector
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateDetector" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['Enable'] = jsonRequestBody.contentString.enable;
+        reqParams.cli['--enable'] = jsonRequestBody.contentString.enable;
+        reqParams.boto3['FindingPublishingFrequency'] = jsonRequestBody.contentString.findingPublishingFrequency;
+        reqParams.cli['--finding-publishing-frequency'] = jsonRequestBody.contentString.findingPublishingFrequency;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'UpdateDetector',
+                'boto3': 'update_detector',
+                'cli': 'update-detector'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:efs:efs.CreateTags
+    // autogen:efs:efs.DeleteTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifyTags") {
+        reqParams.boto3['FileSystemId'] = jsonRequestBody.fileSystemId;
+        reqParams.cli['--file-system-id'] = jsonRequestBody.fileSystemId;
+        if (jsonRequestBody.addTags.length) {
+            reqParams.boto3['Tags'] = jsonRequestBody.addTags;
+            reqParams.cli['--tags'] = jsonRequestBody.addTags;
+
+            outputs.push({
+                'region': region,
+                'service': 'efs',
+                'method': {
+                    'api': 'CreateTags',
+                    'boto3': 'create_tags',
+                    'cli': 'create-tags'
+                },
+                'options': reqParams
+            });
+        }
+        if (jsonRequestBody.removeKeys.length) {
+            reqParams.boto3['TagKeys'] = jsonRequestBody.removeKeys;
+            reqParams.cli['--tag-keys'] = jsonRequestBody.removeKeys;
+
+            outputs.push({
+                'region': region,
+                'service': 'efs',
+                'method': {
+                    'api': 'DeleteTags',
+                    'boto3': 'delete_tags',
+                    'cli': 'delete-tags'
+                },
+                'options': reqParams
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:efs:efs.ModifyMountTargetSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifySecurityGroups") {
+        reqParams.boto3['MountTargetId'] = jsonRequestBody.mountTargetId;
+        reqParams.cli['--mount-target-id'] = jsonRequestBody.mountTargetId;
+        reqParams.boto3['SecurityGroups'] = jsonRequestBody.securityGroups;
+        reqParams.cli['--security-groups'] = jsonRequestBody.securityGroups;
+
+        outputs.push({
+            'region': region,
+            'service': 'efs',
+            'method': {
+                'api': 'ModifyMountTargetSecurityGroups',
+                'boto3': 'modify_mount_target_security_groups',
+                'cli': 'modify-mount-target-security-groups'
             },
             'options': reqParams
         });
