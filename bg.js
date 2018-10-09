@@ -463,6 +463,7 @@ function analyseRequest(details) {
 
     //--EC2--//
     
+    // manual:ec2:ec2.DescribeInstances
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getMergedInstanceList\?/g)) {
         if ('filters' in jsonRequestBody) {
             reqParams.cli['--filters'] = jsonRequestBody.filters;
@@ -490,6 +491,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeImages
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getPrivateImageList\?/g)) {
         if (jsonRequestBody['publicAndPrivate'] != true) {
             reqParams.boto3['Owner'] = ['self'];
@@ -528,6 +530,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeImages
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=searchAmis\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.count;
         outputs.push({
@@ -544,6 +547,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeVpcs
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getVpcs\?/g)) {
         outputs.push({
             'region': region,
@@ -559,6 +563,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeSubnets
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSubnets\?/g)) {
         outputs.push({
             'region': region,
@@ -574,6 +579,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeHosts
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSdkResources_Hosts\?/g)) {
         if ('filters' in jsonRequestBody) {
             reqParams.cli['--filters'] = jsonRequestBody.filters;
@@ -600,6 +606,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:iam.ListInstanceProfiles
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getInstanceProfileList\?/g)) {
         outputs.push({
             'region': region,
@@ -615,6 +622,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeNetworkInterfaces
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getNetworkInterfaces\?/g)) {
         outputs.push({
             'region': region,
@@ -630,6 +638,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeAvailabilityZones
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getAvailabilityZones\?/g)) {
         outputs.push({
             'region': region,
@@ -645,6 +654,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeSecurityGroups
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSecurityGroups\?/g)) {
         outputs.push({
             'region': region,
@@ -660,6 +670,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeKeyPairs
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getKeyPairList\?/g)) {
         outputs.push({
             'region': region,
@@ -675,6 +686,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.CreateSecurityGroup
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=createSecurityGroup\?/g)) {
         reqParams.boto3['GroupDescription'] = jsonRequestBody.groupDescription;
         reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
@@ -716,6 +728,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.AuthorizeSecurityGroupIngress
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=authorizeIngress\?/g)) {
         if ('groupId' in jsonRequestBody) {
             reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
@@ -774,6 +787,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.RunInstances
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.RunInstances\?/g)) {
         reqParams.boto3['ImageId'] = jsonRequestBody.ImageId;
         reqParams.boto3['MaxCount'] = jsonRequestBody.MaxCount;
@@ -858,6 +872,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.TerminateInstances
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=terminateInstances\?/g)) {
         reqParams.boto3['InstanceIds'] = jsonRequestBody.instanceIds;
         reqParams.cli['--instance-ids'] = jsonRequestBody.instanceIds;
@@ -882,6 +897,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeLaunchTemplates
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribeLaunchTemplates\?/g)) {
         outputs.push({
             'region': region,
@@ -897,6 +913,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ds.DescribeDirectories
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.directoryservice.+.DescribeDirectories\?/g)) {
         outputs.push({
             'region': region,
@@ -912,6 +929,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribePlacementGroups
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribePlacementGroups\?/g)) {
         outputs.push({
             'region': region,
@@ -927,6 +945,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeSpotPriceHistory
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getCurrentSpotPrice\?/g)) {
         outputs.push({
             'region': region,
@@ -942,6 +961,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeTags
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTags\?/g)) {
         reqParams.boto3['Filter'] = [];
         reqParams.cli['--filter'] = [];
@@ -989,6 +1009,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ec2:ec2.DescribeInstanceAttribute
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTerminationProtection\?/g)) {
         reqParams.boto3['InstanceId'] = jsonRequestBody.instanceId;
         reqParams.boto3['Attribute'] = "disableApiTermination";
@@ -1011,6 +1032,7 @@ function analyseRequest(details) {
 
     //--S3--//
 
+    // manual:s3:s3.CreateBucket
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "CreateBucket") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1038,7 +1060,8 @@ function analyseRequest(details) {
 
         return {};
     }
-        
+    
+    // manual:s3:s3.PutBucketVersioning
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketVersioning") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1059,6 +1082,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.PutBucketMetricsConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketMetrics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1079,6 +1103,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.PutBucketTagging
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketTagging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1099,6 +1124,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.PutBucketAcl
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketAcl") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1119,6 +1145,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.PutBucketLogging
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketLogging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1139,6 +1166,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.DeleteBucket
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "DeleteBucket") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1158,6 +1186,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.ListObjects
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListObjects") {
         reqParams.boto3['BucketName'] = jsonRequestBody.path;
         reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
@@ -1179,6 +1208,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketVersioning
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketVersioning") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1198,6 +1228,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketLogging
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketLogging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1217,6 +1248,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketTagging
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketTagging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1236,6 +1268,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketNotificationConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketNotification") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1255,6 +1288,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketWebsite
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketWebsite") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1274,6 +1308,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketRequestPayment
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketRequestPayment") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1293,6 +1328,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketAccelerateConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAccelerate") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1312,6 +1348,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketEncryption
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketDefaultEncryption") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1331,6 +1368,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketReplication
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketReplication") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1350,6 +1388,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketMetricsConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketMetrics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1369,6 +1408,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketAnalyticsConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAnalytics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1388,6 +1428,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketLifecycleConfiguration
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetLifecycleConfiguration") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1406,7 +1447,8 @@ function analyseRequest(details) {
 
         return {};
     }
-    
+
+    // manual:s3:s3.GetBucketCORS
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketCORS") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1426,6 +1468,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketPolicy
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketPolicy") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1445,6 +1488,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.GetBucketAcl
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAcl") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
@@ -1464,6 +1508,7 @@ function analyseRequest(details) {
         return {};
     }
     
+    // manual:s3:s3.ListBuckets
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListAllMyBuckets") {
         outputs.push({
             'region': region,
@@ -1479,6 +1524,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:s3:cloudtrail.DescribeTrails
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/cloudtrail-proxy$/g) && jsonRequestBody.operation == "DescribeTrails") {
         reqParams.boto3['includeShadowTrails'] = jsonRequestBody.content.includeShadowTrails;
         reqParams.boto3['trailNameList'] = jsonRequestBody.content.trailNameList;
