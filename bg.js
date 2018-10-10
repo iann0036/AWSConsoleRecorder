@@ -2210,6 +2210,15 @@ function analyseRequest(details) {
         reqParams.boto3['SnsTopicName'] = getUrlValue(details.url, 'snsTopicArn');
         reqParams.cli['--sns-topic-name'] = getUrlValue(details.url, 'snsTopicArn');
 
+        reqParams.cfn['TrailName'] = getUrlValue(details.url, 'configName');
+        reqParams.cfn['IncludeGlobalServiceEvents'] = getUrlValue(details.url, 'isIncludeGlobalServiceEvents');
+        reqParams.cfn['IsMultiRegionTrail'] = getUrlValue(details.url, 'isMultiRegionTrail');
+        reqParams.cfn['KMSKeyId'] = getUrlValue(details.url, 'kmsKeyId');
+        reqParams.cfn['EnableLogFileValidation'] = getUrlValue(details.url, 'logFileValidation');
+        reqParams.cfn['S3BucketName'] = getUrlValue(details.url, 's3BucketName');
+        reqParams.cfn['S3KeyPrefix'] = getUrlValue(details.url, 's3KeyPrefix');
+        reqParams.cfn['SnsTopicName'] = getUrlValue(details.url, 'snsTopicArn');
+
         outputs.push({
             'region': region,
             'service': 'cloudtrail',
@@ -2219,6 +2228,14 @@ function analyseRequest(details) {
                 'cli': 'create-trail'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'type': 'AWS::CloudTrail::Trail',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
@@ -2441,6 +2458,8 @@ function analyseRequest(details) {
         reqParams.boto3['Enable'] = jsonRequestBody.contentString.enable;
         reqParams.cli['--enable'] = jsonRequestBody.contentString.enable;
 
+        reqParams.cfn['Enable'] = jsonRequestBody.contentString.enable;
+
         outputs.push({
             'region': region,
             'service': 'guardduty',
@@ -2450,6 +2469,14 @@ function analyseRequest(details) {
                 'cli': 'create-detector'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Detector',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
@@ -2587,6 +2614,10 @@ function analyseRequest(details) {
         reqParams.boto3['AccountDetails'] = jsonRequestBody.contentString.accountDetails;
         reqParams.cli['--account-details'] = jsonRequestBody.contentString.accountDetails;
 
+        reqParams.cfn['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['MemberId'] = jsonRequestBody.contentString.accountDetails.AccountId;
+        reqParams.cfn['Email'] = jsonRequestBody.contentString.accountDetails.Email;
+        
         outputs.push({
             'region': region,
             'service': 'guardduty',
@@ -2596,6 +2627,14 @@ function analyseRequest(details) {
                 'cli': 'create-members'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Member',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
@@ -2700,6 +2739,12 @@ function analyseRequest(details) {
         reqParams.boto3['Activate'] = jsonRequestBody.contentString.activate;
         reqParams.cli['--activate'] = jsonRequestBody.contentString.activate;
 
+        reqParams.cfn['DetectorId'] = jsonRequestBody.path;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Location'] = jsonRequestBody.contentString.location;
+        reqParams.cfn['Format'] = jsonRequestBody.contentString.format;
+        reqParams.cfn['Activate'] = jsonRequestBody.contentString.activate;
+
         outputs.push({
             'region': region,
             'service': 'guardduty',
@@ -2709,6 +2754,14 @@ function analyseRequest(details) {
                 'cli': 'create-ip-set'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::IPSet',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
