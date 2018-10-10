@@ -4551,4 +4551,221 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.DeleteDhcpOptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteDhcpOptions\?/g)) {
+        reqParams.boto3['DhcpOptionsId'] = jsonRequestBody.request.dhcpOptionsId;
+        reqParams.cli['--dhcp-options-id'] = jsonRequestBody.request.dhcpOptionsId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteDhcpOptions',
+                'boto3': 'delete_dhcp_options',
+                'cli': 'delete-dhcp-options'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateNatGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNatGateway\?/g)) {
+        reqParams.boto3['SubnetId'] = jsonRequestBody.SubnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.SubnetId;
+        reqParams.boto3['AllocationId'] = jsonRequestBody.AllocationId;
+        reqParams.cli['--allocation-id'] = jsonRequestBody.AllocationId;
+
+        reqParams.cfn['SubnetId'] = jsonRequestBody.SubnetId;
+        reqParams.cfn['AllocationId'] = jsonRequestBody.AllocationId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateNatGateway',
+                'boto3': 'create_nat_gateway',
+                'cli': 'create-nat-gateway'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NatGateway',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteNatGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteNatGateway\?/g)) {
+        reqParams.boto3['NatGatewayId'] = jsonRequestBody.NatGatewayId;
+        reqParams.cli['--nat-gateway-id'] = jsonRequestBody.NatGatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteNatGateway',
+                'boto3': 'delete_nat_gateway',
+                'cli': 'delete-nat-gateway'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateNetworkAcl
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createNetworkACL" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+        reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
+        reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
+
+        reqParams.cfn['VpcId'] = getPipeSplitField(requestBody, 17);
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateNetworkAcl',
+                'boto3': 'create_network_acl',
+                'cli': 'create-network-acl'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkAcl',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteNetworkAcl
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "deleteNetworkACL" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+        reqParams.boto3['NetworkAclId'] = getPipeSplitField(requestBody, 17);
+        reqParams.cli['--network-acl-id'] = getPipeSplitField(requestBody, 17);
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteNetworkAcl',
+                'boto3': 'delete_network_acl',
+                'cli': 'delete-network-acl'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateCustomerGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateCustomerGateway\?/g)) {
+        reqParams.boto3['PublicIp'] = jsonRequestBody.PublicIp;
+        reqParams.cli['--public-ip'] = jsonRequestBody.PublicIp;
+        reqParams.boto3['Type'] = jsonRequestBody.Type;
+        reqParams.cli['--type'] = jsonRequestBody.Type;
+
+        reqParams.cfn['IpAddress'] = jsonRequestBody.PublicIp;
+        reqParams.cfn['Type'] = jsonRequestBody.Type;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateCustomerGateway',
+                'boto3': 'create_customer_gateway',
+                'cli': 'create-customer-gateway'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::CustomerGateway',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteCustomerGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteCustomerGateway\?/g)) {
+        reqParams.boto3['CustomerGatewayId'] = jsonRequestBody.CustomerGatewayId;
+        reqParams.cli['--customer-gateway-id'] = jsonRequestBody.CustomerGatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteCustomerGateway',
+                'boto3': 'delete_customer_gateway',
+                'cli': 'delete-customer-gateway'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpnGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnGateway\?/g)) {
+        reqParams.boto3['Type'] = jsonRequestBody.Type;
+        reqParams.cli['--type'] = jsonRequestBody.Type;
+
+        reqParams.cfn['Type'] = jsonRequestBody.Type;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpnGateway',
+                'boto3': 'create_vpn_gateway',
+                'cli': 'create-vpn-gateway'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNGateway',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteVpnGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpnGateway\?/g)) {
+        reqParams.boto3['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+        reqParams.cli['--vpn-gateway-id'] = jsonRequestBody.VpnGatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteVpnGateway',
+                'boto3': 'delete_vpn_gateway',
+                'cli': 'delete-vpn-gateway'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
 }
