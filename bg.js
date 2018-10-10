@@ -746,36 +746,38 @@ function analyseRequest(details) {
         }
         reqParams.boto3['IpPermissions'] = [];
         reqParams.cli['--ip-permissions'] = [];
-        jsonRequestBody['ipPermissions'].forEach(ipPermission => {
-            var ipRangeObjects = [];
-            ipPermission['ipRangeObjects'].forEach(ipRangeObject => {
-                ipRangeObjects.push({
-                    'Description': ipRangeObject['description'],
-                    'CidrIp': ipRangeObject['cidrIp']
+        if (jsonRequestBody['ipPermissions']) {
+            jsonRequestBody['ipPermissions'].forEach(ipPermission => {
+                var ipRangeObjects = [];
+                ipPermission['ipRangeObjects'].forEach(ipRangeObject => {
+                    ipRangeObjects.push({
+                        'Description': ipRangeObject['description'],
+                        'CidrIp': ipRangeObject['cidrIp']
+                    });
+                });
+                var ipv6RangeObjects = [];
+                ipPermission['ipv6RangeObjects'].forEach(ipv6RangeObject => {
+                    ipv6RangeObjects.push({
+                        'Description': ipv6RangeObject['description'],
+                        'CidrIpv6': ipv6RangeObject['CidrIpv6']
+                    });
+                });
+                reqParams.boto3['IpPermissions'].push({
+                    'IpProtocol': ipPermission['ipProtocol'],
+                    'FromPort': ipPermission['fromPort'],
+                    'ToPort': ipPermission['toPort'],
+                    'IpRanges': ipRangeObjects,
+                    'Ipv6Ranges': ipv6RangeObjects
+                });
+                reqParams.cli['--ip-permissions'].push({
+                    'IpProtocol': ipPermission['ipProtocol'],
+                    'FromPort': ipPermission['fromPort'],
+                    'ToPort': ipPermission['toPort'],
+                    'IpRanges': ipRangeObjects,
+                    'Ipv6Ranges': ipv6RangeObjects
                 });
             });
-            var ipv6RangeObjects = [];
-            ipPermission['ipv6RangeObjects'].forEach(ipv6RangeObject => {
-                ipv6RangeObjects.push({
-                    'Description': ipv6RangeObject['description'],
-                    'CidrIpv6': ipv6RangeObject['CidrIpv6']
-                });
-            });
-            reqParams.boto3['IpPermissions'].push({
-                'IpProtocol': ipPermission['ipProtocol'],
-                'FromPort': ipPermission['fromPort'],
-                'ToPort': ipPermission['toPort'],
-                'IpRanges': ipRangeObjects,
-                'Ipv6Ranges': ipv6RangeObjects
-            });
-            reqParams.cli['--ip-permissions'].push({
-                'IpProtocol': ipPermission['ipProtocol'],
-                'FromPort': ipPermission['fromPort'],
-                'ToPort': ipPermission['toPort'],
-                'IpRanges': ipRangeObjects,
-                'Ipv6Ranges': ipv6RangeObjects
-            });
-        });
+        }
 
         outputs.push({
             'region': region,
@@ -815,19 +817,23 @@ function analyseRequest(details) {
         reqParams.boto3['BlockDeviceMapping'] = jsonRequestBody.BlockDeviceMappings;
 
         reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
-        reqParams.cfn['MaxCount'] = jsonRequestBody.MaxCount;
-        reqParams.cfn['MinCount'] = jsonRequestBody.MinCount;
         reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
-        reqParams.cfn['SecurityGroupId'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
         reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
-        reqParams.cfn['Placement'] = jsonRequestBody.Placement;
-        reqParams.cfn['Monitoring'] = jsonRequestBody.Monitoring;
+        if (jsonRequestBody.Placement && jsonRequestBody.Placement.Tenancy) {
+            reqParams.cfn['Tenancy'] = jsonRequestBody.Placement.Tenancy;
+        }
+        reqParams.cfn['Monitoring'] = jsonRequestBody.Monitoring.Enabled;
         reqParams.cfn['DisableApiTermination'] = jsonRequestBody.DisableApiTermination;
         reqParams.cfn['InstanceInitiatedShutdownBehavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
-        reqParams.cfn['CreditSpecification'] = jsonRequestBody.CreditSpecification;
-        reqParams.cfn['TagSpecification'] = jsonRequestBody.TagSpecifications;
+        if (jsonRequestBody.CreditSpecification) {
+            reqParams.cfn['CreditSpecification'] = {
+                'CPUCredits': jsonRequestBody.CreditSpecification.CpuCredits
+            }
+        }
+        reqParams.cfn['Tags'] = jsonRequestBody.TagSpecifications;
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
-        reqParams.cfn['BlockDeviceMapping'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.cfn['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
 
         reqParams.cli['--image-id'] = jsonRequestBody.ImageId;
         if (jsonRequestBody.MaxCount == jsonRequestBody.MinCount) {
@@ -1930,6 +1936,12 @@ function analyseRequest(details) {
         reqParams.boto3['ProvisionedThroughputInMibps'] = jsonRequestBody.provisionedThroughputInMibps;
         reqParams.cli['--provisioned-throughput-in-mibps'] = jsonRequestBody.provisionedThroughputInMibps;
 
+        reqParams.cfn['PerformanceMode'] = jsonRequestBody.performanceMode;
+        reqParams.cfn['Encrypted'] = jsonRequestBody.encrypted;
+        reqParams.cfn['KmsKeyId'] = jsonRequestBody.kmsKeyId;
+        reqParams.cfn['ThroughputMode'] = jsonRequestBody.throughputMode;
+        reqParams.cfn['ProvisionedThroughputInMibps'] = jsonRequestBody.provisionedThroughputInMibps;
+
         outputs.push({
             'region': region,
             'service': 'efs',
@@ -1939,6 +1951,14 @@ function analyseRequest(details) {
                 'cli': 'create-file-system'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'efs',
+            'type': 'AWS::EFS::FileSystem',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
@@ -1953,6 +1973,10 @@ function analyseRequest(details) {
         reqParams.boto3['SecurityGroups'] = jsonRequestBody.mountTargetConfig.securityGroups;
         reqParams.cli['--security-groups'] = jsonRequestBody.mountTargetConfig.securityGroups;
 
+        reqParams.cfn['FileSystemId'] = jsonRequestBody.fileSystemId;
+        reqParams.cfn['SubnetId'] = jsonRequestBody.mountTargetConfig.subnetId;
+        reqParams.cfn['SecurityGroups'] = jsonRequestBody.mountTargetConfig.securityGroups;
+
         outputs.push({
             'region': region,
             'service': 'efs',
@@ -1962,6 +1986,14 @@ function analyseRequest(details) {
                 'cli': 'create-mount-target'
             },
             'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'efs',
+            'type': 'AWS::EFS::MountTarget',
+            'options': reqParams,
+            'was_blocked': blocking
         });
         
         return {};
@@ -2929,6 +2961,798 @@ function analyseRequest(details) {
             },
             'options': reqParams
         });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.ListBrokers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.path == "/brokers" && jsonRequestBody.method == "GET") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'ListBrokers',
+                'boto3': 'list_brokers',
+                'cli': 'list-brokers'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.ListConfigurations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/configurations") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['NextToken'] = jsonRequestBody.params.nextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.params.nextToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'ListConfigurations',
+                'boto3': 'list_configurations',
+                'cli': 'list-configurations'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.CreateBroker
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/brokers") {
+        reqParams.boto3['BrokerName'] = jsonRequestBody.contentString.brokerName;
+        reqParams.cli['--broker-name'] = jsonRequestBody.contentString.brokerName;
+        reqParams.boto3['EngineType'] = jsonRequestBody.contentString.engineType;
+        reqParams.cli['--engine-type'] = jsonRequestBody.contentString.engineType;
+        reqParams.boto3['EngineVersion'] = jsonRequestBody.contentString.engineVersion;
+        reqParams.cli['--engine-version'] = jsonRequestBody.contentString.engineVersion;
+        reqParams.boto3['HostInstanceType'] = jsonRequestBody.contentString.hostInstanceType;
+        reqParams.cli['--host-instance-type'] = jsonRequestBody.contentString.hostInstanceType;
+        reqParams.boto3['DeploymentMode'] = jsonRequestBody.contentString.deploymentMode;
+        reqParams.cli['--deployment-mode'] = jsonRequestBody.contentString.deploymentMode;
+        reqParams.boto3['SecurityGroups'] = jsonRequestBody.contentString.securityGroups;
+        reqParams.cli['--security-groups'] = jsonRequestBody.contentString.securityGroups;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.contentString.subnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.contentString.subnetIds;
+        reqParams.boto3['PubliclyAccessible'] = jsonRequestBody.contentString.publiclyAccessible;
+        reqParams.cli['--publicly-accessible'] = jsonRequestBody.contentString.publiclyAccessible;
+        reqParams.boto3['AutoMinorVersionUpgrade'] = jsonRequestBody.contentString.autoMinorVersionUpgrade;
+        reqParams.cli['--auto-minor-version-upgrade'] = jsonRequestBody.contentString.autoMinorVersionUpgrade;
+        reqParams.boto3['Users'] = jsonRequestBody.contentString.users;
+        reqParams.cli['--users'] = jsonRequestBody.contentString.users;
+        reqParams.boto3['MaintenanceWindowStartTime'] = jsonRequestBody.contentString.maintenanceWindowStartTime;
+        reqParams.cli['--maintenance-window-start-time'] = jsonRequestBody.contentString.maintenanceWindowStartTime;
+        reqParams.boto3['Configuration'] = jsonRequestBody.contentString.configuration;
+        reqParams.cli['--configuration'] = jsonRequestBody.contentString.configuration;
+        reqParams.boto3['Logs'] = jsonRequestBody.contentString.logs;
+        reqParams.cli['--logs'] = jsonRequestBody.contentString.logs;
+
+        reqParams.cfn['BrokerName'] = jsonRequestBody.contentString.brokerName;
+        reqParams.cfn['EngineType'] = jsonRequestBody.contentString.engineType;
+        reqParams.cfn['EngineVersion'] = jsonRequestBody.contentString.engineVersion;
+        reqParams.cfn['HostInstanceType'] = jsonRequestBody.contentString.hostInstanceType;
+        reqParams.cfn['DeploymentMode'] = jsonRequestBody.contentString.deploymentMode;
+        reqParams.cfn['SecurityGroups'] = jsonRequestBody.contentString.securityGroups;
+        reqParams.cfn['SubnetIds'] = jsonRequestBody.contentString.subnetIds;
+        reqParams.cfn['PubliclyAccessible'] = jsonRequestBody.contentString.publiclyAccessible;
+        reqParams.cfn['AutoMinorVersionUpgrade'] = jsonRequestBody.contentString.autoMinorVersionUpgrade;
+        reqParams.cfn['Users'] = jsonRequestBody.contentString.users;
+        reqParams.cfn['MaintenanceWindowStartTime'] = jsonRequestBody.contentString.maintenanceWindowStartTime;
+        reqParams.cfn['Configuration'] = jsonRequestBody.contentString.configuration;
+        reqParams.cfn['Logs'] = jsonRequestBody.contentString.logs;
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'CreateBroker',
+                'boto3': 'create_broker',
+                'cli': 'create-broker'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'mq',
+            'type': 'AWS::AmazonMQ::Broker',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.CreateConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/configurations") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['EngineType'] = jsonRequestBody.contentString.engineType;
+        reqParams.cli['--engine-type'] = jsonRequestBody.contentString.engineType;
+        reqParams.boto3['EngineVersion'] = jsonRequestBody.contentString.engineVersion;
+        reqParams.cli['--engine-version'] = jsonRequestBody.contentString.engineVersion;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['EngineType'] = jsonRequestBody.contentString.engineType;
+        reqParams.cfn['EngineVersion'] = jsonRequestBody.contentString.engineVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'CreateConfiguration',
+                'boto3': 'create_configuration',
+                'cli': 'create-configuration'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'mq',
+            'type': 'AWS::AmazonMQ::Broker',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.DescribeConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+/g)) {
+        reqParams.boto3['ConfigurationId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--configuration-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'DescribeConfiguration',
+                'boto3': 'describe_configuration',
+                'cli': 'describe-configuration'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.DescribeConfigurationRevision
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+\/revisions\/.+/g)) {
+        reqParams.boto3['ConfigurationId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--configuration-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['ConfigurationRevision'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--configuration-revision'] = jsonRequestBody.path.split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'DescribeConfigurationRevision',
+                'boto3': 'describe_configuration_revision',
+                'cli': 'describe-configuration-revision'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeLaunchTemplateVersions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeLaunchTemplateVersions\?/g)) {
+        reqParams.boto3['LaunchTemplateId'] = jsonRequestBody.LaunchTemplateId;
+        reqParams.cli['--launch-template-id'] = jsonRequestBody.LaunchTemplateId;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeLaunchTemplateVersions',
+                'boto3': 'describe_launch_template_versions',
+                'cli': 'describe-launch-template-versions'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeKeyPairs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeKeyPairs\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeKeyPairs',
+                'boto3': 'describe_key_pairs',
+                'cli': 'describe-key-pairs'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeHosts
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeHosts\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeHosts',
+                'boto3': 'describe_hosts',
+                'cli': 'describe-hosts'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSnapshots
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshotsAutoUpdate\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSnapshots',
+                'boto3': 'describe_snapshots',
+                'cli': 'describe-snapshots'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVolumes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getMergedVolumesAutoUpdate\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVolumes',
+                'boto3': 'describe_volumes',
+                'cli': 'describe-volumes'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getTagsAutoUpdate\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeTags',
+                'boto3': 'describe_tags',
+                'cli': 'describe-tags'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateLaunchTemplate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateLaunchTemplate\?/g)) {
+        reqParams.boto3['LaunchTemplateName'] = jsonRequestBody.LaunchTemplateName;
+        reqParams.cli['--launch-template-name'] = jsonRequestBody.LaunchTemplateName;
+        reqParams.boto3['VersionDescription'] = jsonRequestBody.VersionDescription;
+        reqParams.cli['--version-description'] = jsonRequestBody.VersionDescription;
+        reqParams.boto3['LaunchTemplateData'] = jsonRequestBody.LaunchTemplateData;
+        reqParams.cli['--launch-template-data'] = jsonRequestBody.LaunchTemplateData;
+        reqParams.boto3['ClientToken'] = jsonRequestBody.ClientToken;
+        reqParams.cli['--client-token'] = jsonRequestBody.ClientToken;
+
+        reqParams.cfn['LaunchTemplateName'] = jsonRequestBody.LaunchTemplateName;
+        reqParams.cfn['LaunchTemplateData'] = jsonRequestBody.LaunchTemplateData;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateLaunchTemplate',
+                'boto3': 'create_launch_template',
+                'cli': 'create-launch-template'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::LaunchTemplate',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateTags
+    // autogen:ec2:ec2.DeleteTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=updateTags\?/g)) {
+
+        if (jsonRequestBody.addTags.length) {
+            reqParams.boto3['Tags'] = jsonRequestBody.addTags;
+            reqParams.cli['--tags'] = jsonRequestBody.addTags;
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateTags',
+                    'boto3': 'create_tags',
+                    'cli': 'create-tags'
+                },
+                'options': reqParams
+            });
+        }
+        if (jsonRequestBody.removeKeys.length) {
+            reqParams.boto3['TagKeys'] = jsonRequestBody.removeKeys;
+            reqParams.cli['--tag-keys'] = jsonRequestBody.removeKeys;
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'DeleteTags',
+                    'boto3': 'delete_tags',
+                    'cli': 'delete-tags'
+                },
+                'options': reqParams
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateKeyPair
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=createKeyPair\?/g)) {
+        reqParams.boto3['KeyName'] = jsonRequestBody.keyName;
+        reqParams.cli['--key-name'] = jsonRequestBody.keyName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateKeyPair',
+                'boto3': 'create_key_pair',
+                'cli': 'create-key-pair'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteKeyPair
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteKeyPair\?/g)) {
+        reqParams.boto3['KeyName'] = jsonRequestBody.keyName;
+        reqParams.cli['--key-name'] = jsonRequestBody.keyName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteKeyPair',
+                'boto3': 'delete_key_pair',
+                'cli': 'delete-key-pair'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.ImportKeyPair
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=importKeyPair\?/g)) {
+        reqParams.boto3['KeyName'] = jsonRequestBody.keyName;
+        reqParams.cli['--key-name'] = jsonRequestBody.keyName;
+        reqParams.boto3['PublicKeyMaterial'] = jsonRequestBody.publicKeyMaterial;
+        reqParams.cli['--public-key-material'] = jsonRequestBody.publicKeyMaterial;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'ImportKeyPair',
+                'boto3': 'import_key_pair',
+                'cli': 'import-key-pair'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateNetworkInterface
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNetworkInterface\?/g)) {
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['Groups'] = jsonRequestBody.groups;
+        reqParams.cli['--groups'] = jsonRequestBody.groups;
+        reqParams.boto3['SubnetId'] = jsonRequestBody.subnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.subnetId;
+
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.boto3['GroupSet'] = jsonRequestBody.groups;
+        reqParams.boto3['SubnetId'] = jsonRequestBody.subnetId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateNetworkInterface',
+                'boto3': 'create_network_interface',
+                'cli': 'create-network-interface'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInterface',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeFlowLogs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSdkResources_FlowLog\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeFlowLogs',
+                'boto3': 'describe_flow_logs',
+                'cli': 'describe-flow-logs'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteNetworkInterface
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteNetworkInterface\?/g)) {
+        reqParams.boto3['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+        reqParams.cli['--network-interface-id'] = jsonRequestBody.networkInterfaceId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteNetworkInterface',
+                'boto3': 'delete_network_interface',
+                'cli': 'delete-network-interface'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAddresses
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAddresses\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAddresses',
+                'boto3': 'describe_addresses',
+                'cli': 'describe-addresses'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AllocateAddress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
+        reqParams.boto3['Domain'] = jsonRequestBody.Domain;
+        reqParams.cli['--domain'] = jsonRequestBody.Domain;
+
+        reqParams.cfn['Domain'] = jsonRequestBody.Domain;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AllocateAddress',
+                'boto3': 'allocate_address',
+                'cli': 'allocate-address'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EIP',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeInstances
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeInstances',
+                'boto3': 'describe_instances',
+                'cli': 'describe-instances'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeNetworkInterfaces
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkInterfaces\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeNetworkInterfaces',
+                'boto3': 'describe_network_interfaces',
+                'cli': 'describe-network-interfaces'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AssociateAddress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateAddress\?/g)) {
+        reqParams.boto3['AllocationId'] = jsonRequestBody.AllocationId;
+        reqParams.cli['--allocation-id'] = jsonRequestBody.AllocationId;
+        reqParams.boto3['InstanceId'] = jsonRequestBody.InstanceId;
+        reqParams.cli['--instance-id'] = jsonRequestBody.InstanceId;
+        reqParams.boto3['AllowReassociation'] = jsonRequestBody.allowReassociation;
+        reqParams.cli['--allow-reassociation'] = jsonRequestBody.allowReassociation;
+        reqParams.boto3['PrivateIpAddress'] = jsonRequestBody.PrivateIpAddress;
+        reqParams.cli['--private-ip-address'] = jsonRequestBody.PrivateIpAddress;
+
+        reqParams.cfn['AllocationId'] = jsonRequestBody.AllocationId;
+        reqParams.cfn['InstanceId'] = jsonRequestBody.InstanceId;
+        reqParams.cfn['PrivateIpAddress'] = jsonRequestBody.PrivateIpAddress;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AssociateAddress',
+                'boto3': 'associate_address',
+                'cli': 'associate-address'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EIPAssociation',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DisassociateAddress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DisassociateAddress\?/g)) {
+        reqParams.boto3['AssociationId'] = jsonRequestBody.AssociationId;
+        reqParams.cli['--association-id'] = jsonRequestBody.AssociationId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DisassociateAddress',
+                'boto3': 'disassociate_address',
+                'cli': 'disassociate-address'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.ReleaseAddress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReleaseAddress\?/g)) {
+        reqParams.boto3['AllocationId'] = jsonRequestBody.AllocationId;
+        reqParams.cli['--allocation-id'] = jsonRequestBody.AllocationId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'ReleaseAddress',
+                'boto3': 'release_address',
+                'cli': 'release-address'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:config.DescribeConfigurationRecorders
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.config\.AmazonConfig\.DescribeConfigurationRecorders\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribeConfigurationRecorders',
+                'boto3': 'describe_configuration_recorders',
+                'cli': 'describe-configuration-recorders'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AllocateHosts
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateHosts\?/g)) {
+        reqParams.boto3['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.instanceType;
+        reqParams.boto3['AvailabilityZone'] = jsonRequestBody.availabilityZone;
+        reqParams.cli['--availability-zone'] = jsonRequestBody.availabilityZone;
+        reqParams.boto3['AutoPlacement'] = jsonRequestBody.autoPlacement;
+        reqParams.cli['--auto-placement'] = jsonRequestBody.autoPlacement;
+        reqParams.boto3['Quantity'] = jsonRequestBody.quantity;
+        reqParams.cli['--quantity'] = jsonRequestBody.quantity;
+        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecification;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecification;
+
+        reqParams.cfn['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cfn['AvailabilityZone'] = jsonRequestBody.availabilityZone;
+        reqParams.cfn['AutoPlacement'] = jsonRequestBody.autoPlacement;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AllocateHosts',
+                'boto3': 'allocate_hosts',
+                'cli': 'allocate-hosts'
+            },
+            'options': reqParams
+        });
+
+        for (var i=0; i<jsonRequestBody.quantity; i++) {
+            tracked_resources.push({
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::Host',
+                'options': reqParams,
+                'was_blocked': blocking
+            });
+        }
         
         return {};
     }
