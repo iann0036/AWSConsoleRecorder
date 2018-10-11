@@ -6005,4 +6005,510 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:cloudwatch:lambda.ListFunctions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctions\//g)) {
+        reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListFunctions',
+                'boto3': 'list_functions',
+                'cli': 'list-functions'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:kinesis.ListStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListKinesisStreams\//g)) {
+        reqParams.boto3['Limit'] = jsonRequestBody.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'ListStreams',
+                'boto3': 'list_streams',
+                'cli': 'list-streams'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:sns.ListTopics
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSNSTopics\//g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:autoscaling.DescribeAutoScalingGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeAutoScalingGroups\//g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'autoscaling',
+            'method': {
+                'api': 'DescribeAutoScalingGroups',
+                'boto3': 'describe_auto_scaling_groups',
+                'cli': 'describe-auto-scaling-groups'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:sqs.ListQueues
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSQSQueues\//g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sqs',
+            'method': {
+                'api': 'ListQueues',
+                'boto3': 'list_queues',
+                'cli': 'list-queues'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:ecs.ListTaskDefinitionFamilies
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListTaskDefinitionFamilies\//g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ecs',
+            'method': {
+                'api': 'ListTaskDefinitionFamilies',
+                'boto3': 'list_task_definition_families',
+                'cli': 'list-task-definition-families'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:stepfunctions.ListStateMachines
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListStepFunctionsStateMachines\//g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'ListStateMachines',
+                'boto3': 'list_state_machines',
+                'cli': 'list-state-machines'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:ssm.ListDocuments
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListDocuments\//g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
+        reqParams.boto3['DocumentFilterList'] = jsonRequestBody.DocumentFilterList;
+        reqParams.cli['--document-filter-list'] = jsonRequestBody.DocumentFilterList;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'ListDocuments',
+                'boto3': 'list_documents',
+                'cli': 'list-documents'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:firehose.ListDeliveryStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListFirehoseDeliveryStreams\//g)) {
+        reqParams.boto3['Limit'] = jsonRequestBody.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'firehose',
+            'method': {
+                'api': 'ListDeliveryStreams',
+                'boto3': 'list_delivery_streams',
+                'cli': 'list-delivery-streams'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRoles\//g)) {
+        reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:cloudtrail.DescribeTrails
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeTrails\//g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'DescribeTrails',
+                'boto3': 'describe_trails',
+                'cli': 'describe-trails'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:lambda.ListVersionsByFunction
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionVersions\//g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.FunctionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.FunctionName;
+        reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListVersionsByFunction',
+                'boto3': 'list_versions_by_function',
+                'cli': 'list-versions-by-function'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:lambda.ListAliases
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionAliases\//g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.FunctionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.FunctionName;
+        reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListAliases',
+                'boto3': 'list_aliases',
+                'cli': 'list-aliases'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:events.PutRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.SaveRule\//g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Rule.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Rule.Name;
+        reqParams.boto3['State'] = jsonRequestBody.Rule.State;
+        reqParams.cli['--state'] = jsonRequestBody.Rule.State;
+        reqParams.boto3['Description'] = jsonRequestBody.Rule.Description;
+        reqParams.cli['--description'] = jsonRequestBody.Rule.Description;
+        reqParams.boto3['ScheduleExpression'] = jsonRequestBody.Rule.ScheduleExpression;
+        reqParams.cli['--schedule-expression'] = jsonRequestBody.Rule.ScheduleExpression;
+        reqParams.boto3['EventPattern'] = jsonRequestBody.Rule.EventPattern;
+        reqParams.cli['--event-pattern'] = jsonRequestBody.Rule.EventPattern;
+
+        reqParams.cfn['Name'] = jsonRequestBody.Rule.Name;
+        reqParams.cfn['State'] = jsonRequestBody.Rule.State;
+        reqParams.cfn['Description'] = jsonRequestBody.Rule.Description;
+        reqParams.cfn['ScheduleExpression'] = jsonRequestBody.Rule.ScheduleExpression;
+        reqParams.cfn['EventPattern'] = jsonRequestBody.Rule.EventPattern;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutRule',
+                'boto3': 'put_rule',
+                'cli': 'put-rule'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::Events::Rule',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:events.ListRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRules\//g)) {
+        reqParams.boto3['NextToken'] = jsonRequestBody.NextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.NextToken;
+        reqParams.boto3['NamePrefix'] = jsonRequestBody.NamePrefix;
+        reqParams.cli['--name-prefix'] = jsonRequestBody.NamePrefix;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'ListRules',
+                'boto3': 'list_rules',
+                'cli': 'list-rules'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:events.DisableRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DisableRule\//g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'DisableRule',
+                'boto3': 'disable_rule',
+                'cli': 'disable-rule'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:events.EnableRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.EnableRule\//g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'EnableRule',
+                'boto3': 'enable_rule',
+                'cli': 'enable-rule'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudwatch:events.DeleteRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DeleteRule\//g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'DeleteRule',
+                'boto3': 'delete_rule',
+                'cli': 'delete-rule'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:ds.DescribeDirectories
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeDirectories") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DescribeDirectories',
+                'boto3': 'describe_directories',
+                'cli': 'describe-directories'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:workspaces.DescribeWorkspaceBundles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeWorkspaceBundles") {
+
+        outputs.push({
+            'region': region,
+            'service': 'workspaces',
+            'method': {
+                'api': 'DescribeWorkspaceBundles',
+                'boto3': 'describe_workspace_bundles',
+                'cli': 'describe-workspace-bundles'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:kms.ListKeys
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "listKeys") {
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'ListKeys',
+                'boto3': 'list_keys',
+                'cli': 'list-keys'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:workspaces.DescribeWorkspaces
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeWorkspaceImages") {
+
+        outputs.push({
+            'region': region,
+            'service': 'workspaces',
+            'method': {
+                'api': 'DescribeWorkspaces',
+                'boto3': 'describe_workspaces',
+                'cli': 'describe-workspaces'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:workspaces.CreateWorkspaces
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "createRegistration") {
+ 
+        // create directory here
+        // getPipeSplitField(requestBody, 15) // email
+        // getPipeSplitField(requestBody, 16) // first
+        // getPipeSplitField(requestBody, 17) // last
+
+        reqParams.boto3['Workspaces'] = {
+            "Workspaces": [ 
+                { 
+                    "BundleId": getPipeSplitField(requestBody, 18),
+                    "DirectoryId": "directoryid",
+                    "UserName": getPipeSplitField(requestBody, 15)
+                }
+            ]
+        }
+        reqParams.cli['--workspaces'] = {
+            "Workspaces": [ 
+                { 
+                    "BundleId": getPipeSplitField(requestBody, 18),
+                    "DirectoryId": "directoryid",
+                    "UserName": getPipeSplitField(requestBody, 15)
+                }
+            ]
+        }
+
+        reqParams.cfn['BundleId'] = getPipeSplitField(requestBody, 18);
+        reqParams.cfn['UserName'] = getPipeSplitField(requestBody, 15);
+        reqParams.cfn['DirectoryId'] = 'directoryid';
+
+        outputs.push({
+            'region': region,
+            'service': 'workspaces',
+            'method': {
+                'api': 'CreateWorkspaces',
+                'boto3': 'create_workspaces',
+                'cli': 'create-workspaces'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'workspaces',
+            'type': 'AWS::WorkSpaces::Workspace',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:workspaces:workspaces.TerminateWorkspaces
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "terminateWorkspaces") {
+        reqParams.boto3['TerminateWorkspaceRequests'] = {
+            'WorkspaceId': getPipeSplitField(requestBody, 12)
+        };
+        reqParams.cli['--terminate-workspace-requests'] = {
+            'WorkspaceId': getPipeSplitField(requestBody, 12)
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'workspaces',
+            'method': {
+                'api': 'TerminateWorkspaces',
+                'boto3': 'terminate_workspaces',
+                'cli': 'terminate-workspaces'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
 }
