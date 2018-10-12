@@ -8911,4 +8911,329 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:servicecatalog:servicecatalog.CreateProduct
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/product\?/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['Owner'] = jsonRequestBody.owner;
+        reqParams.cli['--owner'] = jsonRequestBody.owner;
+        reqParams.boto3['Distributor'] = jsonRequestBody.distributor;
+        reqParams.cli['--distributor'] = jsonRequestBody.distributor;
+        reqParams.boto3['SupportEmail'] = jsonRequestBody.supportEmail;
+        reqParams.cli['--support-email'] = jsonRequestBody.supportEmail;
+        reqParams.boto3['SupportUrl'] = jsonRequestBody.supportUrl;
+        reqParams.cli['--support-url'] = jsonRequestBody.supportUrl;
+        reqParams.boto3['SupportDescription'] = jsonRequestBody.supportDescription;
+        reqParams.cli['--support-description'] = jsonRequestBody.supportDescription;
+        reqParams.boto3['ProvisioningArtifactParameters'] = jsonRequestBody.provisioningArtifactParameters;
+        reqParams.cli['--provisioning-artifact-parameters'] = jsonRequestBody.provisioningArtifactParameters;
+        reqParams.boto3['Name'] = jsonRequestBody.provisioningArtifactParameters.name;
+        reqParams.cli['--name'] = jsonRequestBody.provisioningArtifactParameters.name;
+        reqParams.boto3['Description'] = jsonRequestBody.provisioningArtifactParameters.description;
+        reqParams.cli['--description'] = jsonRequestBody.provisioningArtifactParameters.description;
+        reqParams.boto3['ProductType'] = jsonRequestBody.productType;
+        reqParams.cli['--product-type'] = jsonRequestBody.productType;
+        reqParams.boto3['IdempotencyToken'] = jsonRequestBody.idempotencyToken;
+        reqParams.cli['--idempotency-token'] = jsonRequestBody.idempotencyToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['Owner'] = jsonRequestBody.owner;
+        reqParams.cfn['Distributor'] = jsonRequestBody.distributor;
+        reqParams.cfn['SupportEmail'] = jsonRequestBody.supportEmail;
+        reqParams.cfn['SupportUrl'] = jsonRequestBody.supportUrl;
+        reqParams.cfn['SupportDescription'] = jsonRequestBody.supportDescription;
+        reqParams.cfn['ProvisioningArtifactParameters'] = jsonRequestBody.provisioningArtifactParameters;
+        reqParams.cfn['Name'] = jsonRequestBody.provisioningArtifactParameters.name;
+        reqParams.cfn['Description'] = jsonRequestBody.provisioningArtifactParameters.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'CreateProduct',
+                'boto3': 'create_product',
+                'cli': 'create-product'
+            },
+            'options': reqParams
+        });
+
+        if (jsonRequestBody.productType == "CLOUD_FORMATION_TEMPLATE") {
+            tracked_resources.push({
+                'region': region,
+                'service': 'servicecatalog',
+                'type': 'AWS::ServiceCatalog::CloudFormationProduct',
+                'options': reqParams,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.ListPortfolios
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/list\?/g)) {
+        reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
+        reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'ListPortfolios',
+                'boto3': 'list_portfolios',
+                'cli': 'list-portfolios'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.CreatePortfolio
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\?/g)) {
+        reqParams.boto3['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cli['--display-name'] = jsonRequestBody.displayName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['ProviderName'] = jsonRequestBody.providerName;
+        reqParams.cli['--provider-name'] = jsonRequestBody.providerName;
+        reqParams.boto3['Tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        reqParams.boto3['IdempotencyToken'] = jsonRequestBody.idempotencyToken;
+        reqParams.cli['--idempotency-token'] = jsonRequestBody.idempotencyToken;
+
+        reqParams.cfn['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['ProviderName'] = jsonRequestBody.providerName;
+        reqParams.cfn['Tags'] = jsonRequestBody.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'CreatePortfolio',
+                'boto3': 'create_portfolio',
+                'cli': 'create-portfolio'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::Portfolio',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.AssociateProductWithPortfolio
+    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/product\/portfolio\?/g)) {
+        reqParams.boto3['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cli['--portfolio-id'] = jsonRequestBody.portfolioId;
+        reqParams.boto3['ProductId'] = jsonRequestBody.productId;
+        reqParams.cli['--product-id'] = jsonRequestBody.productId;
+        reqParams.boto3['SourcePortfolioId'] = jsonRequestBody.sourcePortfolioId;
+        reqParams.cli['--source-portfolio-id'] = jsonRequestBody.sourcePortfolioId;
+
+        reqParams.cfn['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cfn['ProductId'] = jsonRequestBody.productId;
+        reqParams.cfn['SourcePortfolioId'] = jsonRequestBody.sourcePortfolioId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'AssociateProductWithPortfolio',
+                'boto3': 'associate_product_with_portfolio',
+                'cli': 'associate-product-with-portfolio'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::PortfolioProductAssociation',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.CreatePortfolioShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/share\?/g)) {
+        reqParams.boto3['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cli['--portfolio-id'] = jsonRequestBody.portfolioId;
+        reqParams.boto3['AccountId'] = jsonRequestBody.accountId;
+        reqParams.cli['--account-id'] = jsonRequestBody.accountId;
+
+        reqParams.cfn['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cfn['AccountId'] = jsonRequestBody.accountId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'CreatePortfolioShare',
+                'boto3': 'create_portfolio_share',
+                'cli': 'create-portfolio-share'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::PortfolioShare',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.ListTagOptions
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/list\?/g)) {
+        reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
+        reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'ListTagOptions',
+                'boto3': 'list_tag_options',
+                'cli': 'list-tag-options'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.CreateTagOption
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/create\?/g)) {
+        reqParams.boto3['Key'] = jsonRequestBody.key;
+        reqParams.cli['--key'] = jsonRequestBody.key;
+        reqParams.boto3['Value'] = jsonRequestBody.value;
+        reqParams.cli['--value'] = jsonRequestBody.value;
+
+        reqParams.cfn['Key'] = jsonRequestBody.key;
+        reqParams.cfn['Value'] = jsonRequestBody.value;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'CreateTagOption',
+                'boto3': 'create_tag_option',
+                'cli': 'create-tag-option'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::TagOption',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.DescribeTagOption
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/describe\?/g)) {
+        reqParams.boto3['Id'] = getUrlValue(details.url, 'id');
+        reqParams.cli['--id'] = getUrlValue(details.url, 'id');
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'DescribeTagOption',
+                'boto3': 'describe_tag_option',
+                'cli': 'describe-tag-option'
+            },
+            'options': reqParams
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.AssociateTagOptionWithResource
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/associate\?/g)) {
+        reqParams.boto3['ResourceId'] = jsonRequestBody.resourceId;
+        reqParams.cli['--resource-id'] = jsonRequestBody.resourceId;
+        reqParams.boto3['TagOptionId'] = jsonRequestBody.tagOptionId;
+        reqParams.cli['--tag-option-id'] = jsonRequestBody.tagOptionId;
+
+        reqParams.cfn['ResourceId'] = jsonRequestBody.resourceId;
+        reqParams.cfn['TagOptionId'] = jsonRequestBody.tagOptionId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'AssociateTagOptionWithResource',
+                'boto3': 'associate_tag_option_with_resource',
+                'cli': 'associate-tag-option-with-resource'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::TagOptionAssociation',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.AssociatePrincipalWithPortfolio
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/principal\?/g)) {
+        reqParams.boto3['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cli['--portfolio-id'] = jsonRequestBody.portfolioId;
+        reqParams.boto3['PrincipalARN'] = jsonRequestBody.principalARN;
+        reqParams.cli['--principal-arn'] = jsonRequestBody.principalARN;
+        reqParams.boto3['PrincipalType'] = jsonRequestBody.principalType;
+        reqParams.cli['--principal-type'] = jsonRequestBody.principalType;
+
+        reqParams.cfn['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cfn['PrincipalARN'] = jsonRequestBody.principalARN;
+        reqParams.cfn['PrincipalType'] = jsonRequestBody.principalType;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'AssociatePrincipalWithPortfolio',
+                'boto3': 'associate_principal_with_portfolio',
+                'cli': 'associate-principal-with-portfolio'
+            },
+            'options': reqParams
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::PortfolioPrincipalAssociation',
+            'options': reqParams,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
