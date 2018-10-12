@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cfn_editor, cli_editor, raw_editor;
+var boto3_editor, go_editor, cfn_editor, cli_editor, js_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -52,16 +52,16 @@ window.onload = function(){
             cli_editor.refresh();
         },1);
 
-        raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
+        js_editor = CodeMirror.fromTextArea(document.getElementById('js'), {
             lineNumbers: true,
             lineWrapping: true,
             mode: "javascript",
             theme: "material",
             indentUnit: 4
         });
-        raw_editor.getDoc().setValue(response['raw']);
+        js_editor.getDoc().setValue(response['js']);
         setTimeout(function() {
-            raw_editor.refresh();
+            js_editor.refresh();
         },1);
     });
 
@@ -101,14 +101,14 @@ function resetMenu() {
     document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('cfn_menubtn').setAttribute("class", "btn btn-default m-t-10");
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('js_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
     document.getElementById('boto3_container').style = "display: none;";
     document.getElementById('cli_container').style = "display: none;";
     document.getElementById('go_container').style = "display: none;";
     document.getElementById('cfn_container').style = "display: none;";
-    document.getElementById('raw_container').style = "display: none;";
+    document.getElementById('js_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
 }
 
@@ -144,12 +144,12 @@ document.getElementById('cfn_menubtn').onclick = function(evt) {
     cfn_editor.refresh();
 };
 
-document.getElementById('raw_menubtn').onclick = function(evt) {
+document.getElementById('js_menubtn').onclick = function(evt) {
     resetMenu();
-    document.getElementById('raw_menubtn').setAttribute("class", "btn btn-primary m-t-10");
-    document.getElementById('raw_container').style = "";
+    document.getElementById('js_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('js_container').style = "";
 
-    raw_editor.refresh();
+    js_editor.refresh();
 };
 
 document.getElementById('settings_menubtn').onclick = function(evt) {
