@@ -10094,6 +10094,9 @@ function analyseRequest(details) {
                 reqParams.boto3['DatabaseName'] = action['parameters'][0]['databaseName'];
                 reqParams.cli['--database-name'] = action['parameters'][0]['databaseName'];
 
+                reqParams.cfn['TableInput'] = action['parameters'][0]['tableInput'];
+                reqParams.cfn['DatabaseName'] = action['parameters'][0]['databaseName'];
+
                 outputs.push({
                     'region': region,
                     'service': 'glue',
@@ -10104,6 +10107,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Table',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getCatalogImportStatus") {
                 outputs.push({
@@ -10232,6 +10244,8 @@ function analyseRequest(details) {
                 reqParams.boto3['ConnectionInput'] = jsonRequestBody.actions;
                 reqParams.cli['--connection-input'] = jsonRequestBody.actions;
 
+                reqParams.cfn['ConnectionInput'] = jsonRequestBody.actions;
+
                 outputs.push({
                     'region': region,
                     'service': 'glue',
@@ -10242,6 +10256,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Connection',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getClassifiers") {
                 outputs.push({
@@ -10256,8 +10279,21 @@ function analyseRequest(details) {
                     'requestId': details.requestId
                 });
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createClassifier") {
-                reqParams.boto3['JsonClassifier'] = action['parameters'][0]['jsonClassifier'];
-                reqParams.cli['--json-classifier'] = action['parameters'][0]['jsonClassifier'];
+                if ('jsonClassifier' in action['parameters'][0]) {
+                    reqParams.boto3['JsonClassifier'] = action['parameters'][0]['jsonClassifier'];
+                    reqParams.cli['--json-classifier'] = action['parameters'][0]['jsonClassifier'];
+                    reqParams.cfn['JsonClassifier'] = action['parameters'][0]['jsonClassifier'];
+                }
+                if ('grokClassifier' in action['parameters'][0]) {
+                    reqParams.boto3['GrokClassifier'] = action['parameters'][0]['grokClassifier'];
+                    reqParams.cli['--grok-classifier'] = action['parameters'][0]['grokClassifier'];
+                    reqParams.cfn['GrokClassifier'] = action['parameters'][0]['grokClassifier'];
+                }
+                if ('xmlClassifier' in action['parameters'][0]) {
+                    reqParams.boto3['XMLClassifier'] = action['parameters'][0]['xmlClassifier'];
+                    reqParams.cli['--xml-classifier'] = action['parameters'][0]['xmlClassifier'];
+                    reqParams.cfn['XMLClassifier'] = action['parameters'][0]['xmlClassifier'];
+                }
 
                 outputs.push({
                     'region': region,
@@ -10269,6 +10305,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Classifier',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDataCatalogEncryptionSettings") {
                 reqParams.boto3['CatalogId'] = action['parameters'][0]['catalogId'];
