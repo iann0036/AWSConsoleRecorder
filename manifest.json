@@ -14,7 +14,8 @@
     "browser_style": false,
     "default_icon": {
       "128": "icon-128.png"
-    }
+    },
+    "default_popup": "popup.html"
   },
   "permissions": [
     "webRequest",

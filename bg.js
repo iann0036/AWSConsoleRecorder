@@ -3,6 +3,7 @@
 var declared_services;
 var compiled;
 var go_first_output;
+var recording = false;
 
 function notifyBlocked() {
     console.log("Calling notify");
@@ -638,20 +639,6 @@ function addToParamsFromXml(params, xml) {
     return params;
 }
 
-chrome.webRequest.onBeforeRequest.addListener(
-    analyseRequest,
-    {urls: ["<all_urls>"]},
-    ["requestBody","blocking"]
-);
-
-chrome.browserAction.onClicked.addListener(
-    function(){
-        chrome.tabs.create({
-            url: chrome.extension.getURL("main.html")
-        });
-    }
-);
-
 chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         if (message.action == "getCompiledOutputs") {
@@ -670,6 +657,24 @@ chrome.runtime.onMessage.addListener(
         } else if (message.action == "setInterceptOff") {
             intercept = false;
             sendResponse(true);
+        } else if (message.action == "setRecordingOn") {
+            recording = true;
+
+            chrome.webRequest.onBeforeRequest.addListener(
+                analyseRequest,
+                {urls: ["<all_urls>"]},
+                ["requestBody","blocking"]
+            );
+
+            sendResponse(true);
+        } else if (message.action == "setRecordingOff") {
+            recording = false;
+
+            chrome.webRequest.onBeforeRequest.removeListener(analyseRequest);
+
+            sendResponse(true);
+        } else if (message.action == "getRecordingStatus") {
+            sendResponse(recording);
         } else if (message.action == "clearData") {
             outputs = [];
             tracked_resources = [];
