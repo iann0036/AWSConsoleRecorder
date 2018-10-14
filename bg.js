@@ -773,8 +773,6 @@ var tracked_resources = [];
 var blocking = false;
 
 function analyseRequest(details) {
-    console.dir(details);
-
     var reqParams = {
         'boto3': {},
         'go': {},
@@ -9763,7 +9761,8 @@ function analyseRequest(details) {
     // manual:elasticache:elasticache.CreateCacheParameterGroup
     // manual:elasticache:ec2.DescribeAvailabilityZones
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticache\/rpc$/g)) {
-        for (var action in jsonRequestBody.portfolioId.actions) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
             if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
                 outputs.push({
                     'region': region,
@@ -10063,7 +10062,8 @@ function analyseRequest(details) {
     // autogen:glue:glue.BatchDeleteConnection
     // autogen:glue:glue.BatchDeleteTable
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glue\/rpc$/g)) {
-        for (var action in jsonRequestBody.portfolioId.actions) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
             if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDatabases") {
                 outputs.push({
                     'region': region,
@@ -10484,4 +10484,554 @@ function analyseRequest(details) {
 
         return {};
     }
+
+    // autogen:rds:rds.DescribeDBSecurityGroups
+    // autogen:rds:kms.DescribeKey
+    // autogen:rds:ec2.DescribeSecurityGroups
+    // autogen:rds:ec2.DescribeVpcs
+    // autogen:rds:rds.DescribeDBParameterGroups
+    // autogen:rds:rds.DescribeDBClusterParameterGroups
+    // autogen:rds:rds.DescribeDBSubnetGroups
+    // autogen:rds:ec2.DescribeSecurityGroups
+    // autogen:rds:rds.CreateDBInstance
+    // autogen:rds:rds.DescribeEvents
+    // autogen:rds:rds.DescribeDBLogFiles
+    // autogen:rds:rds.DescribeDBClusters
+    // autogen:rds:ec2.DescribeSecurityGroups
+    // autogen:rds:rds.DescribeOptionGroups
+    // autogen:rds:rds.DescribeDBSnapshots
+    // autogen:rds:rds.DescribeDBSnapshots
+    // autogen:rds:rds.DescribeDBClusterSnapshots
+    // autogen:rds:rds.DescribeReservedDBInstances
+    // autogen:rds:rds.DescribeDBSubnetGroups
+    // autogen:rds:ec2.DescribeAvailabilityZones
+    // autogen:rds:rds.CreateDBSubnetGroup
+    // autogen:rds:rds.DescribeDBParameterGroups
+    // autogen:rds:rds.CreateDBParameterGroup
+    // autogen:rds:rds.CreateOptionGroup
+    // autogen:rds:sns.ListTopics
+    // autogen:rds:rds.CreateEventSubscription
+    // autogen:rds:rds.DescribeEventSubscriptions
+    // autogen:rds:rds.StopDBCluster
+    // autogen:rds:rds.CreateDBClusterParameterGroup
+    // autogen:rds:rds.StartDBCluster
+    // autogen:rds:rds.DeleteDBInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/rpc$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+            if (action['action'] == "com.amazonaws.console.rds.shared.DbSecurityGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBSecurityGroups',
+                        'boto3': 'describe_db_security_groups',
+                        'cli': 'describe-db-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.trent.requestfactory.shared.TrentRequestContext.describeKey") {
+                reqParams.boto3['KeyId'] = action['parameters'][0]['keyId'];
+                reqParams.cli['--key-id'] = action['parameters'][0]['keyId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'kms',
+                    'method': {
+                        'api': 'DescribeKey',
+                        'boto3': 'describe_key',
+                        'cli': 'describe-key'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "EC2.DescribeVpcsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeVpcs',
+                        'boto3': 'describe_vpcs',
+                        'cli': 'describe-vpcs'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.findDbParameterGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBParameterGroups',
+                        'boto3': 'describe_db_parameter_groups',
+                        'cli': 'describe-db-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.listDbClusterParameterGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBClusterParameterGroups',
+                        'boto3': 'describe_db_cluster_parameter_groups',
+                        'cli': 'describe-db-cluster-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBSubnetGroups',
+                        'boto3': 'describe_db_subnet_groups',
+                        'cli': 'describe-db-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.create") {
+                reqParams.boto3['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.cli['--auto-minor-version-upgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.boto3['CopyTagsToSnapshot'] = action['parameters'][0]['copyTagsToSnapshot'];
+                reqParams.cli['--copy-tags-to-snapshot'] = action['parameters'][0]['copyTagsToSnapshot'];
+                reqParams.boto3['DeletionProtection'] = action['parameters'][0]['deletionProtection'];
+                reqParams.cli['--deletion-protection'] = action['parameters'][0]['deletionProtection'];
+                reqParams.boto3['MultiAZ'] = action['parameters'][0]['multiAZ'];
+                reqParams.cli['--multi-az'] = action['parameters'][0]['multiAZ'];
+                reqParams.boto3['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cli['--publicly-accessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.boto3['StorageEncrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.cli['--storage-encrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.boto3['AllocatedStorage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.cli['--allocated-storage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.boto3['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.cli['--backup-retention-period'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.boto3['Iops'] = action['parameters'][0]['iops'];
+                reqParams.cli['--iops'] = action['parameters'][0]['iops'];
+                reqParams.boto3['MonitoringInterval'] = action['parameters'][0]['monitoringInterval'];
+                reqParams.cli['--monitoring-interval'] = action['parameters'][0]['monitoringInterval'];
+                reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                reqParams.cli['--port'] = action['parameters'][0]['port'];
+                reqParams.boto3['PromotionTier'] = action['parameters'][0]['promotionTier'];
+                reqParams.cli['--promotion-tier'] = action['parameters'][0]['promotionTier'];
+                reqParams.boto3['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cli['--availability-zone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.boto3['DBInstanceClass'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.cli['--db-instance-class'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.boto3['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.cli['--db-instance-identifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
+                reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                reqParams.boto3['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.cli['--db-parameter-group-name'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.boto3['Engine'] = action['parameters'][0]['engine'];
+                reqParams.cli['--engine'] = action['parameters'][0]['engine'];
+                reqParams.boto3['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                reqParams.cli['--engine-version'] = action['parameters'][0]['engineVersion'];
+                reqParams.boto3['LicenseModel'] = action['parameters'][0]['licenseModel'];
+                reqParams.cli['--license-model'] = action['parameters'][0]['licenseModel'];
+                reqParams.boto3['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.cli['--master-user-password'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.boto3['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                reqParams.cli['--master-username'] = action['parameters'][0]['masterUsername'];
+                reqParams.boto3['MonitoringRoleArn'] = action['parameters'][0]['monitoringRoleArn'];
+                reqParams.cli['--monitoring-role-arn'] = action['parameters'][0]['monitoringRoleArn'];
+                reqParams.boto3['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
+                reqParams.cli['--option-group-name'] = action['parameters'][0]['optionGroupName'];
+                reqParams.boto3['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cli['--preferred-maintenance-window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.boto3['StorageType'] = action['parameters'][0]['storageType'];
+                reqParams.cli['--storage-type'] = action['parameters'][0]['storageType'];
+                reqParams.boto3['EnableCloudwatchLogsExports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
+                reqParams.cli['--enable-cloudwatch-logs-exports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
+                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateDBInstance',
+                        'boto3': 'create_db_instance',
+                        'cli': 'create-db-instance'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.EventContext.findEvents") {
+                reqParams.boto3['Duration'] = action['parameters'][0]['duration'];
+                reqParams.cli['--duration'] = action['parameters'][0]['duration'];
+                reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
+                reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
+                reqParams.boto3['SourceIdentifier'] = action['parameters'][0]['sourceIdentifier'];
+                reqParams.cli['--source-identifier'] = action['parameters'][0]['sourceIdentifier'];
+                reqParams.boto3['SourceType'] = action['parameters'][0]['sourceType'];
+                reqParams.cli['--source-type'] = action['parameters'][0]['sourceType'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeEvents',
+                        'boto3': 'describe_events',
+                        'cli': 'describe-events'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBLogFileContext.list") {
+                reqParams.boto3['DBInstanceIdentifier'] = action['parameters'][0];
+                reqParams.cli['--db-instance-identifier'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBLogFiles',
+                        'boto3': 'describe_db_log_files',
+                        'cli': 'describe-db-log-files'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSnapshotContext.findByDbClusterIdentifier") {
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBClusters',
+                        'boto3': 'describe_db_clusters',
+                        'cli': 'describe-db-clusters'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.ec2.requestfactory.shared.Ec2Context.describeSecurityGroups") {
+                reqParams.boto3['GroupIds'] = action['parameters'][0]['groupIds'];
+                reqParams.cli['--group-ids'] = action['parameters'][0]['groupIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.OptionGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeOptionGroups',
+                        'boto3': 'describe_option_groups',
+                        'cli': 'describe-option-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSnapshotContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBSnapshots',
+                        'boto3': 'describe_db_snapshots',
+                        'cli': 'describe-db-snapshots'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSnapshotContext.describeDBSnapshotsResult") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBSnapshots',
+                        'boto3': 'describe_db_snapshots',
+                        'cli': 'describe-db-snapshots'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSnapshotContext.describeDBClusterSnapshotsResult") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBClusterSnapshots',
+                        'boto3': 'describe_db_cluster_snapshots',
+                        'cli': 'describe-db-cluster-snapshots'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.ReservedDBInstanceContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeReservedDBInstances',
+                        'boto3': 'describe_reserved_db_instances',
+                        'cli': 'describe-reserved-db-instances'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBSubnetGroups',
+                        'boto3': 'describe_db_subnet_groups',
+                        'cli': 'describe-db-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "EC2.DescribeAvailabilityZonesDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeAvailabilityZones',
+                        'boto3': 'describe_availability_zones',
+                        'cli': 'describe-availability-zones'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.create") {
+                reqParams.boto3['DBSubnetGroupDescription'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.cli['--db-subnet-group-description'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
+                reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateDBSubnetGroup',
+                        'boto3': 'create_db_subnet_group',
+                        'cli': 'create-db-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.findDbParameterGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBParameterGroups',
+                        'boto3': 'describe_db_parameter_groups',
+                        'cli': 'describe-db-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.createDbParameterGroup") {
+                reqParams.boto3['DBParameterGroupFamily'] = action['parameters'][0];
+                reqParams.cli['--db-parameter-group-family'] = action['parameters'][0];
+                reqParams.boto3['DBParameterGroupName'] = action['parameters'][1];
+                reqParams.cli['--db-parameter-group-name'] = action['parameters'][1];
+                reqParams.boto3['Description'] = action['parameters'][2];
+                reqParams.cli['--description'] = action['parameters'][2];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateDBParameterGroup',
+                        'boto3': 'create_db_parameter_group',
+                        'cli': 'create-db-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.OptionGroupContext.create") {
+                reqParams.boto3['EngineName'] = action['parameters'][0]['engineName'];
+                reqParams.cli['--engine-name'] = action['parameters'][0]['engineName'];
+                reqParams.boto3['MajorEngineVersion'] = action['parameters'][0]['majorEngineVersion'];
+                reqParams.cli['--major-engine-version'] = action['parameters'][0]['majorEngineVersion'];
+                reqParams.boto3['OptionGroupDescription'] = action['parameters'][0]['optionGroupDescription'];
+                reqParams.cli['--option-group-description'] = action['parameters'][0]['optionGroupDescription'];
+                reqParams.boto3['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
+                reqParams.cli['--option-group-name'] = action['parameters'][0]['optionGroupName'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateOptionGroup',
+                        'boto3': 'create_option_group',
+                        'cli': 'create-option-group'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.sns.requestfactory.shared.SnsRequestContext.listTopicArns") {
+                outputs.push({
+                    'region': region,
+                    'service': 'sns',
+                    'method': {
+                        'api': 'ListTopics',
+                        'boto3': 'list_topics',
+                        'cli': 'list-topics'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.EventSubscriptionContext.create") {
+                reqParams.boto3['Enabled'] = action['parameters'][0]['enabled'];
+                reqParams.cli['--enabled'] = action['parameters'][0]['enabled'];
+                reqParams.boto3['SnsTopicArn'] = action['parameters'][0]['snsTopicArn'];
+                reqParams.cli['--sns-topic-arn'] = action['parameters'][0]['snsTopicArn'];
+                reqParams.boto3['SourceType'] = action['parameters'][0]['sourceType'];
+                reqParams.cli['--source-type'] = action['parameters'][0]['sourceType'];
+                reqParams.boto3['SubscriptionName'] = action['parameters'][0]['subscriptionName'];
+                reqParams.cli['--subscription-name'] = action['parameters'][0]['subscriptionName'];
+                reqParams.boto3['EventCategories'] = action['parameters'][0]['eventCategories'];
+                reqParams.cli['--event-categories'] = action['parameters'][0]['eventCategories'];
+                reqParams.boto3['SourceIds'] = action['parameters'][0]['sourceIds'];
+                reqParams.cli['--source-ids'] = action['parameters'][0]['sourceIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateEventSubscription',
+                        'boto3': 'create_event_subscription',
+                        'cli': 'create-event-subscription'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.EventSubscriptionContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeEventSubscriptions',
+                        'boto3': 'describe_event_subscriptions',
+                        'cli': 'describe-event-subscriptions'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbCContext.stopDBCluster") {
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'StopDBCluster',
+                        'boto3': 'stop_db_cluster',
+                        'cli': 'stop-db-cluster'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.createDbClusterParameterGroup") {
+                reqParams.boto3['DBParameterGroupFamily'] = action['parameters'][0];
+                reqParams.cli['--db-parameter-group-family'] = action['parameters'][0];
+                reqParams.boto3['DBClusterParameterGroupName'] = action['parameters'][1];
+                reqParams.cli['--db-cluster-parameter-group-name'] = action['parameters'][1];
+                reqParams.boto3['Description'] = action['parameters'][2];
+                reqParams.cli['--description'] = action['parameters'][2];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'CreateDBClusterParameterGroup',
+                        'boto3': 'create_db_cluster_parameter_group',
+                        'cli': 'create-db-cluster-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbCContext.startDBCluster") {
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'StartDBCluster',
+                        'boto3': 'start_db_cluster',
+                        'cli': 'start-db-cluster'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.delete") {
+                reqParams.boto3['SkipFinalSnapshot'] = action['parameters'][0]['skipFinalSnapshot'];
+                reqParams.cli['--skip-final-snapshot'] = action['parameters'][0]['skipFinalSnapshot'];
+                reqParams.boto3['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.cli['--db-instance-identifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DeleteDBInstance',
+                        'boto3': 'delete_db_instance',
+                        'cli': 'delete-db-instance'
+                    },
+                    'options': reqParams,
+                    'requestId': details.requestId
+                });
+            }                     
+            
+        }
+
+        return {};
+    }
+        
 }
