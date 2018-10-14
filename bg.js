@@ -12043,4 +12043,166 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ds:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:ds:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:ds:ds.CreateDirectory
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateDirectory") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Password'] = jsonRequestBody.contentString.Password;
+        reqParams.cli['--password'] = jsonRequestBody.contentString.Password;
+        reqParams.boto3['ShortName'] = jsonRequestBody.contentString.ShortName;
+        reqParams.cli['--short-name'] = jsonRequestBody.contentString.ShortName;
+        reqParams.boto3['Size'] = jsonRequestBody.contentString.Type;
+        reqParams.cli['--size'] = jsonRequestBody.contentString.Type;
+        reqParams.boto3['VpcSettings'] = jsonRequestBody.contentString.VpcSettings;
+        reqParams.cli['--vpc-settings'] = jsonRequestBody.contentString.VpcSettings;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Password'] = jsonRequestBody.contentString.Password;
+        reqParams.cfn['ShortName'] = jsonRequestBody.contentString.ShortName;
+        reqParams.cfn['Size'] = jsonRequestBody.contentString.Type;
+        reqParams.cfn['VpcSettings'] = jsonRequestBody.contentString.VpcSettings;
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'CreateDirectory',
+                'boto3': 'create_directory',
+                'cli': 'create-directory'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ds',
+            'type': 'AWS::DirectoryService::SimpleAD',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ds:ds.DescribeDirectories
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DescribeDirectories") {
+        reqParams.boto3['DirectoryIds'] = jsonRequestBody.contentString.DirectoryIds;
+        reqParams.cli['--directory-ids'] = jsonRequestBody.contentString.DirectoryIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DescribeDirectories',
+                'boto3': 'describe_directories',
+                'cli': 'describe-directories'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:ds:ds.DeleteDirectory
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DeleteDirectory") {
+        reqParams.boto3['DirectoryId'] = jsonRequestBody.contentString.DirectoryId;
+        reqParams.cli['--directory-id'] = jsonRequestBody.contentString.DirectoryId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DeleteDirectory',
+                'boto3': 'delete_directory',
+                'cli': 'delete-directory'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:ds:ds.CreateMicrosoftAD
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateMicrosoftAD") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Password'] = jsonRequestBody.contentString.Password;
+        reqParams.cli['--password'] = jsonRequestBody.contentString.Password;
+        reqParams.boto3['ShortName'] = jsonRequestBody.contentString.ShortName;
+        reqParams.cli['--short-name'] = jsonRequestBody.contentString.ShortName;
+        reqParams.boto3['Edition'] = jsonRequestBody.contentString.Edition;
+        reqParams.cli['--edition'] = jsonRequestBody.contentString.Edition;
+        reqParams.boto3['VpcSettings'] = jsonRequestBody.contentString.VpcSettings;
+        reqParams.cli['--vpc-settings'] = jsonRequestBody.contentString.VpcSettings;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Password'] = jsonRequestBody.contentString.Password;
+        reqParams.cfn['ShortName'] = jsonRequestBody.contentString.ShortName;
+        reqParams.cfn['Edition'] = jsonRequestBody.contentString.Edition;
+        reqParams.cfn['VpcSettings'] = jsonRequestBody.contentString.VpcSettings;
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'CreateMicrosoftAD',
+                'boto3': 'create_microsoft_ad',
+                'cli': 'create-microsoft-ad'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'ds',
+            'type': 'AWS::DirectoryService::MicrosoftAD',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
