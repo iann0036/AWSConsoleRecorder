@@ -10679,6 +10679,34 @@ function analyseRequest(details) {
                 reqParams.cli['--enable-cloudwatch-logs-exports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
                 reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
                 reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                reqParams.cfn['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.cfn['CopyTagsToSnapshot'] = action['parameters'][0]['copyTagsToSnapshot'];
+                reqParams.cfn['MultiAZ'] = action['parameters'][0]['multiAZ'];
+                reqParams.cfn['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cfn['StorageEncrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.cfn['AllocatedStorage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.cfn['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.cfn['Iops'] = action['parameters'][0]['iops'];
+                reqParams.cfn['MonitoringInterval'] = action['parameters'][0]['monitoringInterval'];
+                reqParams.cfn['Port'] = action['parameters'][0]['port'];
+                reqParams.cfn['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cfn['DBInstanceClass'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.cfn['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                reqParams.cfn['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cfn['Engine'] = action['parameters'][0]['engine'];
+                reqParams.cfn['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                reqParams.cfn['LicenseModel'] = action['parameters'][0]['licenseModel'];
+                reqParams.cfn['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.cfn['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                reqParams.cfn['MonitoringRoleArn'] = action['parameters'][0]['monitoringRoleArn'];
+                reqParams.cfn['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
+                reqParams.cfn['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cfn['StorageType'] = action['parameters'][0]['storageType'];
+                reqParams.cfn['VPCSecurityGroups'] = action['parameters'][0]['vpcSecurityGroupIds'];
         
                 outputs.push({
                     'region': region,
@@ -10690,6 +10718,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBInstance',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.EventContext.findEvents") {
                 reqParams.boto3['Duration'] = action['parameters'][0]['duration'];
@@ -10848,6 +10885,10 @@ function analyseRequest(details) {
                 reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
                 reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
                 reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+
+                reqParams.cfn['DBSubnetGroupDescription'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cfn['SubnetIds'] = action['parameters'][0]['subnetIds'];
         
                 outputs.push({
                     'region': region,
@@ -10859,6 +10900,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBSubnetGroup',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.findDbParameterGroups") {
                 outputs.push({
@@ -10879,6 +10929,9 @@ function analyseRequest(details) {
                 reqParams.cli['--db-parameter-group-name'] = action['parameters'][1];
                 reqParams.boto3['Description'] = action['parameters'][2];
                 reqParams.cli['--description'] = action['parameters'][2];
+
+                reqParams.cfn['Family'] = action['parameters'][0];
+                reqParams.cfn['Description'] = action['parameters'][2];
         
                 outputs.push({
                     'region': region,
@@ -10891,6 +10944,15 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestId': details.requestId
                 });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBParameterGroup',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
+                });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.OptionGroupContext.create") {
                 reqParams.boto3['EngineName'] = action['parameters'][0]['engineName'];
                 reqParams.cli['--engine-name'] = action['parameters'][0]['engineName'];
@@ -10900,6 +10962,10 @@ function analyseRequest(details) {
                 reqParams.cli['--option-group-description'] = action['parameters'][0]['optionGroupDescription'];
                 reqParams.boto3['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
                 reqParams.cli['--option-group-name'] = action['parameters'][0]['optionGroupName'];
+
+                reqParams.cfn['EngineName'] = action['parameters'][0]['engineName'];
+                reqParams.cfn['MajorEngineVersion'] = action['parameters'][0]['majorEngineVersion'];
+                reqParams.cfn['OptionGroupDescription'] = action['parameters'][0]['optionGroupDescription'];
         
                 outputs.push({
                     'region': region,
@@ -10911,6 +10977,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::OptionGroup',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.gwt.sns.requestfactory.shared.SnsRequestContext.listTopicArns") {
                 outputs.push({
@@ -10983,6 +11058,9 @@ function analyseRequest(details) {
                 reqParams.cli['--db-cluster-parameter-group-name'] = action['parameters'][1];
                 reqParams.boto3['Description'] = action['parameters'][2];
                 reqParams.cli['--description'] = action['parameters'][2];
+
+                reqParams.cfn['Family'] = action['parameters'][0];
+                reqParams.cfn['Description'] = action['parameters'][2];
         
                 outputs.push({
                     'region': region,
@@ -10994,6 +11072,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBClusterParameterGroup',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbCContext.startDBCluster") {
                 reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0];
