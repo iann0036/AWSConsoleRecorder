@@ -11841,4 +11841,206 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:sns:sns.ListTopics
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListTopics$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.ListSubscriptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListSubscriptions$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListSubscriptions',
+                'boto3': 'list_subscriptions',
+                'cli': 'list-subscriptions'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.CreateTopic
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/CreateTopic$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.topicName;
+        reqParams.cli['--name'] = jsonRequestBody.topicName;
+
+        reqParams.boto3['TopicName'] = jsonRequestBody.topicName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'CreateTopic',
+                'boto3': 'create_topic',
+                'cli': 'create-topic'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'sns',
+            'type': 'AWS::SNS::Topic',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.SetTopicAttributes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/SetTopicAttributes$/g)) {
+        reqParams.boto3['TopicArn'] = jsonRequestBody.topicArn;
+        reqParams.cli['--topic-arn'] = jsonRequestBody.topicArn;
+        reqParams.boto3['AttributeName'] = jsonRequestBody.attributeName;
+        reqParams.cli['--attribute-name'] = jsonRequestBody.attributeName;
+        reqParams.boto3['AttributeValue'] = jsonRequestBody.attributeValue;
+        reqParams.cli['--attribute-value'] = jsonRequestBody.attributeValue;
+
+        if (jsonRequestBody.attributeName == "Policy") {
+            reqParams.cfn['PolicyDocument'] = jsonRequestBody.attributeValue;
+            reqParams.cfn['Topics'] = [jsonRequestBody.topicArn];
+
+            tracked_resources.push({
+                'region': region,
+                'service': 'sns',
+                'type': 'AWS::SNS::TopicPolicy',
+                'options': reqParams,
+                'requestId': details.requestId,
+                'was_blocked': blocking
+            });
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'SetTopicAttributes',
+                'boto3': 'set_topic_attributes',
+                'cli': 'set-topic-attributes'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.DeleteTopic
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/DeleteTopic$/g)) {
+        reqParams.boto3['TopicArn'] = jsonRequestBody.topicArn;
+        reqParams.cli['--topic-arn'] = jsonRequestBody.topicArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'DeleteTopic',
+                'boto3': 'delete_topic',
+                'cli': 'delete-topic'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.ListPlatformApplications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListPlatformApplications$/g)) {
+        reqParams.boto3['NextToken'] = jsonRequestBody.nextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.nextToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListPlatformApplications',
+                'boto3': 'list_platform_applications',
+                'cli': 'list-platform-applications'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.Subscribe
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/Subscribe$/g)) {
+        reqParams.boto3['TopicArn'] = jsonRequestBody.topicArn;
+        reqParams.cli['--topic-arn'] = jsonRequestBody.topicArn;
+        reqParams.boto3['Endpoint'] = jsonRequestBody.endpoint;
+        reqParams.cli['--endpoint'] = jsonRequestBody.endpoint;
+        reqParams.boto3['Protocol'] = jsonRequestBody.protocol;
+        reqParams.cli['--protocol'] = jsonRequestBody.protocol;
+
+        reqParams.cfn['TopicArn'] = jsonRequestBody.topicArn;
+        reqParams.cfn['Endpoint'] = jsonRequestBody.endpoint;
+        reqParams.cfn['Protocol'] = jsonRequestBody.protocol;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'Subscribe',
+                'boto3': 'subscribe',
+                'cli': 'subscribe'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'sns',
+            'type': 'AWS::SNS::Subscription',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.GetTopicAttributes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/GetTopicAttributes$/g)) {
+        reqParams.boto3['TopicArn'] = jsonRequestBody.topicArn;
+        reqParams.cli['--topic-arn'] = jsonRequestBody.topicArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'GetTopicAttributes',
+                'boto3': 'get_topic_attributes',
+                'cli': 'get-topic-attributes'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
 }
