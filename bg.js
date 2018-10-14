@@ -786,6 +786,11 @@ function analyseRequest(details) {
     var region_check = /.+\/\/([a-zA-Z0-9-]+)\.console\.aws\.amazon\.com/g.exec(details.url);
     if (region_check && region_check[1]) {
         region = region_check[1];
+    } else {
+        region_check = /.+\/\/[a-z0-9-]+.([a-zA-Z0-9-]+)\.amazonaws\.com/g.exec(details.url);
+        if (region_check && region_check[1]) {
+            region = region_check[1];
+        }
     }
 
     try {
@@ -11012,6 +11017,12 @@ function analyseRequest(details) {
                 reqParams.cli['--event-categories'] = action['parameters'][0]['eventCategories'];
                 reqParams.boto3['SourceIds'] = action['parameters'][0]['sourceIds'];
                 reqParams.cli['--source-ids'] = action['parameters'][0]['sourceIds'];
+
+                reqParams.cfn['Enabled'] = action['parameters'][0]['enabled'];
+                reqParams.cfn['SnsTopicArn'] = action['parameters'][0]['snsTopicArn'];
+                reqParams.cfn['SourceType'] = action['parameters'][0]['sourceType'];
+                reqParams.cfn['EventCategories'] = action['parameters'][0]['eventCategories'];
+                reqParams.cfn['SourceIds'] = action['parameters'][0]['sourceIds'];
         
                 outputs.push({
                     'region': region,
@@ -11023,6 +11034,15 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestId': details.requestId
+                });
+
+                tracked_resources.push({
+                    'region': region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::EventSubscription',
+                    'options': reqParams,
+                    'requestId': details.requestId,
+                    'was_blocked': blocking
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.EventSubscriptionContext.list") {
                 outputs.push({
@@ -11120,5 +11140,355 @@ function analyseRequest(details) {
 
         return {};
     }
+       
+    // autogen:lambda:lambda.ListFunctions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listFunctions&/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListFunctions',
+                'boto3': 'list_functions',
+                'cli': 'list-functions'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
         
+        return {};
+    }
+
+    // autogen:lambda:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listVpcs&/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.GetFunctionConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getFunctionConfiguration&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.functionName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'GetFunctionConfiguration',
+                'boto3': 'get_function_configuration',
+                'cli': 'get-function-configuration'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.GetFunction
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getFunctionCode&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.functionName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'GetFunction',
+                'boto3': 'get_function',
+                'cli': 'get-function'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.ListTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listTags&/g)) {
+        reqParams.boto3['Resource'] = jsonRequestBody.functionName;
+        reqParams.cli['--resource'] = jsonRequestBody.functionName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListTags',
+                'boto3': 'list_tags',
+                'cli': 'list-tags'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:iam.GetRole
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getRole&/g)) {
+        reqParams.boto3['RoleName'] = jsonRequestBody.roleName;
+        reqParams.cli['--role-name'] = jsonRequestBody.roleName;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'GetRole',
+                'boto3': 'get_role',
+                'cli': 'get-role'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:kms.ListKeys
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listKmsKeys&/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'ListKeys',
+                'boto3': 'list_keys',
+                'cli': 'list-keys'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.CreateAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=createAlias&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.functionName;
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['FunctionVersion'] = jsonRequestBody.functionVersion;
+        reqParams.cli['--function-version'] = jsonRequestBody.functionVersion;
+
+        reqParams.cfn['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['FunctionVersion'] = jsonRequestBody.functionVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'CreateAlias',
+                'boto3': 'create_alias',
+                'cli': 'create-alias'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Alias',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.GetAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getAlias&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.functionName;
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'GetAlias',
+                'boto3': 'get_alias',
+                'cli': 'get-alias'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.DeleteFunction
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=deleteFunction&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.functionName;
+        reqParams.boto3['Qualifier'] = jsonRequestBody.qualifier;
+        reqParams.cli['--qualifier'] = jsonRequestBody.qualifier;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'DeleteFunction',
+                'boto3': 'delete_function',
+                'cli': 'delete-function'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.PublishVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=publishVersion&/g)) {
+        reqParams.boto3['FunctionName'] = jsonRequestBody.payload.functionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.payload.functionName;
+        reqParams.boto3['Description'] = jsonRequestBody.payload.description;
+        reqParams.cli['--description'] = jsonRequestBody.payload.description;
+
+        reqParams.cfn['FunctionName'] = jsonRequestBody.payload.functionName;
+        reqParams.cfn['Description'] = jsonRequestBody.payload.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'PublishVersion',
+                'boto3': 'publish_version',
+                'cli': 'publish-version'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Version',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+ 
+    // autogen:lambda:lambda.CreateFunction
+    if (details.method == "POST" && details.url.match(/.+lambda\.[a-z0-9-]+\.amazonaws\.com\/2015\-03\-31\/functions$/g)) {
+        reqParams.boto3['Code'] = jsonRequestBody.Code;
+        reqParams.cli['--code'] = jsonRequestBody.Code;
+        reqParams.boto3['Description'] = jsonRequestBody.Description;
+        reqParams.cli['--description'] = jsonRequestBody.Description;
+        reqParams.boto3['FunctionName'] = jsonRequestBody.FunctionName;
+        reqParams.cli['--function-name'] = jsonRequestBody.FunctionName;
+        reqParams.boto3['Handler'] = jsonRequestBody.Handler;
+        reqParams.cli['--handler'] = jsonRequestBody.Handler;
+        reqParams.boto3['MemorySize'] = jsonRequestBody.MemorySize;
+        reqParams.cli['--memory-size'] = jsonRequestBody.MemorySize;
+        reqParams.boto3['Role'] = jsonRequestBody.Role;
+        reqParams.cli['--role'] = jsonRequestBody.Role;
+        reqParams.boto3['Runtime'] = jsonRequestBody.Runtime;
+        reqParams.cli['--runtime'] = jsonRequestBody.Runtime;
+        reqParams.boto3['Timeout'] = jsonRequestBody.Timeout;
+        reqParams.cli['--timeout'] = jsonRequestBody.Timeout;
+        reqParams.boto3['DeadLetterConfig'] = jsonRequestBody.DeadLetterConfig;
+        reqParams.cli['--dead-letter-config'] = jsonRequestBody.DeadLetterConfig;
+        reqParams.boto3['KMSKeyArn'] = jsonRequestBody.KMSKeyArn;
+        reqParams.cli['--kms-key-arn'] = jsonRequestBody.KMSKeyArn;
+        reqParams.boto3['TracingConfig'] = jsonRequestBody.TracingConfig;
+        reqParams.cli['--tracing-config'] = jsonRequestBody.TracingConfig;
+
+        reqParams.cfn['Code'] = jsonRequestBody.Code;
+        reqParams.cfn['Description'] = jsonRequestBody.Description;
+        reqParams.cfn['FunctionName'] = jsonRequestBody.FunctionName;
+        reqParams.cfn['Handler'] = jsonRequestBody.Handler;
+        reqParams.cfn['MemorySize'] = jsonRequestBody.MemorySize;
+        reqParams.cfn['Role'] = jsonRequestBody.Role;
+        reqParams.cfn['Runtime'] = jsonRequestBody.Runtime;
+        reqParams.cfn['Timeout'] = jsonRequestBody.Timeout;
+        reqParams.cfn['DeadLetterConfig'] = jsonRequestBody.DeadLetterConfig;
+        reqParams.cfn['KmsKeyArn'] = jsonRequestBody.KMSKeyArn;
+        reqParams.cfn['TracingConfig'] = jsonRequestBody.TracingConfig;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'CreateFunction',
+                'boto3': 'create_function',
+                'cli': 'create-function'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Function',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    console.log("Skipping " + details.url);
 }
