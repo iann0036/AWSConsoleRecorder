@@ -13692,4 +13692,298 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:sqs:sqs.CreateQueue
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "createQueue") {
+        reqParams.boto3['QueueName'] = getPipeSplitField(requestBody, 12);
+        reqParams.cli['--queue-name'] = getPipeSplitField(requestBody, 12);
+
+        reqParams.cfn['QueueName'] = getPipeSplitField(requestBody, 12);
+
+        outputs.push({
+            'region': region,
+            'service': 'sqs',
+            'method': {
+                'api': 'CreateQueue',
+                'boto3': 'create_queue',
+                'cli': 'create-queue'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'sqs',
+            'type': 'AWS::SQS::Queue',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sqs:sqs.GetQueueAttributes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "getQueueAttributes") {
+        reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 11);
+        reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 11);
+        reqParams.boto3['AttributeNames'] = getPipeSplitField(requestBody, 14);
+        reqParams.cli['--attribute-names'] = getPipeSplitField(requestBody, 14);
+
+        outputs.push({
+            'region': region,
+            'service': 'sqs',
+            'method': {
+                'api': 'GetQueueAttributes',
+                'boto3': 'get_queue_attributes',
+                'cli': 'get-queue-attributes'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:sqs:sqs.SetQueueAttributes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "setQueueAttributes" && getPipeSplitField(requestBody, 13) == "Policy") {
+        reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 11);
+        reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 11);
+        reqParams.boto3['Attributes'] = {
+            'Policy': getPipeSplitField(requestBody, 14)
+        };
+        reqParams.cli['--attributes'] = {
+            'Policy': getPipeSplitField(requestBody, 14)
+        };
+
+        reqParams.cfn['Queues'] = [getPipeSplitField(requestBody, 11)];
+        reqParams.cfn['PolicyDocument'] = getPipeSplitField(requestBody, 14);
+
+        outputs.push({
+            'region': region,
+            'service': 'sqs',
+            'method': {
+                'api': 'SetQueueAttributes',
+                'boto3': 'set_queue_attributes',
+                'cli': 'set-queue-attributes'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'sqs',
+            'type': 'AWS::SQS::QueuePolicy',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sqs:sqs.DeleteQueue
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g)) {
+        reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 10);
+        reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 10);
+
+        outputs.push({
+            'region': region,
+            'service': 'sqs',
+            'method': {
+                'api': 'DeleteQueue',
+                'boto3': 'delete_queue',
+                'cli': 'delete-queue'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.GetHostedZoneCount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "getHostedZoneCount") {
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'GetHostedZoneCount',
+                'boto3': 'get_hosted_zone_count',
+                'cli': 'get-hosted-zone-count'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.ListHostedZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listHostedZones") {
+        reqParams.boto3['MaxItems'] = getPipeSplitField(requestBody, 10);
+        reqParams.cli['--max-items'] = getPipeSplitField(requestBody, 10);
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'ListHostedZones',
+                'boto3': 'list_hosted_zones',
+                'cli': 'list-hosted-zones'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.CreateHostedZone
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "createPrivateHostedZone") {
+        reqParams.boto3['Name'] = getPipeSplitField(requestBody, 11);
+        reqParams.cli['--name'] = getPipeSplitField(requestBody, 11);
+        reqParams.boto3['HostedZoneConfig'] = {
+            'Comment': getPipeSplitField(requestBody, 12)
+        };
+        reqParams.cli['--hosted-zone-config'] = {
+            'Comment': getPipeSplitField(requestBody, 12)
+        };
+        reqParams.boto3['VPC'] = getPipeSplitField(requestBody, 15);
+        reqParams.cli['--vpc'] = getPipeSplitField(requestBody, 15);
+        reqParams.boto3['CallerReference'] = getPipeSplitField(requestBody, 16);
+        reqParams.cli['--caller-reference'] = getPipeSplitField(requestBody, 16);
+
+        reqParams.cfn['Name'] = getPipeSplitField(requestBody, 11);
+        reqParams.cfn['HostedZoneConfig'] = {
+            'Comment': getPipeSplitField(requestBody, 12)
+        };
+        reqParams.cfn['VPCs'] = [getPipeSplitField(requestBody, 15)];
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'CreateHostedZone',
+                'boto3': 'create_hosted_zone',
+                'cli': 'create-hosted-zone'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'route53',
+            'type': 'AWS::Route53::HostedZone',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.CreateHostedZone
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "createPublicHostedZone") {
+        reqParams.boto3['Name'] = getPipeSplitField(requestBody, 10);
+        reqParams.cli['--name'] = getPipeSplitField(requestBody, 10);
+        reqParams.boto3['HostedZoneConfig'] = {
+            'Comment': getPipeSplitField(requestBody, 11)
+        };
+        reqParams.cli['--hosted-zone-config'] = {
+            'Comment': getPipeSplitField(requestBody, 11)
+        };
+        reqParams.boto3['CallerReference'] = getPipeSplitField(requestBody, 12);
+        reqParams.cli['--caller-reference'] = getPipeSplitField(requestBody, 12);
+
+        reqParams.cfn['Name'] = getPipeSplitField(requestBody, 10);
+        reqParams.cfn['HostedZoneConfig'] = {
+            'Comment': getPipeSplitField(requestBody, 11)
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'CreateHostedZone',
+                'boto3': 'create_hosted_zone',
+                'cli': 'create-hosted-zone'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+
+        tracked_resources.push({
+            'region': region,
+            'service': 'route53',
+            'type': 'AWS::Route53::HostedZone',
+            'options': reqParams,
+            'requestId': details.requestId,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+
+    // autogen:route53:route53.ListGeoLocations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listGeoLocationDetails") {
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'ListGeoLocations',
+                'boto3': 'list_geo_locations',
+                'cli': 'list-geo-locations'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.ListHealthChecks
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listHealthChecks") {
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'ListHealthChecks',
+                'boto3': 'list_health_checks',
+                'cli': 'list-health-checks'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.DeleteHostedZone
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "deleteHostedZone") {
+        reqParams.boto3['Id'] = getPipeSplitField(requestBody, 10);
+        reqParams.cli['--id'] = getPipeSplitField(requestBody, 10);
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'DeleteHostedZone',
+                'boto3': 'delete_hosted_zone',
+                'cli': 'delete-hosted-zone'
+            },
+            'options': reqParams,
+            'requestId': details.requestId
+        });
+        
+        return {};
+    }
+
+
 }
