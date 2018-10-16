@@ -8,12 +8,12 @@
     "scripts": ["bg.js"]
   },
   "icons": {
-    "128": "assets/icon-128.png"
+    "128": "icon-128.png"
   },
   "browser_action": {
     "browser_style": false,
     "default_icon": {
-      "128": "assets/icon-128.png"
+      "128": "icon-128.png"
     },
     "default_popup": "popup.html"
   },
