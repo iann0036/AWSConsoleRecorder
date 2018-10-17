@@ -6,9 +6,10 @@
 
 :exclamation: **CAUTION:** This project is currently in alpha stages. Many components may not work as expected.
 
+
 ## Installation
 
-You can download the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/awsconsolerecorder/djhgeeodemlfdpmcccdekfalbhllcoim) or load the extension manually.
+You can download the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/awsconsolerecorder/tobecompleted) or load the extension manually.
 
 ## Usage
 
