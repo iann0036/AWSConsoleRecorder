@@ -2,6 +2,7 @@
 
 > Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation template.
 
+
 ![Screenshot](assets/screen1.png)
 
 :exclamation: **CAUTION:** This project is currently in alpha stages. Many components may not work as expected.
@@ -13,7 +14,7 @@ You can download the extension from the [Chrome Web Store](https://chrome.google
 
 ## Usage
 
-You can click the orange Console Recorder for AWS icon in the top-right corner of your Chrome window. If you do not see it, you may find it by clicking the three vertical dots and checking the top row. Once the popup is presented, click the **Start Recording** button.
+Click the orange _Console Recorder for AWS_ icon in the top-right corner of your Chrome window. If you do not see it, you may find it by clicking the three vertical dots and checking the top row. Once the popup is presented, click the **Start Recording** button.
 
 ![Screenshot](assets/screen2.png)
 
