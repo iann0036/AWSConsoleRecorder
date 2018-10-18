@@ -15098,5 +15098,1165 @@ function analyseRequest(details) {
             }
         }
     }
+
+    // autogen:waf:waf.ListIPSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListIPSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListIPSets',
+                'boto3': 'list_ip_sets',
+                'cli': 'list-ip-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
         
+        return {};
+    }
+
+    // autogen:waf:waf.ListSqlInjectionMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSqlInjectionMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListSqlInjectionMatchSets',
+                'boto3': 'list_sql_injection_match_sets',
+                'cli': 'list-sql-injection-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListSizeConstraintSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSizeConstraintSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListSizeConstraintSets',
+                'boto3': 'list_size_constraint_sets',
+                'cli': 'list-size-constraint-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListXssMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListXssMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListXssMatchSets',
+                'boto3': 'list_xss_match_sets',
+                'cli': 'list-xss-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListGeoMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListGeoMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListGeoMatchSets',
+                'boto3': 'list_geo_match_sets',
+                'cli': 'list-geo-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListByteMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListByteMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListByteMatchSets',
+                'boto3': 'list_byte_match_sets',
+                'cli': 'list-byte-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListRegexMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRegexMatchSets") {
+        reqParams.boto3['NextMarker'] = jsonRequestBody.content.NextMarker;
+        reqParams.cli['--next-marker'] = jsonRequestBody.content.NextMarker;
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListRegexMatchSets',
+                'boto3': 'list_regex_match_sets',
+                'cli': 'list-regex-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.GetChangeToken
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.GetChangeToken") {
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'GetChangeToken',
+                'boto3': 'get_change_token',
+                'cli': 'get-change-token'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateXssMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateXssMatchSet',
+                'boto3': 'create_xss_match_set',
+                'cli': 'create-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::XssMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateXssMatchSet") {
+        reqParams.boto3['XssMatchSetId'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.cli['--xss-match-set-id'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateXssMatchSet',
+                'boto3': 'update_xss_match_set',
+                'cli': 'update-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateIPSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateIPSet',
+                'boto3': 'create_ip_set',
+                'cli': 'create-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::IPSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateIPSet") {
+        reqParams.boto3['IPSetId'] = jsonRequestBody.content.IPSetId;
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.content.IPSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateIPSet',
+                'boto3': 'update_ip_set',
+                'cli': 'update-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSizeConstraintSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateSizeConstraintSet',
+                'boto3': 'create_size_constraint_set',
+                'cli': 'create-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::SizeConstraintSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSizeConstraintSet") {
+        reqParams.boto3['SizeConstraintSetId'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.cli['--size-constraint-set-id'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateSizeConstraintSet',
+                'boto3': 'update_size_constraint_set',
+                'cli': 'update-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRules") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListRules',
+                'boto3': 'list_rules',
+                'cli': 'list-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListRateBasedRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRateBasedRules") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListRateBasedRules',
+                'boto3': 'list_rate_based_rules',
+                'cli': 'list-rate-based-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListSubscribedRuleGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSubscribedRuleGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListSubscribedRuleGroups',
+                'boto3': 'list_subscribed_rule_groups',
+                'cli': 'list-subscribed-rule-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.ListRuleGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRuleGroups") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'ListRuleGroups',
+                'boto3': 'list_rule_groups',
+                'cli': 'list-rule-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSqlInjectionMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateSqlInjectionMatchSet',
+                'boto3': 'create_sql_injection_match_set',
+                'cli': 'create-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::SqlInjectionMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSqlInjectionMatchSet") {
+        reqParams.boto3['SqlInjectionMatchSetId'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.cli['--sql-injection-match-set-id'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateSqlInjectionMatchSet',
+                'boto3': 'update_sql_injection_match_set',
+                'cli': 'update-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateRule") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cli['--metric-name'] = jsonRequestBody.content.MetricName;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+        reqParams.cfn['MetricName'] = jsonRequestBody.content.MetricName;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateRule',
+                'boto3': 'create_rule',
+                'cli': 'create-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::Rule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateRule") {
+        reqParams.boto3['RuleId'] = jsonRequestBody.content.RuleId;
+        reqParams.cli['--rule-id'] = jsonRequestBody.content.RuleId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateRule',
+                'boto3': 'update_rule',
+                'cli': 'update-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateWebACL
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateWebACL") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cli['--metric-name'] = jsonRequestBody.content.MetricName;
+        reqParams.boto3['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+        reqParams.cli['--default-action'] = jsonRequestBody.content.DefaultAction;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+        reqParams.cfn['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cfn['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateWebACL',
+                'boto3': 'create_web_acl',
+                'cli': 'create-web-acl'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::WebACL',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateWebACL
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateWebACL") {
+        reqParams.boto3['WebACLId'] = jsonRequestBody.content.WebACLId;
+        reqParams.cli['--web-acl-id'] = jsonRequestBody.content.WebACLId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+        reqParams.boto3['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+        reqParams.cli['--default-action'] = jsonRequestBody.content.DefaultAction;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateWebACL',
+                'boto3': 'update_web_acl',
+                'cli': 'update-web-acl'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteXssMatchSet") {
+        reqParams.boto3['XssMatchSetId'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.cli['--xss-match-set-id'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteXssMatchSet',
+                'boto3': 'delete_xss_match_set',
+                'cli': 'delete-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteIPSet") {
+        reqParams.boto3['IPSetId'] = jsonRequestBody.content.IPSetId;
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.content.IPSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteIPSet',
+                'boto3': 'delete_ip_set',
+                'cli': 'delete-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSizeConstraintSet") {
+        reqParams.boto3['SizeConstraintSetId'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.cli['--size-constraint-set-id'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteSizeConstraintSet',
+                'boto3': 'delete_size_constraint_set',
+                'cli': 'delete-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSqlInjectionMatchSet") {
+        reqParams.boto3['SqlInjectionMatchSetId'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.cli['--sql-injection-match-set-id'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteSqlInjectionMatchSet',
+                'boto3': 'delete_sql_injection_match_set',
+                'cli': 'delete-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteRule") {
+        reqParams.boto3['RuleId'] = jsonRequestBody.content.RuleId;
+        reqParams.cli['--rule-id'] = jsonRequestBody.content.RuleId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteRule',
+                'boto3': 'delete_rule',
+                'cli': 'delete-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.CreateByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateByteMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'CreateByteMatchSet',
+                'boto3': 'create_byte_match_set',
+                'cli': 'create-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf', details.requestId),
+            'region': region,
+            'service': 'waf',
+            'type': 'AWS::WAF::ByteMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.UpdateByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateByteMatchSet") {
+        reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.cli['--byte-match-set-id'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'UpdateByteMatchSet',
+                'boto3': 'update_byte_match_set',
+                'cli': 'update-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf.DeleteByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteByteMatchSet") {
+        reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.cli['--byte-match-set-id'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf',
+            'method': {
+                'api': 'DeleteByteMatchSet',
+                'boto3': 'delete_byte_match_set',
+                'cli': 'delete-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.DescribeCrossAccountAccessRole
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeCrossAccountAccessRole") {
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'DescribeCrossAccountAccessRole',
+                'boto3': 'describe_cross_account_access_role',
+                'cli': 'describe-cross-account-access-role'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.ListAssessmentTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.content.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'ListAssessmentTargets',
+                'boto3': 'list_assessment_targets',
+                'cli': 'list-assessment-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.ListRulesPackages
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListRulesPackages") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.content.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'ListRulesPackages',
+                'boto3': 'list_rules_packages',
+                'cli': 'list-rules-packages'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.DescribeRulesPackages
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeRulesPackages") {
+        reqParams.boto3['RulesPackageArns'] = jsonRequestBody.content.rulesPackageArns;
+        reqParams.cli['--rules-package-arns'] = jsonRequestBody.content.rulesPackageArns;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'DescribeRulesPackages',
+                'boto3': 'describe_rules_packages',
+                'cli': 'describe-rules-packages'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.RegisterCrossAccountAccessRole
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/RegisterCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.RegisterCrossAccountAccessRole") {
+        reqParams.boto3['RoleArn'] = jsonRequestBody.content.roleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.content.roleArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'RegisterCrossAccountAccessRole',
+                'boto3': 'register_cross_account_access_role',
+                'cli': 'register-cross-account-access-role'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.CreateAssessmentTarget
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateAssessmentTarget$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTarget") {
+        reqParams.boto3['AssessmentTargetName'] = jsonRequestBody.content.assessmentTargetName;
+        reqParams.cli['--assessment-target-name'] = jsonRequestBody.content.assessmentTargetName;
+
+        reqParams.cfn['AssessmentTargetName'] = jsonRequestBody.content.assessmentTargetName;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'CreateAssessmentTarget',
+                'boto3': 'create_assessment_target',
+                'cli': 'create-assessment-target'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('inspector', details.requestId),
+            'region': region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::AssessmentTarget',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.ListAssessmentTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.content.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'ListAssessmentTargets',
+                'boto3': 'list_assessment_targets',
+                'cli': 'list-assessment-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.CreateAssessmentTemplate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateAssessmentTemplate$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTemplate") {
+        reqParams.boto3['AssessmentTemplateName'] = jsonRequestBody.content.assessmentTemplateName;
+        reqParams.cli['--assessment-template-name'] = jsonRequestBody.content.assessmentTemplateName;
+        reqParams.boto3['AssessmentTargetArn'] = jsonRequestBody.content.assessmentTargetArn;
+        reqParams.cli['--assessment-target-arn'] = jsonRequestBody.content.assessmentTargetArn;
+        reqParams.boto3['DurationInSeconds'] = jsonRequestBody.content.durationInSeconds;
+        reqParams.cli['--duration-in-seconds'] = jsonRequestBody.content.durationInSeconds;
+        reqParams.boto3['RulesPackageArns'] = jsonRequestBody.content.rulesPackageArns;
+        reqParams.cli['--rules-package-arns'] = jsonRequestBody.content.rulesPackageArns;
+
+        reqParams.cfn['AssessmentTemplateName'] = jsonRequestBody.content.assessmentTemplateName;
+        reqParams.cfn['AssessmentTargetArn'] = jsonRequestBody.content.assessmentTargetArn;
+        reqParams.cfn['DurationInSeconds'] = jsonRequestBody.content.durationInSeconds;
+        reqParams.cfn['RulesPackageArns'] = jsonRequestBody.content.rulesPackageArns;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'CreateAssessmentTemplate',
+                'boto3': 'create_assessment_template',
+                'cli': 'create-assessment-template'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('inspector', details.requestId),
+            'region': region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::AssessmentTemplate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.DescribeAssessmentTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeAssessmentTargets") {
+        reqParams.boto3['AssessmentTargetArns'] = jsonRequestBody.content.assessmentTargetArns;
+        reqParams.cli['--assessment-target-arns'] = jsonRequestBody.content.assessmentTargetArns;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'DescribeAssessmentTargets',
+                'boto3': 'describe_assessment_targets',
+                'cli': 'describe-assessment-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.ListAssessmentTemplates
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTemplates$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTemplates") {
+        reqParams.boto3['AssessmentTargetArns'] = jsonRequestBody.content.assessmentTargetArns;
+        reqParams.cli['--assessment-target-arns'] = jsonRequestBody.content.assessmentTargetArns;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.content.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'ListAssessmentTemplates',
+                'boto3': 'list_assessment_templates',
+                'cli': 'list-assessment-templates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:events.PutRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutRule") {
+        reqParams.boto3['Description'] = jsonRequestBody.content.Description;
+        reqParams.cli['--description'] = jsonRequestBody.content.Description;
+        reqParams.boto3['ScheduleExpression'] = jsonRequestBody.content.ScheduleExpression;
+        reqParams.cli['--schedule-expression'] = jsonRequestBody.content.ScheduleExpression;
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutRule',
+                'boto3': 'put_rule',
+                'cli': 'put-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:events.PutTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutTargets") {
+        reqParams.boto3['Rule'] = jsonRequestBody.content.Rule;
+        reqParams.cli['--rule'] = jsonRequestBody.content.Rule;
+        reqParams.boto3['Targets'] = jsonRequestBody.content.Targets;
+        reqParams.cli['--targets'] = jsonRequestBody.content.Targets;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutTargets',
+                'boto3': 'put_targets',
+                'cli': 'put-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:events.ListRuleNamesByTarget
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.ListRuleNamesByTarget") {
+        reqParams.boto3['TargetArn'] = jsonRequestBody.content.TargetArn;
+        reqParams.cli['--target-arn'] = jsonRequestBody.content.TargetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'ListRuleNamesByTarget',
+                'boto3': 'list_rule_names_by_target',
+                'cli': 'list-rule-names-by-target'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:events.DescribeRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.DescribeRule") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'DescribeRule',
+                'boto3': 'describe_rule',
+                'cli': 'describe-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.ListEventSubscriptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListEventSubscriptions$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListEventSubscriptions") {
+        reqParams.boto3['ResourceArn'] = jsonRequestBody.content.resourceArn;
+        reqParams.cli['--resource-arn'] = jsonRequestBody.content.resourceArn;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.content.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'ListEventSubscriptions',
+                'boto3': 'list_event_subscriptions',
+                'cli': 'list-event-subscriptions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:inspector:inspector.CreateResourceGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateResourceGroup$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateResourceGroup") {
+        reqParams.boto3['ResourceGroupTags'] = jsonRequestBody.content.resourceGroupTags;
+        reqParams.cli['--resource-group-tags'] = jsonRequestBody.content.resourceGroupTags;
+
+        reqParams.cfn['ResourceGroupTags'] = jsonRequestBody.content.resourceGroupTags;
+
+        outputs.push({
+            'region': region,
+            'service': 'inspector',
+            'method': {
+                'api': 'CreateResourceGroup',
+                'boto3': 'create_resource_group',
+                'cli': 'create-resource-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('inspector', details.requestId),
+            'region': region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::ResourceGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
