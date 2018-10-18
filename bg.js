@@ -361,16 +361,6 @@ ${service}.${method}(${params});${was_blocked ? ' // blocked' : ''}`;
     return output;
 }
 
-function genRandomChars() {
-    var text = "";
-    var possible = "abcdefghijklmnopqrstuvwxyz";
-  
-    for (var i = 0; i < 6; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-}
-
 function getResourceName(service, requestId) {
     return service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
 }
@@ -14234,5 +14224,879 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:opsworks:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-availability\-zones\?/g)) {
 
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-vpcs\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-subnets\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.CreateStack
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-stack\?/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+        reqParams.boto3['DefaultOs'] = jsonRequestBody.DefaultOs;
+        reqParams.cli['--default-os'] = jsonRequestBody.DefaultOs;
+        reqParams.boto3['DefaultRootDeviceType'] = jsonRequestBody.DefaultRootDeviceType;
+        reqParams.cli['--default-root-device-type'] = jsonRequestBody.DefaultRootDeviceType;
+        reqParams.boto3['HostnameTheme'] = jsonRequestBody.HostnameTheme;
+        reqParams.cli['--hostname-theme'] = jsonRequestBody.HostnameTheme;
+        reqParams.boto3['UseCustomCookbooks'] = jsonRequestBody.UseCustomCookbooks;
+        reqParams.cli['--use-custom-cookbooks'] = jsonRequestBody.UseCustomCookbooks;
+        reqParams.boto3['CustomJson'] = jsonRequestBody.CustomJson;
+        reqParams.cli['--custom-json'] = jsonRequestBody.CustomJson;
+        reqParams.boto3['UseOpsworksSecurityGroups'] = jsonRequestBody.UseOpsworksSecurityGroups;
+        reqParams.cli['--use-opsworks-security-groups'] = jsonRequestBody.UseOpsworksSecurityGroups;
+        reqParams.boto3['ConfigurationManager'] = jsonRequestBody.ConfigurationManager;
+        reqParams.cli['--configuration-manager'] = jsonRequestBody.ConfigurationManager;
+        reqParams.boto3['Name'] = jsonRequestBody.ConfigurationManager.Name;
+        reqParams.cli['--name'] = jsonRequestBody.ConfigurationManager.Name;
+        reqParams.boto3['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cli['--attributes'] = jsonRequestBody.Attributes;
+        reqParams.boto3['Region'] = jsonRequestBody.Region;
+        reqParams.cli['--region'] = jsonRequestBody.Region;
+        reqParams.boto3['CustomCookbooksSource'] = jsonRequestBody.CustomCookbooksSource;
+        reqParams.cli['--custom-cookbooks-source'] = jsonRequestBody.CustomCookbooksSource;
+        reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
+        reqParams.boto3['DefaultSshKeyName'] = jsonRequestBody.DefaultSshKeyName;
+        reqParams.cli['--default-ssh-key-name'] = jsonRequestBody.DefaultSshKeyName;
+        reqParams.boto3['DefaultSubnetId'] = jsonRequestBody.DefaultSubnetId;
+        reqParams.cli['--default-subnet-id'] = jsonRequestBody.DefaultSubnetId;
+        reqParams.boto3['ServiceRoleArn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.cli['--service-role-arn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.boto3['DefaultInstanceProfileArn'] = jsonRequestBody.DefaultInstanceProfileArn;
+        reqParams.cli['--default-instance-profile-arn'] = jsonRequestBody.DefaultInstanceProfileArn;
+        reqParams.boto3['AgentVersion'] = jsonRequestBody.AgentVersion;
+        reqParams.cli['--agent-version'] = jsonRequestBody.AgentVersion;
+
+        reqParams.cfn['Name'] = jsonRequestBody.Name;
+        reqParams.cfn['DefaultOs'] = jsonRequestBody.DefaultOs;
+        reqParams.cfn['DefaultRootDeviceType'] = jsonRequestBody.DefaultRootDeviceType;
+        reqParams.cfn['HostnameTheme'] = jsonRequestBody.HostnameTheme;
+        reqParams.cfn['UseCustomCookbooks'] = jsonRequestBody.UseCustomCookbooks;
+        reqParams.cfn['CustomJson'] = jsonRequestBody.CustomJson;
+        reqParams.cfn['UseOpsworksSecurityGroups'] = jsonRequestBody.UseOpsworksSecurityGroups;
+        reqParams.cfn['ConfigurationManager'] = jsonRequestBody.ConfigurationManager;
+        reqParams.cfn['Name'] = jsonRequestBody.ConfigurationManager.Name;
+        reqParams.cfn['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cfn['CustomCookbooksSource'] = jsonRequestBody.CustomCookbooksSource;
+        reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cfn['DefaultSshKeyName'] = jsonRequestBody.DefaultSshKeyName;
+        reqParams.cfn['DefaultSubnetId'] = jsonRequestBody.DefaultSubnetId;
+        reqParams.cfn['ServiceRoleArn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.cfn['DefaultInstanceProfileArn'] = jsonRequestBody.DefaultInstanceProfileArn;
+        reqParams.cfn['AgentVersion'] = jsonRequestBody.AgentVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'CreateStack',
+                'boto3': 'create_stack',
+                'cli': 'create-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Stack',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.CreateApp
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-app\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+        reqParams.boto3['Type'] = jsonRequestBody.Type;
+        reqParams.cli['--type'] = jsonRequestBody.Type;
+        reqParams.boto3['AppSource'] = jsonRequestBody.AppSource;
+        reqParams.cli['--app-source'] = jsonRequestBody.AppSource;
+        reqParams.boto3['EnableSsl'] = jsonRequestBody.EnableSsl;
+        reqParams.cli['--enable-ssl'] = jsonRequestBody.EnableSsl;
+        reqParams.boto3['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cli['--attributes'] = jsonRequestBody.Attributes;
+        reqParams.boto3['Domains'] = jsonRequestBody.Domains;
+        reqParams.cli['--domains'] = jsonRequestBody.Domains;
+        reqParams.boto3['Environment'] = jsonRequestBody.Environment;
+        reqParams.cli['--environment'] = jsonRequestBody.Environment;
+        reqParams.boto3['DataSources'] = jsonRequestBody.DataSources;
+        reqParams.cli['--data-sources'] = jsonRequestBody.DataSources;
+
+        reqParams.cfn['StackId'] = jsonRequestBody.StackId;
+        reqParams.cfn['Name'] = jsonRequestBody.Name;
+        reqParams.cfn['Type'] = jsonRequestBody.Type;
+        reqParams.cfn['AppSource'] = jsonRequestBody.AppSource;
+        reqParams.cfn['EnableSsl'] = jsonRequestBody.EnableSsl;
+        reqParams.cfn['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cfn['Domains'] = jsonRequestBody.Domains;
+        reqParams.cfn['Environment'] = jsonRequestBody.Environment;
+        reqParams.cfn['DataSources'] = jsonRequestBody.DataSources;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'CreateApp',
+                'boto3': 'create_app',
+                'cli': 'create-app'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::App',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.CreateLayer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-layer\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+        reqParams.boto3['Type'] = jsonRequestBody.Type;
+        reqParams.cli['--type'] = jsonRequestBody.Type;
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+        reqParams.boto3['Shortname'] = jsonRequestBody.Shortname;
+        reqParams.cli['--shortname'] = jsonRequestBody.Shortname;
+        reqParams.boto3['AutoAssignPublicIps'] = jsonRequestBody.AutoAssignPublicIps;
+        reqParams.cli['--auto-assign-public-ips'] = jsonRequestBody.AutoAssignPublicIps;
+        reqParams.boto3['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cli['--attributes'] = jsonRequestBody.Attributes;
+        reqParams.boto3['UseEbsOptimizedInstances'] = jsonRequestBody.UseEbsOptimizedInstances;
+        reqParams.cli['--use-ebs-optimized-instances'] = jsonRequestBody.UseEbsOptimizedInstances;
+        reqParams.boto3['AutoAssignElasticIps'] = jsonRequestBody.AutoAssignElasticIps;
+        reqParams.cli['--auto-assign-elastic-ips'] = jsonRequestBody.AutoAssignElasticIps;
+        reqParams.boto3['CustomRecipes'] = jsonRequestBody.CustomRecipes;
+        reqParams.cli['--custom-recipes'] = jsonRequestBody.CustomRecipes;
+        reqParams.boto3['EnableAutoHealing'] = jsonRequestBody.EnableAutoHealing;
+        reqParams.cli['--enable-auto-healing'] = jsonRequestBody.EnableAutoHealing;
+
+        reqParams.cfn['StackId'] = jsonRequestBody.StackId;
+        reqParams.cfn['Type'] = jsonRequestBody.Type;
+        reqParams.cfn['Name'] = jsonRequestBody.Name;
+        reqParams.cfn['Shortname'] = jsonRequestBody.Shortname;
+        reqParams.cfn['AutoAssignPublicIps'] = jsonRequestBody.AutoAssignPublicIps;
+        reqParams.cfn['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cfn['AutoAssignElasticIps'] = jsonRequestBody.AutoAssignElasticIps;
+        reqParams.cfn['CustomRecipes'] = jsonRequestBody.CustomRecipes;
+        reqParams.cfn['EnableAutoHealing'] = jsonRequestBody.EnableAutoHealing;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'CreateLayer',
+                'boto3': 'create_layer',
+                'cli': 'create-layer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Layer',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.CreateInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-instance\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+        reqParams.boto3['LayerIds'] = jsonRequestBody.LayerIds;
+        reqParams.cli['--layer-ids'] = jsonRequestBody.LayerIds;
+        reqParams.boto3['Hostname'] = jsonRequestBody.Hostname;
+        reqParams.cli['--hostname'] = jsonRequestBody.Hostname;
+        reqParams.boto3['Os'] = jsonRequestBody.Os;
+        reqParams.cli['--os'] = jsonRequestBody.Os;
+        reqParams.boto3['SshKeyName'] = jsonRequestBody.SshKeyName;
+        reqParams.cli['--ssh-key-name'] = jsonRequestBody.SshKeyName;
+        reqParams.boto3['RootDeviceType'] = jsonRequestBody.RootDeviceType;
+        reqParams.cli['--root-device-type'] = jsonRequestBody.RootDeviceType;
+        reqParams.boto3['Architecture'] = jsonRequestBody.Architecture;
+        reqParams.cli['--architecture'] = jsonRequestBody.Architecture;
+        reqParams.boto3['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.InstanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.InstanceType;
+
+        reqParams.cfn['StackId'] = jsonRequestBody.StackId;
+        reqParams.cfn['LayerIds'] = jsonRequestBody.LayerIds;
+        reqParams.cfn['Hostname'] = jsonRequestBody.Hostname;
+        reqParams.cfn['Os'] = jsonRequestBody.Os;
+        reqParams.cfn['SshKeyName'] = jsonRequestBody.SshKeyName;
+        reqParams.cfn['RootDeviceType'] = jsonRequestBody.RootDeviceType;
+        reqParams.cfn['Architecture'] = jsonRequestBody.Architecture;
+        reqParams.cfn['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'CreateInstance',
+                'boto3': 'create_instance',
+                'cli': 'create-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Instance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DescribeLayers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-layers\?region=ap\-southeast\-2$/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DescribeLayers',
+                'boto3': 'describe_layers',
+                'cli': 'describe-layers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.UpdateLayer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/update\-layer\?/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+        reqParams.boto3['Shortname'] = jsonRequestBody.Shortname;
+        reqParams.cli['--shortname'] = jsonRequestBody.Shortname;
+        reqParams.boto3['AutoAssignPublicIps'] = jsonRequestBody.AutoAssignPublicIps;
+        reqParams.cli['--auto-assign-public-ips'] = jsonRequestBody.AutoAssignPublicIps;
+        reqParams.boto3['Attributes'] = jsonRequestBody.Attributes;
+        reqParams.cli['--attributes'] = jsonRequestBody.Attributes;
+        reqParams.boto3['UseEbsOptimizedInstances'] = jsonRequestBody.UseEbsOptimizedInstances;
+        reqParams.cli['--use-ebs-optimized-instances'] = jsonRequestBody.UseEbsOptimizedInstances;
+        reqParams.boto3['CustomInstanceProfileArn'] = jsonRequestBody.CustomInstanceProfileArn;
+        reqParams.cli['--custom-instance-profile-arn'] = jsonRequestBody.CustomInstanceProfileArn;
+        reqParams.boto3['AutoAssignElasticIps'] = jsonRequestBody.AutoAssignElasticIps;
+        reqParams.cli['--auto-assign-elastic-ips'] = jsonRequestBody.AutoAssignElasticIps;
+        reqParams.boto3['CloudWatchLogsConfiguration'] = jsonRequestBody.CloudWatchLogsConfiguration;
+        reqParams.cli['--cloud-watch-logs-configuration'] = jsonRequestBody.CloudWatchLogsConfiguration;
+        reqParams.boto3['CustomRecipes'] = jsonRequestBody.CustomRecipes;
+        reqParams.cli['--custom-recipes'] = jsonRequestBody.CustomRecipes;
+        reqParams.boto3['CustomSecurityGroupIds'] = jsonRequestBody.CustomSecurityGroupIds;
+        reqParams.cli['--custom-security-group-ids'] = jsonRequestBody.CustomSecurityGroupIds;
+        reqParams.boto3['EnableAutoHealing'] = jsonRequestBody.EnableAutoHealing;
+        reqParams.cli['--enable-auto-healing'] = jsonRequestBody.EnableAutoHealing;
+        reqParams.boto3['LayerId'] = jsonRequestBody.LayerId;
+        reqParams.cli['--layer-id'] = jsonRequestBody.LayerId;
+        reqParams.boto3['LifecycleEventConfiguration'] = jsonRequestBody.LifecycleEventConfiguration;
+        reqParams.cli['--lifecycle-event-configuration'] = jsonRequestBody.LifecycleEventConfiguration;
+        reqParams.boto3['Packages'] = jsonRequestBody.Packages;
+        reqParams.cli['--packages'] = jsonRequestBody.Packages;
+        reqParams.boto3['VolumeConfigurations'] = jsonRequestBody.VolumeConfigurations;
+        reqParams.cli['--volume-configurations'] = jsonRequestBody.VolumeConfigurations;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'UpdateLayer',
+                'boto3': 'update_layer',
+                'cli': 'update-layer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.RegisterVolume
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/register\-volume\?/g)) {
+        reqParams.boto3['Ec2VolumeId'] = jsonRequestBody.Ec2VolumeId;
+        reqParams.cli['--ec-2-volume-id'] = jsonRequestBody.Ec2VolumeId;
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        reqParams.cfn['Ec2VolumeId'] = jsonRequestBody.Ec2VolumeId;
+        reqParams.cfn['StackId'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'RegisterVolume',
+                'boto3': 'register_volume',
+                'cli': 'register-volume'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Volume',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DescribeVolumes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-volumes\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DescribeVolumes',
+                'boto3': 'describe_volumes',
+                'cli': 'describe-volumes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.CreateUserProfile
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-user\-profile\?/g)) {
+        reqParams.boto3['IamUserArn'] = jsonRequestBody.IamUserArn;
+        reqParams.cli['--iam-user-arn'] = jsonRequestBody.IamUserArn;
+        reqParams.boto3['SshPublicKey'] = jsonRequestBody.SshPublicKey;
+        reqParams.cli['--ssh-public-key'] = jsonRequestBody.SshPublicKey;
+        reqParams.boto3['AllowSelfManagement'] = jsonRequestBody.AllowSelfManagement;
+        reqParams.cli['--allow-self-management'] = jsonRequestBody.AllowSelfManagement;
+
+        reqParams.cfn['IamUserArn'] = jsonRequestBody.IamUserArn;
+        reqParams.cfn['SshPublicKey'] = jsonRequestBody.SshPublicKey;
+        reqParams.cfn['AllowSelfManagement'] = jsonRequestBody.AllowSelfManagement;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'CreateUserProfile',
+                'boto3': 'create_user_profile',
+                'cli': 'create-user-profile'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::UserProfile',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DescribeElasticLoadBalancers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-elastic\-load\-balancers\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DescribeElasticLoadBalancers',
+                'boto3': 'describe_elastic_load_balancers',
+                'cli': 'describe-elastic-load-balancers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.AttachElasticLoadBalancer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/attach\-elastic\-load\-balancer\?/g)) {
+        reqParams.boto3['ElasticLoadBalancerName'] = jsonRequestBody.ElasticLoadBalancerName;
+        reqParams.cli['--elastic-load-balancer-name'] = jsonRequestBody.ElasticLoadBalancerName;
+        reqParams.boto3['LayerId'] = jsonRequestBody.LayerId;
+        reqParams.cli['--layer-id'] = jsonRequestBody.LayerId;
+
+        reqParams.cfn['ElasticLoadBalancerName'] = jsonRequestBody.ElasticLoadBalancerName;
+        reqParams.cfn['LayerId'] = jsonRequestBody.LayerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'AttachElasticLoadBalancer',
+                'boto3': 'attach_elastic_load_balancer',
+                'cli': 'attach-elastic-load-balancer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::ElasticLoadBalancerAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DeleteInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-instance\?/g)) {
+        reqParams.boto3['InstanceId'] = jsonRequestBody.InstanceId;
+        reqParams.cli['--instance-id'] = jsonRequestBody.InstanceId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DeleteInstance',
+                'boto3': 'delete_instance',
+                'cli': 'delete-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:elb.DeleteLoadBalancer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteLoadBalancer\?/g)) {
+        reqParams.boto3['LoadBalancerName'] = jsonRequestBody.loadBalancerName;
+        reqParams.cli['--load-balancer-name'] = jsonRequestBody.loadBalancerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'elb',
+            'method': {
+                'api': 'DeleteLoadBalancer',
+                'boto3': 'delete_load_balancer',
+                'cli': 'delete-load-balancer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DetachElasticLoadBalancer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/detach\-elastic\-load\-balancer\?/g)) {
+        reqParams.boto3['ElasticLoadBalancerName'] = jsonRequestBody.ElasticLoadBalancerName;
+        reqParams.cli['--elastic-load-balancer-name'] = jsonRequestBody.ElasticLoadBalancerName;
+        reqParams.boto3['LayerId'] = jsonRequestBody.LayerId;
+        reqParams.cli['--layer-id'] = jsonRequestBody.LayerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DetachElasticLoadBalancer',
+                'boto3': 'detach_elastic_load_balancer',
+                'cli': 'detach-elastic-load-balancer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DeleteLayer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-layer\?/g)) {
+        reqParams.boto3['LayerId'] = jsonRequestBody.LayerId;
+        reqParams.cli['--layer-id'] = jsonRequestBody.LayerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DeleteLayer',
+                'boto3': 'delete_layer',
+                'cli': 'delete-layer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DeleteApp
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-app\?/g)) {
+        reqParams.boto3['AppId'] = jsonRequestBody.AppId;
+        reqParams.cli['--app-id'] = jsonRequestBody.AppId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DeleteApp',
+                'boto3': 'delete_app',
+                'cli': 'delete-app'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DeleteStack
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-stack\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DeleteStack',
+                'boto3': 'delete_stack',
+                'cli': 'delete-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:redshift:ec2.DescribeSecurityGroups
+    // autogen:redshift:ec2.DescribeAddresses
+    // autogen:redshift:redshift.DescribeClusterParameterGroups
+    // autogen:redshift:redshift.DescribeClusterSubnetGroups
+    // autogen:redshift:ec2.DescribeVpcs
+    // autogen:redshift:sns.ListTopics
+    // autogen:redshift:redshift.CreateCluster
+    // autogen:redshift:redshift.CreateClusterParameterGroup
+    // autogen:redshift:redshift.CreateClusterSubnetGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/redshift\/rpc$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+            if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "EC2.DescribeAddressesDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeAddresses',
+                        'boto3': 'describe_addresses',
+                        'cli': 'describe-addresses'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ParamGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'redshift',
+                    'method': {
+                        'api': 'DescribeClusterParameterGroups',
+                        'boto3': 'describe_cluster_parameter_groups',
+                        'cli': 'describe-cluster-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ClusterSubnetGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'redshift',
+                    'method': {
+                        'api': 'DescribeClusterSubnetGroups',
+                        'boto3': 'describe_cluster_subnet_groups',
+                        'cli': 'describe-cluster-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "EC2.DescribeVpcsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeVpcs',
+                        'boto3': 'describe_vpcs',
+                        'cli': 'describe-vpcs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.RedshiftSnsContext.listTopicsWithMaxRecords") {
+                outputs.push({
+                    'region': region,
+                    'service': 'sns',
+                    'method': {
+                        'api': 'ListTopics',
+                        'boto3': 'list_topics',
+                        'cli': 'list-topics'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ClusterContext.create") {
+                reqParams.boto3['AllowVersionUpgrade'] = action['parameters'][0]['allowVersionUpgrade'];
+                reqParams.cli['--allow-version-upgrade'] = action['parameters'][0]['allowVersionUpgrade'];
+                reqParams.boto3['Encrypted'] = action['parameters'][0]['encrypted'];
+                reqParams.cli['--encrypted'] = action['parameters'][0]['encrypted'];
+                reqParams.boto3['EnhancedVpcRouting'] = action['parameters'][0]['enhancedVpcRouting'];
+                reqParams.cli['--enhanced-vpc-routing'] = action['parameters'][0]['enhancedVpcRouting'];
+                reqParams.boto3['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cli['--publicly-accessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.boto3['AutomatedSnapshotRetentionPeriod'] = action['parameters'][0]['automatedSnapshotRetentionPeriod'];
+                reqParams.cli['--automated-snapshot-retention-period'] = action['parameters'][0]['automatedSnapshotRetentionPeriod'];
+                reqParams.boto3['NumberOfNodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.cli['--number-of-nodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                reqParams.cli['--port'] = action['parameters'][0]['port'];
+                reqParams.boto3['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cli['--availability-zone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.boto3['ClusterIdentifier'] = action['parameters'][0]['clusterIdentifier'];
+                reqParams.cli['--cluster-identifier'] = action['parameters'][0]['clusterIdentifier'];
+                reqParams.boto3['ClusterType'] = action['parameters'][0]['clusterType'];
+                reqParams.cli['--cluster-type'] = action['parameters'][0]['clusterType'];
+                reqParams.boto3['ClusterVersion'] = action['parameters'][0]['clusterVersion'];
+                reqParams.cli['--cluster-version'] = action['parameters'][0]['clusterVersion'];
+                reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
+                reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                reqParams.boto3['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cli['--kms-key-id'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.boto3['MaintenanceTrackName'] = action['parameters'][0]['maintenanceTrackName'];
+                reqParams.cli['--maintenance-track-name'] = action['parameters'][0]['maintenanceTrackName'];
+                reqParams.boto3['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.cli['--master-user-password'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.boto3['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                reqParams.cli['--master-username'] = action['parameters'][0]['masterUsername'];
+                reqParams.boto3['NodeType'] = action['parameters'][0]['nodeType'];
+                reqParams.cli['--node-type'] = action['parameters'][0]['nodeType'];
+                reqParams.boto3['IamRoles'] = action['parameters'][0]['iamRoles'];
+                reqParams.cli['--iam-roles'] = action['parameters'][0]['iamRoles'];
+                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                reqParams.cfn['AllowVersionUpgrade'] = action['parameters'][0]['allowVersionUpgrade'];
+                reqParams.cfn['Encrypted'] = action['parameters'][0]['encrypted'];
+                reqParams.cfn['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cfn['AutomatedSnapshotRetentionPeriod'] = action['parameters'][0]['automatedSnapshotRetentionPeriod'];
+                reqParams.cfn['NumberOfNodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.cfn['Port'] = action['parameters'][0]['port'];
+                reqParams.cfn['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cfn['ClusterIdentifier'] = action['parameters'][0]['clusterIdentifier'];
+                reqParams.cfn['ClusterType'] = action['parameters'][0]['clusterType'];
+                reqParams.cfn['ClusterVersion'] = action['parameters'][0]['clusterVersion'];
+                reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                reqParams.cfn['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cfn['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.cfn['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                reqParams.cfn['NodeType'] = action['parameters'][0]['nodeType'];
+                reqParams.cfn['IamRoles'] = action['parameters'][0]['iamRoles'];
+                reqParams.cfn['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'redshift',
+                    'method': {
+                        'api': 'CreateCluster',
+                        'boto3': 'create_cluster',
+                        'cli': 'create-cluster'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', details.requestId),
+                    'region': region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::Cluster',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ParamGroupContext.createClusterParameterGroup") {
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['ParameterGroupFamily'] = action['parameters'][0]['parameterGroupFamily'];
+                reqParams.cli['--parameter-group-family'] = action['parameters'][0]['parameterGroupFamily'];
+                reqParams.boto3['ParameterGroupName'] = action['parameters'][0]['parameterGroupName'];
+                reqParams.cli['--parameter-group-name'] = action['parameters'][0]['parameterGroupName'];
+
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['ParameterGroupFamily'] = action['parameters'][0]['parameterGroupFamily'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'redshift',
+                    'method': {
+                        'api': 'CreateClusterParameterGroup',
+                        'boto3': 'create_cluster_parameter_group',
+                        'cli': 'create-cluster-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', details.requestId),
+                    'region': region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::ClusterParameterGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ClusterSubnetGroupContext.create") {
+                reqParams.boto3['ClusterSubnetGroupName'] = action['parameters'][0]['clusterSubnetGroupName'];
+                reqParams.cli['--cluster-subnet-group-name'] = action['parameters'][0]['clusterSubnetGroupName'];
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
+                reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['SubnetIds'] = action['parameters'][0]['subnetIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'redshift',
+                    'method': {
+                        'api': 'CreateClusterSubnetGroup',
+                        'boto3': 'create_cluster_subnet_group',
+                        'cli': 'create-cluster-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', details.requestId),
+                    'region': region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::ClusterSubnetGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+        }
+    }
+        
 }
