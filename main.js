@@ -74,6 +74,16 @@ window.onload = function(){
             document.getElementById('blocking').checked = false;
         }
     });
+
+    chrome.runtime.sendMessage(null, {
+        "action": "getInterceptStatus"
+    }, null, function(intercept_status){
+        if (intercept_status) {
+            document.getElementById('intercept').checked = true;
+        } else {
+            document.getElementById('intercept').checked = false;
+        }
+    });
 };
 
 document.getElementById('blocking').onchange = function(evt) {
@@ -84,6 +94,18 @@ document.getElementById('blocking').onchange = function(evt) {
     } else {
         chrome.runtime.sendMessage(null, {
             "action": "setBlockingOff"
+        });
+    }
+};
+
+document.getElementById('intercept').onchange = function(evt) {
+    if (evt.target.checked) {
+        chrome.runtime.sendMessage(null, {
+            "action": "setInterceptOn"
+        });
+    } else {
+        chrome.runtime.sendMessage(null, {
+            "action": "setInterceptOff"
         });
     }
 };
