@@ -16259,4 +16259,114 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:budgets:budgets.CreateBudget
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/billing\/budgets\/v1\/budgetsV2\/budget\/create?$/g)) {
+        reqParams.boto3['Budget'] = jsonRequestBody.budget;
+        reqParams.cli['--budget'] = jsonRequestBody.budget;
+        reqParams.boto3['NotificationWithSubscribersList'] = jsonRequestBody.notificationWithSubscribersList;
+        reqParams.cli['--notification-with-subscribers-list'] = jsonRequestBody.notificationWithSubscribersList;
+
+        reqParams.cfn['Budget'] = jsonRequestBody.budget;
+        reqParams.cfn['NotificationsWithSubscribers'] = jsonRequestBody.notificationWithSubscribersList;
+
+        outputs.push({
+            'region': region,
+            'service': 'budgets',
+            'method': {
+                'api': 'CreateBudget',
+                'boto3': 'create_budget',
+                'cli': 'create-budget'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('budgets', details.requestId),
+            'region': region,
+            'service': 'budgets',
+            'type': 'AWS::Budgets::Budget',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:acm:acm-pca.ListCertificateAuthorities
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/list_certificate_authorities\.json$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'acm-pca',
+            'method': {
+                'api': 'ListCertificateAuthorities',
+                'boto3': 'list_certificate_authorities',
+                'cli': 'list-certificate-authorities'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:acm:acm.RequestCertificate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/request_cert\.json$/g)) {
+        reqParams.boto3['DomainName'] = jsonRequestBody.domain_name[0];
+        reqParams.cli['--domain-name'] = jsonRequestBody.domain_name[0];
+        reqParams.boto3['SubjectAlternativeNames'] = jsonRequestBody['domains[]'];
+        reqParams.cli['--subject-alternative-names'] = jsonRequestBody['domains[]'];
+        reqParams.boto3['ValidationMethod'] = jsonRequestBody.validation_method[0];
+        reqParams.cli['--validation-method'] = jsonRequestBody.validation_method[0];
+
+        reqParams.cfn['DomainName'] = jsonRequestBody.domain_name[0];
+        reqParams.cfn['SubjectAlternativeNames'] = jsonRequestBody['domains[]'];
+        reqParams.cfn['ValidationMethod'] = jsonRequestBody.validation_method[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'acm',
+            'method': {
+                'api': 'RequestCertificate',
+                'boto3': 'request_certificate',
+                'cli': 'request-certificate'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('acm', details.requestId),
+            'region': region,
+            'service': 'acm',
+            'type': 'AWS::CertificateManager::Certificate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:acm:acm.DescribeCertificate
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/describe_cert\.json\?/g)) {
+        reqParams.boto3['CertificateArn'] = getUrlValue(details.url, 'arn');
+        reqParams.cli['--certificate-arn'] = getUrlValue(details.url, 'arn');
+
+        outputs.push({
+            'region': region,
+            'service': 'acm',
+            'method': {
+                'api': 'DescribeCertificate',
+                'boto3': 'describe_certificate',
+                'cli': 'describe-certificate'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
 }
