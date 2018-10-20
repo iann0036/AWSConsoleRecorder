@@ -143,6 +143,13 @@ function processCfnParameter(param, spacing, index) {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "!Ref " + tracked_resources[i].logicalId;
                 }
+                if (tracked_resources[i].returnValues.GetAtt) {
+                    for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                            return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
+                        }
+                    }
+                }
             }
         }
 
@@ -904,7 +911,6 @@ function setOutputsForTrackedResource(index) {
                 'Ref': jsonRequestBody.brokerId,
                 'GetAtt': {
                     'Arn': jsonRequestBody.brokerArn
-                    // Missing return values
                 }
             };
         } else if (tracked_resources[index].type == "AWS::AmazonMQ::Configuration") {
@@ -913,6 +919,203 @@ function setOutputsForTrackedResource(index) {
                 'GetAtt': {
                     'Arn': jsonRequestBody.arn,
                     'Revision': jsonRequestBody.latestRevision.revision
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::Account") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::Authorizer") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.id
+            };
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::DocumentationPart") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.id
+            };
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::DomainName") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::GatewayResponse") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::Method") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::Model") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.id
+            };
+        } else if (tracked_resources[index].type == "AWS::ApiGateway::UsagePlan") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.id
+            };
+        } else if (tracked_resources[index].type == "AWS::AppSync::ApiKey") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'ApiKey': jsonRequestBody.apiKey.id
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::AppSync::DataSource") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.dataSource.dataSourceArn,
+                'GetAtt': {
+                    'DataSourceArn': jsonRequestBody.dataSource.dataSourceArn,
+                    'Name': jsonRequestBody.dataSource.name
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::AppSync::GraphQLApi") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.graphqlApi.arn,
+                'GetAtt': {
+                    'GraphQLUrl': jsonRequestBody.graphqlApi.uris.GRAPHQL,
+                    'Arn': jsonRequestBody.graphqlApi.arn,
+                    'ApiId': jsonRequestBody.graphqlApi.apiId
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::AppSync::GraphQLSchema") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ApiId + "GraphQLSchema"
+            };
+        } else if (tracked_resources[index].type == "AWS::AppSync::Resolver") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.resolver.resolverArn,
+                'GetAtt': {
+                    'TypeName': jsonRequestBody.resolver.typeName,
+                    'ResolverArn': jsonRequestBody.resolver.resolverArn,
+                    'FieldName': jsonRequestBody.resolver.fieldName
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Athena::NamedQuery") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.Name
+            };
+        } else if (tracked_resources[index].type == "AWS::AutoScaling::AutoScalingGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.AutoScalingGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::AutoScaling::LaunchConfiguration") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.LaunchConfigurationName
+            };
+        } else if (tracked_resources[index].type == "AWS::AutoScaling::LifecycleHook") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.LifecycleHookName
+            };
+        } else if (tracked_resources[index].type == "AWS::AutoScaling::ScalingPolicy") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.PolicyARN
+            };
+        } else if (tracked_resources[index].type == "AWS::AutoScaling::ScheduledAction") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ScheduledActionName
+            };
+        } else if (tracked_resources[index].type == "AWS::Batch::ComputeEnvironment") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.computeEnvironmentArn
+            };
+        } else if (tracked_resources[index].type == "AWS::Batch::JobDefinition") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.jobDefinitionArn
+            };
+        } else if (tracked_resources[index].type == "AWS::Batch::JobQueue") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.jobQueueArn
+            };
+        } else if (tracked_resources[index].type == "AWS::Budgets::Budget") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::CertificateManager::Certificate") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.certificateArn
+            };
+        } else if (tracked_resources[index].type == "AWS::CloudTrail::Trail") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.TrailName,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.data.trailArn,
+                    'SnsTopicArn': jsonRequestBody.data.snsTopicArn
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::CodeDeploy::Application") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ApplicationName
+            };
+        } else if (tracked_resources[index].type == "AWS::CodeDeploy::DeploymentConfig") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.DeploymentConfigName
+            };
+        } else if (tracked_resources[index].type == "AWS::CodeDeploy::DeploymentGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.DeploymentGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::CodePipeline::Pipeline") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.Name
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::IdentityPool") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'Name': tracked_resources[index].options.cfn.IdentityPoolName
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::UserPool") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.success.data.id,
+                'GetAtt': {
+                    //'ProviderName': jsonRequestBody.success.data.,
+                    //'ProviderURL': jsonRequestBody.success.data.,
+                    'Arn': jsonRequestBody.success.data.arn
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::UserPoolClient") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.success.data.id
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::UserPoolGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.GroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::UserPoolUser") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.Username
+            };
+        } else if (tracked_resources[index].type == "AWS::Cognito::UserPoolUserToGroupAttachment") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::DirectoryService::MicrosoftAD") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.DirectoryId
+            };
+        } else if (tracked_resources[index].type == "AWS::DirectoryService::SimpleAD") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.DirectoryId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::CustomerGateway") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.CustomerGateway.CustomerGatewayId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::EIP") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.PublicIp,
+                'GetAtt': {
+                    'AllocationId': jsonRequestBody.allocationId
+                }
+            };
+        }  else if (tracked_resources[index].type == "AWS::EC2::EIPAssociation") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.associationId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::Instance") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.Instances[0].InstanceId,
+                'GetAtt': {
+                    'AvailabilityZone': jsonRequestBody.Instances[0].Placement.AvailabilityZone,
+                    'PrivateDnsName': jsonRequestBody.Instances[0].PrivateDnsName,
+                    'PublicDnsName': jsonRequestBody.Instances[0].PublicDnsName,
+                    'PrivateIp': jsonRequestBody.Instances[0].PrivateIpAddress
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::SecurityGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.securityGroupId,
+                'GetAtt': {
+                    'GroupId': jsonRequestBody.securityGroupId
                 }
             };
         } else if (tracked_resources[index].type == "AWS::OpsWorks::Stack") {
@@ -932,7 +1135,9 @@ function setOutputsForTrackedResource(index) {
                 'Ref': jsonRequestBody.InstanceId
             };
         }
-    } catch {;}
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 /******/
