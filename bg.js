@@ -93,7 +93,7 @@ function ensureInitDeclaredJs(service, region) {
         declared_services['js'].push(service);
         return `
 
-var ${service} = new AWS.${mappedservice}();
+var ${service} = new AWS.${mappedservice}({region: '${region}'});
 `;
     }
     return '';
@@ -16369,4 +16369,657 @@ function analyseRequest(details) {
         
         return {};
     }
+
+    // autogen:cognito-idp:cognito-idp.ListUserPools
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\?/g)) {
+        reqParams.boto3['NextToken'] = getUrlValue(details.url, 'next_token');
+        reqParams.cli['--next-token'] = getUrlValue(details.url, 'next_token');
+        reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'max_results');
+        reqParams.cli['--max-items'] = getUrlValue(details.url, 'max_results');
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'ListUserPools',
+                'boto3': 'list_user_pools',
+                'cli': 'list-user-pools'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:iam.ListRoles
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/iam\/roles\?$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:pinpoint.GetApps
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/pinpoint\/appIds\?/g)) {
+        reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
+        reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
+
+        outputs.push({
+            'region': region,
+            'service': 'pinpoint',
+            'method': {
+                'api': 'GetApps',
+                'boto3': 'get_apps',
+                'cli': 'get-apps'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:acm.ListCertificates
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/acm\/listCertificates\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'acm',
+            'method': {
+                'api': 'ListCertificates',
+                'boto3': 'list_certificates',
+                'cli': 'list-certificates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.CreateUserPool
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool$/g)) {
+        var pools = JSON.parse(jsonRequestBody.pool);
+        for (var i=0; i<pools.length; i++) {
+            reqParams.boto3['PoolName'] = pools[i].name;
+            reqParams.cli['--pool-name'] = pools[i].name;
+            reqParams.boto3['Policies'] = {
+                'PasswordPolicy': {
+                    'MinimumLength': pools[i].passPolicyMinLength,
+                    'RequireUppercase': pools[i].passPolicyRequireUppercase,
+                    'RequireLowercase': pools[i].passPolicyRequireLowercase,
+                    'RequireNumbers': pools[i].passPolicyRequireNumbers,
+                    'RequireSymbols': pools[i].passPolicyRequireSymbols
+                }
+            };
+            reqParams.cli['--policies'] = {
+                'PasswordPolicy': {
+                    'MinimumLength': pools[i].passPolicyMinLength,
+                    'RequireUppercase': pools[i].passPolicyRequireUppercase,
+                    'RequireLowercase': pools[i].passPolicyRequireLowercase,
+                    'RequireNumbers': pools[i].passPolicyRequireNumbers,
+                    'RequireSymbols': pools[i].passPolicyRequireSymbols
+                }
+            };
+            reqParams.boto3['AutoVerifiedAttributes'] = [];
+            reqParams.cli['--auto-verified-attributes'] = [];
+            if (pools[i].verifySMS == false) {
+                reqParams.boto3['AutoVerifiedAttributes'].push("phone_number");
+                reqParams.cli['--auto-verified-attributes'].push("phone_number");
+            }
+            if (pools[i].verifyEmail == false) {
+                reqParams.boto3['AutoVerifiedAttributes'].push("email");
+                reqParams.cli['--auto-verified-attributes'].push("email");
+            }
+            reqParams.boto3['AliasAttributes'] = pools[i].aliasAttributes;
+            reqParams.cli['--alias-attributes'] = pools[i].aliasAttributes;
+            reqParams.boto3['UsernameAttributes'] = pools[i].usernameAttributes;
+            reqParams.cli['--username-attributes'] = pools[i].usernameAttributes;
+            reqParams.boto3['SmsVerificationMessage'] = pools[i].smsVerificationMessage;
+            reqParams.cli['--sms-verification-message'] = pools[i].smsVerificationMessage;
+            reqParams.boto3['EmailVerificationMessage'] = pools[i].emailVerificationMessage;
+            reqParams.cli['--email-verification-message'] = pools[i].emailVerificationMessage;
+            reqParams.boto3['EmailVerificationSubject'] = pools[i].emailVerificationSubject;
+            reqParams.cli['--email-verification-subject'] = pools[i].emailVerificationSubject;
+            reqParams.boto3['VerificationMessageTemplate'] = {
+                'SmsMessage': pools[i].smsVerificationMessage,
+                'EmailMessage': pools[i].emailVerificationMessage,
+                'EmailSubject': pools[i].emailVerificationSubject,
+                'EmailMessageByLink': pools[i].emailVerificationMessageByLink,
+                'EmailSubjectByLink': pools[i].emailVerificationSubjectByLink,
+                'DefaultEmailOption': pools[i].defaultEmailOption
+            };
+            reqParams.cli['--verification-message-template'] = {
+                'SmsMessage': pools[i].smsVerificationMessage,
+                'EmailMessage': pools[i].emailVerificationMessage,
+                'EmailSubject': pools[i].emailVerificationSubject,
+                'EmailMessageByLink': pools[i].emailVerificationMessageByLink,
+                'EmailSubjectByLink': pools[i].emailVerificationSubjectByLink,
+                'DefaultEmailOption': pools[i].defaultEmailOption
+            };
+            reqParams.boto3['MfaConfiguration'] = pools[i].mfaEnabledLevel;
+            reqParams.cli['--mfa-configuration'] = pools[i].mfaEnabledLevel;
+            reqParams.boto3['DeviceConfiguration'] = {
+                'ChallengeRequiredOnNewDevice': pools[i].challengeRequiredOnNewDevice,
+                'DeviceOnlyRememberedOnUserPrompt': pools[i].deviceOnlyRememberedOnUserPrompt
+            };
+            reqParams.cli['--device-configuration'] = {
+                'ChallengeRequiredOnNewDevice': pools[i].challengeRequiredOnNewDevice,
+                'DeviceOnlyRememberedOnUserPrompt': pools[i].deviceOnlyRememberedOnUserPrompt
+            };
+            reqParams.boto3['EmailConfiguration'] = {
+                'SourceArn': pools[i].fromEmailAddressArn,
+                'ReplyToEmailAddress': pools[i].replyToEmailAddress
+            };
+            reqParams.cli['--email-configuration'] = {
+                'SourceArn': pools[i].fromEmailAddressArn,
+                'ReplyToEmailAddress': pools[i].replyToEmailAddress
+            };
+            reqParams.boto3['SmsConfiguration'] = {
+                'SnsCallerArn': pools[i].snsCallerArn,
+                'ExternalId': pools[i].externalId
+            };
+            reqParams.cli['--sms-configuration'] = {
+                'SnsCallerArn': pools[i].snsCallerArn,
+                'ExternalId': pools[i].externalId
+            };
+            reqParams.boto3['UserPoolTags'] = {};
+            reqParams.cli['--user-pool-tags'] = {};
+            for (var j=0; j<pools[i].userpoolTags.length; j++) {
+                reqParams.boto3['UserPoolTags'][pools[i].userpoolTags[j].tagName] = pools[i].userpoolTags[j].tagValue;
+                reqParams.cli['--user-pool-tags'][pools[i].userpoolTags[j].tagName] = pools[i].userpoolTags[j].tagValue;
+            }
+            reqParams.boto3['AdminCreateUserConfig'] = {
+                'AllowAdminCreateUserOnly': pools[i].allowAdminCreateUserOnly,
+                'UnusedAccountValidityDays': pools[i].adminCreateUserUnusedAccountValidityDays
+            };
+            reqParams.cli['--admin-create-user-config'] = {
+                'AllowAdminCreateUserOnly': pools[i].allowAdminCreateUserOnly,
+                'UnusedAccountValidityDays': pools[i].adminCreateUserUnusedAccountValidityDays
+            };
+            reqParams.boto3['Schema'] = [];
+            reqParams.cli['--schema'] = [];
+            for (var j=0; j<pools[i].customAttributes.length; j++) {
+                reqParams.boto3['Schema'].push({
+                    'Name': pools[i].customAttributes[j].name,
+                    'AttributeDataType': pools[i].customAttributes[j].dataType,
+                    'Mutable': pools[i].customAttributes[j].mutable,
+                    'NumberAttributeConstraints': {
+                        'MinValue': pools[i].customAttributes[j].numMinValue,
+                        'MaxValue': pools[i].customAttributes[j].numMaxValue
+                    },
+                    'StringAttributeConstraints': {
+                        'MinLength': pools[i].customAttributes[j].strMinLength,
+                        'MaxLength': pools[i].customAttributes[j].strMaxLength
+                    }
+                });
+                reqParams.cli['--schema'].push({
+                    'Name': pools[i].customAttributes[j].name,
+                    'AttributeDataType': pools[i].customAttributes[j].dataType,
+                    'Mutable': pools[i].customAttributes[j].mutable,
+                    'NumberAttributeConstraints': {
+                        'MinValue': pools[i].customAttributes[j].numMinValue,
+                        'MaxValue': pools[i].customAttributes[j].numMaxValue
+                    },
+                    'StringAttributeConstraints': {
+                        'MinLength': pools[i].customAttributes[j].strMinLength,
+                        'MaxLength': pools[i].customAttributes[j].strMaxLength
+                    }
+                });
+            }
+
+            reqParams.cfn['AdminCreateUserConfig'] = reqParams.boto3['AdminCreateUserConfig'];
+            reqParams.cfn['AliasAttributes'] = pools[i].aliasAttributes;
+            reqParams.cfn['AutoVerifiedAttributes'] = reqParams.boto3['AutoVerifiedAttributes'];
+            reqParams.cfn['DeviceConfiguration'] = reqParams.boto3['DeviceConfiguration'];
+            reqParams.cfn['EmailConfiguration'] = reqParams.boto3['EmailConfiguration'];
+            reqParams.cfn['EmailVerificationMessage'] = pools[i].emailVerificationMessage;
+            reqParams.cfn['EmailVerificationSubject'] = pools[i].emailVerificationSubject;
+            reqParams.cfn['MfaConfiguration'] = pools[i].mfaEnabledLevel;
+            reqParams.cfn['Policies'] = reqParams.boto3['Policies'];
+            reqParams.cfn['Schema'] = reqParams.boto3['Schema'];
+            reqParams.cfn['SmsConfiguration'] = reqParams.boto3['SmsConfiguration'];
+            reqParams.cfn['SmsVerificationMessage'] = pools[i].smsVerificationMessage;
+            reqParams.cfn['UsernameAttributes'] = pools[i].usernameAttributes;
+            reqParams.cfn['UserPoolName'] = pools[i].name;
+            reqParams.cfn['UserPoolTags'] = reqParams.boto3['UserPoolTags'];
+
+            outputs.push({
+                'region': region,
+                'service': 'cognito-idp',
+                'method': {
+                    'api': 'CreateUserPool',
+                    'boto3': 'create_user_pool',
+                    'cli': 'create-user-pool'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('cognito-idp', details.requestId),
+                'region': region,
+                'service': 'cognito-idp',
+                'type': 'AWS::Cognito::UserPool',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+
+            for (var j=0; j<pools[i].userPoolClients.length; j++) {
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {}
+                };
+
+                // TODO
+            }
+        }
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.SetUserPoolMfaConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/mfaConfig$/g)) {
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.id[0];
+        reqParams.boto3['SmsMfaConfiguration'] = {
+            'SmsAuthenticationMessage': jsonRequestBody.smsVerificationMessage[0],
+            'SmsConfiguration': {
+                'SnsCallerArn': jsonRequestBody.snsCallerArn[0],
+                'ExternalId': jsonRequestBody.externalId[0]
+            }
+        };
+        reqParams.cli['--sms-mfa-configuration'] = {
+            'SmsAuthenticationMessage': jsonRequestBody.smsVerificationMessage[0],
+            'SmsConfiguration': {
+                'SnsCallerArn': jsonRequestBody.snsCallerArn[0],
+                'ExternalId': jsonRequestBody.externalId[0]
+            }
+        };
+        reqParams.boto3['SoftwareTokenMfaConfiguration'] = {
+            'Enabled': jsonRequestBody.softwareToken[0]
+        };
+        reqParams.cli['--software-token-mfa-configuration'] = {
+            'Enabled': jsonRequestBody.softwareToken[0]
+        };
+        reqParams.boto3['MfaConfiguration'] = jsonRequestBody.userPoolMfa[0];
+        reqParams.cli['--mfa-configuration'] = jsonRequestBody.userPoolMfa[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'SetUserPoolMfaConfig',
+                'boto3': 'set_user_pool_mfa_config',
+                'cli': 'set-user-pool-mfa-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.ListUsers
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/user\?/g)) {
+        reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
+        reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
+        reqParams.boto3['Limit'] = getUrlValue(details.url, 'maxResults');
+        reqParams.cli['--limit'] = getUrlValue(details.url, 'maxResults');
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'ListUsers',
+                'boto3': 'list_users',
+                'cli': 'list-users'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.ListGroups
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group\?id=us\-west\-2_mswODcnxC&maxResults=60$/g)) {
+        reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
+        reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
+        reqParams.boto3['Limit'] = getUrlValue(details.url, 'maxResults');
+        reqParams.cli['--limit'] = getUrlValue(details.url, 'maxResults');
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'ListGroups',
+                'boto3': 'list_groups',
+                'cli': 'list-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.ListUserPoolClients
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/client\?/g)) {
+        reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
+        reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
+        reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'max_results');
+        reqParams.cli['--max-items'] = getUrlValue(details.url, 'max_results');
+        reqParams.boto3['NextToken'] = getUrlValue(details.url, 'next_token');
+        reqParams.cli['--next-token'] = getUrlValue(details.url, 'next_token');
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'ListUserPoolClients',
+                'boto3': 'list_user_pool_clients',
+                'cli': 'list-user-pool-clients'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.AdminCreateUser
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/user$/g)) {
+        reqParams.boto3['UserAttributes'] = [];
+        reqParams.cli['--user-attributes'] = [];
+        reqParams.boto3['UserAttributes'].push({
+            "Name": "email",
+            "Value": jsonRequestBody.email[0]
+        });
+        reqParams.cli['--user-attributes'].push({
+            "Name": "email",
+            "Value": jsonRequestBody.email[0]
+        });
+        reqParams.boto3['UserAttributes'].push({
+            "Name": "phone_number",
+            "Value": jsonRequestBody.phoneNumber[0]
+        });
+        reqParams.cli['--user-attributes'].push({
+            "Name": "phone_number",
+            "Value": jsonRequestBody.phoneNumber[0]
+        });
+        if (jsonRequestBody.emailVerified[0] == "true") {
+            reqParams.boto3['UserAttributes'].push({
+                "Name": "email_verified",
+                "Value": true
+            });
+            reqParams.cli['--user-attributes'].push({
+                "Name": "email_verified",
+                "Value": true
+            });
+        }
+        if (jsonRequestBody.phoneNumberVerified[0] == "true") {
+            reqParams.boto3['UserAttributes'].push({
+                "Name": "phone_number_verified",
+                "Value": true
+            });
+            reqParams.cli['--user-attributes'].push({
+                "Name": "phone_number_verified",
+                "Value": true
+            });
+        }
+        reqParams.boto3['ForceAliasCreation'] = (jsonRequestBody.forceAliasCreation[0] == "true");
+        reqParams.cli['--force-alias-creation'] = (jsonRequestBody.forceAliasCreation[0] == "true");
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.poolId[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.poolId[0];
+        reqParams.boto3['DesiredDeliveryMediums'] = [];
+        reqParams.cli['--desired-delivery-mediums'] = [];
+        if (jsonRequestBody.sendEmail[0] == "true") {
+            reqParams.boto3['DesiredDeliveryMediums'].push("EMAIL");
+            reqParams.cli['--desired-delivery-mediums'].push("EMAIL");
+        }
+        if (jsonRequestBody.sendSMS[0] == "true") {
+            reqParams.boto3['DesiredDeliveryMediums'].push("SMS");
+            reqParams.cli['--desired-delivery-mediums'].push("SMS");
+        }
+        reqParams.boto3['TemporaryPassword'] = jsonRequestBody.tempPassword[0];
+        reqParams.cli['--temporary-password'] = jsonRequestBody.tempPassword[0];
+        reqParams.boto3['Username'] = jsonRequestBody.username[0];
+        reqParams.cli['--username'] = jsonRequestBody.username[0];
+
+        reqParams.cfn['UserAttributes'] = reqParams.boto3['UserAttributes'];
+        reqParams.cfn['ForceAliasCreation'] = (jsonRequestBody.forceAliasCreation[0] == "true");
+        reqParams.cfn['UserPoolId'] = jsonRequestBody.poolId[0];
+        reqParams.cfn['DesiredDeliveryMediums'] = reqParams.boto3['DesiredDeliveryMediums'];
+        reqParams.cfn['Username'] = jsonRequestBody.username[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'AdminCreateUser',
+                'boto3': 'admin_create_user',
+                'cli': 'admin-create-user'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-idp', details.requestId),
+            'region': region,
+            'service': 'cognito-idp',
+            'type': 'AWS::Cognito::UserPoolUser',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.CreateGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group$/g)) {
+        var groupJSON = JSON.parse(jsonRequestBody.groupJSONString[0]);
+        reqParams.boto3['GroupName'] = groupJSON['groupName'];
+        reqParams.cli['--group-name'] = groupJSON['groupName'];
+        reqParams.boto3['Description'] = groupJSON['description'];
+        reqParams.cli['--description'] = groupJSON['description'];
+        reqParams.boto3['RoleArn'] = groupJSON['roleARN'];
+        reqParams.cli['--role-arn'] = groupJSON['roleARN'];
+        reqParams.boto3['Precedence'] = groupJSON['precedence'];
+        reqParams.cli['--precedence'] = groupJSON['precedence'];
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.id[0];
+
+        reqParams.cfn['GroupName'] = groupJSON['groupName'];
+        reqParams.cfn['Description'] = groupJSON['description'];
+        reqParams.cfn['RoleArn'] = groupJSON['roleARN'];
+        reqParams.cfn['Precedence'] = groupJSON['precedence'];
+        reqParams.cfn['UserPoolId'] = jsonRequestBody.id[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'CreateGroup',
+                'boto3': 'create_group',
+                'cli': 'create-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-idp', details.requestId),
+            'region': region,
+            'service': 'cognito-idp',
+            'type': 'AWS::Cognito::UserPoolGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.AdminAddUserToGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group\/user$/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName[0];
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName[0];
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.id[0];
+        reqParams.boto3['Username'] = jsonRequestBody.username[0];
+        reqParams.cli['--username'] = jsonRequestBody.username[0];
+
+        reqParams.cfn['GroupName'] = jsonRequestBody.groupName[0];
+        reqParams.cfn['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cfn['Username'] = jsonRequestBody.username[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'AdminAddUserToGroup',
+                'boto3': 'admin_add_user_to_group',
+                'cli': 'admin-add-user-to-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-idp', details.requestId),
+            'region': region,
+            'service': 'cognito-idp',
+            'type': 'AWS::Cognito::UserPoolUserToGroupAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.CreateUserPoolClient
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/client$/g)) {
+        var clientJSON = JSON.parse(jsonRequestBody.client[0]);
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.id[0];
+        reqParams.boto3['ClientName'] = clientJSON['name'];
+        reqParams.cli['--client-name'] = clientJSON['name'];
+        reqParams.boto3['ExplicitAuthFlows'] = [];
+        reqParams.cli['--explicit-auth-flows'] = [];
+        if (clientJSON['explicitAdminAuthEnabled']) {
+            reqParams.boto3['ExplicitAuthFlows'].push("ADMIN_NO_SRP_AUTH");
+            reqParams.cli['--explicit-auth-flows'].push("ADMIN_NO_SRP_AUTH");
+        }
+        if (clientJSON['customAuthFlowOnly']) {
+            reqParams.boto3['ExplicitAuthFlows'].push("CUSTOM_AUTH_FLOW_ONLY");
+            reqParams.cli['--explicit-auth-flows'].push("CUSTOM_AUTH_FLOW_ONLY");
+        }
+        if (clientJSON['userPasswordAuth']) {
+            reqParams.boto3['ExplicitAuthFlows'].push("USER_PASSWORD_AUTH");
+            reqParams.cli['--explicit-auth-flows'].push("USER_PASSWORD_AUTH");
+        }
+        reqParams.boto3['GenerateSecret'] = clientJSON['generateSecret'];
+        reqParams.cli['--generate-secret'] = clientJSON['generateSecret'];
+        reqParams.boto3['ReadAttributes'] = clientJSON['readAttributes'];
+        reqParams.cli['--read-attributes'] = clientJSON['readAttributes'];
+        reqParams.boto3['RefreshTokenValidity'] = clientJSON['refreshTokenValidity'];
+        reqParams.cli['--refresh-token-validity'] = clientJSON['refreshTokenValidity'];
+        reqParams.boto3['WriteAttributes'] = clientJSON['writeAttributes'];
+        reqParams.cli['--write-attributes'] = clientJSON['writeAttributes'];
+
+        reqParams.cfn['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cfn['ClientName'] = clientJSON['name'];
+        reqParams.cfn['ExplicitAuthFlows'] = reqParams.boto3['ExplicitAuthFlows'];
+        reqParams.cfn['GenerateSecret'] = clientJSON['generateSecret'];
+        reqParams.cfn['ReadAttributes'] = clientJSON['readAttributes'];
+        reqParams.cfn['RefreshTokenValidity'] = clientJSON['refreshTokenValidity'];
+        reqParams.cfn['WriteAttributes'] = clientJSON['writeAttributes'];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'CreateUserPoolClient',
+                'boto3': 'create_user_pool_client',
+                'cli': 'create-user-pool-client'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-idp', details.requestId),
+            'region': region,
+            'service': 'cognito-idp',
+            'type': 'AWS::Cognito::UserPoolClient',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-identity:cognito-identity.CreateIdentityPool
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/pool$/g)) {
+        reqParams.boto3['DeveloperProviderName'] = jsonRequestBody.developerProviderName[0];
+        reqParams.cli['--developer-provider-name'] = jsonRequestBody.developerProviderName[0];
+        reqParams.boto3['AllowUnauthenticatedIdentities'] = jsonRequestBody.enableUnauth[0];
+        reqParams.cli['--allow-unauthenticated-identities'] = jsonRequestBody.enableUnauth[0];
+        reqParams.boto3['IdentityPoolName'] = jsonRequestBody.name[0];
+        reqParams.cli['--identity-pool-name'] = jsonRequestBody.name[0];
+        reqParams.boto3['OpenIdConnectProviderARNs'] = jsonRequestBody.oidcProviderArnsString[0];
+        reqParams.cli['--open-id-connect-provider-ar-ns'] = jsonRequestBody.oidcProviderArnsString[0];
+        reqParams.boto3['SamlProviderARNs'] = jsonRequestBody.samlProviderArnsString[0];
+        reqParams.cli['--saml-provider-ar-ns'] = jsonRequestBody.samlProviderArnsString[0];
+
+        reqParams.cfn['DeveloperProviderName'] = jsonRequestBody.developerProviderName[0];
+        reqParams.cfn['AllowUnauthenticatedIdentities'] = jsonRequestBody.enableUnauth[0];
+        reqParams.cfn['IdentityPoolName'] = jsonRequestBody.name[0];
+        reqParams.cfn['OpenIdConnectProviderARNs'] = jsonRequestBody.oidcProviderArnsString[0];
+        reqParams.cfn['SamlProviderARNs'] = jsonRequestBody.samlProviderArnsString[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-identity',
+            'method': {
+                'api': 'CreateIdentityPool',
+                'boto3': 'create_identity_pool',
+                'cli': 'create-identity-pool'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-identity', details.requestId),
+            'region': region,
+            'service': 'cognito-identity',
+            'type': 'AWS::Cognito::IdentityPool',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
