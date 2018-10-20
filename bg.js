@@ -1101,6 +1101,16 @@ function setOutputsForTrackedResource(index) {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.associationId
             };
+        } else if (tracked_resources[index].type == "AWS::EC2::EgressOnlyInternetGateway") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.egressOnlyInternetGateway.egressOnlyInternetGatewayId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::FlowLog") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.flowLogIds[0]
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::Host") {
+            ; // TODO
         } else if (tracked_resources[index].type == "AWS::EC2::Instance") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.Instances[0].InstanceId,
@@ -1111,6 +1121,27 @@ function setOutputsForTrackedResource(index) {
                     'PrivateIp': jsonRequestBody.Instances[0].PrivateIpAddress
                 }
             };
+        } else if (tracked_resources[index].type == "AWS::EC2::InternetGateway") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.internetGateway.internetGatewayId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::LaunchTemplate") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.launchTemplate.launchTemplateId,
+                'GetAtt': {
+                    'LatestVersionNumber': jsonRequestBody.launchTemplate.latestVersionNumber,
+                    'DefaultVersionNumber': jsonRequestBody.launchTemplate.defaultVersionNumber
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::NatGateway") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.natGateway.natGatewayId
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::NetworkAcl") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::EC2::NetworkAclEntry") {
+            ; // TODO
+            // UP TO HERE
         } else if (tracked_resources[index].type == "AWS::EC2::SecurityGroup") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.securityGroupId,
