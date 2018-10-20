@@ -121,7 +121,7 @@ ${service}svc := ${service}.New(session.New(&aws.Config{Region: aws.String("${re
     return '';
 }
 
-function processCfnParameter(param, spacing) {
+function processCfnParameter(param, spacing, index) {
     var paramitems = [];
 
     if (param === undefined || param === null)
@@ -137,6 +137,15 @@ function processCfnParameter(param, spacing) {
         if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
             return `${param}`;
         }
+
+        for (var i=0; i<index; i++) { // correlate
+            if (tracked_resources[i].returnValues) {
+                if (tracked_resources[i].returnValues.Ref == param) {
+                    return "!Ref " + tracked_resources[i].logicalId;
+                }
+            }
+        }
+
         return `"${param}"`;
     }
     if (Array.isArray(param)) {
@@ -145,7 +154,7 @@ function processCfnParameter(param, spacing) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processCfnParameter(paramitem, spacing + 4));
+            paramitems.push(processCfnParameter(paramitem, spacing + 4, index));
         });
 
         return `
@@ -158,7 +167,7 @@ function processCfnParameter(param, spacing) {
         }
 
         Object.keys(param).forEach(function (key) {
-            paramitems.push(key + ": " + processCfnParameter(param[key], spacing + 4));
+            paramitems.push(key + ": " + processCfnParameter(param[key], spacing + 4, index));
         });
 
         return `
@@ -365,14 +374,14 @@ function getResourceName(service, requestId) {
     return service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
 }
 
-function outputMapCfn(service, type, options, region, was_blocked, logicalId) {
+function outputMapCfn(index, service, type, options, region, was_blocked, logicalId) {
     var output = '';
     var params = '';
 
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined) {
-                var optionvalue = processCfnParameter(options[option], 12);
+                var optionvalue = processCfnParameter(options[option], 12, index);
                 params += `
             ${option}: ${optionvalue}`;
             }
@@ -488,7 +497,7 @@ var AWS = require('aws-sdk');`
     compiled['js'] += `\n`;
 
     for (var i=0; i<tracked_resources.length; i++) {
-        compiled['cfn'] += outputMapCfn(tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+        compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
     }
 
     return compiled;
@@ -750,20 +759,6 @@ function allEventHandler(debuggeeId, message, params) {
     }
 }
 
-function setOutputsForTrackedResource(index) {
-    var jsonRequestBody = {};
-
-    try {
-        jsonRequestBody = JSON.parse(tracked_resources[index].response.body);
-
-        if (tracked_resources[index].type == "AWS::EC2::SecurityGroup") {
-            tracked_resources[index].returnValues = {
-                'Ref': jsonRequestBody.securityGroupId
-            };
-        }
-    } catch {;}
-}
-
 chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         if (message.action == "getCompiledOutputs") {
@@ -896,6 +891,48 @@ function getPipeSplitField(str, index) {
     }
 
     return parseInt(result);
+}
+
+function setOutputsForTrackedResource(index) {
+    var jsonRequestBody = {};
+
+    try {
+        jsonRequestBody = JSON.parse(tracked_resources[index].response.body);
+
+        if (tracked_resources[index].type == "AWS::AmazonMQ::Broker") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.brokerId,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.brokerArn
+                    // Missing return values
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::AmazonMQ::Configuration") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.id,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.arn,
+                    'Revision': jsonRequestBody.latestRevision.revision
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Stack") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.StackId
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::App") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.AppId
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Layer") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.LayerId
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Instance") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.InstanceId
+            };
+        }
+    } catch {;}
 }
 
 /******/
@@ -1351,20 +1388,6 @@ function analyseRequest(details) {
         else if (jsonRequestBody.EbsOptimized === false)
             reqParams.cli['--no-ebs-optimized'] = null;
         reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
-
-        for (var i=0; i<tracked_resources.length; i++) { // example correlation
-            if (tracked_resources[i].type == "AWS::EC2::SecurityGroup" && tracked_resources[i].returnValues) {
-                var securityGroupIds = [];
-                for (var j=0; j<reqParams.cfn['SecurityGroupIds'].length; j++) {
-                    if (reqParams.cfn['SecurityGroupIds'][j] == tracked_resources[i].returnValues.Ref) {
-                        securityGroupIds[j] = "!Ref " + tracked_resources[i].logicalId;
-                    } else {
-                        securityGroupIds[j] = reqParams.cfn['SecurityGroupIds'][j];
-                    }
-                }
-                reqParams.cfn['SecurityGroupIds'] = securityGroupIds;
-            }
-        }
 
         outputs.push({
             'region': region,
