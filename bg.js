@@ -155,7 +155,7 @@ function processCfnParameter(param, spacing, index) {
 
         // TODO: Check for multiline |\n + indent
 
-        return `"${param}"`;
+        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1390,13 +1390,135 @@ function setOutputsForTrackedResource(index) {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.VolumeId
             };
-        } else if (tracked_resources[index].type == "XXXXX") {
+        } else if (tracked_resources[index].type == "AWS::RDS::DBClusterParameterGroup") {
             tracked_resources[index].returnValues = {
-                'Ref': jsonRequestBody.StackId,
+                'Ref': tracked_resources[index].options.boto3.DBClusterParameterGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::RDS::DBInstance") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.actionResponses[0].data.DBInstanceIdentifier,
                 'GetAtt': {
-                    'GroupId': jsonRequestBody.securityGroupId
+                    //'Endpoint.Address': jsonRequestBody.,
+                    //'Endpoint.Port': jsonRequestBody.
                 }
             };
+        } else if (tracked_resources[index].type == "AWS::RDS::DBParameterGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.DBParameterGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::RDS::DBSubnetGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.DBSubnetGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::RDS::EventSubscription") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.SubscriptionName
+            };
+        } else if (tracked_resources[index].type == "AWS::RDS::OptionGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.actionResponses[0].data.optionGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::Redshift::Cluster") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ClusterIdentifier,
+                'GetAtt': {
+                    //'Endpoint.Address': jsonRequestBody.
+                    //'Endpoint.Port': jsonRequestBody.
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Redshift::ClusterParameterGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.ParameterGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::Redshift::ClusterSubnetGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.ClusterSubnetGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::Route53::HostedZone") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::S3::Bucket") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'Arn': "arn:aws:s3:::" + tracked_resources[index].options.cfn.BucketName
+                    //'DomainName': jsonRequestBody.,
+                    //'DualStackDomainName': jsonRequestBody.,
+                    //'WebsiteURL': jsonRequestBody.
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::SNS::Subscription") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::SNS::Topic") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.CreateTopicResponse.topicArn,
+                'GetAtt': {
+                    'TopicName': tracked_resources[index].options.cfn.TopicName
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::SNS::TopicPolicy") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::SQS::Queue") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SQS::QueuePolicy") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::CloudFormationProduct") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.provisioningArtifactDetail.id,
+                'GetAtt': {
+                    'ProductName': jsonRequestBody.provisioningArtifactDetail.name,
+                    'ProvisioningArtifactIds': [jsonRequestBody.provisioningArtifactDetail.id],
+                    'ProvisioningArtifactNames': [jsonRequestBody.provisioningArtifactDetail.name]
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::Portfolio") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.portfolioDetail.id,
+                'GetAtt': {
+                    'PortfolioName': jsonRequestBody.portfolioDetail.displayName
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::PortfolioPrincipalAssociation") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::PortfolioProductAssociation") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::PortfolioShare") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::TagOption") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.tagOptionDetail.id
+            };
+        } else if (tracked_resources[index].type == "AWS::ServiceCatalog::TagOptionAssociation") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::WAF::ByteMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.ByteMatchSet.ByteMatchSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::IPSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.IPSet.IPSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::Rule") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.Rule.RuleId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::SizeConstraintSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.SizeConstraintSet.SizeConstraintSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::SqlInjectionMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.SqlInjectionMatchSet.SqlInjectionMatchSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::WebACL") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.WebACL.WebACLId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAF::XssMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.XssMatchSet.XssMatchSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WorkSpaces::Workspace") {
+            ; // TODO
         }
     } catch(err) {
         console.log(err);
@@ -12597,7 +12719,7 @@ function analyseRequest(details) {
         reqParams.boto3['Name'] = jsonRequestBody.topicName;
         reqParams.cli['--name'] = jsonRequestBody.topicName;
 
-        reqParams.boto3['TopicName'] = jsonRequestBody.topicName;
+        reqParams.cfn['TopicName'] = jsonRequestBody.topicName;
 
         outputs.push({
             'region': region,
