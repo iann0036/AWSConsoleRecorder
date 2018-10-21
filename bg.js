@@ -153,6 +153,8 @@ function processCfnParameter(param, spacing, index) {
             }
         }
 
+        // TODO: Check for multiline |\n + indent
+
         return `"${param}"`;
     }
     if (Array.isArray(param)) {
@@ -174,7 +176,10 @@ function processCfnParameter(param, spacing, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            paramitems.push(key + ": " + processCfnParameter(param[key], spacing + 4, index));
+            var subvalue = processCfnParameter(param[key], spacing + 4, index);
+            if (subvalue !== undefined) {
+                paramitems.push(key + ": " + subvalue);
+            }
         });
 
         return `
@@ -1141,7 +1146,23 @@ function setOutputsForTrackedResource(index) {
             ; // TODO
         } else if (tracked_resources[index].type == "AWS::EC2::NetworkAclEntry") {
             ; // TODO
-            // UP TO HERE
+        } else if (tracked_resources[index].type == "AWS::EC2::NetworkInterface") {
+            var secondaryIpAddresses = [];
+            for (var i=0; i<jsonRequestBody.networkInterface.privateIpAddresses.length; i++) {
+                if (!jsonRequestBody.networkInterface.privateIpAddresses[i].primary) {
+                    secondaryIpAddresses.push(jsonRequestBody.networkInterface.privateIpAddresses[i].privateIpAddress);
+                }
+            }
+
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.networkInterface.networkInterfaceId,
+                'GetAtt': {
+                    'PrimaryPrivateIpAddress': jsonRequestBody.networkInterface.privateIpAddress,
+                    'SecondaryPrivateIpAddresses': secondaryIpAddresses
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::RouteTable") {
+            ; // TODO
         } else if (tracked_resources[index].type == "AWS::EC2::SecurityGroup") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.securityGroupId,
@@ -1149,21 +1170,232 @@ function setOutputsForTrackedResource(index) {
                     'GroupId': jsonRequestBody.securityGroupId
                 }
             };
-        } else if (tracked_resources[index].type == "AWS::OpsWorks::Stack") {
+        } else if (tracked_resources[index].type == "AWS::EC2::Subnet") {
             tracked_resources[index].returnValues = {
-                'Ref': jsonRequestBody.StackId
+                'Ref': jsonRequestBody.Subnet.SubnetId,
+                'GetAtt': {
+                    'AvailabilityZone': jsonRequestBody.Subnet.AvailabilityZone,
+                    'Ipv6CidrBlocks': jsonRequestBody.Subnet.ipv6CidrBlockAssociationSet,
+                    //'NetworkAclAssociationId': jsonRequestBody.Subnet.,
+                    'VpcId': jsonRequestBody.Subnet.VpcId
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::EC2::VPC") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::EC2::VPCCidrBlock") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::EC2::VPCDHCPOptionsAssociation") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::EC2::VPNGateway") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.VpnGateway.VpnGatewayId
+            };
+        } else if (tracked_resources[index].type == "AWS::EFS::FileSystem") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.fileSystemId
+            };
+        } else if (tracked_resources[index].type == "AWS::EFS::MountTarget") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.mountTargetId
+            };
+        } else if (tracked_resources[index].type == "AWS::ElastiCache::CacheCluster") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.actionResponses[0].data.replicationGroupId,
+                'GetAtt': {
+                    //'ConfigurationEndpoint.Address': jsonRequestBody.actionResponses[0].data.,
+                    //'ConfigurationEndpoint.Port': jsonRequestBody.actionResponses[0].data.,
+                    //'RedisEndpoint.Address': jsonRequestBody.actionResponses[0].data.,
+                    //'RedisEndpoint.Port': jsonRequestBody.actionResponses[0].data.
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ElastiCache::ParameterGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.CacheParameterGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::ElastiCache::SubnetGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.boto3.CacheSubnetGroupName
+            };
+        } else if (tracked_resources[index].type == "AWS::ElasticLoadBalancing::LoadBalancer") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.LoadBalancerName,
+                'GetAtt': {
+                    //'CanonicalHostedZoneName': jsonRequestBody.securityGroupId,
+                    //'CanonicalHostedZoneNameID': jsonRequestBody.securityGroupId,
+                    'DNSName': jsonRequestBody.dnsName
+                    //'SourceSecurityGroup.GroupName': jsonRequestBody.securityGroupId,
+                    //'SourceSecurityGroup.OwnerAlias': jsonRequestBody.securityGroupId
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ElasticLoadBalancingV2::Listener") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.listeners[0].listenerArn
+            };
+        } else if (tracked_resources[index].type == "AWS::ElasticLoadBalancingV2::ListenerRule") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.rules[0].ruleArn
+            };
+        } else if (tracked_resources[index].type == "AWS::ElasticLoadBalancingV2::LoadBalancer") {
+            var lb_name_parts = jsonRequestBody.loadBalancers[0].loadBalancerArn.split("/").shift();
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.loadBalancers[0].loadBalancerArn,
+                'GetAtt': {
+                    'CanonicalHostedZoneID': jsonRequestBody.loadBalancers[0].hostedZoneId,
+                    'DNSName': jsonRequestBody.loadBalancers[0].dnsName,
+                    'LoadBalancerFullName': lb_name_parts.join("/"),
+                    'LoadBalancerName': jsonRequestBody.loadBalancers[0].loadBalancerName,
+                    'SecurityGroups': tracked_resources[index].options.cfn.SecurityGroups
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ElasticLoadBalancingV2::TargetGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.targetGroups[0].arn,
+                'GetAtt': {
+                    'LoadBalancerArns': jsonRequestBody.targetGroups[0].loadBalancerArn,
+                    'TargetGroupFullName': jsonRequestBody.targetGroups[0].loadBalancerArn.split(":").pop(),
+                    'TargetGroupName': jsonRequestBody.targetGroups[0].name
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Elasticsearch::Domain") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.DomainStatus.DomainId,
+                'GetAtt': {
+                    'DomainArn': jsonRequestBody.DomainStatus.ARN,
+                    'DomainEndpoint': jsonRequestBody.DomainStatus.Endpoint
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Events::Rule") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::Glue::Classifier") {
+            var ref = null;
+            if (tracked_resources[index].options.cfn.GrokClassifier) {
+                ref = tracked_resources[index].options.cfn.GrokClassifier.Name;
+            }
+            if (tracked_resources[index].options.cfn.JsonClassifier) {
+                ref = tracked_resources[index].options.cfn.JsonClassifier.Name;
+            }
+            if (tracked_resources[index].options.cfn.XMLClassifier) {
+                ref = tracked_resources[index].options.cfn.XMLClassifier.Name;
+            }
+
+            tracked_resources[index].returnValues = {
+                'Ref': ref
+            };
+        } else if (tracked_resources[index].type == "AWS::Glue::Connection") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ConnectionInput
+            };
+        } else if (tracked_resources[index].type == "AWS::Glue::Table") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.TableInput
+            };
+        } else if (tracked_resources[index].type == "AWS::GuardDuty::Detector") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.detectorId
+            };
+        } else if (tracked_resources[index].type == "AWS::GuardDuty::IPSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.ipSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::GuardDuty::Member") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.MemberId
+            };
+        } else if (tracked_resources[index].type == "AWS::IAM::User") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.name,
+                'GetAtt': {
+                    //'Arn': jsonRequestBody.
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::IAM::UserToGroupAddition") {
+            tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::Inspector::AssessmentTarget") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.assessmentTargetArn
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Inspector::AssessmentTemplate") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.assessmentTemplateArn
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Inspector::ResourceGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': null,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.resourceGroupArn
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Lambda::Alias") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.arn
+            };
+        } else if (tracked_resources[index].type == "AWS::Lambda::Function") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.FunctionArn
+            };
+        } else if (tracked_resources[index].type == "AWS::Lambda::Version") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.functionArn,
+                'GetAtt': {
+                    'Version': jsonRequestBody.version
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::Logs::LogGroup") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::Logs::LogStream") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::Logs::MetricFilter") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::Logs::SubscriptionFilter") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "XXXXX") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.StackId,
+                'GetAtt': {
+                    'GroupId': jsonRequestBody.securityGroupId
+                }
             };
         } else if (tracked_resources[index].type == "AWS::OpsWorks::App") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.AppId
             };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::ElasticLoadBalancerAttachment") {
+            tracked_resources[index].returnValues = null
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Instance") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.InstanceId
+            };
         } else if (tracked_resources[index].type == "AWS::OpsWorks::Layer") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.LayerId
             };
-        } else if (tracked_resources[index].type == "AWS::OpsWorks::Instance") {
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Stack") {
             tracked_resources[index].returnValues = {
-                'Ref': jsonRequestBody.InstanceId
+                'Ref': jsonRequestBody.StackId
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::UserProfile") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.IamUserArn,
+                'GetAtt': {
+                    //'SshUsername': jsonRequestBody.
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::OpsWorks::Volume") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.VolumeId
+            };
+        } else if (tracked_resources[index].type == "XXXXX") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.StackId,
+                'GetAtt': {
+                    'GroupId': jsonRequestBody.securityGroupId
+                }
             };
         }
     } catch(err) {
