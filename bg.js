@@ -1083,6 +1083,20 @@ function setOutputsForTrackedResource(index) {
             };
         } else if (tracked_resources[index].type == "AWS::Cognito::UserPoolUserToGroupAttachment") {
             tracked_resources[index].returnValues = null;
+        } else if (tracked_resources[index].type == "AWS::Config::ConfigurationAggregator") {
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ConfigurationAggregatorName
+            };
+        } else if (tracked_resources[index].type == "AWS::Config::ConfigRule") {
+            ; // TODO
+            tracked_resources[index].returnValues = {
+                'Ref': tracked_resources[index].options.cfn.ConfigRuleName,
+                'GetAtt': {
+                    //'Arn': jsonRequestBody.,
+                    //'ConfigRuleId': jsonRequestBody.,
+                    //'Compliance.Type': jsonRequestBody.
+                }
+            };
         } else if (tracked_resources[index].type == "AWS::DirectoryService::MicrosoftAD") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.DirectoryId
@@ -1266,6 +1280,12 @@ function setOutputsForTrackedResource(index) {
             };
         } else if (tracked_resources[index].type == "AWS::Events::Rule") {
             ; // TODO
+        } else if (tracked_resources[index].type == "AWS::GameLift::Alias") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::GameLift::Build") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::GameLift::Fleet") {
+            ; // TODO
         } else if (tracked_resources[index].type == "AWS::Glue::Classifier") {
             var ref = null;
             if (tracked_resources[index].options.cfn.GrokClassifier) {
@@ -1331,13 +1351,20 @@ function setOutputsForTrackedResource(index) {
                     'Arn': jsonRequestBody.resourceGroupArn
                 }
             };
+        } else if (tracked_resources[index].type == "AWS::Kinesis::Stream") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::KinesisFirehose::DeliveryStream") {
+            ; // TODO
         } else if (tracked_resources[index].type == "AWS::Lambda::Alias") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.arn
             };
         } else if (tracked_resources[index].type == "AWS::Lambda::Function") {
             tracked_resources[index].returnValues = {
-                'Ref': jsonRequestBody.FunctionArn
+                'Ref': jsonRequestBody.FunctionName,
+                'GetAtt': {
+                    'Arn': jsonRequestBody.FunctionArn
+                }
             };
         } else if (tracked_resources[index].type == "AWS::Lambda::Version") {
             tracked_resources[index].returnValues = {
@@ -1460,6 +1487,22 @@ function setOutputsForTrackedResource(index) {
         } else if (tracked_resources[index].type == "AWS::SQS::Queue") {
             ; // TODO
         } else if (tracked_resources[index].type == "AWS::SQS::QueuePolicy") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::Association") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::Document") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::MaintenanceWindow") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::MaintenanceWindowTarget") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::MaintenanceWindowTask") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::Parameter") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::PatchBaseline") {
+            ; // TODO
+        } else if (tracked_resources[index].type == "AWS::SSM::ResourceDataSync") {
             ; // TODO
         } else if (tracked_resources[index].type == "AWS::ServiceCatalog::CloudFormationProduct") {
             tracked_resources[index].returnValues = {
@@ -17630,6 +17673,1212 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.DescribeConfigurationAggregators
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregators\/describeConfigurationAggregators\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribeConfigurationAggregators',
+                'boto3': 'describe_configuration_aggregators',
+                'cli': 'describe-configuration-aggregators'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.PutConfigurationAggregator
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregators\/putConfigurationAggregator\?/g)) {
+        reqParams.boto3['ConfigurationAggregatorName'] = jsonRequestBody.configurationAggregatorName;
+        reqParams.cli['--configuration-aggregator-name'] = jsonRequestBody.configurationAggregatorName;
+        reqParams.boto3['AccountAggregationSources'] = jsonRequestBody.accountAggregationSources;
+        reqParams.cli['--account-aggregation-sources'] = jsonRequestBody.accountAggregationSources;
+        reqParams.boto3['OrganizationAggregationSource'] = jsonRequestBody.organizationAggregationSource;
+        reqParams.cli['--organization-aggregation-source'] = jsonRequestBody.organizationAggregationSource;
+
+        reqParams.cfn['ConfigurationAggregatorName'] = jsonRequestBody.configurationAggregatorName;
+        reqParams.cfn['AccountAggregationSources'] = jsonRequestBody.accountAggregationSources;
+        reqParams.cfn['OrganizationAggregationSource'] = jsonRequestBody.organizationAggregationSource;
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'PutConfigurationAggregator',
+                'boto3': 'put_configuration_aggregator',
+                'cli': 'put-configuration-aggregator'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('config', details.requestId),
+            'region': region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigurationAggregator',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.PutConfigRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/configRule\?/g)) {
+        reqParams.boto3['ConfigRule'] = {
+            'ConfigRuleName': jsonRequestBody.configRuleName,
+            'Description': jsonRequestBody.description,
+            'Scope': jsonRequestBody.scope,
+            'Source': jsonRequestBody.source,
+            'InputParameters': JSON.stringify(jsonRequestBody.inputParameters),
+            'MaximumExecutionFrequency': jsonRequestBody.maximumExecutionFrequency // jsonRequestBody.source.sourceDetails[0].maximumExecutionFrequency?
+        };
+        reqParams.cli['--config-rule'] = {
+            'ConfigRuleName': jsonRequestBody.configRuleName,
+            'Description': jsonRequestBody.description,
+            'Scope': jsonRequestBody.scope,
+            'Source': jsonRequestBody.source,
+            'InputParameters': JSON.stringify(jsonRequestBody.inputParameters),
+            'MaximumExecutionFrequency': jsonRequestBody.maximumExecutionFrequency // jsonRequestBody.source.sourceDetails[0].maximumExecutionFrequency?
+        };
+
+        reqParams.cfn['ConfigRuleName'] = jsonRequestBody.configRuleName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['InputParameters'] = jsonRequestBody.inputParameters;
+        reqParams.cfn['MaximumExecutionFrequency'] = jsonRequestBody.maximumExecutionFrequency;
+        reqParams.cfn['Scope'] = jsonRequestBody.scope;
+        reqParams.cfn['Source'] = jsonRequestBody.source;
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'PutConfigRule',
+                'boto3': 'put_config_rule',
+                'cli': 'put-config-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('config', details.requestId),
+            'region': region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigRule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.ListDocuments
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listDocuments") {
+        reqParams.boto3['Filters'] = jsonRequestBody.contentString.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.contentString.Filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+ 
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'ListDocuments',
+                'boto3': 'list_documents',
+                'cli': 'list-documents'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.CreateDocument
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createDocument") {
+        reqParams.boto3['Content'] = jsonRequestBody.contentString.Content;
+        reqParams.cli['--content'] = jsonRequestBody.contentString.Content;
+        reqParams.boto3['DocumentType'] = jsonRequestBody.contentString.DocumentType;
+        reqParams.cli['--document-type'] = jsonRequestBody.contentString.DocumentType;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['DocumentFormat'] = jsonRequestBody.contentString.DocumentFormat;
+        reqParams.cli['--document-format'] = jsonRequestBody.contentString.DocumentFormat;
+
+        reqParams.cfn['Content'] = jsonRequestBody.contentString.Content;
+        reqParams.cfn['DocumentType'] = jsonRequestBody.contentString.DocumentType;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'CreateDocument',
+                'boto3': 'create_document',
+                'cli': 'create-document'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::Document',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DescribeDocumentPermission
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeDocumentPermission") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['PermissionType'] = jsonRequestBody.contentString.PermissionType;
+        reqParams.cli['--permission-type'] = jsonRequestBody.contentString.PermissionType;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DescribeDocumentPermission',
+                'boto3': 'describe_document_permission',
+                'cli': 'describe-document-permission'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DeleteDocument
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteDocument") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DeleteDocument',
+                'boto3': 'delete_document',
+                'cli': 'delete-document'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DescribeParameters
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeParameters") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DescribeParameters',
+                'boto3': 'describe_parameters',
+                'cli': 'describe-parameters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.PutParameter
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "putParameter") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Value'] = jsonRequestBody.contentString.Value;
+        reqParams.cli['--value'] = jsonRequestBody.contentString.Value;
+        reqParams.boto3['Type'] = jsonRequestBody.contentString.Type;
+        reqParams.cli['--type'] = jsonRequestBody.contentString.Type;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['Value'] = jsonRequestBody.contentString.Value;
+        reqParams.cfn['Type'] = jsonRequestBody.contentString.Type;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'PutParameter',
+                'boto3': 'put_parameter',
+                'cli': 'put-parameter'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::Parameter',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DeleteParameters
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteParameters") {
+        reqParams.boto3['Names'] = jsonRequestBody.contentString.Names;
+        reqParams.cli['--names'] = jsonRequestBody.contentString.Names;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DeleteParameters',
+                'boto3': 'delete_parameters',
+                'cli': 'delete-parameters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DescribeMaintenanceWindows
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeMaintenanceWindows") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DescribeMaintenanceWindows',
+                'boto3': 'describe_maintenance_windows',
+                'cli': 'describe-maintenance-windows'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.CreateMaintenanceWindow
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createMaintenanceWindow") {
+        reqParams.boto3['AllowUnassociatedTargets'] = jsonRequestBody.contentString.AllowUnassociatedTargets;
+        reqParams.cli['--allow-unassociated-targets'] = jsonRequestBody.contentString.AllowUnassociatedTargets;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Schedule'] = jsonRequestBody.contentString.Schedule;
+        reqParams.cli['--schedule'] = jsonRequestBody.contentString.Schedule;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Duration'] = jsonRequestBody.contentString.Duration;
+        reqParams.cli['--duration'] = jsonRequestBody.contentString.Duration;
+        reqParams.boto3['Cutoff'] = jsonRequestBody.contentString.Cutoff;
+        reqParams.cli['--cutoff'] = jsonRequestBody.contentString.Cutoff;
+
+        reqParams.cfn['AllowUnassociatedTargets'] = jsonRequestBody.contentString.AllowUnassociatedTargets;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Schedule'] = jsonRequestBody.contentString.Schedule;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['Duration'] = jsonRequestBody.contentString.Duration;
+        reqParams.cfn['Cutoff'] = jsonRequestBody.contentString.Cutoff;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'CreateMaintenanceWindow',
+                'boto3': 'create_maintenance_window',
+                'cli': 'create-maintenance-window'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::MaintenanceWindow',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DescribePatchBaselines
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describePatchBaselines") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DescribePatchBaselines',
+                'boto3': 'describe_patch_baselines',
+                'cli': 'describe-patch-baselines'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.RegisterTargetWithMaintenanceWindow
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTargetWithMaintenanceWindow") {
+        reqParams.boto3['ResourceType'] = jsonRequestBody.contentString.ResourceType;
+        reqParams.cli['--resource-type'] = jsonRequestBody.contentString.ResourceType;
+        reqParams.boto3['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cli['--targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.boto3['WindowId'] = jsonRequestBody.contentString.WindowId;
+        reqParams.cli['--window-id'] = jsonRequestBody.contentString.WindowId;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+
+        reqParams.cfn['ResourceType'] = jsonRequestBody.contentString.ResourceType;
+        reqParams.cfn['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cfn['WindowId'] = jsonRequestBody.contentString.WindowId;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'RegisterTargetWithMaintenanceWindow',
+                'boto3': 'register_target_with_maintenance_window',
+                'cli': 'register-target-with-maintenance-window'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::MaintenanceWindowTarget',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DeleteMaintenanceWindow
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteMaintenanceWindow") {
+        reqParams.boto3['WindowId'] = jsonRequestBody.contentString.WindowId;
+        reqParams.cli['--window-id'] = jsonRequestBody.contentString.WindowId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DeleteMaintenanceWindow',
+                'boto3': 'delete_maintenance_window',
+                'cli': 'delete-maintenance-window'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.CreatePatchBaseline
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createPatchBaseline") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['OperatingSystem'] = jsonRequestBody.contentString.OperatingSystem;
+        reqParams.cli['--operating-system'] = jsonRequestBody.contentString.OperatingSystem;
+        reqParams.boto3['ApprovalRules'] = jsonRequestBody.contentString.ApprovalRules;
+        reqParams.cli['--approval-rules'] = jsonRequestBody.contentString.ApprovalRules;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['ApprovedPatches'] = jsonRequestBody.contentString.ApprovedPatches;
+        reqParams.cli['--approved-patches'] = jsonRequestBody.contentString.ApprovedPatches;
+        reqParams.boto3['RejectedPatches'] = jsonRequestBody.contentString.RejectedPatches;
+        reqParams.cli['--rejected-patches'] = jsonRequestBody.contentString.RejectedPatches;
+        reqParams.boto3['ApprovedPatchesComplianceLevel'] = jsonRequestBody.contentString.ApprovedPatchesComplianceLevel;
+        reqParams.cli['--approved-patches-compliance-level'] = jsonRequestBody.contentString.ApprovedPatchesComplianceLevel;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['OperatingSystem'] = jsonRequestBody.contentString.OperatingSystem;
+        reqParams.cfn['ApprovalRules'] = jsonRequestBody.contentString.ApprovalRules;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['ApprovedPatches'] = jsonRequestBody.contentString.ApprovedPatches;
+        reqParams.cfn['RejectedPatches'] = jsonRequestBody.contentString.RejectedPatches;
+        reqParams.cfn['ApprovedPatchesComplianceLevel'] = jsonRequestBody.contentString.ApprovedPatchesComplianceLevel;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'CreatePatchBaseline',
+                'boto3': 'create_patch_baseline',
+                'cli': 'create-patch-baseline'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::PatchBaseline',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.ListResourceDataSync
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listResourceDataSync") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'ListResourceDataSync',
+                'boto3': 'list_resource_data_sync',
+                'cli': 'list-resource-data-sync'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ec2.DescribeRegions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ec2$/g) && jsonRequestBody.operation == "describeRegions") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeRegions',
+                'boto3': 'describe_regions',
+                'cli': 'describe-regions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.CreateResourceDataSync
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createResourceDataSync") {
+        reqParams.boto3['SyncName'] = jsonRequestBody.contentString.SyncName;
+        reqParams.cli['--sync-name'] = jsonRequestBody.contentString.SyncName;
+        reqParams.boto3['S3Destination'] = jsonRequestBody.contentString.S3Destination;
+        reqParams.cli['--s3-destination'] = jsonRequestBody.contentString.S3Destination;
+
+        reqParams.cfn['SyncName'] = jsonRequestBody.contentString.SyncName;
+        reqParams.cfn['BucketName'] = jsonRequestBody.contentString.S3Destination.BucketName;
+        reqParams.cfn['BucketPrefix'] = jsonRequestBody.contentString.S3Destination.Prefix;
+        reqParams.cfn['SyncFormat'] = jsonRequestBody.contentString.S3Destination.SyncFormat;
+        reqParams.cfn['BucketRegion'] = jsonRequestBody.contentString.S3Destination.Region;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'CreateResourceDataSync',
+                'boto3': 'create_resource_data_sync',
+                'cli': 'create-resource-data-sync'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::ResourceDataSync',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.GetInventorySchema
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "getInventorySchema") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'GetInventorySchema',
+                'boto3': 'get_inventory_schema',
+                'cli': 'get-inventory-schema'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.CreateAssociation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createAssociation") {
+        reqParams.boto3['AssociationName'] = jsonRequestBody.contentString.AssociationName;
+        reqParams.cli['--association-name'] = jsonRequestBody.contentString.AssociationName;
+        reqParams.boto3['ScheduleExpression'] = jsonRequestBody.contentString.ScheduleExpression;
+        reqParams.cli['--schedule-expression'] = jsonRequestBody.contentString.ScheduleExpression;
+        reqParams.boto3['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cli['--targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Parameters'] = jsonRequestBody.contentString.Parameters;
+        reqParams.cli['--parameters'] = jsonRequestBody.contentString.Parameters;
+        reqParams.boto3['OutputLocation'] = jsonRequestBody.contentString.OutputLocation;
+        reqParams.cli['--output-location'] = jsonRequestBody.contentString.OutputLocation;
+
+        reqParams.cfn['AssociationName'] = jsonRequestBody.contentString.AssociationName;
+        reqParams.cfn['ScheduleExpression'] = jsonRequestBody.contentString.ScheduleExpression;
+        reqParams.cfn['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Parameters'] = jsonRequestBody.contentString.Parameters;
+        reqParams.cfn['OutputLocation'] = jsonRequestBody.contentString.OutputLocation;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'CreateAssociation',
+                'boto3': 'create_association',
+                'cli': 'create-association'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::Association',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.ListAssociations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listAssociations") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'ListAssociations',
+                'boto3': 'list_associations',
+                'cli': 'list-associations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ssm:ssm.DeleteAssociation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteAssociation") {
+        reqParams.boto3['AssociationId'] = jsonRequestBody.contentString.AssociationId;
+        reqParams.cli['--association-id'] = jsonRequestBody.contentString.AssociationId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'DeleteAssociation',
+                'boto3': 'delete_association',
+                'cli': 'delete-association'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.CreateBuild
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\?/g)) {
+        reqParams.boto3['Name'] = getUrlValue(details.url, 'sampleBuildName');
+        reqParams.cli['--name'] = getUrlValue(details.url, 'sampleBuildName');
+
+        reqParams.cfn['Name'] = getUrlValue(details.url, 'sampleBuildName');
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'CreateBuild',
+                'boto3': 'create_build',
+                'cli': 'create-build'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('gamelift', details.requestId),
+            'region': region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Build',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.ListFleets
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'ListFleets',
+                'boto3': 'list_fleets',
+                'cli': 'list-fleets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.CreateFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['MetricGroups'] = jsonRequestBody.metricGroups;
+        reqParams.cli['--metric-groups'] = jsonRequestBody.metricGroups;
+        reqParams.boto3['EC2InstanceType'] = jsonRequestBody.ec2InstanceType;
+        reqParams.cli['--ec2-instance-type'] = jsonRequestBody.ec2InstanceType;
+        reqParams.boto3['BuildId'] = jsonRequestBody.buildId;
+        reqParams.cli['--build-id'] = jsonRequestBody.buildId;
+        reqParams.boto3['ServerLaunchPath'] = jsonRequestBody.serverLaunchPath;
+        reqParams.cli['--server-launch-path'] = jsonRequestBody.serverLaunchPath;
+        reqParams.boto3['ServerLaunchParameters'] = jsonRequestBody.serverLaunchParameters;
+        reqParams.cli['--server-launch-parameters'] = jsonRequestBody.serverLaunchParameters;
+        reqParams.boto3['EC2InboundPermissions'] = jsonRequestBody.ec2InboundPermissions;
+        reqParams.cli['--ec2-inbound-permissions'] = jsonRequestBody.ec2InboundPermissions;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['EC2InstanceType'] = jsonRequestBody.ec2InstanceType;
+        reqParams.cfn['BuildId'] = jsonRequestBody.buildId;
+        reqParams.cfn['ServerLaunchPath'] = jsonRequestBody.serverLaunchPath;
+        reqParams.cfn['ServerLaunchParameters'] = jsonRequestBody.serverLaunchParameters;
+        reqParams.cfn['EC2InboundPermissions'] = jsonRequestBody.ec2InboundPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'CreateFleet',
+                'boto3': 'create_fleet',
+                'cli': 'create-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('gamelift', details.requestId),
+            'region': region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Fleet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.PutScalingPolicy
+    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets\/.+\/scaling\-policies$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['FleetId'] = jsonRequestBody.fleetId;
+        reqParams.cli['--fleet-id'] = jsonRequestBody.fleetId;
+        reqParams.boto3['ScalingAdjustmentType'] = jsonRequestBody.scalingAdjustmentType;
+        reqParams.cli['--scaling-adjustment-type'] = jsonRequestBody.scalingAdjustmentType;
+        reqParams.boto3['ScalingAdjustment'] = jsonRequestBody.scalingAdjustment;
+        reqParams.cli['--scaling-adjustment'] = jsonRequestBody.scalingAdjustment;
+        reqParams.boto3['EvaluationPeriods'] = jsonRequestBody.evaluationPeriods;
+        reqParams.cli['--evaluation-periods'] = jsonRequestBody.evaluationPeriods;
+        reqParams.boto3['Threshold'] = jsonRequestBody.threshold;
+        reqParams.cli['--threshold'] = jsonRequestBody.threshold;
+        reqParams.boto3['ComparisonOperator'] = jsonRequestBody.comparisonOperator;
+        reqParams.cli['--comparison-operator'] = jsonRequestBody.comparisonOperator;
+        reqParams.boto3['MetricName'] = jsonRequestBody.metricName;
+        reqParams.cli['--metric-name'] = jsonRequestBody.metricName;
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'PutScalingPolicy',
+                'boto3': 'put_scaling_policy',
+                'cli': 'put-scaling-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.DescribeFleetAttributes
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets\/describe\-fleet\-attributes\/params\?/g)) {
+        reqParams.boto3['FleetIds'] = getUrlValue(details.url, 'fleetIds');
+        reqParams.cli['--fleet-ids'] = getUrlValue(details.url, 'fleetIds');
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'DescribeFleetAttributes',
+                'boto3': 'describe_fleet_attributes',
+                'cli': 'describe-fleet-attributes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.CreateAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['RoutingStrategy'] = {
+            'Type': jsonRequestBody.type,
+            'FleetId': jsonRequestBody.fleetId
+        };
+        reqParams.cli['--routing-strategy'] = {
+            'Type': jsonRequestBody.type,
+            'FleetId': jsonRequestBody.fleetId
+        };
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['RoutingStrategy'] = reqParams.boto3['RoutingStrategy'];
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'CreateAlias',
+                'boto3': 'create_alias',
+                'cli': 'create-alias'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('gamelift', details.requestId),
+            'region': region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Alias',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.DeleteBuild
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/build\-/g)) {
+        reqParams.boto3['BuildId'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--build-id'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'DeleteBuild',
+                'boto3': 'delete_build',
+                'cli': 'delete-build'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:gamelift:gamelift.DeleteAlias
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/alias\-/g)) {
+        reqParams.boto3['AliasId'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--alias-id'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'gamelift',
+            'method': {
+                'api': 'DeleteAlias',
+                'boto3': 'delete_alias',
+                'cli': 'delete-alias'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.DescribeLimits
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeLimits") {
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'DescribeLimits',
+                'boto3': 'describe_limits',
+                'cli': 'describe-limits'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.CreateStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "CreateStream") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+        reqParams.boto3['ShardCount'] = jsonRequestBody.content.ShardCount;
+        reqParams.cli['--shard-count'] = jsonRequestBody.content.ShardCount;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.StreamName;
+        reqParams.cfn['ShardCount'] = jsonRequestBody.content.ShardCount;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'CreateStream',
+                'boto3': 'create_stream',
+                'cli': 'create-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kinesis', details.requestId),
+            'region': region,
+            'service': 'kinesis',
+            'type': 'AWS::Kinesis::Stream',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.ListStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreams") {
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'ListStreams',
+                'boto3': 'list_streams',
+                'cli': 'list-streams'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.DescribeStreamSummary
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeStreamSummary") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'DescribeStreamSummary',
+                'boto3': 'describe_stream_summary',
+                'cli': 'describe-stream-summary'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.ListStreamConsumers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreamConsumers") {
+        reqParams.boto3['StreamARN'] = jsonRequestBody.content.StreamARN;
+        reqParams.cli['--stream-arn'] = jsonRequestBody.content.StreamARN;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'ListStreamConsumers',
+                'boto3': 'list_stream_consumers',
+                'cli': 'list-stream-consumers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.DeleteStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DeleteStream") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+        reqParams.boto3['EnforceConsumerDeletion'] = jsonRequestBody.content.EnforceConsumerDeletion;
+        reqParams.cli['--enforce-consumer-deletion'] = jsonRequestBody.content.EnforceConsumerDeletion;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'DeleteStream',
+                'boto3': 'delete_stream',
+                'cli': 'delete-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:firehose.ListDeliveryStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
+
+        outputs.push({
+            'region': region,
+            'service': 'firehose',
+            'method': {
+                'api': 'ListDeliveryStreams',
+                'boto3': 'list_delivery_streams',
+                'cli': 'list-delivery-streams'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:s3.HeadBucket
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/s3\-proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'HeadBucket',
+                'boto3': 'head_bucket',
+                'cli': 'head-bucket'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:logs.DescribeLogGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "DescribeLogGroups") {
+        reqParams.boto3['LogGroupNamePrefix'] = jsonRequestBody.content.logGroupNamePrefix;
+        reqParams.cli['--log-group-name-prefix'] = jsonRequestBody.content.logGroupNamePrefix;
+
+        outputs.push({
+            'region': region,
+            'service': 'logs',
+            'method': {
+                'api': 'DescribeLogGroups',
+                'boto3': 'describe_log_groups',
+                'cli': 'describe-log-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:logs.CreateLogGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogGroup") {
+        reqParams.boto3['LogGroupName'] = jsonRequestBody.content.logGroupName;
+        reqParams.cli['--log-group-name'] = jsonRequestBody.content.logGroupName;
+
+        outputs.push({
+            'region': region,
+            'service': 'logs',
+            'method': {
+                'api': 'CreateLogGroup',
+                'boto3': 'create_log_group',
+                'cli': 'create-log-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:logs.CreateLogStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogStream") {
+        reqParams.boto3['LogGroupName'] = jsonRequestBody.content.logGroupName;
+        reqParams.cli['--log-group-name'] = jsonRequestBody.content.logGroupName;
+        reqParams.boto3['LogStreamName'] = jsonRequestBody.content.logStreamName;
+        reqParams.cli['--log-stream-name'] = jsonRequestBody.content.logStreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'logs',
+            'method': {
+                'api': 'CreateLogStream',
+                'boto3': 'create_log_stream',
+                'cli': 'create-log-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:firehose.CreateDeliveryStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "CreateDeliveryStream") {
+        reqParams.boto3['DeliveryStreamName'] = jsonRequestBody.content.DeliveryStreamName;
+        reqParams.cli['--delivery-stream-name'] = jsonRequestBody.content.DeliveryStreamName;
+        reqParams.boto3['DeliveryStreamType'] = jsonRequestBody.content.DeliveryStreamType;
+        reqParams.cli['--delivery-stream-type'] = jsonRequestBody.content.DeliveryStreamType;
+        reqParams.boto3['ExtendedS3DestinationConfiguration'] = jsonRequestBody.content.ExtendedS3DestinationConfiguration;
+        reqParams.cli['--extended-s3-destination-configuration'] = jsonRequestBody.content.ExtendedS3DestinationConfiguration;
+
+        reqParams.cfn['DeliveryStreamName'] = jsonRequestBody.content.DeliveryStreamName;
+        reqParams.cfn['DeliveryStreamType'] = jsonRequestBody.content.DeliveryStreamType;
+        reqParams.cfn['ExtendedS3DestinationConfiguration'] = jsonRequestBody.content.ExtendedS3DestinationConfiguration;
+        
+        outputs.push({
+            'region': region,
+            'service': 'firehose',
+            'method': {
+                'api': 'CreateDeliveryStream',
+                'boto3': 'create_delivery_stream',
+                'cli': 'create-delivery-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('firehose', details.requestId),
+            'region': region,
+            'service': 'firehose',
+            'type': 'AWS::KinesisFirehose::DeliveryStream',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:firehose:firehose.DeleteDeliveryStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "DeleteDeliveryStream") {
+        reqParams.boto3['DeliveryStreamName'] = jsonRequestBody.content.DeliveryStreamName;
+        reqParams.cli['--delivery-stream-name'] = jsonRequestBody.content.DeliveryStreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'firehose',
+            'method': {
+                'api': 'DeleteDeliveryStream',
+                'boto3': 'delete_delivery_stream',
+                'cli': 'delete-delivery-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
         });
         
         return {};
