@@ -18884,4 +18884,606 @@ function analyseRequest(details) {
         return {};
     }
 
+    // Internal Note: Last addition to return values here
+
+    // autogen:ec2:ec2.DeleteSubnet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteSubnet\?/g)) {
+        reqParams.boto3['SubnetId'] = jsonRequestBody.SubnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.SubnetId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteSubnet',
+                'boto3': 'delete_subnet',
+                'cli': 'delete-subnet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcEndpointServices
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServices\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcEndpointServices',
+                'boto3': 'describe_vpc_endpoint_services',
+                'cli': 'describe-vpc-endpoint-services'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribePrefixLists
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribePrefixLists\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribePrefixLists',
+                'boto3': 'describe_prefix_lists',
+                'cli': 'describe-prefix-lists'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpcEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpoint\?/g)) {
+        reqParams.boto3['ServiceName'] = jsonRequestBody.ServiceName;
+        reqParams.cli['--service-name'] = jsonRequestBody.ServiceName;
+        reqParams.boto3['VpcEndpointType'] = jsonRequestBody.VpcEndpointType;
+        reqParams.cli['--vpc-endpoint-type'] = jsonRequestBody.VpcEndpointType;
+        reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.SubnetIds;
+        reqParams.boto3['PrivateDnsEnabled'] = jsonRequestBody.PrivateDnsEnabled;
+        reqParams.cli['--private-dns-enabled'] = jsonRequestBody.PrivateDnsEnabled;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.SecurityGroupIds;
+
+        reqParams.cfn['ServiceName'] = jsonRequestBody.ServiceName;
+        reqParams.cfn['VpcEndpointType'] = jsonRequestBody.VpcEndpointType;
+        reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cfn['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cfn['PrivateDnsEnabled'] = jsonRequestBody.PrivateDnsEnabled;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpcEndpoint',
+                'boto3': 'create_vpc_endpoint',
+                'cli': 'create-vpc-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCEndpoint',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteVpcEndpoints
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcEndpoints\?/g)) {
+        reqParams.boto3['VpcEndpointIds'] = jsonRequestBody.VpcEndpointIds;
+        reqParams.cli['--vpc-endpoint-ids'] = jsonRequestBody.VpcEndpointIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteVpcEndpoints',
+                'boto3': 'delete_vpc_endpoints',
+                'cli': 'delete-vpc-endpoints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:kms.ListKeys
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/listEncryptionKeys\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'ListKeys',
+                'boto3': 'list_keys',
+                'cli': 'list-keys'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.ListUsers
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/users$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListUsers',
+                'boto3': 'list_users',
+                'cli': 'list-users'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.ListRoles
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/roles$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:kms.CreateKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/createKey$/g)) {
+        reqParams.boto3['Description'] = jsonRequestBody.keyDescription[0];
+        reqParams.cli['--description'] = jsonRequestBody.keyDescription[0];
+        reqParams.boto3['Origin'] = jsonRequestBody.origin[0];
+        reqParams.cli['--origin'] = jsonRequestBody.origin[0];
+        reqParams.boto3['Policy'] = jsonRequestBody.policy[0];
+        reqParams.cli['--policy'] = jsonRequestBody.policy[0];
+        reqParams.boto3['Tags'] = jsonRequestBody.tags[0];
+        reqParams.cli['--tags'] = jsonRequestBody.tags[0];
+
+        reqParams.cfn['Description'] = jsonRequestBody.keyDescription[0];
+        reqParams.cfn['KeyPolicy'] = jsonRequestBody.policy[0];
+        reqParams.cfn['Tags'] = jsonRequestBody.tags[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'CreateKey',
+                'boto3': 'create_key',
+                'cli': 'create-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kms', details.requestId),
+            'region': region,
+            'service': 'kms',
+            'type': 'AWS::KMS::Key',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        /* -- TODO
+        if (Array.isArray(jsonRequestBody.keyAlias)) {
+            reqParams.boto3['AliasName'] = jsonRequestBody.keyAlias[0];
+            reqParams.cli['--alias-name'] = jsonRequestBody.keyAlias[0];
+            reqParams.boto3['TargetKeyId'] = "???";
+            reqParams.cli['--target-key-id'] = "???";
+
+            outputs.push({
+                'region': region,
+                'service': 'kms',
+                'method': {
+                    'api': 'CreateAlias',
+                    'boto3': 'create_alias',
+                    'cli': 'create-alias'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+        }
+        */
+        
+        return {};
+    }
+
+    // autogen:iam:kms.GetKeyPolicy
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/getKeyPolicy\?/g)) {
+        reqParams.boto3['KeyId'] = getUrlValue(details.url, 'keyId');
+        reqParams.cli['--key-id'] = getUrlValue(details.url, 'keyId');
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'GetKeyPolicy',
+                'boto3': 'get_key_policy',
+                'cli': 'get-key-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:kms.ListResourceTags
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/listResourceTags\?/g)) {
+        reqParams.boto3['KeyId'] = getUrlValue(details.url, 'keyId');
+        reqParams.cli['--key-id'] = getUrlValue(details.url, 'keyId');
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'ListResourceTags',
+                'boto3': 'list_resource_tags',
+                'cli': 'list-resource-tags'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:kms.ScheduleKeyDeletion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/scheduleKeyDeletion$/g)) {
+        jsonRequestBody.keyIdList.forEach(keyId => {
+            reqParams.boto3['KeyId'] = keyId;
+            reqParams.cli['--key-id'] = keyId;
+            reqParams.boto3['PendingWindowInDays'] = jsonRequestBody.pendingWindowInDays[0];
+            reqParams.cli['--pending-window-in-days'] = jsonRequestBody.pendingWindowInDays[0];
+    
+            outputs.push({
+                'region': region,
+                'service': 'kms',
+                'method': {
+                    'api': 'ScheduleKeyDeletion',
+                    'boto3': 'schedule_key_deletion',
+                    'cli': 'schedule-key-deletion'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.CreateGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/groups\/createGroup$/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName[0];
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName[0];
+
+        reqParams.cfn['GroupName'] = jsonRequestBody.groupName[0];
+        if (jsonRequestBody['policies[]'] && jsonRequestBody['policies[]'].length) {
+            reqParams.cfn['Policies'] = jsonRequestBody['policies[]'];
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateGroup',
+                'boto3': 'create_group',
+                'cli': 'create-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Group',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (jsonRequestBody['policies[]'] && jsonRequestBody['policies[]'].length) {
+            jsonRequestBody['policies[]'].forEach(policy => {
+                var reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {}
+                };
+
+                reqParams.boto3['GroupName'] = jsonRequestBody.groupName[0];
+                reqParams.cli['--group-name'] = jsonRequestBody.groupName[0];
+                reqParams.boto3['PolicyArn'] = jsonRequestBody.groupName[0];
+                reqParams.cli['--policy-arn'] = jsonRequestBody.groupName[0];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'iam',
+                    'method': {
+                        'api': 'AttachGroupPolicy',
+                        'boto3': 'attach_group_policy',
+                        'cli': 'attach-group-policy'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:iam:iam.ListGroups
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/groups$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListGroups',
+                'boto3': 'list_groups',
+                'cli': 'list-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.CreateRole
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles$/g)) {
+        reqParams.boto3['RoleName'] = jsonRequestBody.name;
+        reqParams.cli['--role-name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['AssumeRolePolicyDocument'] = jsonRequestBody.trustPolicyDocument;
+        reqParams.cli['--assume-role-policy-document'] = jsonRequestBody.trustPolicyDocument;
+
+        reqParams.cfn['RoleName'] = jsonRequestBody.name;
+        reqParams.cfn['AssumeRolePolicyDocument'] = jsonRequestBody.trustPolicyDocument;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateRole',
+                'boto3': 'create_role',
+                'cli': 'create-role'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Role',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.CreateInstanceProfile
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/instanceProfiles$/g)) {
+        reqParams.boto3['InstanceProfileName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+        reqParams.cli['--instance-profile-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+
+        reqParams.cfn['InstanceProfileName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateInstanceProfile',
+                'boto3': 'create_instance_profile',
+                'cli': 'create-instance-profile'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::InstanceProfile',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.AttachRolePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/attachments$/g)) {
+        reqParams.boto3['PolicyArn'] = jsonRequestBody.policyArn;
+        reqParams.cli['--policy-arn'] = jsonRequestBody.policyArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'AttachRolePolicy',
+                'boto3': 'attach_role_policy',
+                'cli': 'attach-role-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.CreatePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/policies\/create$/g)) {
+        reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.policyDocument;
+        reqParams.cli['--policy-document'] = jsonRequestBody.policyDocument;
+
+        reqParams.cfn['ManagedPolicyName'] = jsonRequestBody.policyName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.policyDocument;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreatePolicy',
+                'boto3': 'create_policy',
+                'cli': 'create-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::ManagedPolicy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.DeletePolicy
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/policies\/.+$/g)) {
+        reqParams.boto3['PolicyArn'] = /.+console\.aws\.amazon\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--policy-arn'] = /.+console\.aws\.amazon\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'DeletePolicy',
+                'boto3': 'delete_policy',
+                'cli': 'delete-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.DeleteAccessKey
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/.+$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
+        reqParams.boto3['AccessKeyId'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--access-key-id'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'DeleteAccessKey',
+                'boto3': 'delete_access_key',
+                'cli': 'delete-access-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.ListAccessKeys
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListAccessKeys',
+                'boto3': 'list_access_keys',
+                'cli': 'list-access-keys'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
