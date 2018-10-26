@@ -20184,4 +20184,254 @@ function analyseRequest(details) {
         }
     }
 
+    // autogen:elasticbeanstalk:elasticbeanstalk.DescribeApplicationVersions
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'DescribeApplicationVersions',
+                'boto3': 'describe_application_versions',
+                'cli': 'describe-application-versions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.ListPlatformVersions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/platforms\/list\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'ListPlatformVersions',
+                'boto3': 'list_platform_versions',
+                'cli': 'list-platform-versions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.CreateApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\?/g)) {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.applicationName;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.applicationName;
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'CreateApplication',
+                'boto3': 'create_application',
+                'cli': 'create-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('elasticbeanstalk', details.requestId),
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'type': 'AWS::ElasticBeanstalk::Application',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.CreateEnvironment
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\?/g)) {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.applicationName;
+        reqParams.boto3['EnvironmentName'] = jsonRequestBody.environmentName;
+        reqParams.cli['--environment-name'] = jsonRequestBody.environmentName;
+        reqParams.boto3['OptionSettings'] = jsonRequestBody.optionSettings;
+        reqParams.cli['--option-settings'] = jsonRequestBody.optionSettings;
+        reqParams.boto3['OptionsToRemove'] = jsonRequestBody.optionsToRemove;
+        reqParams.cli['--options-to-remove'] = jsonRequestBody.optionsToRemove;
+        reqParams.boto3['PlatformArn'] = jsonRequestBody.platformArn;
+        reqParams.cli['--platform-arn'] = jsonRequestBody.platformArn;
+        reqParams.boto3['Tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        reqParams.boto3['Tier'] = jsonRequestBody.tier;
+        reqParams.cli['--tier'] = jsonRequestBody.tier;
+        reqParams.boto3['VersionLabel'] = jsonRequestBody.versionLabel;
+        reqParams.cli['--version-label'] = jsonRequestBody.versionLabel;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cfn['EnvironmentName'] = jsonRequestBody.environmentName;
+        reqParams.cfn['OptionSettings'] = jsonRequestBody.optionSettings;
+        reqParams.cfn['PlatformArn'] = jsonRequestBody.platformArn;
+        reqParams.cfn['Tags'] = jsonRequestBody.tags;
+        reqParams.cfn['Tier'] = jsonRequestBody.tier;
+        reqParams.cfn['VersionLabel'] = jsonRequestBody.versionLabel;
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'CreateEnvironment',
+                'boto3': 'create_environment',
+                'cli': 'create-environment'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('elasticbeanstalk', details.requestId),
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'type': 'AWS::ElasticBeanstalk::Environment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.CreateApplicationVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.applicationName;
+        reqParams.boto3['VersionLabel'] = jsonRequestBody.versionLabel;
+        reqParams.cli['--version-label'] = jsonRequestBody.versionLabel;
+        reqParams.boto3['SourceBundle'] = jsonRequestBody.sourceBundle;
+        reqParams.cli['--source-bundle'] = jsonRequestBody.sourceBundle;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cfn['SourceBundle'] = jsonRequestBody.sourceBundle;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'CreateApplicationVersion',
+                'boto3': 'create_application_version',
+                'cli': 'create-application-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('elasticbeanstalk', details.requestId),
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'type': 'AWS::ElasticBeanstalk::ApplicationVersion',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.CreateConfigurationTemplate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/configurationTemplate\?/g)) {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.applicationName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['EnvironmentId'] = jsonRequestBody.environmentId;
+        reqParams.cli['--environment-id'] = jsonRequestBody.environmentId;
+        reqParams.boto3['TemplateName'] = jsonRequestBody.templateName;
+        reqParams.cli['--template-name'] = jsonRequestBody.templateName;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.applicationName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['EnvironmentId'] = jsonRequestBody.environmentId;
+        reqParams.cfn['SourceConfiguration'] = {
+            'ApplicationName': jsonRequestBody.applicationName,
+            'TemplateName': jsonRequestBody.templateName
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'CreateConfigurationTemplate',
+                'boto3': 'create_configuration_template',
+                'cli': 'create-configuration-template'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('elasticbeanstalk', details.requestId),
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'type': 'AWS::ElasticBeanstalk::ConfigurationTemplate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.DeleteApplicationVersion
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+        reqParams.boto3['ApplicationName'] = getUrlValue(details.url, 'applicationName');
+        reqParams.cli['--application-name'] = getUrlValue(details.url, 'applicationName');
+        reqParams.boto3['DeleteSourceBundle'] = getUrlValue(details.url, 'deleteSourceBundle');
+        reqParams.cli['--delete-source-bundle'] = getUrlValue(details.url, 'deleteSourceBundle');
+        reqParams.boto3['VersionLabel'] = getUrlValue(details.url, 'versionLabel');
+        reqParams.cli['--version-label'] = getUrlValue(details.url, 'versionLabel');
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'DeleteApplicationVersion',
+                'boto3': 'delete_application_version',
+                'cli': 'delete-application-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:elasticbeanstalk:elasticbeanstalk.DeleteEnvironmentConfiguration
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\//g)) {
+        reqParams.boto3['EnvironmentName'] = /.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
+        reqParams.cli['--environment-name'] = /.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'elasticbeanstalk',
+            'method': {
+                'api': 'DeleteEnvironmentConfiguration',
+                'boto3': 'delete_environment_configuration',
+                'cli': 'delete-environment-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
