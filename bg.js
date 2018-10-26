@@ -19486,4 +19486,599 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:dms:dms.DescribeReplicationSubnetGroups
+    // autogen:dms:ec2.DescribeVpcs
+    // autogen:dms:ec2.DescribeSubnets
+    // autogen:dms:iam.GetRole
+    // autogen:dms:dms.CreateReplicationSubnetGroup
+    // autogen:dms:dms.DeleteReplicationSubnetGroup
+    // autogen:dms:dms.DescribeReplicationInstances
+    // autogen:dms:dms.DescribeOrderableReplicationInstances
+    // autogen:dms:dms.DescribeAccountAttributes
+    // autogen:dms:ec2.DescribeAvailabilityZones
+    // autogen:dms:ec2.DescribeSecurityGroups
+    // autogen:dms:kms.DescribeKey
+    // autogen:dms:dms.CreateReplicationInstance
+    // autogen:dms:dms.DescribeReplicationInstanceTaskLogs
+    // autogen:dms:dms.DeleteReplicationInstance
+    // autogen:dms:dms.DescribeCertificates
+    // autogen:dms:dms.ImportCertificate
+    // autogen:dms:dms.DescribeEndpoints
+    // autogen:dms:dms.DescribeConnections
+    // autogen:dms:rds.DescribeDBInstances
+    // autogen:dms:dms.DescribeEndpointTypes
+    // autogen:dms:dms.CreateEndpoint
+    // autogen:dms:dms.DescribeSchemas
+    // autogen:dms:dms.DescribeRefreshSchemasStatus
+    // autogen:dms:dms.DeleteEndpoint
+    // autogen:dms:dms.DescribeEventSubscriptions
+    // autogen:dms:sns.ListTopics
+    // autogen:dms:dms.DescribeEventCategories
+    // autogen:dms:dms.CreateEventSubscription
+    // autogen:dms:dms.DeleteEventSubscription
+    // autogen:dms:dms.RefreshSchemas
+    // autogen:dms:dms.CreateReplicationTask
+    // autogen:dms:dms.DescribeTableStatistics
+    // autogen:dms:dms.DescribeReplicationTaskAssessmentResults
+    // autogen:dms:dms.DeleteReplicationTask
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/dms\/rpc$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+            if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationSubnetGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeReplicationSubnetGroups',
+                        'boto3': 'describe_replication_subnet_groups',
+                        'cli': 'describe-replication-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonEC2Context.describeVpcs") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeVpcs',
+                        'boto3': 'describe_vpcs',
+                        'cli': 'describe-vpcs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonEC2Context.describeSubnets") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSubnets',
+                        'boto3': 'describe_subnets',
+                        'cli': 'describe-subnets'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonIdentityManagementContext.getRole") {
+                reqParams.boto3['RoleName'] = action['parameters'][0]['roleName'];
+                reqParams.cli['--role-name'] = action['parameters'][0]['roleName'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'iam',
+                    'method': {
+                        'api': 'GetRole',
+                        'boto3': 'get_role',
+                        'cli': 'get-role'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createReplicationSubnetGroup") {
+                reqParams.boto3['ReplicationSubnetGroupDescription'] = action['parameters'][0]['replicationSubnetGroupDescription'];
+                reqParams.cli['--replication-subnet-group-description'] = action['parameters'][0]['replicationSubnetGroupDescription'];
+                reqParams.boto3['ReplicationSubnetGroupIdentifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+                reqParams.cli['--replication-subnet-group-identifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+                reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
+                reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'CreateReplicationSubnetGroup',
+                        'boto3': 'create_replication_subnet_group',
+                        'cli': 'create-replication-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteReplicationSubnetGroup") {
+                reqParams.boto3['ReplicationSubnetGroupIdentifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+                reqParams.cli['--replication-subnet-group-identifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DeleteReplicationSubnetGroup',
+                        'boto3': 'delete_replication_subnet_group',
+                        'cli': 'delete-replication-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationInstances") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeReplicationInstances',
+                        'boto3': 'describe_replication_instances',
+                        'cli': 'describe-replication-instances'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeOrderableReplicationInstances") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeOrderableReplicationInstances',
+                        'boto3': 'describe_orderable_replication_instances',
+                        'cli': 'describe-orderable-replication-instances'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeAccountAttributes") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeAccountAttributes',
+                        'boto3': 'describe_account_attributes',
+                        'cli': 'describe-account-attributes'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonEC2Context.describeAvailabilityZones") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeAvailabilityZones',
+                        'boto3': 'describe_availability_zones',
+                        'cli': 'describe-availability-zones'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonEC2Context.describeSecurityGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSKMSContext.describeKey") {
+                reqParams.boto3['KeyId'] = action['parameters'][0]['keyId'];
+                reqParams.cli['--key-id'] = action['parameters'][0]['keyId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'kms',
+                    'method': {
+                        'api': 'DescribeKey',
+                        'boto3': 'describe_key',
+                        'cli': 'describe-key'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createReplicationInstance") {
+                reqParams.boto3['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.cli['--auto-minor-version-upgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.boto3['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cli['--publicly-accessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.boto3['AllocatedStorage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.cli['--allocated-storage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.boto3['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cli['--availability-zone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.boto3['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                reqParams.cli['--engine-version'] = action['parameters'][0]['engineVersion'];
+                reqParams.boto3['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cli['--preferred-maintenance-window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.boto3['ReplicationInstanceClass'] = action['parameters'][0]['replicationInstanceClass'];
+                reqParams.cli['--replication-instance-class'] = action['parameters'][0]['replicationInstanceClass'];
+                reqParams.boto3['ReplicationInstanceIdentifier'] = action['parameters'][0]['replicationInstanceIdentifier'];
+                reqParams.cli['--replication-instance-identifier'] = action['parameters'][0]['replicationInstanceIdentifier'];
+                reqParams.boto3['ReplicationSubnetGroupIdentifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+                reqParams.cli['--replication-subnet-group-identifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
+                reqParams.boto3['Tags'] = action['parameters'][0]['tags'];
+                reqParams.cli['--tags'] = action['parameters'][0]['tags'];
+                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'CreateReplicationInstance',
+                        'boto3': 'create_replication_instance',
+                        'cli': 'create-replication-instance'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationInstanceTaskLogs") {
+                reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
+                reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
+                reqParams.boto3['ReplicationInstanceArn'] = action['parameters'][0]['replicationInstanceArn'];
+                reqParams.cli['--replication-instance-arn'] = action['parameters'][0]['replicationInstanceArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeReplicationInstanceTaskLogs',
+                        'boto3': 'describe_replication_instance_task_logs',
+                        'cli': 'describe-replication-instance-task-logs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteReplicationInstance") {
+                reqParams.boto3['ReplicationInstanceArn'] = action['parameters'][0]['replicationInstanceArn'];
+                reqParams.cli['--replication-instance-arn'] = action['parameters'][0]['replicationInstanceArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DeleteReplicationInstance',
+                        'boto3': 'delete_replication_instance',
+                        'cli': 'delete-replication-instance'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeCertificates") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeCertificates',
+                        'boto3': 'describe_certificates',
+                        'cli': 'describe-certificates'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.shared.DMSServiceContext.importNewCertificate") {
+                reqParams.boto3['CertificateIdentifier'] = action['parameters'][0]['certificateIdentifier'];
+                reqParams.cli['--certificate-identifier'] = action['parameters'][0]['certificateIdentifier'];
+                reqParams.boto3['CertificatePem'] = action['parameters'][0]['certificatePem'];
+                reqParams.cli['--certificate-pem'] = action['parameters'][0]['certificatePem'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'ImportCertificate',
+                        'boto3': 'import_certificate',
+                        'cli': 'import-certificate'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEndpoints") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeEndpoints',
+                        'boto3': 'describe_endpoints',
+                        'cli': 'describe-endpoints'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeConnections") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeConnections',
+                        'boto3': 'describe_connections',
+                        'cli': 'describe-connections'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonRDSContext.describeDBInstances") {
+                reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
+                reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'rds',
+                    'method': {
+                        'api': 'DescribeDBInstances',
+                        'boto3': 'describe_db_instances',
+                        'cli': 'describe-db-instances'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEndpointTypes") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeEndpointTypes',
+                        'boto3': 'describe_endpoint_types',
+                        'cli': 'describe-endpoint-types'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createEndpoint") {
+                reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                reqParams.cli['--port'] = action['parameters'][0]['port'];
+                reqParams.boto3['EndpointIdentifier'] = action['parameters'][0]['endpointIdentifier'];
+                reqParams.cli['--endpoint-identifier'] = action['parameters'][0]['endpointIdentifier'];
+                reqParams.boto3['EndpointType'] = action['parameters'][0]['endpointType'];
+                reqParams.cli['--endpoint-type'] = action['parameters'][0]['endpointType'];
+                reqParams.boto3['EngineName'] = action['parameters'][0]['engineName'];
+                reqParams.cli['--engine-name'] = action['parameters'][0]['engineName'];
+                reqParams.boto3['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cli['--kms-key-id'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.boto3['Password'] = action['parameters'][0]['password'];
+                reqParams.cli['--password'] = action['parameters'][0]['password'];
+                reqParams.boto3['ServerName'] = action['parameters'][0]['serverName'];
+                reqParams.cli['--server-name'] = action['parameters'][0]['serverName'];
+                reqParams.boto3['SslMode'] = action['parameters'][0]['sslMode'];
+                reqParams.cli['--ssl-mode'] = action['parameters'][0]['sslMode'];
+                reqParams.boto3['Username'] = action['parameters'][0]['username'];
+                reqParams.cli['--username'] = action['parameters'][0]['username'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'CreateEndpoint',
+                        'boto3': 'create_endpoint',
+                        'cli': 'create-endpoint'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeSchemas") {
+                reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
+                reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeSchemas',
+                        'boto3': 'describe_schemas',
+                        'cli': 'describe-schemas'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeRefreshSchemasStatus") {
+                reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
+                reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeRefreshSchemasStatus',
+                        'boto3': 'describe_refresh_schemas_status',
+                        'cli': 'describe-refresh-schemas-status'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteEndpoint") {
+                reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
+                reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DeleteEndpoint',
+                        'boto3': 'delete_endpoint',
+                        'cli': 'delete-endpoint'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEventSubscriptions") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeEventSubscriptions',
+                        'boto3': 'describe_event_subscriptions',
+                        'cli': 'describe-event-subscriptions'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AmazonSNSContext.listTopics") {
+                outputs.push({
+                    'region': region,
+                    'service': 'sns',
+                    'method': {
+                        'api': 'ListTopics',
+                        'boto3': 'list_topics',
+                        'cli': 'list-topics'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEventCategories") {
+                reqParams.boto3['SourceType'] = action['parameters'][0]['sourceType'];
+                reqParams.cli['--source-type'] = action['parameters'][0]['sourceType'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeEventCategories',
+                        'boto3': 'describe_event_categories',
+                        'cli': 'describe-event-categories'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createEventSubscription") {
+                reqParams.boto3['Enabled'] = action['parameters'][0]['enabled'];
+                reqParams.cli['--enabled'] = action['parameters'][0]['enabled'];
+                reqParams.boto3['SnsTopicArn'] = action['parameters'][0]['snsTopicArn'];
+                reqParams.cli['--sns-topic-arn'] = action['parameters'][0]['snsTopicArn'];
+                reqParams.boto3['SourceType'] = action['parameters'][0]['sourceType'];
+                reqParams.cli['--source-type'] = action['parameters'][0]['sourceType'];
+                reqParams.boto3['SubscriptionName'] = action['parameters'][0]['subscriptionName'];
+                reqParams.cli['--subscription-name'] = action['parameters'][0]['subscriptionName'];
+                reqParams.boto3['EventCategories'] = action['parameters'][0]['eventCategories'];
+                reqParams.cli['--event-categories'] = action['parameters'][0]['eventCategories'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'CreateEventSubscription',
+                        'boto3': 'create_event_subscription',
+                        'cli': 'create-event-subscription'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteEventSubscription") {
+                reqParams.boto3['SubscriptionName'] = action['parameters'][0]['subscriptionName'];
+                reqParams.cli['--subscription-name'] = action['parameters'][0]['subscriptionName'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DeleteEventSubscription',
+                        'boto3': 'delete_event_subscription',
+                        'cli': 'delete-event-subscription'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.refreshSchemas") {
+                reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
+                reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
+                reqParams.boto3['ReplicationInstanceArn'] = action['parameters'][0]['replicationInstanceArn'];
+                reqParams.cli['--replication-instance-arn'] = action['parameters'][0]['replicationInstanceArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'RefreshSchemas',
+                        'boto3': 'refresh_schemas',
+                        'cli': 'refresh-schemas'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createReplicationTask") {
+                reqParams.boto3['MigrationType'] = action['parameters'][0]['migrationType'];
+                reqParams.cli['--migration-type'] = action['parameters'][0]['migrationType'];
+                reqParams.boto3['ReplicationInstanceArn'] = action['parameters'][0]['replicationInstanceArn'];
+                reqParams.cli['--replication-instance-arn'] = action['parameters'][0]['replicationInstanceArn'];
+                reqParams.boto3['ReplicationTaskIdentifier'] = action['parameters'][0]['replicationTaskIdentifier'];
+                reqParams.cli['--replication-task-identifier'] = action['parameters'][0]['replicationTaskIdentifier'];
+                reqParams.boto3['ReplicationTaskSettings'] = action['parameters'][0]['replicationTaskSettings'];
+                reqParams.cli['--replication-task-settings'] = action['parameters'][0]['replicationTaskSettings'];
+                reqParams.boto3['SourceEndpointArn'] = action['parameters'][0]['sourceEndpointArn'];
+                reqParams.cli['--source-endpoint-arn'] = action['parameters'][0]['sourceEndpointArn'];
+                reqParams.boto3['TableMappings'] = action['parameters'][0]['tableMappings'];
+                reqParams.cli['--table-mappings'] = action['parameters'][0]['tableMappings'];
+                reqParams.boto3['TargetEndpointArn'] = action['parameters'][0]['targetEndpointArn'];
+                reqParams.cli['--target-endpoint-arn'] = action['parameters'][0]['targetEndpointArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'CreateReplicationTask',
+                        'boto3': 'create_replication_task',
+                        'cli': 'create-replication-task'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeTableStatistics") {
+                reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
+                reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
+                reqParams.boto3['ReplicationTaskArn'] = action['parameters'][0]['replicationTaskArn'];
+                reqParams.cli['--replication-task-arn'] = action['parameters'][0]['replicationTaskArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeTableStatistics',
+                        'boto3': 'describe_table_statistics',
+                        'cli': 'describe-table-statistics'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationTaskAssessmentResults") {
+                reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
+                reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
+                reqParams.boto3['ReplicationTaskArn'] = action['parameters'][0]['replicationTaskArn'];
+                reqParams.cli['--replication-task-arn'] = action['parameters'][0]['replicationTaskArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DescribeReplicationTaskAssessmentResults',
+                        'boto3': 'describe_replication_task_assessment_results',
+                        'cli': 'describe-replication-task-assessment-results'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteReplicationTask") {
+                reqParams.boto3['ReplicationTaskArn'] = action['parameters'][0]['replicationTaskArn'];
+                reqParams.cli['--replication-task-arn'] = action['parameters'][0]['replicationTaskArn'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dms',
+                    'method': {
+                        'api': 'DeleteReplicationTask',
+                        'boto3': 'delete_replication_task',
+                        'cli': 'delete-replication-task'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            }
+        }
+    }
+
 }
