@@ -10,7 +10,13 @@
 
 ## Installation
 
-You can download the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/awsconsolerecorder/tobecompleted) or load the extension manually.
+### Google Chrome
+
+You can download the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/console-recorder/ganlhgooidfbijjidcpkeaohjnkeicba) or load the extension manually via chrome://extensions/.
+
+### Mozilla Firefox
+
+You can download the extension from [Firefox Add-ons](https://addons.mozilla.org/en-GB/firefox/addon/console-recorder/) or load the extension manually via about:addons. If loaded manually, replace the `manifest.json` file with the `firefoxManifest.json` file before loading.
 
 ## Usage
 

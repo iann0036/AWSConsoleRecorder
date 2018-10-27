@@ -1,8 +1,8 @@
 {
-  "name": "Console Recorder",
+  "name": "Console Recorder for AWS",
   "version": "0.1.0",
   "manifest_version": 2,
-  "description": "Record AWS console actions.",
+  "description": "Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation template.",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background":  {
     "scripts": ["bg.js"]
@@ -18,9 +18,11 @@
     "default_popup": "popup.html"
   },
   "permissions": [
+    "clipboardWrite",
     "webRequest",
     "webRequestBlocking",
     "tabs",
+    "debugger",
     "notifications",
     "*://*.console.aws.amazon.com/*",
     "*://console.aws.amazon.com/*",
