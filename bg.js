@@ -2283,6 +2283,11 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+
         return {};
     }
     
@@ -2304,6 +2309,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
 
         return {};
     }
@@ -2327,6 +2337,11 @@ function analyseRequest(details) {
             'requestDetails': details
         });
 
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+
         return {};
     }
     
@@ -2348,6 +2363,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
 
         return {};
     }
@@ -2371,6 +2391,11 @@ function analyseRequest(details) {
             'requestDetails': details
         });
 
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+
         return {};
     }
     
@@ -2393,6 +2418,11 @@ function analyseRequest(details) {
             'requestDetails': details
         });
 
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+
         return {};
     }
     
@@ -2413,6 +2443,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
 
         return {};
     }
@@ -2798,8 +2833,6 @@ function analyseRequest(details) {
         return {};
     }
 
-    /* Start Auto */
-
     // autogen:cloud9:cloud9.DescribeEnvironmentMemberships
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironmentMemberships" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Permissions'] = jsonRequestBody.contentString.permissions;
@@ -2882,6 +2915,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -2948,6 +2986,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -2968,6 +3011,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3024,6 +3072,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3114,6 +3167,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3214,6 +3272,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3252,6 +3315,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3316,6 +3384,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3336,6 +3409,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3356,6 +3434,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3507,6 +3590,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3675,6 +3763,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3695,6 +3788,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3763,6 +3861,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3927,6 +4030,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -3949,6 +4057,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4057,6 +4170,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4125,6 +4243,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4147,6 +4270,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4169,6 +4297,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4233,6 +4366,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4257,6 +4395,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4298,6 +4441,11 @@ function analyseRequest(details) {
             'requestDetails': details
             });
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4320,6 +4468,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4484,6 +4637,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4522,6 +4680,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4751,6 +4914,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4791,6 +4959,11 @@ function analyseRequest(details) {
             'requestDetails': details
             });
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4811,6 +4984,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4831,6 +5009,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4853,6 +5036,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4891,6 +5079,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4929,6 +5122,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -4979,6 +5177,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5059,6 +5262,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5079,6 +5287,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5099,6 +5312,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5160,6 +5378,11 @@ function analyseRequest(details) {
                 'requestDetails': details,
                 'was_blocked': blocking
             });
+        }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
         }
         
         return {};
@@ -5586,6 +5809,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5673,6 +5901,11 @@ function analyseRequest(details) {
                 'was_blocked': blocking
             });
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5693,6 +5926,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5713,6 +5951,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5751,6 +5994,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5783,6 +6031,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5821,6 +6074,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5853,6 +6111,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5873,6 +6136,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5895,6 +6163,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5923,6 +6196,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5943,6 +6221,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5963,6 +6246,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -5998,6 +6286,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6018,6 +6311,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6050,6 +6348,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6070,6 +6373,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6105,6 +6413,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6125,6 +6438,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6157,6 +6475,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6177,6 +6500,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6233,6 +6561,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6322,6 +6655,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6344,6 +6682,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6379,6 +6722,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6463,6 +6811,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6521,6 +6874,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6753,6 +7111,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6781,6 +7144,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6827,6 +7195,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6855,6 +7228,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6893,6 +7271,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6915,6 +7298,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -6939,6 +7327,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7012,6 +7405,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7056,6 +7454,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7097,6 +7500,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7119,6 +7527,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7190,6 +7603,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7279,6 +7697,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7299,6 +7722,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7343,6 +7771,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7419,6 +7852,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7439,6 +7877,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7487,6 +7930,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7787,6 +8235,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7829,6 +8282,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7849,6 +8307,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7869,6 +8332,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -7997,6 +8465,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8021,6 +8494,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8062,6 +8540,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8097,6 +8580,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8132,6 +8620,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8176,6 +8669,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8231,6 +8729,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8295,6 +8798,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8342,6 +8850,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8390,6 +8903,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8410,6 +8928,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8514,6 +9037,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8610,6 +9138,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8653,6 +9186,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8677,6 +9215,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8819,6 +9362,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8841,6 +9389,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8887,6 +9440,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8909,6 +9467,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8956,6 +9519,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -8978,6 +9546,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9148,6 +9721,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9168,6 +9746,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9190,6 +9773,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9234,6 +9822,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9295,6 +9888,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9336,6 +9934,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9362,6 +9965,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9406,6 +10014,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9426,6 +10039,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9448,6 +10066,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9468,6 +10091,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9503,6 +10131,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9644,6 +10277,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9756,6 +10394,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9778,6 +10421,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9835,6 +10483,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -9875,6 +10528,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10018,6 +10676,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10076,6 +10739,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10158,6 +10826,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10178,6 +10851,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10213,6 +10891,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10299,6 +10982,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10364,6 +11052,11 @@ function analyseRequest(details) {
                 'was_blocked': blocking
             });
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10427,6 +11120,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10465,6 +11163,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10500,6 +11203,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10555,6 +11263,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10610,6 +11323,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10648,6 +11366,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -10799,6 +11522,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "amazon.acs.acsconsole.shared.CacheClusterContext.create") {
                 reqParams.boto3['NumCacheNodes'] = action['parameters'][0]['numCacheNodes'];
                 reqParams.cli['--num-cache-nodes'] = action['parameters'][0]['numCacheNodes'];
@@ -10859,6 +11587,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "amazon.acs.acsconsole.shared.ReservedCacheNodeRequestContext.findAll") {
                 outputs.push({
                     'region': region,
@@ -10927,6 +11660,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "EC2.DescribeAvailabilityZonesDefault") {
                 outputs.push({
                     'region': region,
@@ -11028,6 +11766,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getCatalogImportStatus") {
                 outputs.push({
                     'region': region,
@@ -11178,6 +11921,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getClassifiers") {
                 outputs.push({
                     'region': region,
@@ -11228,6 +11976,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDataCatalogEncryptionSettings") {
                 reqParams.boto3['CatalogId'] = action['parameters'][0]['catalogId'];
                 reqParams.cli['--catalog-id'] = action['parameters'][0]['catalogId'];
@@ -11260,6 +12013,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getJobs") {
                 outputs.push({
                     'region': region,
@@ -11313,6 +12071,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.deleteSecurityConfiguration") {
                 reqParams.boto3['Name'] = action['parameters'][0]['name'];
                 reqParams.cli['--name'] = action['parameters'][0]['name'];
@@ -11328,6 +12091,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.putDataCatalogEncryptionSettings") {
                 reqParams.boto3['DataCatalogEncryptionSettings'] = action['parameters'][0]['dataCatalogEncryptionSettings'];
                 reqParams.cli['--data-catalog-encryption-settings'] = action['parameters'][0]['dataCatalogEncryptionSettings'];
@@ -11345,6 +12113,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.deleteClassifier") {
                 reqParams.boto3['Name'] = action['parameters'][0]['name'];
                 reqParams.cli['--name'] = action['parameters'][0]['name'];
@@ -11360,6 +12133,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.batchDeleteConnection") {
                 reqParams.boto3['ConnectionNameList'] = action['parameters'][0]['connectionNameList'];
                 reqParams.cli['--connection-name-list'] = action['parameters'][0]['connectionNameList'];
@@ -11375,6 +12153,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.batchDeleteTable") {
                 reqParams.boto3['DatabaseName'] = action['parameters'][0]['databaseName'];
                 reqParams.cli['--database-name'] = action['parameters'][0]['databaseName'];
@@ -11392,6 +12175,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             }
         }
 
@@ -11642,6 +12430,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.EventContext.findEvents") {
                 reqParams.boto3['Duration'] = action['parameters'][0]['duration'];
                 reqParams.cli['--duration'] = action['parameters'][0]['duration'];
@@ -11825,6 +12618,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.findDbParameterGroups") {
                 outputs.push({
                     'region': region,
@@ -11869,6 +12667,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.OptionGroupContext.create") {
                 reqParams.boto3['EngineName'] = action['parameters'][0]['engineName'];
                 reqParams.cli['--engine-name'] = action['parameters'][0]['engineName'];
@@ -11904,6 +12707,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.gwt.sns.requestfactory.shared.SnsRequestContext.listTopicArns") {
                 outputs.push({
                     'region': region,
@@ -11957,6 +12765,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.EventSubscriptionContext.list") {
                 outputs.push({
                     'region': region,
@@ -11984,6 +12797,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.createDbClusterParameterGroup") {
                 reqParams.boto3['DBParameterGroupFamily'] = action['parameters'][0];
                 reqParams.cli['--db-parameter-group-family'] = action['parameters'][0];
@@ -12016,6 +12834,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbCContext.startDBCluster") {
                 reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0];
                 reqParams.cli['--db-cluster-identifier'] = action['parameters'][0];
@@ -12031,6 +12854,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.delete") {
                 reqParams.boto3['SkipFinalSnapshot'] = action['parameters'][0]['skipFinalSnapshot'];
                 reqParams.cli['--skip-final-snapshot'] = action['parameters'][0]['skipFinalSnapshot'];
@@ -12048,6 +12876,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             }                     
             
         }
@@ -12262,6 +13095,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12306,6 +13144,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12341,6 +13184,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12403,6 +13251,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12611,6 +13464,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12711,6 +13569,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12819,6 +13682,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12858,6 +13726,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12878,6 +13751,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -12936,6 +13814,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13036,6 +13919,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13076,6 +13964,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13120,6 +14013,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13233,6 +14131,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13349,6 +14252,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13384,6 +14292,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13490,6 +14403,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13540,6 +14458,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13560,6 +14483,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13580,6 +14508,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13626,8 +14559,6 @@ function analyseRequest(details) {
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && (getPipeSplitField(requestBody, 8) == "modifyIngressRulesForNetworkACL" || getPipeSplitField(requestBody, 8) == "modifyEgressRulesForNetworkACL")) {
         var headerCount = getPipeSplitField(requestBody, 2);
         var offset = headerCount + 32;
-
-        console.log(requestBody.split("|"));
         
         while (getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2) && getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2).includes("FirewallRule")) {
             var reqParams = {
@@ -13725,6 +14656,11 @@ function analyseRequest(details) {
                 });
             }
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13760,6 +14696,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -13816,6 +14757,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14032,6 +14978,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14097,6 +15048,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14138,6 +15094,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14289,6 +15250,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14309,6 +15275,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14329,6 +15300,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14349,6 +15325,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14369,6 +15350,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14416,6 +15402,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14438,6 +15429,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14473,6 +15469,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14509,6 +15510,11 @@ function analyseRequest(details) {
                 'requestDetails': details,
                 'was_blocked': blocking
             });
+
+            if (blocking) {
+                notifyBlocked();
+                return {cancel: true};
+            }
         } else if (jsonRequestBody.I && jsonRequestBody.I[0] && jsonRequestBody.I[0]["O"] && jsonRequestBody.I[0]["O"] == "bDg0Lbt_pKcqOJ8vSNZWGQW7Rfk=") {
             reqParams.boto3['LogGroupName'] = jsonRequestBody.I[0]["P"][0];
             reqParams.cli['--log-group-name'] = jsonRequestBody.I[0]["P"][0];
@@ -14539,6 +15545,11 @@ function analyseRequest(details) {
                 'requestDetails': details,
                 'was_blocked': blocking
             });
+
+            if (blocking) {
+                notifyBlocked();
+                return {cancel: true};
+            }
         } else if (jsonRequestBody.I && jsonRequestBody.I[0] && jsonRequestBody.I[0]["O"] && jsonRequestBody.I[0]["O"] == "w3zy8wcdTk4$qD2iBc81AziNanc=") {
             reqParams.boto3['LogGroupName'] = jsonRequestBody.I[0]["P"][0];
             reqParams.cli['--log-group-name'] = jsonRequestBody.I[0]["P"][0];
@@ -14574,6 +15585,11 @@ function analyseRequest(details) {
                 'requestDetails': details,
                 'was_blocked': blocking
             });
+
+            if (blocking) {
+                notifyBlocked();
+                return {cancel: true};
+            }
         } else if (jsonRequestBody.I && jsonRequestBody.I[0] && jsonRequestBody.I[0]["O"] && jsonRequestBody.I[0]["O"] == "lRd9M18y9YlzeZbi97CtbWseYDE=") {
             reqParams.boto3['DestinationArn'] = jsonRequestBody.O[0]["P"]["destinationArn"];
             reqParams.cli['--destination-arn'] = jsonRequestBody.O[0]["P"]["destinationArn"];
@@ -14612,6 +15628,11 @@ function analyseRequest(details) {
                 'requestDetails': details,
                 'was_blocked': blocking
             });
+
+            if (blocking) {
+                notifyBlocked();
+                return {cancel: true};
+            }
         }
         
         return {};
@@ -14645,6 +15666,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14706,6 +15732,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14726,6 +15757,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14810,6 +15846,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14853,6 +15894,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -14910,6 +15956,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15046,6 +16097,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15102,6 +16158,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15160,6 +16221,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15216,6 +16282,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15284,6 +16355,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15319,6 +16395,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15377,6 +16458,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15432,6 +16518,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15452,6 +16543,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15472,6 +16568,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15514,6 +16615,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15534,6 +16640,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15554,6 +16665,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -15721,6 +16837,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ParamGroupContext.createClusterParameterGroup") {
                 reqParams.boto3['Description'] = action['parameters'][0]['description'];
                 reqParams.cli['--description'] = action['parameters'][0]['description'];
@@ -15753,6 +16874,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.cookiemonster.shared.ClusterSubnetGroupContext.create") {
                 reqParams.boto3['ClusterSubnetGroupName'] = action['parameters'][0]['clusterSubnetGroupName'];
                 reqParams.cli['--cluster-subnet-group-name'] = action['parameters'][0]['clusterSubnetGroupName'];
@@ -15785,6 +16911,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             }
         }
     }
@@ -15979,6 +17110,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16003,6 +17139,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16037,6 +17178,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16061,6 +17207,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16095,6 +17246,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16119,6 +17275,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16231,6 +17392,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16255,6 +17421,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16292,6 +17463,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16316,6 +17492,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16356,6 +17537,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16382,6 +17568,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16404,6 +17595,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16426,6 +17622,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16448,6 +17649,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16470,6 +17676,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16492,6 +17703,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16526,6 +17742,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16550,6 +17771,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16572,6 +17798,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16670,6 +17901,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16702,6 +17938,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16763,6 +18004,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16829,6 +18075,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16851,6 +18102,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16945,6 +18201,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -16980,6 +18241,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17036,6 +18302,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17317,6 +18588,11 @@ function analyseRequest(details) {
 
                 // TODO
             }
+
+            if (blocking) {
+                notifyBlocked();
+                return {cancel: true};
+            }
         }
         
         return {};
@@ -17360,6 +18636,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17518,6 +18799,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17563,6 +18849,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17601,6 +18892,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17664,6 +18960,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17708,6 +19009,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17764,6 +19070,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17815,6 +19126,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17876,6 +19192,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17918,6 +19239,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17979,6 +19305,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -17999,6 +19330,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18066,6 +19402,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18130,6 +19471,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18150,6 +19496,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18200,6 +19551,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18276,6 +19632,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18343,6 +19704,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18383,6 +19749,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18415,6 +19786,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18485,6 +19861,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18519,6 +19900,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18583,6 +19969,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18603,6 +19994,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18623,6 +20019,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18676,6 +20077,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18756,6 +20162,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18834,6 +20245,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18856,6 +20272,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18894,6 +20315,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18914,6 +20340,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -18936,6 +20367,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19047,6 +20483,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19067,6 +20508,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19162,6 +20608,11 @@ function analyseRequest(details) {
             'was_blocked': blocking
         });
 
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+
         /* -- TODO
         if (Array.isArray(jsonRequestBody.keyAlias)) {
             reqParams.boto3['AliasName'] = jsonRequestBody.keyAlias[0];
@@ -19246,6 +20697,11 @@ function analyseRequest(details) {
                 'requestDetails': details
             });
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19309,6 +20765,11 @@ function analyseRequest(details) {
                 });
             });
         }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19364,6 +20825,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19396,6 +20862,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19416,6 +20887,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19454,6 +20930,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19474,6 +20955,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19496,6 +20982,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -19642,6 +21133,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteReplicationSubnetGroup") {
                 reqParams.boto3['ReplicationSubnetGroupIdentifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
                 reqParams.cli['--replication-subnet-group-identifier'] = action['parameters'][0]['replicationSubnetGroupIdentifier'];
@@ -19657,6 +21153,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationInstances") {
                 outputs.push({
                     'region': region,
@@ -19789,6 +21290,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationInstanceTaskLogs") {
                 reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
                 reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
@@ -19821,6 +21327,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeCertificates") {
                 outputs.push({
                     'region': region,
@@ -19863,6 +21374,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEndpoints") {
                 outputs.push({
                     'region': region,
@@ -19965,6 +21481,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeSchemas") {
                 reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
                 reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
@@ -20010,6 +21531,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeEventSubscriptions") {
                 outputs.push({
                     'region': region,
@@ -20088,6 +21614,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.deleteEventSubscription") {
                 reqParams.boto3['SubscriptionName'] = action['parameters'][0]['subscriptionName'];
                 reqParams.cli['--subscription-name'] = action['parameters'][0]['subscriptionName'];
@@ -20103,6 +21634,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.refreshSchemas") {
                 reqParams.boto3['EndpointArn'] = action['parameters'][0]['endpointArn'];
                 reqParams.cli['--endpoint-arn'] = action['parameters'][0]['endpointArn'];
@@ -20120,6 +21656,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.createReplicationTask") {
                 reqParams.boto3['MigrationType'] = action['parameters'][0]['migrationType'];
                 reqParams.cli['--migration-type'] = action['parameters'][0]['migrationType'];
@@ -20165,6 +21706,11 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             } else if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeTableStatistics") {
                 reqParams.boto3['MaxRecords'] = action['parameters'][0]['maxRecords'];
                 reqParams.cli['--max-records'] = action['parameters'][0]['maxRecords'];
@@ -20214,6 +21760,11 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             }
         }
     }
@@ -20284,6 +21835,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20336,6 +21892,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20376,6 +21937,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20420,6 +21986,11 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20444,6 +22015,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20464,6 +22040,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20504,6 +22085,11 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
@@ -20517,6 +22103,9 @@ function analyseRequest(details) {
         reqParams.boto3['ThingName'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName;
         reqParams.cli['--thing-name'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName;
 
+        reqParams.cfn['AttributePayload'] = jsonRequestBody.templateBody.Resources.Thing.Properties.AttributePayload;
+        reqParams.cfn['ThingName'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName;
+
         outputs.push({
             'region': region,
             'service': 'iot',
@@ -20528,6 +22117,21 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Thing',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
