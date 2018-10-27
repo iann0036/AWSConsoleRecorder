@@ -835,7 +835,7 @@ chrome.runtime.onMessage.addListener(
                 ["requestBody","blocking"]
             );
 
-            if (intercept) {
+            if (intercept && navigator.userAgent.search("Firefox") == -1) {
                 chrome.tabs.query(
                     {
                         url: [
@@ -861,7 +861,7 @@ chrome.runtime.onMessage.addListener(
 
             chrome.webRequest.onBeforeRequest.removeListener(analyseRequest);
 
-            if (intercept) {
+            if (intercept && navigator.userAgent.search("Firefox") == -1) {
                 chrome.debugger.onEvent.removeListener(allEventHandler);
                 chrome.debugger.getTargets(function(targets) {
                     for (var i=0; i<targets.length; i++) {
@@ -1563,9 +1563,7 @@ function setOutputsForTrackedResource(index) {
         } else if (tracked_resources[index].type == "AWS::WorkSpaces::Workspace") {
             ; // TODO
         }
-    } catch(err) {
-        console.log(err);
-    }
+    } catch(err) {;}
 }
 
 /******/
@@ -1584,6 +1582,42 @@ function analyseRequest(details) {
     var requestBody = "";
     var jsonRequestBody = {};
     var region = 'us-east-1';
+
+
+    // Firefox
+    if (intercept && navigator.userAgent.search("Firefox") > -1) {
+        let filter = browser.webRequest.filterResponseData(details.requestId);
+        let decoder = new TextDecoder("utf-8");
+        let encoder = new TextEncoder();
+        var responseBody = "";
+
+        filter.ondata = event => {
+            filter.write(event.data);
+           
+            responseBody += decoder.decode(event.data, {stream: true});
+        }
+
+        filter.onstop = event => {
+            filter.disconnect();
+
+            console.log(responseBody);
+
+            for (var i=tracked_resources.length-1; i>=0; i--) {
+                if (details.requestId == tracked_resources[i].requestDetails.requestId) {
+                    tracked_resources[i]["response"] = {
+                        'timestamp': null,
+                        'properties': null,
+                        'body': responseBody
+                    };
+                    setOutputsForTrackedResource(i);
+                }
+            }
+
+            for (var i=0; i<outputs.length; i++) { // TODO
+                ;
+            }
+        }
+    }
 
     var region_check = /.+\/\/([a-zA-Z0-9-]+)\.console\.aws\.amazon\.com/g.exec(details.url);
     if (region_check && region_check[1]) {
@@ -20426,6 +20460,70 @@ function analyseRequest(details) {
                 'api': 'DeleteEnvironmentConfiguration',
                 'boto3': 'delete_environment_configuration',
                 'cli': 'delete-environment-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.ListThings
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thing\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'ListThings',
+                'boto3': 'list_things',
+                'cli': 'list-things'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.CreateThingType
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thingType$/g)) {
+        reqParams.boto3['ThingTypeName'] = jsonRequestBody.thingTypeName;
+        reqParams.cli['--thing-type-name'] = jsonRequestBody.thingTypeName;
+        reqParams.boto3['ThingTypeProperties'] = jsonRequestBody.thingTypeProperties;
+        reqParams.cli['--thing-type-properties'] = jsonRequestBody.thingTypeProperties;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateThingType',
+                'boto3': 'create_thing_type',
+                'cli': 'create-thing-type'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.CreateThing
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/provision\/thing$/g)) {
+        reqParams.boto3['AttributePayload'] = jsonRequestBody.templateBody.Resources.Thing.Properties.AttributePayload;
+        reqParams.cli['--attribute-payload'] = jsonRequestBody.templateBody.Resources.Thing.Properties.AttributePayload;
+        reqParams.boto3['ThingTypeName'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingTypeName;
+        reqParams.cli['--thing-type-name'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingTypeName;
+        reqParams.boto3['ThingName'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName;
+        reqParams.cli['--thing-name'] = jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateThing',
+                'boto3': 'create_thing',
+                'cli': 'create-thing'
             },
             'options': reqParams,
             'requestDetails': details
