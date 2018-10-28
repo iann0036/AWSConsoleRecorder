@@ -6,6 +6,201 @@ var go_first_output;
 var recording = false;
 var intercept = false;
 
+function interpretGwtArg(tracker) {
+    var index = parseInt(tracker.pipesplit[tracker.cursor]);
+    if (index == 0) {
+        tracker.cursor += 1;
+        return {
+            'value': null,
+            'type': null
+        }
+    } else if (index < 0) {
+        tracker.cursor += 1;
+        return tracker.resolvedObjects[Math.abs(index)];
+    }
+
+    var arg_type = tracker.params[index];
+    tracker.cursor += 1;
+
+    if (arg_type == "amazonaws.console.common.dtos.Regions$Region/2677748408") {
+        var ret = {
+            'type': arg_type
+        };
+        tracker.resolvedObjects.push(ret);
+
+        interpretGwtArg(tracker);
+        tracker.cursor += 9;
+        var region = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 7;
+
+        ret['value'] = region;
+
+        return ret;
+    } else if (arg_type == "java.lang.String/2004016611") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var val = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['value'] = val;
+
+        return ret;
+    } else if (arg_type == "java.util.ArrayList/4159755760") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var arr = [];
+        var array_length = tracker.pipesplit[tracker.cursor];
+        tracker.cursor += 1;
+
+        for (var i=0; i<array_length; i++) {
+            arr.push(interpretGwtArg(tracker));
+        }
+
+        ret['value'] = arr;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.FirewallRule/883972025") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var ruleId = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var protocol = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var portStart = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var portEnd = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var cidr = interpretGwtArg(tracker);
+        interpretGwtArg(tracker);
+        interpretGwtArg(tracker);
+        var action = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var ruleDirection = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['value'] = ruleId;
+        ret['ruleId'] = ruleId;
+        ret['protocol'] = protocol;
+        ret['portStart'] = portStart;
+        ret['portEnd'] = portEnd;
+        ret['cidr'] = cidr;
+        ret['action'] = action;
+        ret['ruleDirection'] = ruleDirection;
+
+        return ret;
+    } else {
+        var ret = {
+            'type': 'unknown'
+        };
+        tracker.resolvedObjects.push(ret);
+
+        console.log("Unknown GWT type: " + arg_type);
+
+        var val = tracker.pipesplit[tracker.cursor];
+        tracker.cursor += 1;
+
+        ret['value'] = val;
+
+        return ret;
+    }
+}
+
+function interpretGwtWireRequest(str) {
+    var xsrfRequested = false;
+    var args = [];
+
+    if (!str) return {};
+    if (str.split("|").length < 5) return {};
+
+    var tracker = {
+        'params': [null], // 1-indexed
+        'cursor': 0,
+        'args': [],
+        'resolvedObjects': [null],
+        'pipesplit': str.split("|")
+    }
+
+    if (parseInt(tracker.pipesplit[tracker.cursor]) != 7) {
+        return {};
+    }
+    tracker.cursor += 1;
+
+    if (parseInt(tracker.pipesplit[tracker.cursor]) == 2) {
+        xsrfRequested = true;
+    }
+    tracker.cursor += 1;
+
+    var param_count = parseInt(tracker.pipesplit[tracker.cursor]);
+
+    for (var i=0; i<param_count; i++) {
+        tracker.cursor += 1;
+        tracker.params.push(tracker.pipesplit[tracker.cursor]);
+    }
+    tracker.cursor += 1;
+
+    var endpoint = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+    tracker.cursor += 1;
+    var policy_file = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+    tracker.cursor += 1;
+    if (xsrfRequested) {
+        tracker.cursor += 2;
+    }
+    var service = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+    tracker.cursor += 1;
+    var method = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+    tracker.cursor += 1;
+    var num_args = parseInt(tracker.pipesplit[tracker.cursor]);
+    tracker.cursor += 1;
+
+    if (service == "amazonaws.console.vpc.client.VpcConsoleService" && method == "modifyIngressRulesForNetworkACL") {
+        args.push({
+            'value': interpretGwtArg(tracker),
+            'name': 'region'
+        });
+
+        args.push({
+            'value': tracker.params[parseInt(tracker.pipesplit[tracker.cursor])],
+            'name': 'aclId'
+        });
+        tracker.cursor += 1;
+
+        args.push({
+            'value': interpretGwtArg(tracker),
+            'name': 'rules'
+        });
+    } else if (service == "amazonaws.console.vpc.client.VpcConsoleService" && method == "getVpcs") {
+        args.push({
+            'value': interpretGwtArg(tracker),
+            'name': 'region'
+        });
+
+        args.push({
+            'value': tracker.pipesplit[tracker.cursor],
+            'name': 'null'
+        });
+        tracker.cursor += 1;
+    }
+
+    return {
+        'endpoint': endpoint,
+        'service': service,
+        'method': method,
+        'params': tracker.params,
+        'params': tracker.resolvedObjects,
+        'num_args': num_args,
+        'args': args
+    };
+}
+
 function MD5(e) {
     function h(a, b) {
         var c, d, e, f, g;
@@ -1582,7 +1777,7 @@ function analyseRequest(details) {
     var requestBody = "";
     var jsonRequestBody = {};
     var region = 'us-east-1';
-
+    var gwtRequest = {};
 
     // Firefox
     if (intercept && navigator.userAgent.search("Firefox") > -1) {
@@ -1641,7 +1836,9 @@ function analyseRequest(details) {
     
         try {
             jsonRequestBody = JSON.parse(requestBody);
-        } catch(e) {;}
+        } catch(e) {
+            gwtRequest = interpretGwtWireRequest(requestBody);
+        }
 
         // check for string objects
         for (var prop in jsonRequestBody) {
@@ -5389,7 +5586,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRegions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService" && getPipeSplitField(requestBody, 8) == "getRegions") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRegions") {
 
         outputs.push({
             'region': region,
@@ -5425,7 +5622,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getDHCPOptions" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -5443,7 +5640,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService" && getPipeSplitField(requestBody, 8) == "getVpcAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getVpcAttributes") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -5483,7 +5680,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g) && getPipeSplitField(requestBody, 8) == "getVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g) && gwtRequest['method'] == "getVpcs") {
 
         outputs.push({
             'region': region,
@@ -5501,7 +5698,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService" && getPipeSplitField(requestBody, 8) == "getRouteTables") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRouteTables") {
 
         outputs.push({
             'region': region,
@@ -5555,7 +5752,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getDHCPOptions" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -5685,7 +5882,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkAcls
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getNetworkACLs" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNetworkACLs" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -5779,7 +5976,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createVpc" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['CidrBlock'] = getPipeSplitField(requestBody, 18);
         reqParams.cli['--cidr-block'] = getPipeSplitField(requestBody, 18);
         reqParams.boto3['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
@@ -5961,7 +6158,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "modifyDHCPOptions" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService" && getPipeSplitField(requestBody, 8) == "getInstancesForVPC" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getInstancesForVPC" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -5979,7 +6176,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "deleteVpc" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 18);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 18);
 
@@ -6004,7 +6201,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createRouteTable" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -6041,7 +6238,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getRouteTables" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -6206,7 +6403,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "deleteRouteTable" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['RouteTableId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--route-table-id'] = getPipeSplitField(requestBody, 17);
 
@@ -6321,7 +6518,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createNetworkACL" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -6358,7 +6555,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "deleteNetworkACL" && getPipeSplitField(requestBody, 7) == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.boto3['NetworkAclId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--network-acl-id'] = getPipeSplitField(requestBody, 17);
 
@@ -6510,7 +6707,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.ListQueues
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 7) == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && getPipeSplitField(requestBody, 8) == "listQueues") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "listQueues") {
 
         outputs.push({
             'region': region,
@@ -6528,7 +6725,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonKMS$/g) && getPipeSplitField(requestBody, 8) == "listKeys" && getPipeSplitField(requestBody, 7) == "com.amazonaws.console.sqs.shared.services.AmazonKMSService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonKMS$/g) && gwtRequest['method'] == "listKeys" && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonKMSService") {
 
         outputs.push({
             'region': region,
@@ -6546,7 +6743,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.DeleteQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "createQueue" && getPipeSplitField(requestBody, 7) == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && getPipeSplitField(requestBody, 8) == "deleteQueue" && getPipeSplitField(requestBody, 7) == "com.amazonaws.console.sqs.shared.services.AmazonSQSService") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "createQueue" && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "deleteQueue" && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService") {
         reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 10);
         reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 10);
 
@@ -8342,7 +8539,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:ds.DescribeDirectories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeDirectories") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeDirectories") {
 
         outputs.push({
             'region': region,
@@ -8360,7 +8557,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.DescribeWorkspaceBundles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeWorkspaceBundles") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceBundles") {
 
         outputs.push({
             'region': region,
@@ -8378,7 +8575,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "listKeys") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "listKeys") {
 
         outputs.push({
             'region': region,
@@ -8396,7 +8593,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.DescribeWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "describeWorkspaceImages") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceImages") {
 
         outputs.push({
             'region': region,
@@ -8414,7 +8611,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.CreateWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "createRegistration") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "createRegistration") {
  
         // TODO: create directory here
         // getPipeSplitField(requestBody, 15) // email
@@ -8475,7 +8672,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.TerminateWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && getPipeSplitField(requestBody, 8) == "terminateWorkspaces") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "terminateWorkspaces") {
         reqParams.boto3['TerminateWorkspaceRequests'] = {
             'WorkspaceId': getPipeSplitField(requestBody, 12)
         };
@@ -14262,7 +14459,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createVpc") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc") {
         reqParams.boto3['CidrBlock'] = getPipeSplitField(requestBody, 18);
         reqParams.cli['--cidr-block'] = getPipeSplitField(requestBody, 18);
         reqParams.boto3['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
@@ -14302,7 +14499,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcs") {
 
         outputs.push({
             'region': region,
@@ -14320,7 +14517,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getDHCPOptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions") {
 
         outputs.push({
             'region': region,
@@ -14338,7 +14535,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getVpcAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcAttributes") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -14358,7 +14555,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getRouteTables") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables") {
 
         outputs.push({
             'region': region,
@@ -14376,7 +14573,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createRouteTable") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createRouteTable") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -14413,7 +14610,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkAcls
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createDHCPOption" && getPipeSplitField(requestBody, 8) == "getNetworkACLs") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createDHCPOption" && gwtRequest['method'] == "getNetworkACLs") {
 
         outputs.push({
             'region': region,
@@ -14431,7 +14628,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "createNetworkACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -14468,7 +14665,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "modifyIngressRulesForNetworkACL" && getPipeSplitField(requestBody, 8) == "deleteNetworkACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyIngressRulesForNetworkACL" && gwtRequest['method'] == "deleteNetworkACL") {
         reqParams.boto3['NetworkAclId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--network-acl-id'] = getPipeSplitField(requestBody, 17);
 
@@ -14493,7 +14690,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "deleteRouteTable") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable") {
         reqParams.boto3['RouteTableId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--route-table-id'] = getPipeSplitField(requestBody, 17);
 
@@ -14538,7 +14735,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getSubnets") {
 
         outputs.push({
             'region': region,
@@ -14556,11 +14753,8 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.CreateNetworkAclEntry
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && (getPipeSplitField(requestBody, 8) == "modifyIngressRulesForNetworkACL" || getPipeSplitField(requestBody, 8) == "modifyEgressRulesForNetworkACL")) {
-        var headerCount = getPipeSplitField(requestBody, 2);
-        var offset = headerCount + 32;
-        
-        while (getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2) && getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2).includes("FirewallRule")) {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && (gwtRequest['method'] == "modifyIngressRulesForNetworkACL" || gwtRequest['method'] == "modifyEgressRulesForNetworkACL")) {
+        for (var i=0; i<gwtRequest.args[2].value.value.length; i++) {
             var reqParams = {
                 'boto3': {},
                 'go': {},
@@ -14568,7 +14762,7 @@ function analyseRequest(details) {
                 'cli': {}
             };
             
-            if (getPipeSplitField(requestBody, 8) == "modifyIngressRulesForNetworkACL") {
+            if (gwtRequest['method'] == "modifyIngressRulesForNetworkACL") {
                 reqParams.boto3['Egress'] = false;
                 reqParams.cli['--ingress'] = null;
                 reqParams.cfn['Egress'] = false;
@@ -14578,59 +14772,40 @@ function analyseRequest(details) {
                 reqParams.cfn['Egress'] = true;
             }
             
-            reqParams.boto3['NetworkAclId'] = getPipeSplitField(requestBody, 18);
-            reqParams.cli['--network-acl-id'] = getPipeSplitField(requestBody, 18);
-            reqParams.cfn['NetworkAclId'] = getPipeSplitField(requestBody, 18);
-            offset += 1;
-            reqParams.boto3['RuleNumber'] = getPipeSplitField(requestBody, offset);
-            reqParams.cli['--rule-number'] = getPipeSplitField(requestBody, offset);
-            reqParams.cfn['RuleNumber'] = getPipeSplitField(requestBody, offset);
-            offset += 1;
-            reqParams.boto3['Protocol'] = getPipeSplitField(requestBody, offset);
-            reqParams.cli['--protocol'] = getPipeSplitField(requestBody, offset);
-            reqParams.cfn['Protocol'] = getPipeSplitField(requestBody, offset);
-            offset += 1;
-            if (getPipeSplitField(requestBody, offset) > 0) { // don't set ICMP PortRange
+            reqParams.boto3['NetworkAclId'] = gwtRequest.args[1].value;
+            reqParams.cli['--network-acl-id'] = gwtRequest.args[1].value;
+            reqParams.cfn['NetworkAclId'] = gwtRequest.args[1].value;
+            
+            reqParams.boto3['RuleNumber'] = gwtRequest.args[2].value.value[i].ruleId;
+            reqParams.cli['--rule-number'] = gwtRequest.args[2].value.value[i].ruleId;
+            reqParams.cfn['RuleNumber'] = gwtRequest.args[2].value.value[i].ruleId;
+            
+            reqParams.boto3['Protocol'] = gwtRequest.args[2].value.value[i].protocol;
+            reqParams.cli['--protocol'] = gwtRequest.args[2].value.value[i].protocol;
+            reqParams.cfn['Protocol'] = gwtRequest.args[2].value.value[i].protocol;
+            
+            if (gwtRequest.args[2].value.value[i].portStart > 0) { // don't set ICMP PortRange
                 reqParams.boto3['PortRange'] = {
-                    'From': getPipeSplitField(requestBody, offset),
-                    'To': getPipeSplitField(requestBody, (offset + 1))
+                    'From': gwtRequest.args[2].value.value[i].portStart,
+                    'To': gwtRequest.args[2].value.value[i].portEnd
                 };
                 reqParams.cli['--port-range'] = {
-                    'From': getPipeSplitField(requestBody, offset),
-                    'To': getPipeSplitField(requestBody, (offset + 1))
+                    'From': gwtRequest.args[2].value.value[i].portStart,
+                    'To': gwtRequest.args[2].value.value[i].portEnd
                 };
                 reqParams.cfn['PortRange'] = {
-                    'From': getPipeSplitField(requestBody, offset),
-                    'To': getPipeSplitField(requestBody, (offset + 1))
+                    'From': gwtRequest.args[2].value.value[i].portStart,
+                    'To': gwtRequest.args[2].value.value[i].portEnd
                 };
             }
-            offset += 4;
-            if (getPipeSplitField(requestBody, offset) > 0) {
-                offset += 1;
-                reqParams.boto3['CidrBlock'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
-                reqParams.cli['--cidr-block'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
-                reqParams.cfn['CidrBlock'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
-            } else {
-                reqParams.boto3['CidrBlock'] = '???'; // TODO - Fix this
-                reqParams.cli['--cidr-block'] = '???';
-                reqParams.cfn['CidrBlock'] = '???';
-            }
-            offset += 1;
-            if (getPipeSplitField(requestBody, offset) == 0) {
-                offset += 1;
-            } else if (getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2).includes("ArrayList")) {
-                offset += getPipeSplitField(requestBody, (offset + 1)) + 2;
-            }
-            if (getPipeSplitField(requestBody, offset) == 0) {
-                offset += 1;
-            } else if (getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2).includes("ArrayList")) {
-                offset += getPipeSplitField(requestBody, (offset + 1)) + 2;
-            }
-            reqParams.boto3['RuleAction'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
-            reqParams.cli['--rule-action'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
-            reqParams.cfn['RuleAction'] = getPipeSplitField(requestBody, getPipeSplitField(requestBody, offset) + 2);
+            
+            reqParams.boto3['CidrBlock'] = gwtRequest.args[2].value.value[i].cidr.value[0].value;
+            reqParams.cli['--cidr-block'] = gwtRequest.args[2].value.value[i].cidr.value[0].value;
+            reqParams.cfn['CidrBlock'] = gwtRequest.args[2].value.value[i].cidr.value[0].value;
 
-            offset += 2;
+            reqParams.boto3['RuleAction'] = gwtRequest.args[2].value.value[i].action;
+            reqParams.cli['--rule-action'] = gwtRequest.args[2].value.value[i].action;
+            reqParams.cfn['RuleAction'] = gwtRequest.args[2].value.value[i].action;
 
             if (reqParams.boto3['RuleNumber'] != 32767) { // ignore default rule
                 outputs.push({
@@ -14666,7 +14841,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "modifyDHCPOptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
         reqParams.boto3['DhcpOptionsId'] = getPipeSplitField(requestBody, 18);
@@ -14706,7 +14881,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNatGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && getPipeSplitField(requestBody, 8) == "getNatGateways") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNatGateways") {
 
         outputs.push({
             'region': region,
@@ -15639,7 +15814,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.CreateQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "createQueue") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "createQueue") {
         reqParams.boto3['QueueName'] = getPipeSplitField(requestBody, 12);
         reqParams.cli['--queue-name'] = getPipeSplitField(requestBody, 12);
 
@@ -15676,7 +15851,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.GetQueueAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "getQueueAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "getQueueAttributes") {
         reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 11);
         reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 11);
         reqParams.boto3['AttributeNames'] = getPipeSplitField(requestBody, 14);
@@ -15698,7 +15873,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.SetQueueAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && getPipeSplitField(requestBody, 8) == "setQueueAttributes" && getPipeSplitField(requestBody, 13) == "Policy") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "setQueueAttributes" && getPipeSplitField(requestBody, 13) == "Policy") {
         reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 11);
         reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 11);
         reqParams.boto3['Attributes'] = {
@@ -15767,7 +15942,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.GetHostedZoneCount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "getHostedZoneCount") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "getHostedZoneCount") {
 
         outputs.push({
             'region': region,
@@ -15785,7 +15960,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.ListHostedZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listHostedZones") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHostedZones") {
         reqParams.boto3['MaxItems'] = getPipeSplitField(requestBody, 10);
         reqParams.cli['--max-items'] = getPipeSplitField(requestBody, 10);
 
@@ -15805,7 +15980,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.CreateHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "createPrivateHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPrivateHostedZone") {
         reqParams.boto3['Name'] = getPipeSplitField(requestBody, 11);
         reqParams.cli['--name'] = getPipeSplitField(requestBody, 11);
         reqParams.boto3['HostedZoneConfig'] = {
@@ -15856,7 +16031,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.CreateHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "createPublicHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPublicHostedZone") {
         reqParams.boto3['Name'] = getPipeSplitField(requestBody, 10);
         reqParams.cli['--name'] = getPipeSplitField(requestBody, 10);
         reqParams.boto3['HostedZoneConfig'] = {
@@ -15905,7 +16080,7 @@ function analyseRequest(details) {
 
 
     // autogen:route53:route53.ListGeoLocations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listGeoLocationDetails") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listGeoLocationDetails") {
 
         outputs.push({
             'region': region,
@@ -15923,7 +16098,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.ListHealthChecks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "listHealthChecks") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHealthChecks") {
 
         outputs.push({
             'region': region,
@@ -15941,7 +16116,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.DeleteHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && getPipeSplitField(requestBody, 8) == "deleteHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "deleteHostedZone") {
         reqParams.boto3['Id'] = getPipeSplitField(requestBody, 10);
         reqParams.cli['--id'] = getPipeSplitField(requestBody, 10);
 
