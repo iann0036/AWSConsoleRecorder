@@ -22889,4 +22889,196 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:apigateway:apigateway.CreateRestApi
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/restapis") {
+        reqParams.boto3['name'] = jsonRequestBody.contentString.info.title;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.info.title;
+        reqParams.boto3['description'] = jsonRequestBody.contentString.info.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.info.description;
+        reqParams.boto3['version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+        reqParams.cli['--api-version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+        reqParams.boto3['endpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
+        reqParams.cli['--endpoint-configuration'] = jsonRequestBody.params.endpointConfigurationTypes;
+
+        reqParams.cfn['name'] = jsonRequestBody.contentString.info.title;
+        reqParams.cfn['description'] = jsonRequestBody.contentString.info.description;
+        reqParams.cfn['version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+        reqParams.cfn['endpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
+        
+        // TODO: More here
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateRestApi',
+                'boto3': 'create_rest_api',
+                'cli': 'create-rest-api'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::RestApi',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateResource
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/resources\/.+$/g)) {
+        reqParams.boto3['restApiId'] = /^\/restapis\/(.+)\/resources\/.+$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/resources\/.+$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['parentId'] = /^\/restapis\/.+\/resources\/(.+)$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--parent-id'] = /^\/restapis\/.+\/resources\/(.+)$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['pathPart'] = jsonRequestBody.contentString.pathPart;
+        reqParams.cli['--path-part'] = jsonRequestBody.contentString.pathPart;
+
+        reqParams.cfn['RestApiId'] = /^\/restapis\/(.+)\/resources\/.+$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['ParentId'] = /^\/restapis\/.+\/resources\/(.+)$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['PathPart'] = jsonRequestBody.contentString.pathPart;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateResource',
+                'boto3': 'create_resource',
+                'cli': 'create-resource'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::Resource',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateStage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/stages$/g)) {
+        reqParams.boto3['RestApiId'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['stageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+        reqParams.boto3['description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['deploymentId'] = jsonRequestBody.contentString.deploymentId;
+        reqParams.cli['--deployment-id'] = jsonRequestBody.contentString.deploymentId;
+
+        reqParams.cfn['RestApiId'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['DeploymentId'] = jsonRequestBody.contentString.deploymentId;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateStage',
+                'boto3': 'create_stage',
+                'cli': 'create-stage'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::Resource',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateUsagePlanKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/usageplans\/.+\/keys$/g)) {
+        reqParams.boto3['usagePlanId'] = /^\/usageplans\/(.+)\/keys$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--usage-plan-id'] = /^\/usageplans\/(.+)\/keys$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['keyId'] = jsonRequestBody.contentString.keyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.contentString.keyId;
+        reqParams.boto3['keyType'] = jsonRequestBody.contentString.keyType;
+        reqParams.cli['--key-type'] = jsonRequestBody.contentString.keyType;
+
+        reqParams.cfn['UsagePlanId'] = /^\/usageplans\/(.+)\/keys$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['KeyId'] = jsonRequestBody.contentString.keyId;
+        reqParams.cfn['KeyType'] = jsonRequestBody.contentString.keyType;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateUsagePlanKey',
+                'boto3': 'create_usage_plan_key',
+                'cli': 'create-usage-plan-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::UsagePlanKey',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ecr.CreateRepository
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/repository\/create\?/g)) {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.repositoryName[0];
+        reqParams.cli['--repository-name'] = jsonRequestBody.repositoryName[0];
+
+        reqParams.cfn['RepositoryName'] = jsonRequestBody.repositoryName[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'CreateRepository',
+                'boto3': 'create_repository',
+                'cli': 'create-repository'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('ecr', details.requestId),
+            'region': region,
+            'service': 'ecr',
+            'type': 'AWS::ECR::Repository',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
