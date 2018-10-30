@@ -22647,4 +22647,246 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.CreatePlacementGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreatePlacementGroup\?/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+        reqParams.boto3['Strategy'] = jsonRequestBody.strategy;
+        reqParams.cli['--strategy'] = jsonRequestBody.strategy;
+
+        reqParams.cfn['Strategy'] = jsonRequestBody.strategy;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreatePlacementGroup',
+                'boto3': 'create_placement_group',
+                'cli': 'create-placement-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::PlacementGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeletePlacementGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeletePlacementGroup\?/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeletePlacementGroup',
+                'boto3': 'delete_placement_group',
+                'cli': 'delete-placement-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeInstanceCreditSpecifications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstanceCreditSpecifications\?/g)) {
+        reqParams.boto3['InstanceIds'] = jsonRequestBody.InstanceIds;
+        reqParams.cli['--instance-ids'] = jsonRequestBody.InstanceIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeInstanceCreditSpecifications',
+                'boto3': 'describe_instance_credit_specifications',
+                'cli': 'describe-instance-credit-specifications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeIdFormat
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeIdFormat\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeIdFormat',
+                'boto3': 'describe_id_format',
+                'cli': 'describe-id-format'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AttachNetworkInterface
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=attachNetworkInterface\?/g)) {
+        reqParams.boto3['InstanceId'] = jsonRequestBody.instanceId;
+        reqParams.cli['--instance-id'] = jsonRequestBody.instanceId;
+        reqParams.boto3['DeviceIndex'] = jsonRequestBody.deviceIndex;
+        reqParams.cli['--device-index'] = jsonRequestBody.deviceIndex;
+        reqParams.boto3['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+        reqParams.cli['--network-interface-id'] = jsonRequestBody.networkInterfaceId;
+
+        reqParams.cfn['InstanceId'] = jsonRequestBody.instanceId;
+        reqParams.cfn['DeviceIndex'] = jsonRequestBody.deviceIndex;
+        reqParams.cfn['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AttachNetworkInterface',
+                'boto3': 'attach_network_interface',
+                'cli': 'attach-network-interface'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInterfaceAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DetachNetworkInterface
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=detachNetworkInterface\?/g)) {
+        reqParams.boto3['AttachmentId'] = jsonRequestBody.attachmentId;
+        reqParams.cli['--attachment-id'] = jsonRequestBody.attachmentId;
+        reqParams.boto3['Force'] = jsonRequestBody.force;
+        reqParams.cli['--force'] = jsonRequestBody.force;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DetachNetworkInterface',
+                'boto3': 'detach_network_interface',
+                'cli': 'detach-network-interface'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeNetworkAcls
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkAcls\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeNetworkAcls',
+                'boto3': 'describe_network_acls',
+                'cli': 'describe-network-acls'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.ReplaceNetworkAclAssociation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReplaceNetworkAclAssociation\?/g)) {
+        reqParams.boto3['AssociationId'] = jsonRequestBody.associationId;
+        reqParams.cli['--association-id'] = jsonRequestBody.associationId;
+        reqParams.boto3['NetworkAclId'] = jsonRequestBody.networkAclId;
+        reqParams.cli['--network-acl-id'] = jsonRequestBody.networkAclId;
+
+        reqParams.cfn['SubnetId'] = jsonRequestBody.associationId;
+        reqParams.cfn['NetworkAclId'] = jsonRequestBody.networkAclId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'ReplaceNetworkAclAssociation',
+                'boto3': 'replace_network_acl_association',
+                'cli': 'replace-network-acl-association'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SubnetNetworkAclAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AssociateRouteTable
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateRouteTable\?/g)) {
+        reqParams.boto3['SubnetId'] = jsonRequestBody.subnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.subnetId;
+        reqParams.boto3['RouteTableId'] = jsonRequestBody.routeTableId;
+        reqParams.cli['--route-table-id'] = jsonRequestBody.routeTableId;
+
+        reqParams.cfn['SubnetId'] = jsonRequestBody.subnetId;
+        reqParams.cfn['RouteTableId'] = jsonRequestBody.routeTableId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AssociateRouteTable',
+                'boto3': 'associate_route_table',
+                'cli': 'associate-route-table'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SubnetRouteTableAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
