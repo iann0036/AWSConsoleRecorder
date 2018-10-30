@@ -1833,6 +1833,34 @@ function setOutputsForTrackedResource(index) {
             tracked_resources[index].returnValues = {
                 'Ref': jsonRequestBody.XssMatchSet.XssMatchSetId
             };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::ByteMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.ByteMatchSet.ByteMatchSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::IPSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.IPSet.IPSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::Rule") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.Rule.RuleId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::SizeConstraintSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.SizeConstraintSet.SizeConstraintSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::SqlInjectionMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.SqlInjectionMatchSet.SqlInjectionMatchSetId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::WebACL") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.WebACL.WebACLId
+            };
+        } else if (tracked_resources[index].type == "AWS::WAFRegional::XssMatchSet") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.XssMatchSet.XssMatchSetId
+            };
         } else if (tracked_resources[index].type == "AWS::WorkSpaces::Workspace") {
             ; // TODO
         }
@@ -23077,6 +23105,1382 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DescribeStacks
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DescribeStacks',
+                'boto3': 'describe_stacks',
+                'cli': 'describe-stacks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DescribeFleets
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DescribeFleets',
+                'boto3': 'describe_fleets',
+                'cli': 'describe-fleets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.CreateStack
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cli['--display-name'] = jsonRequestBody.displayName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['StorageConnectors'] = jsonRequestBody.storageConnectors;
+        reqParams.cli['--storage-connectors'] = jsonRequestBody.storageConnectors;
+        reqParams.boto3['UserSettings'] = jsonRequestBody.userSettings;
+        reqParams.cli['--user-settings'] = jsonRequestBody.userSettings;
+        reqParams.boto3['ApplicationSettings'] = jsonRequestBody.applicationSettings;
+        reqParams.cli['--application-settings'] = jsonRequestBody.applicationSettings;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['StorageConnectors'] = jsonRequestBody.storageConnectors;
+        reqParams.cfn['UserSettings'] = jsonRequestBody.userSettings;
+        reqParams.cfn['ApplicationSettings'] = jsonRequestBody.applicationSettings;
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'CreateStack',
+                'boto3': 'create_stack',
+                'cli': 'create-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Stack',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.CreateFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cli['--display-name'] = jsonRequestBody.displayName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['ImageArn'] = jsonRequestBody.imageArn;
+        reqParams.cli['--image-arn'] = jsonRequestBody.imageArn;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.instanceType;
+        reqParams.boto3['DisconnectTimeoutInSeconds'] = jsonRequestBody.disconnectTimeoutInSeconds;
+        reqParams.cli['--disconnect-timeout-in-seconds'] = jsonRequestBody.disconnectTimeoutInSeconds;
+        reqParams.boto3['VpcConfig'] = jsonRequestBody.vpcConfig;
+        reqParams.cli['--vpc-config'] = jsonRequestBody.vpcConfig;
+        reqParams.boto3['ComputeCapacity'] = jsonRequestBody.computeCapacity;
+        reqParams.cli['--compute-capacity'] = jsonRequestBody.computeCapacity;
+        reqParams.boto3['EnableDefaultInternetAccess'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.cli['--enable-default-internet-access'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.boto3['DomainJoinInfo'] = jsonRequestBody.domainJoinInfo;
+        reqParams.cli['--domain-join-info'] = jsonRequestBody.domainJoinInfo;
+        reqParams.boto3['FleetType'] = jsonRequestBody.fleetType;
+        reqParams.cli['--fleet-type'] = jsonRequestBody.fleetType;
+        reqParams.boto3['MaxUserDurationInSeconds'] = jsonRequestBody.maxUserDurationInSeconds;
+        reqParams.cli['--max-user-duration-in-seconds'] = jsonRequestBody.maxUserDurationInSeconds;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+        reqParams.cfn['ImageArn'] = jsonRequestBody.imageArn;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cfn['DisconnectTimeoutInSeconds'] = jsonRequestBody.disconnectTimeoutInSeconds;
+        reqParams.cfn['VpcConfig'] = jsonRequestBody.vpcConfig;
+        reqParams.cfn['ComputeCapacity'] = jsonRequestBody.computeCapacity;
+        reqParams.cfn['EnableDefaultInternetAccess'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.cfn['DomainJoinInfo'] = jsonRequestBody.domainJoinInfo;
+        reqParams.cfn['FleetType'] = jsonRequestBody.fleetType;
+        reqParams.cfn['MaxUserDurationInSeconds'] = jsonRequestBody.maxUserDurationInSeconds;
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'CreateFleet',
+                'boto3': 'create_fleet',
+                'cli': 'create-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Fleet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DescribeImages
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/images$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DescribeImages',
+                'boto3': 'describe_images',
+                'cli': 'describe-images'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DescribeImageBuilders
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DescribeImageBuilders',
+                'boto3': 'describe_image_builders',
+                'cli': 'describe-image-builders'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.CreateImageBuilder
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cli['--display-name'] = jsonRequestBody.displayName;
+        reqParams.boto3['DomainJoinInfo'] = jsonRequestBody.domainJoinInfo;
+        reqParams.cli['--domain-join-info'] = jsonRequestBody.domainJoinInfo;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.instanceType;
+        reqParams.boto3['VpcConfig'] = {
+            'SubnetIds': [
+                jsonRequestBody.subnetId
+            ],
+            'SecurityGroupIds': jsonRequestBody.securityGroupIds
+        };
+        reqParams.cli['--vpc-config'] = {
+            'SubnetIds': [
+                jsonRequestBody.subnetId
+            ],
+            'SecurityGroupIds': jsonRequestBody.securityGroupIds
+        };
+        reqParams.boto3['ImageArn'] = jsonRequestBody.imageArn;
+        reqParams.cli['--image-arn'] = jsonRequestBody.imageArn;
+        reqParams.boto3['EnableDefaultInternetAccess'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.cli['--enable-default-internet-access'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.boto3['AppstreamAgentVersion'] = jsonRequestBody.appstreamAgentVersion;
+        reqParams.cli['--appstream-agent-version'] = jsonRequestBody.appstreamAgentVersion;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['DisplayName'] = jsonRequestBody.displayName;
+        reqParams.cfn['DomainJoinInfo'] = jsonRequestBody.domainJoinInfo;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.instanceType;
+        reqParams.cfn['VpcConfig'] = {
+            'SubnetIds': [
+                jsonRequestBody.subnetId
+            ],
+            'SecurityGroupIds': jsonRequestBody.securityGroupIds
+        };
+        reqParams.cfn['ImageArn'] = jsonRequestBody.imageArn;
+        reqParams.cfn['EnableDefaultInternetAccess'] = jsonRequestBody.enableDefaultInternetAccess;
+        reqParams.cfn['AppstreamAgentVersion'] = jsonRequestBody.appstreamAgentVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'CreateImageBuilder',
+                'boto3': 'create_image_builder',
+                'cli': 'create-image-builder'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::ImageBuilder',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.CreateDirectoryConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs$/g)) {
+        reqParams.boto3['DirectoryName'] = jsonRequestBody.directoryName;
+        reqParams.cli['--directory-name'] = jsonRequestBody.directoryName;
+        reqParams.boto3['ServiceAccountCredentials'] = jsonRequestBody.serviceAccountCredentials;
+        reqParams.cli['--service-account-credentials'] = jsonRequestBody.serviceAccountCredentials;
+        reqParams.boto3['OrganizationalUnitDistinguishedNames'] = jsonRequestBody.organizationalUnitDistinguishedNames;
+        reqParams.cli['--organizational-unit-distinguished-names'] = jsonRequestBody.organizationalUnitDistinguishedNames;
+
+        reqParams.cfn['DirectoryName'] = jsonRequestBody.directoryName;
+        reqParams.cfn['ServiceAccountCredentials'] = jsonRequestBody.serviceAccountCredentials;
+        reqParams.cfn['OrganizationalUnitDistinguishedNames'] = jsonRequestBody.organizationalUnitDistinguishedNames;
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'CreateDirectoryConfig',
+                'boto3': 'create_directory_config',
+                'cli': 'create-directory-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::DirectoryConfig',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:appstream:appstream.CreateUser
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/users$/g)) {
+        reqParams.boto3['UserName'] = jsonRequestBody.emailAddress;
+        reqParams.cli['--user-name'] = jsonRequestBody.emailAddress;
+        reqParams.boto3['FirstName'] = jsonRequestBody.firstName;
+        reqParams.cli['--first-name'] = jsonRequestBody.firstName;
+        reqParams.boto3['LastName'] = jsonRequestBody.lastName;
+        reqParams.cli['--last-name'] = jsonRequestBody.lastName;
+        reqParams.boto3['AuthenticationType'] = 'USERPOOL';
+        reqParams.cli['--authentication-type'] = 'USERPOOL';
+
+        reqParams.cfn['UserName'] = jsonRequestBody.emailAddress;
+        reqParams.cfn['FirstName'] = jsonRequestBody.firstName;
+        reqParams.cfn['LastName'] = jsonRequestBody.lastName;
+        reqParams.cfn['AuthenticationType'] = 'USERPOOL';
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'CreateUser',
+                'boto3': 'create_user',
+                'cli': 'create-user'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::User',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:appstream:appstream.BatchAssociateUserStack
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/users$/g)) {
+        for (var i=0; i<jsonRequestBody.length; i++) {
+            reqParams.boto3['UserName'] = jsonRequestBody[i].user.name;
+            reqParams.cli['--user-name'] = jsonRequestBody[i].user.name;
+            reqParams.boto3['StackName'] = jsonRequestBody[i].stackName;
+            reqParams.cli['--stack-name'] = jsonRequestBody[i].stackName;
+            reqParams.boto3['SendEmailNotification'] = jsonRequestBody[i].sendEmailNotification;
+            reqParams.cli['--send-email-notification'] = jsonRequestBody[i].sendEmailNotification;
+            reqParams.boto3['AuthenticationType'] = 'USERPOOL';
+            reqParams.cli['--authentication-type'] = 'USERPOOL';
+
+            reqParams.cfn['Username'] = jsonRequestBody[i].user.name;
+            reqParams.cfn['StackName'] = jsonRequestBody[i].stackName;
+            reqParams.cfn['SendEmailNotification'] = jsonRequestBody[i].sendEmailNotification;
+            reqParams.cfn['AuthenticationType'] = 'USERPOOL';
+
+            outputs.push({
+                'region': region,
+                'service': 'appstream',
+                'method': {
+                    'api': 'BatchAssociateUserStack',
+                    'boto3': 'batch_associate_user_stack',
+                    'cli': 'batch-associate-user-stack'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+            
+            tracked_resources.push({
+                'logicalId': getResourceName('appstream', details.requestId),
+                'region': region,
+                'service': 'appstream',
+                'type': 'AWS::AppStream::StackUserAssociation',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.AssociateFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/.+\/associations$/g)) {
+        reqParams.boto3['StackName'] = jsonRequestBody.stackName;
+        reqParams.cli['--stack-name'] = jsonRequestBody.stackName;
+        reqParams.boto3['FleetName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+        reqParams.cli['--fleet-name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+
+        reqParams.cfn['StackName'] = jsonRequestBody.stackName;
+        reqParams.cfn['FleetName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'AssociateFleet',
+                'boto3': 'associate_fleet',
+                'cli': 'associate-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('appstream', details.requestId),
+            'region': region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::StackFleetAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DeleteStack
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/.+$/g)) {
+        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DeleteStack',
+                'boto3': 'delete_stack',
+                'cli': 'delete-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DeleteImageBuilder
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/.+$/g)) {
+        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DeleteImageBuilder',
+                'boto3': 'delete_image_builder',
+                'cli': 'delete-image-builder'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DeleteDirectoryConfig
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/.+$/g)) {
+        reqParams.boto3['DirectoryName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--directory-name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DeleteDirectoryConfig',
+                'boto3': 'delete_directory_config',
+                'cli': 'delete-directory-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appstream:appstream.DeleteFleet
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/.+$/g)) {
+        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'appstream',
+            'method': {
+                'api': 'DeleteFleet',
+                'boto3': 'delete_fleet',
+                'cli': 'delete-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListIPSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListIPSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListIPSets',
+                'boto3': 'list_ip_sets',
+                'cli': 'list-ip-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListSqlInjectionMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSqlInjectionMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListSqlInjectionMatchSets',
+                'boto3': 'list_sql_injection_match_sets',
+                'cli': 'list-sql-injection-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListSizeConstraintSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSizeConstraintSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListSizeConstraintSets',
+                'boto3': 'list_size_constraint_sets',
+                'cli': 'list-size-constraint-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListXssMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListXssMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListXssMatchSets',
+                'boto3': 'list_xss_match_sets',
+                'cli': 'list-xss-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListGeoMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListGeoMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListGeoMatchSets',
+                'boto3': 'list_geo_match_sets',
+                'cli': 'list-geo-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListByteMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListByteMatchSets") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListByteMatchSets',
+                'boto3': 'list_byte_match_sets',
+                'cli': 'list-byte-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListRegexMatchSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRegexMatchSets") {
+        reqParams.boto3['NextMarker'] = jsonRequestBody.content.NextMarker;
+        reqParams.cli['--next-marker'] = jsonRequestBody.content.NextMarker;
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListRegexMatchSets',
+                'boto3': 'list_regex_match_sets',
+                'cli': 'list-regex-match-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.GetChangeToken
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.GetChangeToken") {
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'GetChangeToken',
+                'boto3': 'get_change_token',
+                'cli': 'get-change-token'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateXssMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateXssMatchSet',
+                'boto3': 'create_xss_match_set',
+                'cli': 'create-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::XssMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateXssMatchSet") {
+        reqParams.boto3['XssMatchSetId'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.cli['--xss-match-set-id'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateXssMatchSet',
+                'boto3': 'update_xss_match_set',
+                'cli': 'update-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateIPSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateIPSet',
+                'boto3': 'create_ip_set',
+                'cli': 'create-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::IPSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateIPSet") {
+        reqParams.boto3['IPSetId'] = jsonRequestBody.content.IPSetId;
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.content.IPSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateIPSet',
+                'boto3': 'update_ip_set',
+                'cli': 'update-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSizeConstraintSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateSizeConstraintSet',
+                'boto3': 'create_size_constraint_set',
+                'cli': 'create-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::SizeConstraintSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSizeConstraintSet") {
+        reqParams.boto3['SizeConstraintSetId'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.cli['--size-constraint-set-id'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateSizeConstraintSet',
+                'boto3': 'update_size_constraint_set',
+                'cli': 'update-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRules") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListRules',
+                'boto3': 'list_rules',
+                'cli': 'list-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListRateBasedRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRateBasedRules") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListRateBasedRules',
+                'boto3': 'list_rate_based_rules',
+                'cli': 'list-rate-based-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListSubscribedRuleGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSubscribedRuleGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListSubscribedRuleGroups',
+                'boto3': 'list_subscribed_rule_groups',
+                'cli': 'list-subscribed-rule-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.ListRuleGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRuleGroups") {
+        reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
+        reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'ListRuleGroups',
+                'boto3': 'list_rule_groups',
+                'cli': 'list-rule-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSqlInjectionMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateSqlInjectionMatchSet',
+                'boto3': 'create_sql_injection_match_set',
+                'cli': 'create-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::SqlInjectionMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSqlInjectionMatchSet") {
+        reqParams.boto3['SqlInjectionMatchSetId'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.cli['--sql-injection-match-set-id'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateSqlInjectionMatchSet',
+                'boto3': 'update_sql_injection_match_set',
+                'cli': 'update-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateRule") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cli['--metric-name'] = jsonRequestBody.content.MetricName;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+        reqParams.cfn['MetricName'] = jsonRequestBody.content.MetricName;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateRule',
+                'boto3': 'create_rule',
+                'cli': 'create-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::Rule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateRule") {
+        reqParams.boto3['RuleId'] = jsonRequestBody.content.RuleId;
+        reqParams.cli['--rule-id'] = jsonRequestBody.content.RuleId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateRule',
+                'boto3': 'update_rule',
+                'cli': 'update-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateWebACL
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateWebACL") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cli['--metric-name'] = jsonRequestBody.content.MetricName;
+        reqParams.boto3['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+        reqParams.cli['--default-action'] = jsonRequestBody.content.DefaultAction;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+        reqParams.cfn['MetricName'] = jsonRequestBody.content.MetricName;
+        reqParams.cfn['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateWebACL',
+                'boto3': 'create_web_acl',
+                'cli': 'create-web-acl'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::WebACL',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateWebACL
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateWebACL") {
+        reqParams.boto3['WebACLId'] = jsonRequestBody.content.WebACLId;
+        reqParams.cli['--web-acl-id'] = jsonRequestBody.content.WebACLId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+        reqParams.boto3['DefaultAction'] = jsonRequestBody.content.DefaultAction;
+        reqParams.cli['--default-action'] = jsonRequestBody.content.DefaultAction;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateWebACL',
+                'boto3': 'update_web_acl',
+                'cli': 'update-web-acl'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteXssMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteXssMatchSet") {
+        reqParams.boto3['XssMatchSetId'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.cli['--xss-match-set-id'] = jsonRequestBody.content.XssMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteXssMatchSet',
+                'boto3': 'delete_xss_match_set',
+                'cli': 'delete-xss-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteIPSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteIPSet") {
+        reqParams.boto3['IPSetId'] = jsonRequestBody.content.IPSetId;
+        reqParams.cli['--ip-set-id'] = jsonRequestBody.content.IPSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteIPSet',
+                'boto3': 'delete_ip_set',
+                'cli': 'delete-ip-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteSizeConstraintSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSizeConstraintSet") {
+        reqParams.boto3['SizeConstraintSetId'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.cli['--size-constraint-set-id'] = jsonRequestBody.content.SizeConstraintSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteSizeConstraintSet',
+                'boto3': 'delete_size_constraint_set',
+                'cli': 'delete-size-constraint-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteSqlInjectionMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSqlInjectionMatchSet") {
+        reqParams.boto3['SqlInjectionMatchSetId'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.cli['--sql-injection-match-set-id'] = jsonRequestBody.content.SqlInjectionMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteSqlInjectionMatchSet',
+                'boto3': 'delete_sql_injection_match_set',
+                'cli': 'delete-sql-injection-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteRule") {
+        reqParams.boto3['RuleId'] = jsonRequestBody.content.RuleId;
+        reqParams.cli['--rule-id'] = jsonRequestBody.content.RuleId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteRule',
+                'boto3': 'delete_rule',
+                'cli': 'delete-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.CreateByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateByteMatchSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.content.Name;
+        reqParams.cli['--name'] = jsonRequestBody.content.Name;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'CreateByteMatchSet',
+                'boto3': 'create_byte_match_set',
+                'cli': 'create-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::ByteMatchSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.UpdateByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateByteMatchSet") {
+        reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.cli['--byte-match-set-id'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+        reqParams.boto3['Updates'] = jsonRequestBody.content.Updates;
+        reqParams.cli['--updates'] = jsonRequestBody.content.Updates;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'UpdateByteMatchSet',
+                'boto3': 'update_byte_match_set',
+                'cli': 'update-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:waf:waf-regional.DeleteByteMatchSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteByteMatchSet") {
+        reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.cli['--byte-match-set-id'] = jsonRequestBody.content.ByteMatchSetId;
+        reqParams.boto3['ChangeToken'] = jsonRequestBody.content.ChangeToken;
+        reqParams.cli['--change-token'] = jsonRequestBody.content.ChangeToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'DeleteByteMatchSet',
+                'boto3': 'delete_byte_match_set',
+                'cli': 'delete-byte-match-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
