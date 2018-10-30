@@ -3278,6 +3278,12 @@ function analyseRequest(details) {
         reqParams.boto3['ClientRequestToken'] = jsonRequestBody.contentString.clientRequestToken;
         reqParams.cli['--client-request-token'] = jsonRequestBody.contentString.clientRequestToken;
 
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.contentString.instanceType;
+        reqParams.cfn['AutomaticStopTimeMinutes'] = jsonRequestBody.contentString.automaticStopTimeMinutes;
+        reqParams.cfn['SubnetId'] = jsonRequestBody.contentString.subnetId;
+
         outputs.push({
             'region': region,
             'service': 'cloud9',
@@ -3288,6 +3294,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cloud9', details.requestId),
+            'region': region,
+            'service': 'cloud9',
+            'type': 'AWS::Cloud9::EnvironmentEC2',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
 
         if (blocking) {
@@ -24481,6 +24497,143 @@ function analyseRequest(details) {
             notifyBlocked();
             return {cancel: true};
         }
+        
+        return {};
+    }
+
+    // autogen:eks:eks.CreateCluster
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/eks$/g) && jsonRequestBody.operation == "createCluster") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Version'] = jsonRequestBody.contentString.version;
+        reqParams.cli['--version'] = jsonRequestBody.contentString.version;
+        reqParams.boto3['RoleArn'] = jsonRequestBody.contentString.roleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.contentString.roleArn;
+        reqParams.boto3['ResourcesVpcConfig'] = jsonRequestBody.contentString.resourcesVpcConfig;
+        reqParams.cli['--resources-vpc-config'] = jsonRequestBody.contentString.resourcesVpcConfig;
+        reqParams.boto3['ClientRequestToken'] = jsonRequestBody.contentString.clientRequestToken;
+        reqParams.cli['--client-request-token'] = jsonRequestBody.contentString.clientRequestToken;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Version'] = jsonRequestBody.contentString.version;
+        reqParams.cfn['RoleArn'] = jsonRequestBody.contentString.roleArn;
+        reqParams.cfn['ResourcesVpcConfig'] = jsonRequestBody.contentString.resourcesVpcConfig;
+
+        outputs.push({
+            'region': region,
+            'service': 'eks',
+            'method': {
+                'api': 'CreateCluster',
+                'boto3': 'create_cluster',
+                'cli': 'create-cluster'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('eks', details.requestId),
+            'region': region,
+            'service': 'eks',
+            'type': 'AWS::EKS::Cluster',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-projects:iot1click-projects.ListProjects
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/projects") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-projects',
+            'method': {
+                'api': 'ListProjects',
+                'boto3': 'list_projects',
+                'cli': 'list-projects'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-projects:iot1click-projects.CreateProject
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/projects") {
+        reqParams.boto3['ProjectName'] = jsonRequestBody.contentString.projectName;
+        reqParams.cli['--project-name'] = jsonRequestBody.contentString.projectName;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['PlacementTemplate'] = jsonRequestBody.contentString.placementTemplate;
+        reqParams.cli['--placement-template'] = jsonRequestBody.contentString.placementTemplate;
+
+        reqParams.cfn['ProjectName'] = jsonRequestBody.contentString.projectName;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['PlacementTemplate'] = jsonRequestBody.contentString.placementTemplate;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-projects',
+            'method': {
+                'api': 'CreateProject',
+                'boto3': 'create_project',
+                'cli': 'create-project'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot1click-projects', details.requestId),
+            'region': region,
+            'service': 'iot1click-projects',
+            'type': 'AWS::IoT1Click::Project',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-projects:iot1click-projects.CreatePlacement
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/projects\/.+\/placements$/g)) {
+        reqParams.boto3['PlacementName'] = jsonRequestBody.contentString.placementName;
+        reqParams.cli['--placement-name'] = jsonRequestBody.contentString.placementName;
+        reqParams.boto3['Attributes'] = jsonRequestBody.contentString.attributes;
+        reqParams.cli['--attributes'] = jsonRequestBody.contentString.attributes;
+        reqParams.boto3['ProjectName'] = /^\/projects\/(.+)\/placements$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--project-name'] = /^\/projects\/(.+)\/placements$/g.exec(jsonRequestBody.path)[1];
+
+        reqParams.cfn['PlacementName'] = jsonRequestBody.contentString.placementName;
+        reqParams.cfn['Attributes'] = jsonRequestBody.contentString.attributes;
+        reqParams.cfn['ProjectName'] = /^\/projects\/(.+)\/placements$/g.exec(jsonRequestBody.path)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-projects',
+            'method': {
+                'api': 'CreatePlacement',
+                'boto3': 'create_placement',
+                'cli': 'create-placement'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot1click-projects', details.requestId),
+            'region': region,
+            'service': 'iot1click-projects',
+            'type': 'AWS::IoT1Click::Placement',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
         
         return {};
     }
