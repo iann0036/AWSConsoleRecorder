@@ -24638,4 +24638,824 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:sagemaker:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.ListNotebookInstanceLifecycleConfigs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstanceLifecycleConfigs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'ListNotebookInstanceLifecycleConfigs',
+                'boto3': 'list_notebook_instance_lifecycle_configs',
+                'cli': 'list-notebook-instance-lifecycle-configs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.CreateNotebookInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstance") {
+        reqParams.boto3['DirectInternetAccess'] = jsonRequestBody.contentString.DirectInternetAccess;
+        reqParams.cli['--direct-internet-access'] = jsonRequestBody.contentString.DirectInternetAccess;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.contentString.InstanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.contentString.InstanceType;
+        reqParams.boto3['NotebookInstanceName'] = jsonRequestBody.contentString.NotebookInstanceName;
+        reqParams.cli['--notebook-instance-name'] = jsonRequestBody.contentString.NotebookInstanceName;
+        reqParams.boto3['RoleArn'] = jsonRequestBody.contentString.RoleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.contentString.RoleArn;
+        reqParams.boto3['SubnetId'] = jsonRequestBody.contentString.SubnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.contentString.SubnetId;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['DirectInternetAccess'] = jsonRequestBody.contentString.DirectInternetAccess;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.contentString.InstanceType;
+        reqParams.cfn['NotebookInstanceName'] = jsonRequestBody.contentString.NotebookInstanceName;
+        reqParams.cfn['RoleArn'] = jsonRequestBody.contentString.RoleArn;
+        reqParams.cfn['SubnetId'] = jsonRequestBody.contentString.SubnetId;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'CreateNotebookInstance',
+                'boto3': 'create_notebook_instance',
+                'cli': 'create-notebook-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('sagemaker', details.requestId),
+            'region': region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::NotebookInstance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.ListNotebookInstances
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstances") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.boto3['SortBy'] = jsonRequestBody.contentString.SortBy;
+        reqParams.cli['--sort-by'] = jsonRequestBody.contentString.SortBy;
+        reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
+        reqParams.cli['--sort-order'] = jsonRequestBody.contentString.SortOrder;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'ListNotebookInstances',
+                'boto3': 'list_notebook_instances',
+                'cli': 'list-notebook-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.CreateNotebookInstanceLifecycleConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstanceLifecycleConfig") {
+        reqParams.boto3['NotebookInstanceLifecycleConfigName'] = jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName;
+        reqParams.cli['--notebook-instance-lifecycle-config-name'] = jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName;
+        reqParams.boto3['OnCreate'] = jsonRequestBody.contentString.OnCreate;
+        reqParams.cli['--on-create'] = jsonRequestBody.contentString.OnCreate;
+        reqParams.boto3['OnStart'] = jsonRequestBody.contentString.OnStart;
+        reqParams.cli['--on-start'] = jsonRequestBody.contentString.OnStart;
+
+        reqParams.cfn['NotebookInstanceLifecycleConfigName'] = jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName;
+        reqParams.cfn['OnCreate'] = jsonRequestBody.contentString.OnCreate;
+        reqParams.cfn['OnStart'] = jsonRequestBody.contentString.OnStart;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'CreateNotebookInstanceLifecycleConfig',
+                'boto3': 'create_notebook_instance_lifecycle_config',
+                'cli': 'create-notebook-instance-lifecycle-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('sagemaker', details.requestId),
+            'region': region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::NotebookInstanceLifecycleConfig',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.DeleteNotebookInstanceLifecycleConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstanceLifecycleConfig") {
+        reqParams.boto3['NotebookInstanceLifecycleConfigName'] = jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName;
+        reqParams.cli['--notebook-instance-lifecycle-config-name'] = jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'DeleteNotebookInstanceLifecycleConfig',
+                'boto3': 'delete_notebook_instance_lifecycle_config',
+                'cli': 'delete-notebook-instance-lifecycle-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.StopNotebookInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "stopNotebookInstance") {
+        reqParams.boto3['NotebookInstanceName'] = jsonRequestBody.contentString.NotebookInstanceName;
+        reqParams.cli['--notebook-instance-name'] = jsonRequestBody.contentString.NotebookInstanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'StopNotebookInstance',
+                'boto3': 'stop_notebook_instance',
+                'cli': 'stop-notebook-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.ListModels
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listModels") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.boto3['SortBy'] = jsonRequestBody.contentString.SortBy;
+        reqParams.cli['--sort-by'] = jsonRequestBody.contentString.SortBy;
+        reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
+        reqParams.cli['--sort-order'] = jsonRequestBody.contentString.SortOrder;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'ListModels',
+                'boto3': 'list_models',
+                'cli': 'list-models'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.ListEndpoints
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpoints") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
+        reqParams.cli['--sort-order'] = jsonRequestBody.contentString.SortOrder;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'ListEndpoints',
+                'boto3': 'list_endpoints',
+                'cli': 'list-endpoints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.ListEndpointConfigs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpointConfigs") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
+        reqParams.cli['--sort-order'] = jsonRequestBody.contentString.SortOrder;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'ListEndpointConfigs',
+                'boto3': 'list_endpoint_configs',
+                'cli': 'list-endpoint-configs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.DeleteNotebookInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstance") {
+        reqParams.boto3['NotebookInstanceName'] = jsonRequestBody.contentString.NotebookInstanceName;
+        reqParams.cli['--notebook-instance-name'] = jsonRequestBody.contentString.NotebookInstanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'DeleteNotebookInstance',
+                'boto3': 'delete_notebook_instance',
+                'cli': 'delete-notebook-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.CreateModel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createModel") {
+        reqParams.boto3['ExecutionRoleArn'] = jsonRequestBody.contentString.ExecutionRoleArn;
+        reqParams.cli['--execution-role-arn'] = jsonRequestBody.contentString.ExecutionRoleArn;
+        reqParams.boto3['ModelName'] = jsonRequestBody.contentString.ModelName;
+        reqParams.cli['--model-name'] = jsonRequestBody.contentString.ModelName;
+        reqParams.boto3['PrimaryContainer'] = jsonRequestBody.contentString.PrimaryContainer;
+        reqParams.cli['--primary-container'] = jsonRequestBody.contentString.PrimaryContainer;
+        reqParams.boto3['VpcConfig'] = jsonRequestBody.contentString.VpcConfig;
+        reqParams.cli['--vpc-config'] = jsonRequestBody.contentString.VpcConfig;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['ExecutionRoleArn'] = jsonRequestBody.contentString.ExecutionRoleArn;
+        reqParams.cfn['ModelName'] = jsonRequestBody.contentString.ModelName;
+        reqParams.cfn['PrimaryContainer'] = jsonRequestBody.contentString.PrimaryContainer;
+        reqParams.cfn['VpcConfig'] = jsonRequestBody.contentString.VpcConfig;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'CreateModel',
+                'boto3': 'create_model',
+                'cli': 'create-model'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('sagemaker', details.requestId),
+            'region': region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Model',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.CreateApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "CreateApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['ApplicationDescription'] = jsonRequestBody.content.ApplicationDescription;
+        reqParams.cli['--application-description'] = jsonRequestBody.content.ApplicationDescription;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cfn['ApplicationDescription'] = jsonRequestBody.content.ApplicationDescription;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'CreateApplication',
+                'boto3': 'create_application',
+                'cli': 'create-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kinesisanalytics', details.requestId),
+            'region': region,
+            'service': 'kinesisanalytics',
+            'type': 'AWS::KinesisAnalytics::Application',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.DescribeApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DescribeApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'DescribeApplication',
+                'boto3': 'describe_application',
+                'cli': 'describe-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:firehose.ListDeliveryStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/firehose\-proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
+
+        outputs.push({
+            'region': region,
+            'service': 'firehose',
+            'method': {
+                'api': 'ListDeliveryStreams',
+                'boto3': 'list_delivery_streams',
+                'cli': 'list-delivery-streams'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesis.ListStreams
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "ListStreams") {
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'ListStreams',
+                'boto3': 'list_streams',
+                'cli': 'list-streams'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesis.CreateStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "CreateStream") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+        reqParams.boto3['ShardCount'] = jsonRequestBody.content.ShardCount;
+        reqParams.cli['--shard-count'] = jsonRequestBody.content.ShardCount;
+
+        reqParams.cfn['Name'] = jsonRequestBody.content.StreamName;
+        reqParams.cfn['ShardCount'] = jsonRequestBody.content.ShardCount;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'CreateStream',
+                'boto3': 'create_stream',
+                'cli': 'create-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kinesis', details.requestId),
+            'region': region,
+            'service': 'kinesis',
+            'type': 'AWS::Kinesis::Stream',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesis.DescribeStream
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "DescribeStream") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'DescribeStream',
+                'boto3': 'describe_stream',
+                'cli': 'describe-stream'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesis.PutRecords
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "PutRecords") {
+        reqParams.boto3['Records'] = jsonRequestBody.content.Records;
+        reqParams.cli['--records'] = jsonRequestBody.content.Records;
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'PutRecords',
+                'boto3': 'put_records',
+                'cli': 'put-records'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.DiscoverInputSchema
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DiscoverInputSchema") {
+        reqParams.boto3['ResourceARN'] = jsonRequestBody.content.ResourceARN;
+        reqParams.cli['--resource-arn'] = jsonRequestBody.content.ResourceARN;
+        reqParams.boto3['RoleARN'] = jsonRequestBody.content.RoleARN;
+        reqParams.cli['--role-arn'] = jsonRequestBody.content.RoleARN;
+        reqParams.boto3['InputStartingPositionConfiguration'] = jsonRequestBody.content.InputStartingPositionConfiguration;
+        reqParams.cli['--input-starting-position-configuration'] = jsonRequestBody.content.InputStartingPositionConfiguration;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'DiscoverInputSchema',
+                'boto3': 'discover_input_schema',
+                'cli': 'discover-input-schema'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.AddApplicationInput
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationInput") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['CurrentApplicationVersionId'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.cli['--current-application-version-id'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.boto3['Input'] = jsonRequestBody.content.Input;
+        reqParams.cli['--input'] = jsonRequestBody.content.Input;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'AddApplicationInput',
+                'boto3': 'add_application_input',
+                'cli': 'add-application-input'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.StartApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StartApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['InputConfigurations'] = jsonRequestBody.content.InputConfigurations;
+        reqParams.cli['--input-configurations'] = jsonRequestBody.content.InputConfigurations;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'StartApplication',
+                'boto3': 'start_application',
+                'cli': 'start-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.UpdateApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "UpdateApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['CurrentApplicationVersionId'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.cli['--current-application-version-id'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.boto3['ApplicationUpdate'] = jsonRequestBody.content.ApplicationUpdate;
+        reqParams.cli['--application-update'] = jsonRequestBody.content.ApplicationUpdate;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'UpdateApplication',
+                'boto3': 'update_application',
+                'cli': 'update-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:lambda.ListFunctions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/lambda\-proxy$/g) && jsonRequestBody.operation == "ListFunctions") {
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListFunctions',
+                'boto3': 'list_functions',
+                'cli': 'list-functions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.AddApplicationOutput
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationOutput") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['CurrentApplicationVersionId'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.cli['--current-application-version-id'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.boto3['Output'] = jsonRequestBody.content.Output;
+        reqParams.cli['--output'] = jsonRequestBody.content.Output;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cfn['Output'] = jsonRequestBody.content.Output;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'AddApplicationOutput',
+                'boto3': 'add_application_output',
+                'cli': 'add-application-output'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kinesisanalytics', details.requestId),
+            'region': region,
+            'service': 'kinesisanalytics',
+            'type': 'AWS::KinesisAnalytics::ApplicationOutput',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.StopApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StopApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'StopApplication',
+                'boto3': 'stop_application',
+                'cli': 'stop-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalytics.DeleteApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DeleteApplication") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['CreateTimestamp'] = jsonRequestBody.content.CreateTimestamp;
+        reqParams.cli['--create-timestamp'] = jsonRequestBody.content.CreateTimestamp;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalytics',
+            'method': {
+                'api': 'DeleteApplication',
+                'boto3': 'delete_application',
+                'cli': 'delete-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesis:kinesis.ListShards
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListShards") {
+        reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
+        reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesis',
+            'method': {
+                'api': 'ListShards',
+                'boto3': 'list_shards',
+                'cli': 'list-shards'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudformation:cloudformation.CreateStack
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudformation\/service\/stacks\?/g)) {
+        reqParams.boto3['Capabilities'] = jsonRequestBody.capabilities;
+        reqParams.cli['--capabilities'] = jsonRequestBody.capabilities;
+        reqParams.boto3['DisableRollback'] = jsonRequestBody.disableRollback;
+        reqParams.cli['--disable-rollback'] = jsonRequestBody.disableRollback;
+        reqParams.boto3['EnableTerminationProtection'] = jsonRequestBody.enableTerminationProtection;
+        reqParams.cli['--enable-termination-protection'] = jsonRequestBody.enableTerminationProtection;
+        reqParams.boto3['NotificationARNs'] = jsonRequestBody.notificationARNs;
+        reqParams.cli['--notification-ar-ns'] = jsonRequestBody.notificationARNs;
+        reqParams.boto3['Parameters'] = jsonRequestBody.parameters;
+        reqParams.cli['--parameters'] = jsonRequestBody.parameters;
+        reqParams.boto3['RoleARN'] = jsonRequestBody.roleARN;
+        reqParams.cli['--role-arn'] = jsonRequestBody.roleARN;
+        reqParams.boto3['RollbackConfiguration'] = jsonRequestBody.rollbackConfiguration;
+        reqParams.cli['--rollback-configuration'] = jsonRequestBody.rollbackConfiguration;
+        reqParams.boto3['StackName'] = jsonRequestBody.stackName;
+        reqParams.cli['--stack-name'] = jsonRequestBody.stackName;
+        reqParams.boto3['Tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        reqParams.boto3['TemplateURL'] = jsonRequestBody.templateURL;
+        reqParams.cli['--template-url'] = jsonRequestBody.templateURL;
+        reqParams.boto3['TimeoutInMinutes'] = jsonRequestBody.timeoutInMinutes;
+        reqParams.cli['--timeout-in-minutes'] = jsonRequestBody.timeoutInMinutes;
+        reqParams.boto3['StackPolicyBody'] = jsonRequestBody.stackPolicyBody;
+        reqParams.cli['--stack-policy-body'] = jsonRequestBody.stackPolicyBody;
+        reqParams.boto3['StackPolicyURL'] = jsonRequestBody.stackPolicyURL;
+        reqParams.cli['--stack-policy-url'] = jsonRequestBody.stackPolicyURL;
+        reqParams.boto3['ClientRequestToken'] = jsonRequestBody.clientRequestToken;
+        reqParams.cli['--client-request-token'] = jsonRequestBody.clientRequestToken;
+
+        reqParams.cfn['NotificationARNs'] = jsonRequestBody.notificationARNs;
+        reqParams.cfn['Parameters'] = jsonRequestBody.parameters;
+        reqParams.cfn['Tags'] = jsonRequestBody.tags;
+        reqParams.cfn['TemplateURL'] = jsonRequestBody.templateURL;
+        reqParams.cfn['TimeoutInMinutes'] = jsonRequestBody.timeoutInMinutes;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudformation',
+            'method': {
+                'api': 'CreateStack',
+                'boto3': 'create_stack',
+                'cli': 'create-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        // TODO: is this appropriate?
+        tracked_resources.push({
+            'logicalId': getResourceName('cloudformation', details.requestId),
+            'region': region,
+            'service': 'cloudformation',
+            'type': 'AWS::CloudFormation::Stack',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudformation:cloudformation.DeleteStack
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/cloudformation\/service\/stacks\?/g)) {
+        reqParams.boto3['ClientRequestToken'] = getUrlValue(details.url, 'clientRequestToken');
+        reqParams.cli['--client-request-token'] = getUrlValue(details.url, 'clientRequestToken');
+        reqParams.boto3['StackName'] = getUrlValue(details.url, 'stackId');
+        reqParams.cli['--stack-name'] = getUrlValue(details.url, 'stackId');
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudformation',
+            'method': {
+                'api': 'DeleteStack',
+                'boto3': 'delete_stack',
+                'cli': 'delete-stack'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
