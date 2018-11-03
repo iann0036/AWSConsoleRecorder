@@ -36,7 +36,7 @@ This option will stop any mutable requests (most things that aren't a `Get*` or 
 
 ### Intercept Responses
 
-This option will record the response body from all AWS calls. Setting this allows CloudFormation to correlate actions between resources and allows the `!Ref` and `!GetAtt` intrinsic functions to be used to reference resource identifiers within the template.
+This option will record the response body from all AWS calls. Setting this allows CloudFormation to correlate actions between resources and uses the `!Ref` and `!GetAtt` intrinsic functions to reference resource identifiers within the template.
 
 :warning: **Note:** When Intercept Responses is set in Google Chrome, a notification telling you the extension is debugging the browser is shown for the duration of the recording for security purposes.
 

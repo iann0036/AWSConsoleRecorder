@@ -25860,4 +25860,894 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:apigateway:apigateway.CreateVpcLink
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/vpclinks" && jsonRequestBody.method == "POST") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['TargetArns'] = jsonRequestBody.contentString.targetArns;
+        reqParams.cli['--target-arns'] = jsonRequestBody.contentString.targetArns;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['TargetArns'] = jsonRequestBody.contentString.targetArns;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateVpcLink',
+                'boto3': 'create_vpc_link',
+                'cli': 'create-vpc-link'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::VpcLink',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.DeleteStage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/$\/restapis\/.+\/stages\/.+^/g)) {
+        reqParams.boto3['RestApiId'] = /$\/restapis\/(.+)\/stages\/.+^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/stages\/.+^/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['StageName'] = /$\/restapis\/.+\/stages\/(.+)^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--stage-name'] = /$\/restapis\/.+\/stages\/(.+)^/g.exec(jsonRequestBody.path)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'DeleteStage',
+                'boto3': 'delete_stage',
+                'cli': 'delete-stage'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:apigateway:apigateway.CreateStage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/stages^/g) && jsonRequestBody.method == "POST") {
+        reqParams.boto3['stageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+        reqParams.boto3['description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['deploymentId'] = jsonRequestBody.contentString.deploymentId;
+        reqParams.cli['--deployment-id'] = jsonRequestBody.contentString.deploymentId;
+        reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
+
+        reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['DeploymentId'] = jsonRequestBody.contentString.deploymentId;
+        reqParams.cfn['RestApiId'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateStage',
+                'boto3': 'create_stage',
+                'cli': 'create-stage'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::Stage',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateDeployment
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/deployments^/g) && jsonRequestBody.method == "POST") {
+        reqParams.boto3['RestApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+
+        reqParams.cfn['RestApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateDeployment',
+                'boto3': 'create_deployment',
+                'cli': 'create-deployment'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::Deployment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateRequestValidator
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/$\/restapis\/.+\/requestvalidators^/g)) {
+        reqParams.boto3['RestApiId'] = /$\/restapis\/(.+)\/requestvalidators^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/requestvalidators^/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['ValidateRequestBody'] = jsonRequestBody.contentString.validateRequestBody;
+        reqParams.cli['--validate-request-body'] = jsonRequestBody.contentString.validateRequestBody;
+        reqParams.boto3['ValidateRequestParameters'] = jsonRequestBody.contentString.validateRequestParameters;
+        reqParams.cli['--validate-request-parameters'] = jsonRequestBody.contentString.validateRequestParameters;
+
+        reqParams.cfn['RestApiId'] = /$\/restapis\/(.+)\/requestvalidators^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['ValidateRequestBody'] = jsonRequestBody.contentString.validateRequestBody;
+        reqParams.cfn['ValidateRequestParameters'] = jsonRequestBody.contentString.validateRequestParameters;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateRequestValidator',
+                'boto3': 'create_request_validator',
+                'cli': 'create-request-validator'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::RequestValidator',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.GenerateClientCertificate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/clientcertificates") {
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'GenerateClientCertificate',
+                'boto3': 'generate_client_certificate',
+                'cli': 'generate-client-certificate'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::ClientCertificate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ecs.ListClusters
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/list\?/g)) {
+        reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'maxResults');
+        reqParams.cli['--max-results'] = getUrlValue(details.url, 'maxResults');
+
+        outputs.push({
+            'region': region,
+            'service': 'ecs',
+            'method': {
+                'api': 'ListClusters',
+                'boto3': 'list_clusters',
+                'cli': 'list-clusters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ec2.DescribeVpcs
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/describeVpcs\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ec2.DescribeAvailabilityZones
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/describeAvailabilityZones\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ecs.CreateCluster
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/create\?/g)) {
+        reqParams.boto3['ClusterName'] = jsonRequestBody.clusterName[0];
+        reqParams.cli['--cluster-name'] = jsonRequestBody.clusterName[0];
+
+        reqParams.cfn['ClusterName'] = jsonRequestBody.clusterName[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'ecs',
+            'method': {
+                'api': 'CreateCluster',
+                'boto3': 'create_cluster',
+                'cli': 'create-cluster'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ecs', details.requestId),
+            'region': region,
+            'service': 'ecs',
+            'type': 'AWS::ECS::Cluster',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:logs.DescribeLogGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/logs\/describeLogGroups\?/g)) {
+        reqParams.boto3['LogGroupNamePrefix'] = jsonRequestBody.logGroupNamePrefix;
+        reqParams.cli['--log-group-name-prefix'] = jsonRequestBody.logGroupNamePrefix;
+
+        outputs.push({
+            'region': region,
+            'service': 'logs',
+            'method': {
+                'api': 'DescribeLogGroups',
+                'boto3': 'describe_log_groups',
+                'cli': 'describe-log-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ecs.RegisterTaskDefinition
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/taskDefinitions\/register\?/g)) {
+        reqParams.boto3['RequiresCompatibilities'] = jsonRequestBody.requiresCompatibilities;
+        reqParams.cli['--requires-compatibilities'] = jsonRequestBody.requiresCompatibilities;
+        reqParams.boto3['ContainerDefinitions'] = jsonRequestBody.containerDefinitions;
+        reqParams.cli['--container-definitions'] = jsonRequestBody.containerDefinitions;
+        reqParams.boto3['Volumes'] = jsonRequestBody.volumes;
+        reqParams.cli['--volumes'] = jsonRequestBody.volumes;
+        reqParams.boto3['NetworkMode'] = jsonRequestBody.networkMode;
+        reqParams.cli['--network-mode'] = jsonRequestBody.networkMode;
+        reqParams.boto3['Memory'] = jsonRequestBody.memory;
+        reqParams.cli['--memory'] = jsonRequestBody.memory;
+        reqParams.boto3['Cpu'] = jsonRequestBody.cpu;
+        reqParams.cli['--cpu'] = jsonRequestBody.cpu;
+        reqParams.boto3['ExecutionRoleArn'] = jsonRequestBody.executionRoleArn;
+        reqParams.cli['--execution-role-arn'] = jsonRequestBody.executionRoleArn;
+        reqParams.boto3['Family'] = jsonRequestBody.family;
+        reqParams.cli['--family'] = jsonRequestBody.family;
+        reqParams.boto3['TaskRoleArn'] = jsonRequestBody.taskRoleArn;
+        reqParams.cli['--task-role-arn'] = jsonRequestBody.taskRoleArn;
+
+        reqParams.cfn['RequiresCompatibilities'] = jsonRequestBody.requiresCompatibilities;
+        reqParams.cfn['ContainerDefinitions'] = jsonRequestBody.containerDefinitions;
+        reqParams.cfn['Volumes'] = jsonRequestBody.volumes;
+        reqParams.cfn['NetworkMode'] = jsonRequestBody.networkMode;
+        reqParams.cfn['Memory'] = jsonRequestBody.memory;
+        reqParams.cfn['Cpu'] = jsonRequestBody.cpu;
+        reqParams.cfn['ExecutionRoleArn'] = jsonRequestBody.executionRoleArn;
+        reqParams.cfn['Family'] = jsonRequestBody.family;
+        reqParams.cfn['TaskRoleArn'] = jsonRequestBody.taskRoleArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecs',
+            'method': {
+                'api': 'RegisterTaskDefinition',
+                'boto3': 'register_task_definition',
+                'cli': 'register-task-definition'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ecs', details.requestId),
+            'region': region,
+            'service': 'ecs',
+            'type': 'AWS::ECS::TaskDefinition',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:servicediscovery.ListNamespaces
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/serviceDiscovery\/listNamespaces\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'ListNamespaces',
+                'boto3': 'list_namespaces',
+                'cli': 'list-namespaces'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ec2.CreateSecurityGroup
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/createSecurityGroup\?/g)) {
+        reqParams.boto3['Description'] = getUrlValue(details.url, 'groupDescription');
+        reqParams.cli['--description'] = getUrlValue(details.url, 'groupDescription');
+        reqParams.boto3['GroupName'] = getUrlValue(details.url, 'groupName');
+        reqParams.cli['--group-name'] = getUrlValue(details.url, 'groupName');
+        reqParams.boto3['VpcId'] = getUrlValue(details.url, 'vpcId');
+        reqParams.cli['--vpc-id'] = getUrlValue(details.url, 'vpcId');
+
+        reqParams.cfn['GroupDescription'] = getUrlValue(details.url, 'groupDescription');
+        reqParams.cfn['GroupName'] = getUrlValue(details.url, 'groupName');
+        reqParams.cfn['VpcId'] = getUrlValue(details.url, 'vpcId');
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateSecurityGroup',
+                'boto3': 'create_security_group',
+                'cli': 'create-security-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SecurityGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:ecs.CreateService
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/.+\/services\/create\?/g)) {
+        reqParams.boto3['ServiceName'] = jsonRequestBody.serviceName;
+        reqParams.cli['--service-name'] = jsonRequestBody.serviceName;
+        reqParams.boto3['TaskDefinition'] = jsonRequestBody.taskDefinition;
+        reqParams.cli['--task-definition'] = jsonRequestBody.taskDefinition;
+        reqParams.boto3['DesiredCount'] = jsonRequestBody.desiredCount;
+        reqParams.cli['--desired-count'] = jsonRequestBody.desiredCount;
+        reqParams.boto3['Role'] = jsonRequestBody.role;
+        reqParams.cli['--role'] = jsonRequestBody.role;
+        reqParams.boto3['LoadBalancers'] = jsonRequestBody.loadBalancers;
+        reqParams.cli['--load-balancers'] = jsonRequestBody.loadBalancers;
+        reqParams.boto3['PlacementConstraints'] = jsonRequestBody.placementConstraints;
+        reqParams.cli['--placement-constraints'] = jsonRequestBody.placementConstraints;
+        reqParams.boto3['DeploymentConfiguration'] = jsonRequestBody.deploymentConfiguration;
+        reqParams.cli['--deployment-configuration'] = jsonRequestBody.deploymentConfiguration;
+        reqParams.boto3['LaunchType'] = jsonRequestBody.launchType;
+        reqParams.cli['--launch-type'] = jsonRequestBody.launchType;
+        reqParams.boto3['PlatformVersion'] = jsonRequestBody.platformVersion;
+        reqParams.cli['--platform-version'] = jsonRequestBody.platformVersion;
+        reqParams.boto3['NetworkConfiguration'] = jsonRequestBody.networkConfiguration;
+        reqParams.cli['--network-configuration'] = jsonRequestBody.networkConfiguration;
+        reqParams.boto3['SchedulingStrategy'] = jsonRequestBody.schedulingStrategy;
+        reqParams.cli['--scheduling-strategy'] = jsonRequestBody.schedulingStrategy;
+        reqParams.boto3['Cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+        reqParams.cli['--cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+
+        reqParams.cfn['ServiceName'] = jsonRequestBody.serviceName;
+        reqParams.cfn['TaskDefinition'] = jsonRequestBody.taskDefinition;
+        reqParams.cfn['DesiredCount'] = jsonRequestBody.desiredCount;
+        reqParams.cfn['Role'] = jsonRequestBody.role;
+        reqParams.cfn['LoadBalancers'] = jsonRequestBody.loadBalancers;
+        reqParams.cfn['PlacementConstraints'] = jsonRequestBody.placementConstraints;
+        reqParams.cfn['DeploymentConfiguration'] = jsonRequestBody.deploymentConfiguration;
+        reqParams.cfn['LaunchType'] = jsonRequestBody.launchType;
+        reqParams.cfn['PlatformVersion'] = jsonRequestBody.platformVersion;
+        reqParams.cfn['NetworkConfiguration'] = jsonRequestBody.networkConfiguration;
+        reqParams.cfn['SchedulingStrategy'] = jsonRequestBody.schedulingStrategy;
+        reqParams.cfn['Cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'ecs',
+            'method': {
+                'api': 'CreateService',
+                'boto3': 'create_service',
+                'cli': 'create-service'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ecs', details.requestId),
+            'region': region,
+            'service': 'ecs',
+            'type': 'AWS::ECS::Service',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:application-autoscaling.RegisterScalableTarget
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/anyScale\/scalableTargets\/register\?/g)) {
+        reqParams.boto3['MaxCapacity'] = jsonRequestBody.maxCapacity[0];
+        reqParams.cli['--max-capacity'] = jsonRequestBody.maxCapacity[0];
+        reqParams.boto3['MinCapacity'] = jsonRequestBody.minCapacity[0];
+        reqParams.cli['--min-capacity'] = jsonRequestBody.minCapacity[0];
+        reqParams.boto3['ResourceId'] = jsonRequestBody.resourceId[0];
+        reqParams.cli['--resource-id'] = jsonRequestBody.resourceId[0];
+        reqParams.boto3['RoleARN'] = jsonRequestBody.roleArn[0];
+        reqParams.cli['--role-arn'] = jsonRequestBody.roleArn[0];
+
+        reqParams.cfn['MaxCapacity'] = jsonRequestBody.maxCapacity[0];
+        reqParams.cfn['MinCapacity'] = jsonRequestBody.minCapacity[0];
+        reqParams.cfn['ResourceId'] = jsonRequestBody.resourceId[0];
+        reqParams.cfn['RoleARN'] = jsonRequestBody.roleArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'application-autoscaling',
+            'method': {
+                'api': 'RegisterScalableTarget',
+                'boto3': 'register_scalable_target',
+                'cli': 'register-scalable-target'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('application-autoscaling', details.requestId),
+            'region': region,
+            'service': 'application-autoscaling',
+            'type': 'AWS::ApplicationAutoScaling::ScalableTarget',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecs:application-autoscaling.PutScalingPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/anyScale\/scalingPolicies\/put/g)) {
+        reqParams.boto3['ResourceId'] = jsonRequestBody.resourceId;
+        reqParams.cli['--resource-id'] = jsonRequestBody.resourceId;
+        reqParams.boto3['PolicyType'] = jsonRequestBody.policyType;
+        reqParams.cli['--policy-type'] = jsonRequestBody.policyType;
+        reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
+        reqParams.boto3['ServiceNamespace'] = "ecs";
+        reqParams.cli['--service-namespace'] = "ecs";
+        reqParams.boto3['ScalableDimension'] = "ecs:service:DesiredCount";
+        reqParams.cli['--scalable-dimension'] = "ecs:service:DesiredCount";
+        reqParams.boto3['TargetTrackingScalingPolicyConfiguration'] = {
+            'TargetValue': jsonRequestBody.targetValue,
+            'ScaleOutCooldown': jsonRequestBody.scaleOutCooldown,
+            'ScaleInCooldown': jsonRequestBody.scaleInCooldown,
+            'PredefinedMetricSpecification': {
+                'PredefinedMetricType': jsonRequestBody.predefinedMetricSpecification.predefinedMetricType
+            }
+        };
+        reqParams.cli['--target-tracking-scaling-policy-configuration'] = {
+            'TargetValue': jsonRequestBody.targetValue,
+            'ScaleOutCooldown': jsonRequestBody.scaleOutCooldown,
+            'ScaleInCooldown': jsonRequestBody.scaleInCooldown,
+            'PredefinedMetricSpecification': {
+                'PredefinedMetricType': jsonRequestBody.predefinedMetricSpecification.predefinedMetricType
+            }
+        };
+
+        reqParams.cfn['ResourceId'] = jsonRequestBody.resourceId;
+        reqParams.cfn['PolicyType'] = jsonRequestBody.policyType;
+        reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cfn['ServiceNamespace'] = "ecs";
+        reqParams.cfn['ScalableDimension'] = "ecs:service:DesiredCount";
+        reqParams.cfn['TargetTrackingScalingPolicyConfiguration'] = {
+            'TargetValue': jsonRequestBody.targetValue,
+            'ScaleOutCooldown': jsonRequestBody.scaleOutCooldown,
+            'ScaleInCooldown': jsonRequestBody.scaleInCooldown,
+            'PredefinedMetricSpecification': {
+                'PredefinedMetricType': jsonRequestBody.predefinedMetricSpecification.predefinedMetricType
+            }
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'application-autoscaling',
+            'method': {
+                'api': 'PutScalingPolicy',
+                'boto3': 'put_scaling_policy',
+                'cli': 'put-scaling-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('application-autoscaling', details.requestId),
+            'region': region,
+            'service': 'application-autoscaling',
+            'type': 'AWS::ApplicationAutoScaling::ScalingPolicy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:dynamodb:dynamodb.ListTables
+    // autogen:dynamodb:dynamodb.DescribeTable
+    // autogen:dynamodb:dax.DescribeClusters
+    // autogen:dynamodb:ec2.DescribeVpcs
+    // autogen:dynamodb:ec2.DescribeSubnets
+    // autogen:dynamodb:dax.CreateSubnetGroup
+    // autogen:dynamodb:dax.DescribeSubnetGroups
+    // autogen:dynamodb:dax.DeleteSubnetGroup
+    // autogen:dynamodb:dax.DescribeParameterGroups
+    // autogen:dynamodb:dax.CreateParameterGroup
+    // autogen:dynamodb:dax.UpdateParameterGroup
+    // autogen:dynamodb:dax.DeleteParameterGroup
+    // autogen:dynamodb:dax.CreateCluster
+    // autogen:dynamodb:dax.DeleteCluster
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/dynamodb\/rpc$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+
+            if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBRequestContext.listTables") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dynamodb',
+                    'method': {
+                        'api': 'ListTables',
+                        'boto3': 'list_tables',
+                        'cli': 'list-tables'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBRequestContext.describeTables") {
+                for (var j=0; j<action['parameters'][0].length; j++) {
+                    reqParams.boto3['TableName'] = action['parameters'][0];
+                    reqParams.cli['--table-name'] = action['parameters'][0];
+
+                    outputs.push({
+                        'region': region,
+                        'service': 'dynamodb',
+                        'method': {
+                            'api': 'DescribeTable',
+                            'boto3': 'describe_table',
+                            'cli': 'describe-table'
+                        },
+                        'options': reqParams,
+                        'requestDetails': details
+                    });
+                }
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxClusterContext.describeClusters") {
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DescribeClusters',
+                        'boto3': 'describe_clusters',
+                        'cli': 'describe-clusters'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.ec2.requestfactory.shared.Ec2Context.describeVpcs") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeVpcs',
+                        'boto3': 'describe_vpcs',
+                        'cli': 'describe-vpcs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.ec2.requestfactory.shared.Ec2Context.describeSubnets") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSubnets',
+                        'boto3': 'describe_subnets',
+                        'cli': 'describe-subnets'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxSubnetGroupsContext.createSubnetGroup") {
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['SubnetGroupName'] = action['parameters'][0]['subnetGroupName'];
+                reqParams.cli['--subnet-group-name'] = action['parameters'][0]['subnetGroupName'];
+                reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
+                reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['SubnetGroupName'] = action['parameters'][0]['subnetGroupName'];
+                reqParams.cfn['SubnetIds'] = action['parameters'][0]['subnetIds'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'CreateSubnetGroup',
+                        'boto3': 'create_subnet_group',
+                        'cli': 'create-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('dax', details.requestId),
+                    'region': region,
+                    'service': 'dax',
+                    'type': 'AWS::DAX::SubnetGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxSubnetGroupsContext.describeSubnetGroups") {
+                reqParams.boto3['MaxResults'] = actions['parameters'][0];
+                reqParams.cli['--max-items'] = actions['parameters'][0];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DescribeSubnetGroups',
+                        'boto3': 'describe_subnet_groups',
+                        'cli': 'describe-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxParameterGroupsContext.deleteSubnetGroup") {
+                reqParams.boto3['SubnetGroupName'] = action['parameters'][0]['subnetGroupName'];
+                reqParams.cli['--subnet-group-name'] = action['parameters'][0]['subnetGroupName'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DeleteSubnetGroup',
+                        'boto3': 'delete_subnet_group',
+                        'cli': 'delete-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxParameterGroupsContext.describeParameterGroups") {
+                reqParams.boto3['MaxResults'] = actions['parameters'][0];
+                reqParams.cli['--max-items'] = actions['parameters'][0];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DescribeParameterGroups',
+                        'boto3': 'describe_parameter_groups',
+                        'cli': 'describe-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxParameterGroupsContext.createParameterGroup") {
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['ParameterGroupName'] = action['parameters'][0]['parameterGroupName'];
+                reqParams.cli['--parameter-group-name'] = action['parameters'][0]['parameterGroupName'];
+
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['ParameterGroupName'] = action['parameters'][0]['parameterGroupName'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'CreateParameterGroup',
+                        'boto3': 'create_parameter_group',
+                        'cli': 'create-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('dax', details.requestId),
+                    'region': region,
+                    'service': 'dax',
+                    'type': 'AWS::DAX::ParameterGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxParameterGroupsContext.updateParameterGroup") {
+                reqParams.boto3['ParameterGroupName'] = action['parameters'][0]['parameterGroupName'];
+                reqParams.cli['--parameter-group-name'] = action['parameters'][0]['parameterGroupName'];
+                reqParams.boto3['ParameterNameValues'] = action['parameters'][0]['parameterNameValues'];
+                reqParams.cli['--parameter-name-values'] = action['parameters'][0]['parameterNameValues'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'UpdateParameterGroup',
+                        'boto3': 'update_parameter_group',
+                        'cli': 'update-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxParameterGroupsContext.deleteParameterGroup") {
+                reqParams.boto3['ParameterGroupName'] = action['parameters'][0]['parameterGroupName'];
+                reqParams.cli['--parameter-group-name'] = action['parameters'][0]['parameterGroupName'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DeleteParameterGroup',
+                        'boto3': 'delete_parameter_group',
+                        'cli': 'delete-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxClusterContext.createCluster") {
+                reqParams.boto3['SSESpecification'] = action['parameters'][0]['SSESpecification'];
+                reqParams.cli['--sse-specification'] = action['parameters'][0]['SSESpecification'];
+                reqParams.boto3['ReplicationFactor'] = action['parameters'][0]['replicationFactor'];
+                reqParams.cli['--replication-factor'] = action['parameters'][0]['replicationFactor'];
+                reqParams.boto3['ClusterName'] = action['parameters'][0]['clusterName'];
+                reqParams.cli['--cluster-name'] = action['parameters'][0]['clusterName'];
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['IamRoleArn'] = action['parameters'][0]['iamRoleArn'];
+                reqParams.cli['--iam-role-arn'] = action['parameters'][0]['iamRoleArn'];
+                reqParams.boto3['NodeType'] = action['parameters'][0]['nodeType'];
+                reqParams.cli['--node-type'] = action['parameters'][0]['nodeType'];
+                reqParams.boto3['SecurityGroupIds'] = action['parameters'][0]['securityGroupIds'];
+                reqParams.cli['--security-group-ids'] = action['parameters'][0]['securityGroupIds'];
+
+                reqParams.cfn['SSESpecification'] = action['parameters'][0]['SSESpecification'];
+                reqParams.cfn['ReplicationFactor'] = action['parameters'][0]['replicationFactor'];
+                reqParams.cfn['ClusterName'] = action['parameters'][0]['clusterName'];
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['IAMRoleARN'] = action['parameters'][0]['iamRoleArn'];
+                reqParams.cfn['NodeType'] = action['parameters'][0]['nodeType'];
+                reqParams.cfn['SecurityGroupIds'] = action['parameters'][0]['securityGroupIds'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'CreateCluster',
+                        'boto3': 'create_cluster',
+                        'cli': 'create-cluster'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('dax', details.requestId),
+                    'region': region,
+                    'service': 'dax',
+                    'type': 'AWS::DAX::Cluster',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.dax.shared.DaxClusterContext.deleteCluster") {
+                reqParams.boto3['ClusterName'] = action['parameters'][0]['clusterName'];
+                reqParams.cli['--cluster-name'] = action['parameters'][0]['clusterName'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dax',
+                    'method': {
+                        'api': 'DeleteCluster',
+                        'boto3': 'delete_cluster',
+                        'cli': 'delete-cluster'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            }
+        }
+
+        return {};
+    }
 }
