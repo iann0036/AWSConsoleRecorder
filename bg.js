@@ -26750,4 +26750,210 @@ function analyseRequest(details) {
 
         return {};
     }
+
+    // autogen:states:stepfunctions.CreateActivity
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/create$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'CreateActivity',
+                'boto3': 'create_activity',
+                'cli': 'create-activity'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('stepfunctions', details.requestId),
+            'region': region,
+            'service': 'stepfunctions',
+            'type': 'AWS::StepFunctions::Activity',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.ListActivities
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/list$/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'ListActivities',
+                'boto3': 'list_activities',
+                'cli': 'list-activities'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.DeleteActivity
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/delete$/g)) {
+        reqParams.boto3['ActivityArn'] = jsonRequestBody.activityArn;
+        reqParams.cli['--activity-arn'] = jsonRequestBody.activityArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'DeleteActivity',
+                'boto3': 'delete_activity',
+                'cli': 'delete-activity'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.ListStateMachines
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines$/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'ListStateMachines',
+                'boto3': 'list_state_machines',
+                'cli': 'list-state-machines'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.DescribeStateMachine
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/details$/g)) {
+        reqParams.boto3['StateMachineArn'] = jsonRequestBody.stateMachineArn;
+        reqParams.cli['--state-machine-arn'] = jsonRequestBody.stateMachineArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'DescribeStateMachine',
+                'boto3': 'describe_state_machine',
+                'cli': 'describe-state-machine'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.CreateStateMachine
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/create$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Definition'] = jsonRequestBody.definition;
+        reqParams.cli['--definition'] = jsonRequestBody.definition;
+        reqParams.boto3['RoleArn'] = jsonRequestBody.roleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.roleArn;
+
+        reqParams.cfn['StateMachineName'] = jsonRequestBody.name;
+        reqParams.cfn['DefinitionString'] = jsonRequestBody.definition;
+        reqParams.cfn['RoleArn'] = jsonRequestBody.roleArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'CreateStateMachine',
+                'boto3': 'create_state_machine',
+                'cli': 'create-state-machine'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('stepfunctions', details.requestId),
+            'region': region,
+            'service': 'stepfunctions',
+            'type': 'AWS::StepFunctions::StateMachine',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:states:stepfunctions.DeleteStateMachine
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/delete$/g)) {
+        reqParams.boto3['StateMachineArn'] = jsonRequestBody.stateMachineArn;
+        reqParams.cli['--state-machine-arn'] = jsonRequestBody.stateMachineArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'stepfunctions',
+            'method': {
+                'api': 'DeleteStateMachine',
+                'boto3': 'delete_state_machine',
+                'cli': 'delete-state-machine'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:s3:s3.PutBucketPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketPolicy") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+        reqParams.boto3['Policy'] = jsonRequestBody.params.policy;
+        reqParams.cli['--policy'] = jsonRequestBody.params.policy;
+
+        reqParams.cfn['Bucket'] = jsonRequestBody.path;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.params.policy;
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'PutBucketPolicy',
+                'boto3': 'put_bucket_policy',
+                'cli': 'put-bucket-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('s3', details.requestId),
+            'region': region,
+            'service': 's3',
+            'type': 'AWS::S3::BucketPolicy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
