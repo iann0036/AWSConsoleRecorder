@@ -699,9 +699,14 @@ function outputMapCli(service, method, options, region, was_blocked) {
         }
         for (option in options) {
             if (options[option] !== undefined) {
-                if (options[option] === null)
+                if (options[option] === null) {
                     params += ` ${option}`
-                else {
+                } else if (typeof options[option] == "boolean") {
+                    if (options[option])
+                        params += ` ${option}`
+                    else
+                        params += ` --no-${option.substr(2)}`
+                } else {
                     var optionvalue = JSON.stringify(options[option]);
                     if (typeof options[option] == "object")
                         optionvalue = "'" + optionvalue + "'";
@@ -1104,7 +1109,11 @@ chrome.runtime.onMessage.addListener(
 
             chrome.webRequest.onBeforeRequest.addListener(
                 analyseRequest,
-                {urls: ["<all_urls>"]},
+                {urls: [
+                    "*://*.console.aws.amazon.com/*",
+                    "*://console.aws.amazon.com/*",
+                    "*://*.amazonaws.com/*"
+                ]},
                 ["requestBody","blocking"]
             );
 
