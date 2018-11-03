@@ -25458,4 +25458,397 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:neptune:neptune.DescribeDBInstances
+    // autogen:neptune:neptune.DescribeDBEngineVersions
+    // autogen:neptune:ec2.DescribeVpcs
+    // autogen:neptune:iam.ListRoles
+    // autogen:neptune:neptune.DescribeDBSubnetGroups
+    // autogen:neptune:kms.DescribeKey
+    // autogen:neptune:ec2.DescribeSecurityGroups
+    // autogen:neptune:neptune.DescribeDBParameterGroups
+    // autogen:neptune:neptune.DescribeDBClusterParameterGroups
+    // autogen:neptune:neptune.DescribeDBSubnetGroups
+    // autogen:neptune:neptune.CreateDBInstance
+    // autogen:neptune:ec2.DescribeSecurityGroups
+    // autogen:neptune:ec2.DescribeAvailabilityZones
+    // autogen:neptune:neptune.CreateDBSubnetGroup
+    // autogen:neptune:neptune.CreateDBParameterGroup
+    // autogen:neptune:neptune.CreateDBClusterParameterGroup
+    // autogen:neptune:neptune.DeleteDBParameterGroup
+    // autogen:neptune:neptune.DeleteDBSubnetGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/neptune\/rpc$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+
+            if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBInstances',
+                        'boto3': 'describe_db_instances',
+                        'cli': 'describe-db-instances'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+                
+                return {};
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.findDbEngineVersions") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBEngineVersions',
+                        'boto3': 'describe_db_engine_versions',
+                        'cli': 'describe-db-engine-versions'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+                
+                return {};
+            } else if (action['action'] == "EC2.DescribeVpcsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeVpcs',
+                        'boto3': 'describe_vpcs',
+                        'cli': 'describe-vpcs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.IAMContext.listIAMRoles") {
+                outputs.push({
+                    'region': region,
+                    'service': 'iam',
+                    'method': {
+                        'api': 'ListRoles',
+                        'boto3': 'list_roles',
+                        'cli': 'list-roles'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbSecurityGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBSubnetGroups',
+                        'boto3': 'describe_db_subnet_groups',
+                        'cli': 'describe-db-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.trent.requestfactory.shared.TrentRequestContext.describeKey") {
+                reqParams.boto3['KeyId'] = action['parameters'][0]['keyId'];
+                reqParams.cli['--key-id'] = action['parameters'][0]['keyId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'kms',
+                    'method': {
+                        'api': 'DescribeKey',
+                        'boto3': 'describe_key',
+                        'cli': 'describe-key'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.findDbParameterGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBParameterGroups',
+                        'boto3': 'describe_db_parameter_groups',
+                        'cli': 'describe-db-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.listDbClusterParameterGroups") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBClusterParameterGroups',
+                        'boto3': 'describe_db_cluster_parameter_groups',
+                        'cli': 'describe-db-cluster-parameter-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.list") {
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DescribeDBSubnetGroups',
+                        'boto3': 'describe_db_subnet_groups',
+                        'cli': 'describe-db-subnet-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.create") {
+                reqParams.boto3['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.cli['--auto-minor-version-upgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.boto3['EnableIAMDatabaseAuthentication'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
+                reqParams.cli['--enable-iam-database-authentication'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
+                reqParams.boto3['MultiAZ'] = action['parameters'][0]['multiAZ'];
+                reqParams.cli['--multi-az'] = action['parameters'][0]['multiAZ'];
+                reqParams.boto3['PubliclyAccessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.cli['--publicly-accessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.boto3['StorageEncrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.cli['--storage-encrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.boto3['AllocatedStorage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.cli['--allocated-storage'] = action['parameters'][0]['allocatedStorage'];
+                reqParams.boto3['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.cli['--backup-retention-period'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.boto3['Iops'] = action['parameters'][0]['iops'];
+                reqParams.cli['--iops'] = action['parameters'][0]['iops'];
+                reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                reqParams.cli['--port'] = action['parameters'][0]['port'];
+                reqParams.boto3['PromotionTier'] = action['parameters'][0]['promotionTier'];
+                reqParams.cli['--promotion-tier'] = action['parameters'][0]['promotionTier'];
+                reqParams.boto3['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cli['--availability-zone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.boto3['DBInstanceClass'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.cli['--db-instance-class'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.boto3['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.cli['--db-instance-identifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.boto3['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.cli['--db-parameter-group-name'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.boto3['Engine'] = action['parameters'][0]['engine'];
+                reqParams.cli['--engine'] = action['parameters'][0]['engine'];
+                reqParams.boto3['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                reqParams.cli['--engine-version'] = action['parameters'][0]['engineVersion'];
+                reqParams.boto3['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cli['--kms-key-id'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.boto3['LicenseModel'] = action['parameters'][0]['licenseModel'];
+                reqParams.cli['--license-model'] = action['parameters'][0]['licenseModel'];
+                reqParams.boto3['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
+                reqParams.cli['--option-group-name'] = action['parameters'][0]['optionGroupName'];
+                reqParams.boto3['PreferredBackupWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cli['--preferred-backup-window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.boto3['StorageType'] = action['parameters'][0]['storageType'];
+                reqParams.cli['--storage-type'] = action['parameters'][0]['storageType'];
+                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                reqParams.cfn['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
+                reqParams.cfn['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.cfn['DBInstanceClass'] = action['parameters'][0]['DBInstanceClass'];
+                reqParams.cfn['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
+                reqParams.cfn['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
+                reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cfn['PreferredBackupWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'CreateDBInstance',
+                        'boto3': 'create_db_instance',
+                        'cli': 'create-db-instance'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('neptune', details.requestId),
+                    'region': region,
+                    'service': 'neptune',
+                    'type': 'AWS::Neptune::DBInstance',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.gwt.ec2.requestfactory.shared.Ec2Context.describeSecurityGroups") {
+                reqParams.boto3['GroupIds'] = action['parameters'][0]['groupIds'];
+                reqParams.cli['--group-ids'] = action['parameters'][0]['groupIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeSecurityGroups',
+                        'boto3': 'describe_security_groups',
+                        'cli': 'describe-security-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "EC2.DescribeAvailabilityZonesDefault") {
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'DescribeAvailabilityZones',
+                        'boto3': 'describe_availability_zones',
+                        'cli': 'describe-availability-zones'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.create") {
+                reqParams.boto3['DBSubnetGroupDescription'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.cli['--db-subnet-group-description'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.boto3['SubnetIds'] = action['parameters'][0]['subnetIds'];
+                reqParams.cli['--subnet-ids'] = action['parameters'][0]['subnetIds'];
+
+                reqParams.cfn['DBSubnetGroupDescription'] = action['parameters'][0]['DBSubnetGroupDescription'];
+                reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cfn['SubnetIds'] = action['parameters'][0]['subnetIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'CreateDBSubnetGroup',
+                        'boto3': 'create_db_subnet_group',
+                        'cli': 'create-db-subnet-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('neptune', details.requestId),
+                    'region': region,
+                    'service': 'neptune',
+                    'type': 'AWS::Neptune::DBSubnetGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.createDbParameterGroup") {
+                reqParams.boto3['DBParameterGroupName'] = action['parameters'][1];
+                reqParams.cli['--db-parameter-group-name'] = action['parameters'][1];
+                reqParams.boto3['DBParameterGroupFamily'] = action['parameters'][0];
+                reqParams.cli['--db-parameter-group-family'] = action['parameters'][0];
+                reqParams.boto3['Description'] = action['parameters'][2];
+                reqParams.cli['--description'] = action['parameters'][2];
+
+                reqParams.cfn['Name'] = action['parameters'][1];
+                reqParams.cfn['Family'] = action['parameters'][0];
+                reqParams.cfn['Description'] = action['parameters'][2];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'CreateDBParameterGroup',
+                        'boto3': 'create_db_parameter_group',
+                        'cli': 'create-db-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('neptune', details.requestId),
+                    'region': region,
+                    'service': 'neptune',
+                    'type': 'AWS::Neptune::DBParameterGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.createDbClusterParameterGroup") {
+                reqParams.boto3['DBClusterParameterGroupName'] = action['parameters'][1];
+                reqParams.cli['--db-cluster-parameter-group-name'] = action['parameters'][1];
+                reqParams.boto3['DBParameterGroupFamily'] = action['parameters'][0];
+                reqParams.cli['--db-parameter-group-family'] = action['parameters'][0];
+                reqParams.boto3['Description'] = action['parameters'][2];
+                reqParams.cli['--description'] = action['parameters'][2];
+
+                reqParams.cfn['Name'] = action['parameters'][1];
+                reqParams.cfn['Family'] = action['parameters'][0];
+                reqParams.cfn['Description'] = action['parameters'][2];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'CreateDBClusterParameterGroup',
+                        'boto3': 'create_db_cluster_parameter_group',
+                        'cli': 'create-db-cluster-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('neptune', details.requestId),
+                    'region': region,
+                    'service': 'neptune',
+                    'type': 'AWS::Neptune::DBClusterParameterGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DbParamGroupContext.delete") {
+                reqParams.boto3['DBParameterGroupName'] = action['parameters'][0];
+                reqParams.cli['--db-parameter-group-name'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'DeleteDBParameterGroup',
+                        'boto3': 'delete_db_parameter_group',
+                        'cli': 'delete-db-parameter-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.rds.shared.DBSubnetGroupContext.deleteDbSubnetGroupsByName") {
+                for (var j=0; j<action['parameters'][0].length; j++) {
+                    reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0][j];
+                    reqParams.cli['--db-subnet-group-name'] = action['parameters'][0][j];
+            
+                    outputs.push({
+                        'region': region,
+                        'service': 'neptune',
+                        'method': {
+                            'api': 'DeleteDBSubnetGroup',
+                            'boto3': 'delete_db_subnet_group',
+                            'cli': 'delete-db-subnet-group'
+                        },
+                        'options': reqParams,
+                        'requestDetails': details
+                    });
+                }
+            }
+        }
+
+        return {};
+    }
+
 }
