@@ -5,7 +5,7 @@
 
 ![Screenshot](assets/screen1.png)
 
-:exclamation: **CAUTION:** This project is currently in alpha stages. Many components may not work as expected.
+:exclamation: **CAUTION:** This project is currently in beta stages. Some components may not work as expected.
 
 
 ## Installation

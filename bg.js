@@ -385,9 +385,10 @@ ${service}_client = boto3.client('${service}', region_name='${region}')
 
 function ensureInitDeclaredGo(service, region) {
     if (!declared_services['go'].includes(service)) {
+        var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g,'');
         declared_services['go'].push(service);
         return `
-${service}svc := ${service}.New(session.New(&aws.Config{Region: aws.String("${region}")}))
+    ${service}svc := ${mappedservice}.New(session.New(&aws.Config{Region: aws.String("${region}")}))
 
 `;
     }
@@ -559,7 +560,7 @@ function processBoto3Parameter(param, spacing) {
     return undefined;
 }
 
-function processGoParameter(paramkey, param, spacing) {
+function processGoParameter(service, paramkey, param, spacing) {
     var paramitems = [];
 
     if (param === undefined || param === null)
@@ -572,14 +573,45 @@ function processGoParameter(paramkey, param, spacing) {
     if (typeof param == "number")
         return `aws.Int64(${param})`;
     if (typeof param == "string")
-        return `aws.String('${param}')`;
+        return `aws.String("${param}")`;
     if (Array.isArray(param)) {
-        return undefined; // TODO
-        return "";
+        if (param.length == 0) {
+            return `[]*${service}.${paramkey}{}`;
+        }
+
+        param.forEach(paramitem => {
+            var item = processGoParameter(service, paramkey, paramitem, spacing + 4);
+            if (item !== undefined) {
+                paramitems.push(item);
+            }
+        });
+
+        slicetype = `*${service}.${paramkey}`;
+        if (paramitems[0].startsWith("aws.String(")) {
+            slicetype = "*string";
+        } else if (paramitems[0].startsWith("aws.Bool(")) {
+            slicetype = "*bool";
+        } else if (paramitems[0].startsWith("aws.Int64(")) {
+            slicetype = "*int64";
+        }
+
+        return `[]${slicetype}{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `,
+` + ' '.repeat(spacing) + '}';
     }
     if (typeof param == "object") {
-        return undefined; // TODO
-        return "";
+        Object.keys(param).forEach(function (key) {
+            var item = processGoParameter(service, key, param[key], spacing + 4);
+            if (item !== undefined) {
+                paramitems.push(key + ": " + processGoParameter(service, key, param[key], spacing + 4));
+            }
+        });
+
+        return `&${service}.${paramkey}{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `,
+` + ' '.repeat(spacing) + '}';
     }
     
     return undefined;
@@ -610,20 +642,21 @@ function outputMapBoto3(service, method, options, region, was_blocked) {
 function outputMapGo(service, method, options, region, was_blocked) {
     var output = ensureInitDeclaredGo(service, region);
     var params = '';
+    var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g,'');
 
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined) {
-                var optionvalue = processGoParameter(option, options[option], 4);
+                var optionvalue = processGoParameter(mappedservice, option, options[option], 8);
                 params += `
         ${option}: ${optionvalue},`;
             }
         }
         params += `
-`;
+    `;
     }
 
-    output += `_, err ${go_first_output ? ':' : ''}= ${service}svc.${method}(&${service}.${method}Input{${params}})${was_blocked ? ' // blocked' : ''}
+    output += `    _, err ${go_first_output ? ':' : ''}= ${service}svc.${method}(&${mappedservice}.${method}Input{${params}})${was_blocked ? ' // blocked' : ''}
 `
 
     go_first_output = false;
@@ -666,7 +699,7 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined) {
-                var optionvalue = processCfnParameter(options[option], 12, index);
+                var optionvalue = processCfnParameter(options[option], 16, index);
                 params += `
             ${option}: ${optionvalue}`;
             }
@@ -675,9 +708,9 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
 `;
     }
 
-    output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
-        Type: "${type}"
-        Properties:${params}
+    output += `        ${logicalId}:${was_blocked ? ' # blocked' : ''}
+            Type: "${type}"
+            Properties:${params}
 `;
 
     return output;
@@ -749,14 +782,17 @@ function compileOutputs() {
 import boto3
 `,
         'go': `// go get -u github.com/aws/aws-sdk-go/...
-// Still a WIP, Request objects not yet implemented
 
 package main
 
 import (
-${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${service}"`).join(`
+    "github.com/aws/aws-sdk-go/aws"
+    "github.com/aws/aws-sdk-go/aws/session"
+${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${mapServiceJs(service).toLowerCase().replace(/\-/g,'')}"`).join(`
 `)}
 )
+
+func main() {
 `,
         'cfn': `${tracked_resources.length == 0 ? '# No resources created in recording' : `AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
@@ -785,6 +821,12 @@ var AWS = require('aws-sdk');`
         compiled['js'] += outputMapJs(outputs[i].service, lowerFirstChar(outputs[i].method.api), outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
     }
     compiled['js'] += `\n`;
+    compiled['go'] += `
+    if err != nil {
+        panic(err);
+    }
+}
+`;
 
     for (var i=0; i<tracked_resources.length; i++) {
         compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
@@ -816,7 +858,6 @@ function mapServiceJs(service) {
         "cloudhsmv2": "CloudHSMV2",
         "cloudsearch": "CloudSearch",
         "cloudsearchdomain": "CloudSearchDomain",
-        "cloudsearch": "CloudSearch",
         "cloudtrail": "CloudTrail",
         "cloudwatch": "CloudWatch",
         "cloudwatchevents": "CloudWatchEvents",
@@ -830,8 +871,7 @@ function mapServiceJs(service) {
         "cognito-idp": "CognitoIdentityServiceProvider",
         "cognito-sync": "CognitoSync",
         "comprehend": "Comprehend",
-        "config": "Config",
-        "configservice": "ConfigService",
+        "config": "ConfigService",
         "connect": "Connect",
         "costexplorer": "CostExplorer",
         "dax": "DAX",
@@ -879,7 +919,6 @@ function mapServiceJs(service) {
         "kinesisvideo": "KinesisVideo",
         "kinesis-video-archived-media": "KinesisVideoArchivedMedia",
         "kinesis-video-media": "KinesisVideoMedia",
-        "lambda": "Lambda",
         "lambda": "Lambda",
         "lex-models": "LexModelBuildingService",
         "lex-runtime": "LexRuntime",
@@ -2361,11 +2400,7 @@ function analyseRequest(details) {
         reqParams.cli['--instance-initiated-shutdown-behavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
         reqParams.cli['--credit-specification'] = jsonRequestBody.CreditSpecification;
         reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
-
-        if (jsonRequestBody.EbsOptimized === true)
-            reqParams.cli['--ebs-optimized'] = null;
-        else if (jsonRequestBody.EbsOptimized === false)
-            reqParams.cli['--no-ebs-optimized'] = null;
+        reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
 
         outputs.push({
@@ -4126,7 +4161,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListDetectors
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListDetectors" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "ListDetectors" || jsonRequestBody.operation == "listDetectors") && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -4162,7 +4197,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateDetector
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateDetector" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "CreateDetector" || jsonRequestBody.operation == "createDetector") && jsonRequestBody.method == "POST") {
         reqParams.boto3['Enable'] = jsonRequestBody.contentString.enable;
         reqParams.cli['--enable'] = jsonRequestBody.contentString.enable;
 
@@ -26948,6 +26983,99 @@ function analyseRequest(details) {
             'region': region,
             'service': 's3',
             'type': 'AWS::S3::BucketPolicy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateThreatIntelSet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "createThreatIntelSet") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Location'] = jsonRequestBody.contentString.location;
+        reqParams.cli['--location'] = jsonRequestBody.contentString.location;
+        reqParams.boto3['Format'] = jsonRequestBody.contentString.format;
+        reqParams.cli['--format'] = jsonRequestBody.contentString.format;
+        reqParams.boto3['Activate'] = jsonRequestBody.contentString.activate;
+        reqParams.cli['--activate'] = jsonRequestBody.contentString.activate;
+        reqParams.boto3['ClientToken'] = jsonRequestBody.contentString.clientToken;
+        reqParams.cli['--client-token'] = jsonRequestBody.contentString.clientToken;
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Location'] = jsonRequestBody.contentString.location;
+        reqParams.cfn['Format'] = jsonRequestBody.contentString.format;
+        reqParams.cfn['Activate'] = jsonRequestBody.contentString.activate;
+        reqParams.cfn['DetectorId'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateThreatIntelSet',
+                'boto3': 'create_threat_intel_set',
+                'cli': 'create-threat-intel-set'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('guardduty', details.requestId),
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::ThreatIntelSet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.CreateFilter
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateFilter") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.cli['--finding-criteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.boto3['Action'] = jsonRequestBody.contentString.action;
+        reqParams.cli['--action'] = jsonRequestBody.contentString.action;
+        reqParams.boto3['Rank'] = jsonRequestBody.contentString.rank;
+        reqParams.cli['--rank'] = jsonRequestBody.contentString.rank;
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
+        reqParams.cfn['Action'] = jsonRequestBody.contentString.action;
+        reqParams.cfn['Rank'] = jsonRequestBody.contentString.rank;
+        reqParams.cfn['DetectorId'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'CreateFilter',
+                'boto3': 'create_filter',
+                'cli': 'create-filter'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('guardduty', details.requestId),
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Filter',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
