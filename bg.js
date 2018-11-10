@@ -27084,4 +27084,432 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:organizations:organizations.ListRoots
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/roots$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListRoots',
+                'boto3': 'list_roots',
+                'cli': 'list-roots'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.ListCreateAccountStatus
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/account\-creation\-requests\?/g)) {
+        reqParams.boto3['States'] = [getUrlValue(details.url, 'statuses')];
+        reqParams.cli['--states'] = [getUrlValue(details.url, 'statuses')];
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListCreateAccountStatus',
+                'boto3': 'list_create_account_status',
+                'cli': 'list-create-account-status'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.ListAccounts
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListAccounts',
+                'boto3': 'list_accounts',
+                'cli': 'list-accounts'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.DescribeAccount
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
+        reqParams.boto3['AccountId'] = getUrlValue(details.url, 'accountId');
+        reqParams.cli['--account-id'] = getUrlValue(details.url, 'accountId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'DescribeAccount',
+                'boto3': 'describe_account',
+                'cli': 'describe-account'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.CreateAccount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
+        reqParams.boto3['AccountName'] = jsonRequestBody.name;
+        reqParams.cli['--account-name'] = jsonRequestBody.name;
+        reqParams.boto3['Email'] = jsonRequestBody.email;
+        reqParams.cli['--email'] = jsonRequestBody.email;
+        reqParams.boto3['RoleName'] = jsonRequestBody.roleName;
+        reqParams.cli['--role-name'] = jsonRequestBody.roleName;
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'CreateAccount',
+                'boto3': 'create_account',
+                'cli': 'create-account'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.ListOrganizationalUnitsForParent
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+        reqParams.boto3['ParentId'] = getUrlValue(details.url, 'parentId');
+        reqParams.cli['--parent-id'] = getUrlValue(details.url, 'parentId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListOrganizationalUnitsForParent',
+                'boto3': 'list_organizational_units_for_parent',
+                'cli': 'list-organizational-units-for-parent'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.CreateOrganizationalUnit
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+        reqParams.boto3['Name'] = getUrlValue(details.url, 'name');
+        reqParams.cli['--name'] = getUrlValue(details.url, 'name');
+        reqParams.boto3['ParentId'] = getUrlValue(details.url, 'parentId');
+        reqParams.cli['--parent-id'] = getUrlValue(details.url, 'parentId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'CreateOrganizationalUnit',
+                'boto3': 'create_organizational_unit',
+                'cli': 'create-organizational-unit'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.ListParents
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/parents\?/g)) {
+        reqParams.boto3['ChildId'] = getUrlValue(details.url, 'childId');
+        reqParams.cli['--child-id'] = getUrlValue(details.url, 'childId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListParents',
+                'boto3': 'list_parents',
+                'cli': 'list-parents'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.MoveAccount
+    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
+        reqParams.boto3['AccountId'] = getUrlValue(details.url, 'accountId');
+        reqParams.cli['--account-id'] = getUrlValue(details.url, 'accountId');
+        reqParams.boto3['DestinationParentId'] = getUrlValue(details.url, 'destinationParentId');
+        reqParams.cli['--destination-parent-id'] = getUrlValue(details.url, 'destinationParentId');
+        reqParams.boto3['SourceParentId'] = getUrlValue(details.url, 'sourceParentId');
+        reqParams.cli['--source-parent-id'] = getUrlValue(details.url, 'sourceParentId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'MoveAccount',
+                'boto3': 'move_account',
+                'cli': 'move-account'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.ListPolicies
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'ListPolicies',
+                'boto3': 'list_policies',
+                'cli': 'list-policies'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.DescribePolicy
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+        reqParams.boto3['PolicyId'] = getUrlValue(details.url, 'policyId');
+        reqParams.cli['--policy-id'] = getUrlValue(details.url, 'policyId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'DescribePolicy',
+                'boto3': 'describe_policy',
+                'cli': 'describe-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.CreatePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies$/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Type'] = jsonRequestBody.type;
+        reqParams.cli['--type'] = jsonRequestBody.type;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['Content'] = jsonRequestBody.content;
+        reqParams.cli['--content'] = jsonRequestBody.content;
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'CreatePolicy',
+                'boto3': 'create_policy',
+                'cli': 'create-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.DeletePolicy
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+        reqParams.boto3['PolicyId'] = getUrlValue(details.url, 'policyId');
+        reqParams.cli['--policy-id'] = getUrlValue(details.url, 'policyId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'DeletePolicy',
+                'boto3': 'delete_policy',
+                'cli': 'delete-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:organizations:organizations.DeleteOrganizationalUnit
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+        reqParams.boto3['OrganizationalUnitId'] = getUrlValue(details.url, 'organizationalUnitId');
+        reqParams.cli['--organizational-unit-id'] = getUrlValue(details.url, 'organizationalUnitId');
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'DeleteOrganizationalUnit',
+                'boto3': 'delete_organizational_unit',
+                'cli': 'delete-organizational-unit'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.GetServiceGraph
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetServiceGraph/g)) {
+        reqParams.boto3['StartTime'] = jsonRequestBody.content.StartTime;
+        reqParams.cli['--start-time'] = jsonRequestBody.content.StartTime;
+        reqParams.boto3['EndTime'] = jsonRequestBody.content.EndTime;
+        reqParams.cli['--end-time'] = jsonRequestBody.content.EndTime;
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetServiceGraph',
+                'boto3': 'get_service_graph',
+                'cli': 'get-service-graph'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.GetEncryptionConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetEncryptionConfig/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetEncryptionConfig',
+                'boto3': 'get_encryption_config',
+                'cli': 'get-encryption-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.GetTraceSummaries
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetTraceSummaries/g)) {
+        reqParams.boto3['StartTime'] = jsonRequestBody.content.StartTime;
+        reqParams.cli['--start-time'] = jsonRequestBody.content.StartTime;
+        reqParams.boto3['EndTime'] = jsonRequestBody.content.EndTime;
+        reqParams.cli['--end-time'] = jsonRequestBody.content.EndTime;
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetTraceSummaries',
+                'boto3': 'get_trace_summaries',
+                'cli': 'get-trace-summaries'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.GetSamplingRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingRules/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetSamplingRules',
+                'boto3': 'get_sampling_rules',
+                'cli': 'get-sampling-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.GetSamplingStatisticSummaries
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingStatisticSummaries/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'GetSamplingStatisticSummaries',
+                'boto3': 'get_sampling_statistic_summaries',
+                'cli': 'get-sampling-statistic-summaries'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.CreateSamplingRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=CreateSamplingRule/g)) {
+        reqParams.boto3['SamplingRule'] = jsonRequestBody.content.SamplingRule;
+        reqParams.cli['--sampling-rule'] = jsonRequestBody.content.SamplingRule;
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'CreateSamplingRule',
+                'boto3': 'create_sampling_rule',
+                'cli': 'create-sampling-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:xray:xray.DeleteSamplingRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=DeleteSamplingRule/g)) {
+        reqParams.boto3['RuleARN'] = jsonRequestBody.content.RuleARN;
+        reqParams.cli['--rule-arn'] = jsonRequestBody.content.RuleARN;
+
+        outputs.push({
+            'region': region,
+            'service': 'xray',
+            'method': {
+                'api': 'DeleteSamplingRule',
+                'boto3': 'delete_sampling_rule',
+                'cli': 'delete-sampling-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
