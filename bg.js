@@ -12165,6 +12165,8 @@ function analyseRequest(details) {
     // autogen:glue:glue.DeleteClassifier
     // autogen:glue:glue.BatchDeleteConnection
     // autogen:glue:glue.BatchDeleteTable
+    // autogen:glue:glue.CreateCrawler
+    // autogen:glue:glue.CreateDevEndpoint
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glue\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
@@ -12630,6 +12632,151 @@ function analyseRequest(details) {
                     },
                     'options': reqParams,
                     'requestDetails': details
+                });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createCrawler") {
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+                reqParams.boto3['Role'] = action['parameters'][0]['role'];
+                reqParams.cli['--role'] = action['parameters'][0]['role'];
+                reqParams.boto3['DatabaseName'] = action['parameters'][0]['databaseName'];
+                reqParams.cli['--database-name'] = action['parameters'][0]['databaseName'];
+                reqParams.boto3['Description'] = action['parameters'][0]['description'];
+                reqParams.cli['--description'] = action['parameters'][0]['description'];
+                reqParams.boto3['Classifiers'] = action['parameters'][0]['classifiers'];
+                reqParams.cli['--classifiers'] = action['parameters'][0]['classifiers'];
+                reqParams.boto3['Schedule'] = action['parameters'][0]['schedule'];
+                reqParams.cli['--schedule'] = action['parameters'][0]['schedule'];
+                reqParams.boto3['Configuration'] = action['parameters'][0]['configuration'];
+                reqParams.cli['--configuration'] = action['parameters'][0]['configuration'];
+                reqParams.boto3['TablePrefix'] = action['parameters'][0]['tablePrefix'];
+                reqParams.cli['--table-prefix'] = action['parameters'][0]['tablePrefix'];
+                reqParams.boto3['SchemaChangePolicy'] = {
+                    'UpdateBehavior': action['parameters'][0]['schemaChangePolicy']['updateBehavior'],
+                    'DeleteBehaviour': action['parameters'][0]['schemaChangePolicy']['deleteBehaviour']
+                };
+                reqParams.cli['--schema-change-policy'] = {
+                    'UpdateBehavior': action['parameters'][0]['schemaChangePolicy']['updateBehavior'],
+                    'DeleteBehaviour': action['parameters'][0]['schemaChangePolicy']['deleteBehaviour']
+                };
+                reqParams.boto3['CrawlerSecurityConfiguration'] = action['parameters'][0]['crawlerSecurityConfiguration'];
+                reqParams.cli['--crawler-security-configuration'] = action['parameters'][0]['crawlerSecurityConfiguration'];
+
+                var s3Targets = [];
+                var jdbcTargets = [];
+                var dynamoDbTargets = [];
+                for (var j=0; j<action['parameters'][0]['targets']['s3Targets'].length; j++) {
+                    s3Targets.push({
+                        'Path': action['parameters'][0]['targets']['s3Targets'][j]['path'],
+                        'Exclusions': action['parameters'][0]['targets']['s3Targets'][j]['exclusions']
+                    });
+                }
+                for (var j=0; j<action['parameters'][0]['targets']['jdbcTargets'].length; j++) {
+                    jdbcTargets.push({
+                        'ConnectionName': action['parameters'][0]['targets']['jdbcTargets'][j]['connectionName'],
+                        'Path': action['parameters'][0]['targets']['jdbcTargets'][j]['path'],
+                        'Exclusions': action['parameters'][0]['targets']['jdbcTargets'][j]['exclusions']
+                    });
+                }
+                for (var j=0; j<action['parameters'][0]['targets']['dynamoDBTargets'].length; j++) {
+                    dynamoDbTargets.push({
+                        'Path': action['parameters'][0]['targets']['dynamoDBTargets'][j]['path']
+                    });
+                }
+
+                reqParams.boto3['Targets'] = {
+                    'S3Targets': s3Targets,
+                    'JdbcTargets': jdbcTargets,
+                    'DynamoDBTargets': dynamoDbTargets
+                };
+                reqParams.cli['--targets'] = {
+                    'S3Targets': s3Targets,
+                    'JdbcTargets': jdbcTargets,
+                    'DynamoDBTargets': dynamoDbTargets
+                };
+
+                reqParams.cfn['Name'] = action['parameters'][0]['name'];
+                reqParams.cfn['Role'] = action['parameters'][0]['role'];
+                reqParams.cfn['DatabaseName'] = action['parameters'][0]['databaseName'];
+                reqParams.cfn['Description'] = action['parameters'][0]['description'];
+                reqParams.cfn['Classifiers'] = action['parameters'][0]['classifiers'];
+                reqParams.cfn['Schedule'] = action['parameters'][0]['schedule'];
+                reqParams.cfn['Configuration'] = action['parameters'][0]['configuration'];
+                reqParams.cfn['TablePrefix'] = action['parameters'][0]['tablePrefix'];
+                reqParams.cfn['SchemaChangePolicy'] = {
+                    'UpdateBehavior': action['parameters'][0]['schemaChangePolicy']['updateBehavior'],
+                    'DeleteBehaviour': action['parameters'][0]['schemaChangePolicy']['deleteBehaviour']
+                };
+                reqParams.cfn['Targets'] = {
+                    'S3Targets': s3Targets,
+                    'JdbcTargets': jdbcTargets
+                };
+
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'CreateCrawler',
+                        'boto3': 'create_crawler',
+                        'cli': 'create-crawler'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glue', details.requestId),
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Crawler',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createDevEndpoint") {
+                reqParams.boto3['RoleArn'] = action['parameters'][0]['roleArn'];
+                reqParams.cli['--role-arn'] = action['parameters'][0]['roleArn'];
+                reqParams.boto3['EndpointName'] = action['parameters'][0]['endpointName'];
+                reqParams.cli['--endpoint-name'] = action['parameters'][0]['endpointName'];
+                reqParams.boto3['NumberOfNodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.cli['--number-of-nodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.boto3['PublicKeys'] = action['parameters'][0]['publicKeys'];
+                reqParams.cli['--public-keys'] = action['parameters'][0]['publicKeys'];
+
+                reqParams.cfn['RoleArn'] = action['parameters'][0]['roleArn'];
+                reqParams.cfn['EndpointName'] = action['parameters'][0]['endpointName'];
+                reqParams.cfn['NumberOfNodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.cfn['PublicKey'] = action['parameters'][0]['publicKeys'][0];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'CreateDevEndpoint',
+                        'boto3': 'create_dev_endpoint',
+                        'cli': 'create-dev-endpoint'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glue', details.requestId),
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::DevEndpoint',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
                 });
 
                 if (blocking) {
@@ -28302,5 +28449,148 @@ function analyseRequest(details) {
         return {};
     }
     */
+
+    // autogen:servicecatalog:servicecatalog.CreateConstraint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/constraint\?/g)) {
+        reqParams.boto3['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cli['--portfolio-id'] = jsonRequestBody.portfolioId;
+        reqParams.boto3['ProductId'] = jsonRequestBody.productId;
+        reqParams.cli['--product-id'] = jsonRequestBody.productId;
+        reqParams.boto3['Type'] = jsonRequestBody.type;
+        reqParams.cli['--type'] = jsonRequestBody.type;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['IdempotencyToken'] = jsonRequestBody.idempotencyToken;
+        reqParams.cli['--idempotency-token'] = jsonRequestBody.idempotencyToken;
+
+        reqParams.cfn['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cfn['ProductId'] = jsonRequestBody.productId;
+        reqParams.cfn['Description'] = jsonRequestBody.description;
+
+        if (jsonRequestBody.type == "LAUNCH") {
+            reqParams.boto3['Parameters'] = {
+                "RoleArn": getUrlValue(details.url, 'parameters')
+            };
+            reqParams.cli['--parameters'] = {
+                "RoleArn": getUrlValue(details.url, 'parameters')
+            };
+
+            reqParams.cfn['RoleArn'] = getUrlValue(details.url, 'parameters');
+
+            tracked_resources.push({
+                'logicalId': getResourceName('servicecatalog', details.requestId),
+                'region': region,
+                'service': 'servicecatalog',
+                'type': 'AWS::ServiceCatalog::LaunchRoleConstraint',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        } else if (jsonRequestBody.type == "NOTIFICATION") {
+            reqParams.boto3['Parameters'] = {
+                "NotificationArns": getUrlValue(details.url, 'parameters')
+            };
+            reqParams.cli['--parameters'] = {
+                "NotificationArns": getUrlValue(details.url, 'parameters')
+            };
+
+            reqParams.cfn['NotificationArns'] = getUrlValue(details.url, 'parameters');
+
+            tracked_resources.push({
+                'logicalId': getResourceName('servicecatalog', details.requestId),
+                'region': region,
+                'service': 'servicecatalog',
+                'type': 'AWS::ServiceCatalog::LaunchNotificationConstraint',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        } else if (jsonRequestBody.type == "TEMPLATE") {
+            reqParams.boto3['Parameters'] = {
+                "Rules": getUrlValue(details.url, 'parameters')
+            };
+            reqParams.cli['--parameters'] = {
+                "Rules": getUrlValue(details.url, 'parameters')
+            };
+
+            reqParams.cfn['Rules'] = getUrlValue(details.url, 'parameters');
+
+            tracked_resources.push({
+                'logicalId': getResourceName('servicecatalog', details.requestId),
+                'region': region,
+                'service': 'servicecatalog',
+                'type': 'AWS::ServiceCatalog::LaunchTemplateConstraint',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'CreateConstraint',
+                'boto3': 'create_constraint',
+                'cli': 'create-constraint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.DeleteConstraint
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/constraint\?/g)) {
+        reqParams.boto3['Id'] = getUrlValue(details.url, 'constraintId');
+        reqParams.cli['--id'] = getUrlValue(details.url, 'constraintId');
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'DeleteConstraint',
+                'boto3': 'delete_constraint',
+                'cli': 'delete-constraint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicecatalog:servicecatalog.AcceptPortfolioShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/share\/accept\?/g)) {
+        reqParams.boto3['PortfolioId'] = jsonRequestBody.portfolioId;
+        reqParams.cli['--portfolio-id'] = jsonRequestBody.portfolioId;
+
+        reqParams.cfn['PortfolioId'] = jsonRequestBody.portfolioId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'AcceptPortfolioShare',
+                'boto3': 'accept_portfolio_share',
+                'cli': 'accept-portfolio-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('servicecatalog', details.requestId),
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::AcceptedPortfolioShare',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
 
 }
