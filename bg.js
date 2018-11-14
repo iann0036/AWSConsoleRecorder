@@ -521,9 +521,9 @@ function processTfParameter(param, spacing, index) {
         });
 
         return `[
-` + paramitems.join(`
-,` + `,
-]`)
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `]`;
     }
     if (typeof param == "object") {
         if (Object.keys(param).length === 0 && param.constructor === Object) {
@@ -533,14 +533,18 @@ function processTfParameter(param, spacing, index) {
         Object.keys(param).forEach(function (key) {
             var subvalue = processTfParameter(param[key], spacing + 4, index);
             if (subvalue !== undefined) {
-                paramitems.push(key + " = " + subvalue);
+                if (subvalue[0] == '{') {
+                    paramitems.push(key + " " + subvalue);
+                } else {
+                    paramitems.push(key + " = " + subvalue);
+                }
             }
         });
 
         return `{
 ` + ' '.repeat(spacing + 4) + paramitems.join(`
-` + ' '.repeat(spacing + 4) + `
-}`)
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}`;
     }
     
     return undefined;
@@ -875,15 +879,21 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
         for (option in options) {
             if (options[option] !== undefined) {
                 var optionvalue = processTfParameter(options[option], 4, index);
-                params += `
+                if (optionvalue[0] == '{') {
+                    params += `
+    ${option} ${optionvalue}`;
+                } else {
+                    params += `
     ${option} = ${optionvalue}`;
+                }
             }
         }
         params += `
 `;
     }
 
-    output += `resource "${type}" "${logicalId}" {${params}}
+    output += `
+resource "${type}" "${logicalId}" {${params}}
 `;
 
     return output;
@@ -974,7 +984,11 @@ Metadata:
 Description: ""
 Resources:
 `}`,
-        'tf': `${tracked_resources.length == 0 ? '# No resources created in recording' : `
+        'tf': `${tracked_resources.length == 0 ? '# No resources created in recording' : `# https://www.terraform.io/downloads.html
+
+provider "aws" {
+    region = "${tracked_resources[0].region}"
+}
 `}`,
         'cli': `# pip install awscli --upgrade --user
 
@@ -2589,6 +2603,55 @@ function analyseRequest(details) {
         reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
 
+        reqParams.tf['ami'] = jsonRequestBody.ImageId;
+        reqParams.tf['key_name'] = jsonRequestBody.KeyName;
+        reqParams.tf['vpc_security_group_ids'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.tf['instance_type'] = jsonRequestBody.InstanceType;
+        if (jsonRequestBody.Placement && jsonRequestBody.Placement.Tenancy) {
+            reqParams.tf['tenancy'] = jsonRequestBody.Placement.Tenancy;
+        }
+        reqParams.tf['monitoring'] = jsonRequestBody.Monitoring.Enabled;
+        reqParams.tf['disable_api_termination'] = jsonRequestBody.DisableApiTermination;
+        reqParams.tf['instance_initiated_shutdown_behavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        if (jsonRequestBody.CreditSpecification) {
+            reqParams.tf['credit_specification'] = {
+                'cpu_credits': jsonRequestBody.CreditSpecification.CpuCredits
+            }
+        }
+
+        if (jsonRequestBody.TagSpecifications.length) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
+                if (jsonRequestBody.TagSpecifications[i].ResourceType == "instance") {
+                    for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
+                        reqParams.tf['tags'][jsonRequestBody.TagSpecifications[i].Tag[j].Key] = jsonRequestBody.TagSpecifications[i].Tag[j].Value;
+                    }
+                }
+            }
+        }
+        reqParams.tf['ebs_optimized'] = jsonRequestBody.EbsOptimized;
+
+        for (var i=0; i<jsonRequestBody.BlockDeviceMappings.length; i++) {
+            if (jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/sda1" || jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/xvda") {
+                if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
+                    reqParams.tf['root_block_device'] = {
+                        'volume_type': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeType,
+                        'volume_size': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeSize,
+                        'delete_on_termination': jsonRequestBody.BlockDeviceMappings[i].Ebs.DeleteOnTermination
+                    };
+                }
+            } else if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
+                reqParams.tf['ebs_block_device'] = {
+                    'device_name': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'volume_type': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeType,
+                    'volume_size': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeSize,
+                    'delete_on_termination': jsonRequestBody.BlockDeviceMappings[i].Ebs.DeleteOnTermination,
+                    'iops': jsonRequestBody.BlockDeviceMappings[i].Ebs.Iops,
+                    'snapshot_id': jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId
+                };
+            }
+        }
+
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -2607,6 +2670,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ec2',
             'type': 'AWS::EC2::Instance',
+            'terraformType': 'aws_instance',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
