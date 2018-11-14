@@ -12167,6 +12167,21 @@ function analyseRequest(details) {
     // autogen:glue:glue.BatchDeleteTable
     // autogen:glue:glue.CreateCrawler
     // autogen:glue:glue.CreateDevEndpoint
+    // autogen:glue:glue.CreateDatabase
+    // autogen:glue:glue.GetJob
+    // autogen:glue:s3.CreateBucket
+    // autogen:glue:glue.GetTable
+    // autogen:glue:glue.GetMapping
+    // autogen:glue:glue.GetPlan
+    // autogen:glue:glue.CreateJob
+    // autogen:glue:glue.GetJobRuns
+    // autogen:glue:glue.GetDataflowGraph
+    // autogen:glue:glue.GetTrigger
+    // autogen:glue:glue.CreateTrigger
+    // autogen:glue:glue.DeleteDatabase
+    // autogen:glue:glue.DeleteJob
+    // autogen:glue:glue.DeleteTrigger
+    // autogen:glue:glue.GetDevEndpoints
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glue\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
@@ -12783,6 +12798,318 @@ function analyseRequest(details) {
                     notifyBlocked();
                     return {cancel: true};
                 }
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createDatabase") {
+                reqParams.boto3['DatabaseInput'] = action['parameters'][0]['databaseInput'];
+                reqParams.cli['--database-input'] = action['parameters'][0]['databaseInput'];
+
+                reqParams.cfn['DatabaseInput'] = action['parameters'][0]['databaseInput'];
+                reqParams.cfn['CatalogId'] = "!Ref AWS::AccountId";
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'CreateDatabase',
+                        'boto3': 'create_database',
+                        'cli': 'create-database'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glue', details.requestId),
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Database',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getJob") {
+                reqParams.boto3['JobName'] = action['parameters'][0]['jobName'];
+                reqParams.cli['--job-name'] = action['parameters'][0]['jobName'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetJob',
+                        'boto3': 'get_job',
+                        'cli': 'get-job'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.shared.S3RequestContext.createBucket") {
+                reqParams.boto3['Bucket'] = action['parameters'][0];
+                reqParams.cli['--bucket'] = action['parameters'][0];
+
+                reqParams.cfn['BucketName'] = action['parameters'][0];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 's3',
+                    'method': {
+                        'api': 'CreateBucket',
+                        'boto3': 'create_bucket',
+                        'cli': 'create-bucket'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('s3', details.requestId),
+                    'region': region,
+                    'service': 's3',
+                    'type': 'AWS::S3::Bucket',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getTable") {
+                reqParams.boto3['DatabaseName'] = action['parameters'][0]['databaseName'];
+                reqParams.cli['--database-name'] = action['parameters'][0]['databaseName'];
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetTable',
+                        'boto3': 'get_table',
+                        'cli': 'get-table'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getMapping") {
+                reqParams.boto3['Source'] = action['parameters'][0]['source'];
+                reqParams.cli['--source'] = action['parameters'][0]['source'];
+                reqParams.boto3['Sinks'] = action['parameters'][0]['sinks'];
+                reqParams.cli['--sinks'] = action['parameters'][0]['sinks'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetMapping',
+                        'boto3': 'get_mapping',
+                        'cli': 'get-mapping'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getPlan") {
+                reqParams.boto3['Source'] = action['parameters'][0]['source'];
+                reqParams.cli['--source'] = action['parameters'][0]['source'];
+                reqParams.boto3['Language'] = action['parameters'][0]['language'];
+                reqParams.cli['--language'] = action['parameters'][0]['language'];
+                reqParams.boto3['Sinks'] = action['parameters'][0]['sinks'];
+                reqParams.cli['--sinks'] = action['parameters'][0]['sinks'];
+                reqParams.boto3['Mapping'] = action['parameters'][0]['mapping'];
+                reqParams.cli['--mapping'] = action['parameters'][0]['mapping'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetPlan',
+                        'boto3': 'get_plan',
+                        'cli': 'get-plan'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createJob") {
+                reqParams.boto3['ExecutionProperty'] = action['parameters'][0]['executionProperty'];
+                reqParams.cli['--execution-property'] = action['parameters'][0]['executionProperty'];
+                reqParams.boto3['Command'] = action['parameters'][0]['command'];
+                reqParams.cli['--command'] = action['parameters'][0]['command'];
+                reqParams.boto3['AllocatedCapacity'] = action['parameters'][0]['allocatedCapacity'];
+                reqParams.cli['--allocated-capacity'] = action['parameters'][0]['allocatedCapacity'];
+                reqParams.boto3['MaxRetries'] = action['parameters'][0]['maxRetries'];
+                reqParams.cli['--max-retries'] = action['parameters'][0]['maxRetries'];
+                reqParams.boto3['Timeout'] = action['parameters'][0]['timeout'];
+                reqParams.cli['--timeout'] = action['parameters'][0]['timeout'];
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+                reqParams.boto3['Role'] = action['parameters'][0]['role'];
+                reqParams.cli['--role'] = action['parameters'][0]['role'];
+                reqParams.boto3['DefaultArguments'] = action['parameters'][0]['defaultArguments'];
+                reqParams.cli['--default-arguments'] = action['parameters'][0]['defaultArguments'];
+
+                reqParams.cfn['ExecutionProperty'] = action['parameters'][0]['executionProperty'];
+                reqParams.cfn['Command'] = action['parameters'][0]['command'];
+                reqParams.cfn['AllocatedCapacity'] = action['parameters'][0]['allocatedCapacity'];
+                reqParams.cfn['MaxRetries'] = action['parameters'][0]['maxRetries'];
+                reqParams.cfn['Name'] = action['parameters'][0]['name'];
+                reqParams.cfn['Role'] = action['parameters'][0]['role'];
+                reqParams.cfn['DefaultArguments'] = action['parameters'][0]['defaultArguments'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'CreateJob',
+                        'boto3': 'create_job',
+                        'cli': 'create-job'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glue', details.requestId),
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Job',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getJobRuns") {
+                reqParams.boto3['JobName'] = action['parameters'][0]['jobName'];
+                reqParams.cli['--job-name'] = action['parameters'][0]['jobName'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetJobRuns',
+                        'boto3': 'get_job_runs',
+                        'cli': 'get-job-runs'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDataflowGraph") {
+                reqParams.boto3['PythonScript'] = action['parameters'][0]['pythonScript'];
+                reqParams.cli['--python-script'] = action['parameters'][0]['pythonScript'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetDataflowGraph',
+                        'boto3': 'get_dataflow_graph',
+                        'cli': 'get-dataflow-graph'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getTrigger") {
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetTrigger',
+                        'boto3': 'get_trigger',
+                        'cli': 'get-trigger'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.createTrigger") {
+                reqParams.boto3['StartOnCreation'] = action['parameters'][0]['startOnCreation'];
+                reqParams.cli['--start-on-creation'] = action['parameters'][0]['startOnCreation'];
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+                reqParams.boto3['Schedule'] = action['parameters'][0]['schedule'];
+                reqParams.cli['--schedule'] = action['parameters'][0]['schedule'];
+                reqParams.boto3['Type'] = action['parameters'][0]['type'];
+                reqParams.cli['--type'] = action['parameters'][0]['type'];
+                reqParams.boto3['Actions'] = action['parameters'][0]['actions'];
+                reqParams.cli['--actions'] = action['parameters'][0]['actions'];
+
+                reqParams.cfn['Name'] = action['parameters'][0]['name'];
+                reqParams.cfn['Schedule'] = action['parameters'][0]['schedule'];
+                reqParams.cfn['Type'] = action['parameters'][0]['type'];
+                reqParams.cfn['Actions'] = action['parameters'][0]['actions'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'CreateTrigger',
+                        'boto3': 'create_trigger',
+                        'cli': 'create-trigger'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glue', details.requestId),
+                    'region': region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Trigger',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.deleteDatabase") {
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'DeleteDatabase',
+                        'boto3': 'delete_database',
+                        'cli': 'delete-database'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.deleteJob") {
+                reqParams.boto3['JobName'] = action['parameters'][0]['jobName'];
+                reqParams.cli['--job-name'] = action['parameters'][0]['jobName'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'DeleteJob',
+                        'boto3': 'delete_job',
+                        'cli': 'delete-job'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.deleteTrigger") {
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'DeleteTrigger',
+                        'boto3': 'delete_trigger',
+                        'cli': 'delete-trigger'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDevEndpoints") {
+                outputs.push({
+                    'region': region,
+                    'service': 'glue',
+                    'method': {
+                        'api': 'GetDevEndpoints',
+                        'boto3': 'get_dev_endpoints',
+                        'cli': 'get-dev-endpoints'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
             }
         }
 
