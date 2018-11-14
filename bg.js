@@ -592,7 +592,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processCfnParameter(paramitem, spacing + 4, index));
+            paramitems.push(processCfnParameter(paramitem, spacing, index));
         });
 
         return `
@@ -854,7 +854,7 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined) {
-                var optionvalue = processCfnParameter(options[option], 16, index);
+                var optionvalue = processCfnParameter(options[option], 12, index);
                 params += `
             ${option}: ${optionvalue}`;
             }
