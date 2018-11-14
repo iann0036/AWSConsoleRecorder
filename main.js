@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cfn_editor, cli_editor, js_editor;
+var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -38,6 +38,18 @@ window.onload = function(){
         cfn_editor.getDoc().setValue(response['cfn']);
         setTimeout(function() {
             cfn_editor.refresh();
+        },1);
+
+        tf_editor = CodeMirror.fromTextArea(document.getElementById('tf'), {
+            lineNumbers: true,
+            lineWrapping: true,
+            mode: "ruby",
+            theme: "material",
+            indentUnit: 4
+        });
+        tf_editor.getDoc().setValue(response['tf']);
+        setTimeout(function() {
+            tf_editor.refresh();
         },1);
 
         cli_editor = CodeMirror.fromTextArea(document.getElementById('cli'), {
@@ -123,6 +135,7 @@ function resetMenu() {
     document.getElementById('cli_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('go_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('cfn_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('tf_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('js_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
@@ -130,6 +143,7 @@ function resetMenu() {
     document.getElementById('cli_container').style = "display: none;";
     document.getElementById('go_container').style = "display: none;";
     document.getElementById('cfn_container').style = "display: none;";
+    document.getElementById('tf_container').style = "display: none;";
     document.getElementById('js_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
 }
@@ -164,6 +178,14 @@ document.getElementById('cfn_menubtn').onclick = function(evt) {
     document.getElementById('cfn_container').style = "";
 
     cfn_editor.refresh();
+};
+
+document.getElementById('tf_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('tf_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('tf_container').style = "";
+
+    tf_editor.refresh();
 };
 
 document.getElementById('js_menubtn').onclick = function(evt) {

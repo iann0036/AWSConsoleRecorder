@@ -488,6 +488,64 @@ function ensureInitDeclaredGo(service, region) {
     return '';
 }
 
+function processTfParameter(param, spacing, index) {
+    var paramitems = [];
+
+    if (param === undefined || param === null)
+        return undefined;
+    if (typeof param == "boolean") {
+        if (param)
+            return 'true';
+        return 'false';
+    }
+    if (typeof param == "number")
+        return `${param}`;
+    if (typeof param == "string") {
+        if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
+            return undefined;
+        }
+
+        // TODO: correlate
+
+        // TODO: Check for multiline |\n + indent
+
+        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
+    }
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            paramitems.push(processTfParameter(paramitem, spacing + 4, index));
+        });
+
+        return `[
+` + paramitems.join(`
+,` + `,
+]`)
+    }
+    if (typeof param == "object") {
+        if (Object.keys(param).length === 0 && param.constructor === Object) {
+            return "{}";
+        }
+
+        Object.keys(param).forEach(function (key) {
+            var subvalue = processTfParameter(param[key], spacing + 4, index);
+            if (subvalue !== undefined) {
+                paramitems.push(key + " = " + subvalue);
+            }
+        });
+
+        return `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`
+` + ' '.repeat(spacing + 4) + `
+}`)
+    }
+    
+    return undefined;
+}
+
 function processCfnParameter(param, spacing, index) {
     var paramitems = [];
 
@@ -801,9 +859,31 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
 `;
     }
 
-    output += `        ${logicalId}:${was_blocked ? ' # blocked' : ''}
-            Type: "${type}"
-            Properties:${params}
+    output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
+        Type: "${type}"
+        Properties:${params}
+`;
+
+    return output;
+}
+
+function outputMapTf(index, service, type, options, region, was_blocked, logicalId) {
+    var output = '';
+    var params = '';
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            if (options[option] !== undefined) {
+                var optionvalue = processTfParameter(options[option], 4, index);
+                params += `
+    ${option} = ${optionvalue}`;
+            }
+        }
+        params += `
+`;
+    }
+
+    output += `resource "${type}" "${logicalId}" {${params}}
 `;
 
     return output;
@@ -854,6 +934,7 @@ function compileOutputs() {
             'boto3': '# No recorded actions yet',
             'go': '// No recorded actions yet',
             'cfn': '# No recorded actions yet',
+            'tf': '# No recorded actions yet',
             'cli': '# No recorded actions yet',
             'js': '// No recorded actions yet'
         };
@@ -893,6 +974,8 @@ Metadata:
 Description: ""
 Resources:
 `}`,
+        'tf': `${tracked_resources.length == 0 ? '# No resources created in recording' : `
+`}`,
         'cli': `# pip install awscli --upgrade --user
 
 `,
@@ -922,7 +1005,12 @@ var AWS = require('aws-sdk');`
 `;
 
     for (var i=0; i<tracked_resources.length; i++) {
-        compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+        if (tracked_resources[i].type) {
+            compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+        }
+        if (tracked_resources[i].terraformType) {
+            compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+        }
     }
 
     return compiled;
@@ -2019,7 +2107,8 @@ function analyseRequest(details) {
         'boto3': {},
         'go': {},
         'cfn': {},
-        'cli': {}
+        'cli': {},
+        'tf': {}
     };
     var requestBody = "";
     var jsonRequestBody = {};
@@ -2338,13 +2427,16 @@ function analyseRequest(details) {
         reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
         reqParams.cli['--description'] = jsonRequestBody.groupDescription;
         reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+
         reqParams.cfn['GroupDescription'] = jsonRequestBody.groupDescription;
         reqParams.cfn['GroupName'] = jsonRequestBody.groupName;
-        if ('vpcId' in jsonRequestBody) {
-            reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
-            reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
-            reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
-        }
+        reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
+
+        reqParams.tf['description'] = jsonRequestBody.groupDescription;
+        reqParams.tf['name'] = jsonRequestBody.groupName;
+        reqParams.tf['vpc_id'] = jsonRequestBody.vpcId;
 
         outputs.push({
             'region': region,
@@ -2364,6 +2456,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ec2',
             'type': 'AWS::EC2::SecurityGroup',
+            'terraformType': 'aws_security_group',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -15492,7 +15585,8 @@ function analyseRequest(details) {
                 'boto3': {},
                 'go': {},
                 'cfn': {},
-                'cli': {}
+                'cli': {},
+                'tf': {}
             };
             
             if (gwtRequest['method'] == "modifyIngressRulesForNetworkACL") {
@@ -19491,7 +19585,8 @@ function analyseRequest(details) {
                     'boto3': {},
                     'go': {},
                     'cfn': {},
-                    'cli': {}
+                    'cli': {},
+                    'tf': {}
                 };
 
                 // TODO
@@ -21652,7 +21747,8 @@ function analyseRequest(details) {
                     'boto3': {},
                     'go': {},
                     'cfn': {},
-                    'cli': {}
+                    'cli': {},
+                    'tf': {}
                 };
 
                 reqParams.boto3['GroupName'] = jsonRequestBody.groupName[0];

@@ -31,6 +31,7 @@
     <script src="lib/codemirror/mode/go/go.js"></script>
     <script src="lib/codemirror/mode/javascript/javascript.js"></script>
     <script src="lib/codemirror/mode/yaml/yaml.js"></script>
+    <script src="lib/codemirror/mode/ruby/ruby.js"></script>
   </head>
   <body class="horizontal-menu horizontal-app-menu ">
     <div class="header">
@@ -56,6 +57,7 @@
                 <button id="js_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">JavaScript</span></button>
                 <button id="go_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">Go SDK (v1)</span></button>
                 <button id="cfn_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">CloudFormation</span></button>
+                <button id="tf_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><span class="bold">Terraform</span></button>
                 <div style="float: right;">
                   <button id="settings_menubtn" class="btn btn-default m-t-10" style="width: 140px;"><i class="fa fa-cogs"></i> <span class="bold">Settings</span></button>
                 </div>
@@ -75,6 +77,13 @@
             </div>
             <div id='cfn_container' style="display: none;">
                 <textarea id='cfn'></textarea>
+            </div>
+            <div id='tf_container' style="display: none;">
+                <div class="alert alert-warning bordered" role="alert">
+                  <p class="pull-left"><strong>Under Construction</strong></p>
+                  <div class="clearfix"></div>
+                </div>
+                <textarea id='tf'></textarea>
             </div>
             <div id='js_container' style="display: none;">
                 <textarea id='js'></textarea>
