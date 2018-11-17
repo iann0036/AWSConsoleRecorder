@@ -2,7 +2,7 @@
   "name": "Console Recorder for AWS",
   "version": "0.1.6",
   "manifest_version": 2,
-  "description": "Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation template.",
+  "description": "Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation/Terraform templates.",
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "background":  {
     "scripts": ["bg.js"]

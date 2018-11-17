@@ -1,6 +1,6 @@
 # Console Recorder for AWS
 
-> Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation template.
+> Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation/Terraform templates.
 
 
 ![Screenshot](assets/screen1.png)

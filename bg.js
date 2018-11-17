@@ -1181,7 +1181,7 @@ function mapServiceJs(service) {
         "xray": "XRay"
     };
 
-    return service_mapping[service];
+    return service_mapping[service] || "";
 }
 
 function lowerFirstChar(str) {
@@ -20807,6 +20807,12 @@ function analyseRequest(details) {
         reqParams.cfn['Duration'] = jsonRequestBody.contentString.Duration;
         reqParams.cfn['Cutoff'] = jsonRequestBody.contentString.Cutoff;
 
+        reqParams.tf['allow_unassociated_targets'] = jsonRequestBody.contentString.AllowUnassociatedTargets;
+        reqParams.tf['name'] = jsonRequestBody.contentString.Name;
+        reqParams.tf['schedule'] = jsonRequestBody.contentString.Schedule;
+        reqParams.tf['duration'] = jsonRequestBody.contentString.Duration;
+        reqParams.tf['cutoff'] = jsonRequestBody.contentString.Cutoff;
+
         outputs.push({
             'region': region,
             'service': 'ssm',
@@ -20824,6 +20830,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ssm',
             'type': 'AWS::SSM::MaintenanceWindow',
+            'terraformType': 'aws_ssm_maintenance_window',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -20876,6 +20883,10 @@ function analyseRequest(details) {
         reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
         reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
 
+        reqParams.tf['resource_type'] = jsonRequestBody.contentString.ResourceType;
+        reqParams.tf['targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.tf['window_id'] = jsonRequestBody.contentString.WindowId;
+
         outputs.push({
             'region': region,
             'service': 'ssm',
@@ -20893,6 +20904,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ssm',
             'type': 'AWS::SSM::MaintenanceWindowTarget',
+            'terraformType': 'aws_ssm_maintenance_window_target',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -21734,7 +21746,29 @@ function analyseRequest(details) {
         reqParams.cfn['DeliveryStreamName'] = jsonRequestBody.content.DeliveryStreamName;
         reqParams.cfn['DeliveryStreamType'] = jsonRequestBody.content.DeliveryStreamType;
         reqParams.cfn['ExtendedS3DestinationConfiguration'] = jsonRequestBody.content.ExtendedS3DestinationConfiguration;
-        
+
+        reqParams.tf['name'] = jsonRequestBody.content.DeliveryStreamName;
+        if ('ExtendedS3DestinationConfiguration' in jsonRequestBody.content) {
+            reqParams.tf['destination'] = 'extended_s3';
+            reqParams.tf['s3_configuration'] = {
+                'role_arn': jsonRequestBody.content.ExtendedS3DestinationConfiguration.RoleARN,
+                'bucket_arn': jsonRequestBody.content.ExtendedS3DestinationConfiguration.BucketARN,
+                'prefix': jsonRequestBody.content.ExtendedS3DestinationConfiguration.Prefix,
+                'buffer_size': jsonRequestBody.content.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs,
+                'buffer_interval': jsonRequestBody.content.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds,
+                'compression_format': jsonRequestBody.content.ExtendedS3DestinationConfiguration.CompressionFormat,
+                'cloudwatch_logging_options': {
+                    'enabled': jsonRequestBody.content.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled,
+                    'log_group_name': jsonRequestBody.content.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName,
+                    'log_stream_name': jsonRequestBody.content.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
+                },
+                'processing_configuration': {
+                    'enabled': jsonRequestBody.content.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled
+                },
+                's3_backup_mode': jsonRequestBody.content.ExtendedS3DestinationConfiguration.S3BackupMode
+            };
+        }
+
         outputs.push({
             'region': region,
             'service': 'firehose',
@@ -21752,6 +21786,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'firehose',
             'type': 'AWS::KinesisFirehose::DeliveryStream',
+            'terraformType': 'aws_kinesis_firehose_delivery_stream',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
