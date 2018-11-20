@@ -1,5 +1,7 @@
 /**
  * bootstrap-checkbox.js
+ * https://github.com/vsn4ik/bootstrap-checkbox
+ * 1.5.0
  * (c) 2013~ Jiung Kang
  * Licensed under the Apache License, Version 2.0 (the "License");
  */

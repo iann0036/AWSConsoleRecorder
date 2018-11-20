@@ -2624,7 +2624,7 @@ function analyseRequest(details) {
             }
         }
 
-        if (jsonRequestBody.TagSpecifications.length) {
+        if (jsonRequestBody.TagSpecifications) {
             reqParams.tf['tags'] = {};
             for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
                 if (jsonRequestBody.TagSpecifications[i].ResourceType == "instance") {
@@ -5073,7 +5073,7 @@ function analyseRequest(details) {
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifyTags") {
         reqParams.boto3['FileSystemId'] = jsonRequestBody.fileSystemId;
         reqParams.cli['--file-system-id'] = jsonRequestBody.fileSystemId;
-        if (jsonRequestBody.addTags.length) {
+        if (jsonRequestBody.addTags) {
             reqParams.boto3['Tags'] = jsonRequestBody.addTags;
             reqParams.cli['--tags'] = jsonRequestBody.addTags;
 
@@ -5089,7 +5089,7 @@ function analyseRequest(details) {
             'requestDetails': details
             });
         }
-        if (jsonRequestBody.removeKeys.length) {
+        if (jsonRequestBody.removeKeys) {
             reqParams.boto3['TagKeys'] = jsonRequestBody.removeKeys;
             reqParams.cli['--tag-keys'] = jsonRequestBody.removeKeys;
 
@@ -5675,7 +5675,7 @@ function analyseRequest(details) {
             }
         }
 
-        if (jsonRequestBody.TagSpecifications.length) {
+        if (jsonRequestBody.TagSpecifications) {
             reqParams.tf['tags'] = {};
             for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
                 if (jsonRequestBody.TagSpecifications[i].ResourceType == "instance") {
@@ -5743,7 +5743,7 @@ function analyseRequest(details) {
     // autogen:ec2:ec2.DeleteTags
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=updateTags\?/g)) {
 
-        if (jsonRequestBody.addTags.length) {
+        if (jsonRequestBody.addTags) {
             reqParams.boto3['Tags'] = jsonRequestBody.addTags;
             reqParams.cli['--tags'] = jsonRequestBody.addTags;
 
@@ -5759,7 +5759,7 @@ function analyseRequest(details) {
             'requestDetails': details
             });
         }
-        if (jsonRequestBody.removeKeys.length) {
+        if (jsonRequestBody.removeKeys) {
             reqParams.boto3['TagKeys'] = jsonRequestBody.removeKeys;
             reqParams.cli['--tag-keys'] = jsonRequestBody.removeKeys;
 
