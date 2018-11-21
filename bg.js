@@ -14854,7 +14854,7 @@ function analyseRequest(details) {
             'kms_key_id': jsonRequestBody.contentString.EncryptionAtRestOptions.KmsKeyId
         };
         reqParams.tf['node_to_node_encryption'] = {
-            'enabled': jsonRequestBody.contentString.NodeToNodeEncryptionOptions.Enabled;
+            'enabled': jsonRequestBody.contentString.NodeToNodeEncryptionOptions.Enabled
         };
         reqParams.tf['snapshot_options'] = {
             'automated_snapshot_start_hour': jsonRequestBody.contentString.SnapshotOptions.AutomatedSnapshotStartHour
