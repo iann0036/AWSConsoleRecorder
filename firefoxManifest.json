@@ -25,6 +25,7 @@
     "notifications",
     "*://*.console.aws.amazon.com/*",
     "*://console.aws.amazon.com/*",
-    "*://*.amazonaws.com/*"
+    "*://*.amazonaws.com/*",
+    "*://developer.amazon.com/*"
   ]
 }
