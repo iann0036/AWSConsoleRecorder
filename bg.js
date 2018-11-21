@@ -14801,8 +14801,14 @@ function analyseRequest(details) {
         reqParams.cli['--encryption-at-rest-options'] = jsonRequestBody.contentString.EncryptionAtRestOptions;
         reqParams.boto3['SnapshotOptions'] = jsonRequestBody.contentString.SnapshotOptions;
         reqParams.cli['--snapshot-options'] = jsonRequestBody.contentString.SnapshotOptions;
-        reqParams.boto3['VPCOptions'] = jsonRequestBody.contentString.VPCOptions;
-        reqParams.cli['--vpc-options'] = jsonRequestBody.contentString.VPCOptions;
+        reqParams.boto3['VPCOptions'] = {
+            'SubnetIds': jsonRequestBody.contentString.VPCOptions.SubnetIds,
+            'SecurityGroupIds': jsonRequestBody.contentString.VPCOptions.SecurityGroupIds
+        };
+        reqParams.cli['--vpc-options'] = {
+            'SubnetIds': jsonRequestBody.contentString.VPCOptions.SubnetIds,
+            'SecurityGroupIds': jsonRequestBody.contentString.VPCOptions.SecurityGroupIds
+        };
         reqParams.boto3['AdvancedOptions'] = jsonRequestBody.contentString.AdvancedOptions;
         reqParams.cli['--advanced-options'] = jsonRequestBody.contentString.AdvancedOptions;
         reqParams.boto3['CognitoOptions'] = jsonRequestBody.contentString.CognitoOptions;
@@ -14820,11 +14826,47 @@ function analyseRequest(details) {
         reqParams.cfn['EBSOptions'] = jsonRequestBody.contentString.EBSOptions;
         reqParams.cfn['EncryptionAtRestOptions'] = jsonRequestBody.contentString.EncryptionAtRestOptions;
         reqParams.cfn['SnapshotOptions'] = jsonRequestBody.contentString.SnapshotOptions;
-        reqParams.cfn['VPCOptions'] = jsonRequestBody.contentString.VPCOptions;
+        reqParams.cfn['VPCOptions'] = {
+            'SubnetIds': jsonRequestBody.contentString.VPCOptions.SubnetIds,
+            'SecurityGroupIds': jsonRequestBody.contentString.VPCOptions.SecurityGroupIds
+        };
         reqParams.cfn['AdvancedOptions'] = jsonRequestBody.contentString.AdvancedOptions;
         reqParams.cfn['DomainName'] = jsonRequestBody.contentString.DomainName;
         reqParams.cfn['ElasticsearchVersion'] = jsonRequestBody.contentString.ElasticsearchVersion;
         reqParams.cfn['AccessPolicies'] = jsonRequestBody.contentString.AccessPolicies;
+
+        reqParams.tf['cluster_config'] = {
+            'instance_count': jsonRequestBody.contentString.ElasticsearchClusterConfig.InstanceCount,
+            'instance_type': jsonRequestBody.contentString.ElasticsearchClusterConfig.InstanceType,
+            'zone_awareness_enabled': jsonRequestBody.contentString.ElasticsearchClusterConfig.ZoneAwarenessEnabled,
+            'dedicated_master_enabled': jsonRequestBody.contentString.ElasticsearchClusterConfig.DedicatedMasterEnabled,
+            'dedicated_master_type': jsonRequestBody.contentString.ElasticsearchClusterConfig.DedicatedMasterType,
+            'dedicated_master_count': jsonRequestBody.contentString.ElasticsearchClusterConfig.DedicatedMasterCount
+        };
+        reqParams.tf['ebs_options'] = {
+            'ebs_enabled': jsonRequestBody.contentString.EBSOptions.EBSEnabled,
+            'volume_type': jsonRequestBody.contentString.EBSOptions.VolumeType,
+            'iops': jsonRequestBody.contentString.EBSOptions.Iops,
+            'volume_size': jsonRequestBody.contentString.EBSOptions.VolumeSize
+        };
+        reqParams.tf['encrypt_at_rest'] = {
+            'enabled': jsonRequestBody.contentString.EncryptionAtRestOptions.Enabled,
+            'kms_key_id': jsonRequestBody.contentString.EncryptionAtRestOptions.KmsKeyId
+        };
+        reqParams.tf['node_to_node_encryption'] = {
+            'enabled': jsonRequestBody.contentString.NodeToNodeEncryptionOptions.Enabled;
+        };
+        reqParams.tf['snapshot_options'] = {
+            'automated_snapshot_start_hour': jsonRequestBody.contentString.SnapshotOptions.AutomatedSnapshotStartHour
+        };
+        reqParams.tf['vpc_options'] = {
+            'subnet_ids': jsonRequestBody.contentString.VPCOptions.SubnetIds,
+            'security_group_ids': jsonRequestBody.contentString.VPCOptions.SecurityGroupIds
+        };
+        reqParams.tf['advanced_options'] = jsonRequestBody.contentString.AdvancedOptions;
+        reqParams.tf['domain_name'] = jsonRequestBody.contentString.DomainName;
+        reqParams.tf['elasticsearch_version'] = jsonRequestBody.contentString.ElasticsearchVersion;
+        reqParams.tf['access_policies'] = jsonRequestBody.contentString.AccessPolicies;
 
         outputs.push({
             'region': region,
@@ -14843,6 +14885,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'es',
             'type': 'AWS::Elasticsearch::Domain',
+            'terraformType': 'aws_elasticsearch_domain',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
