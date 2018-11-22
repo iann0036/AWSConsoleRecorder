@@ -29660,4 +29660,559 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:route53:route53resolver.ListResolverEndpoints
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverEndpoints") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'ListResolverEndpoints',
+                'boto3': 'list_resolver_endpoints',
+                'cli': 'list-resolver-endpoints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.ListResolverRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'ListResolverRules',
+                'boto3': 'list_resolver_rules',
+                'cli': 'list-resolver-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.ListResolverRuleAssociations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRuleAssociations") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'ListResolverRuleAssociations',
+                'boto3': 'list_resolver_rule_associations',
+                'cli': 'list-resolver-rule-associations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.ListResolverRules
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'ListResolverRules',
+                'boto3': 'list_resolver_rules',
+                'cli': 'list-resolver-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.CreateResolverEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverEndpoint") {
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.boto3['Direction'] = jsonRequestBody.contentString.Direction;
+        reqParams.cli['--direction'] = jsonRequestBody.contentString.Direction;
+        reqParams.boto3['IpAddresses'] = jsonRequestBody.contentString.IpAddresses;
+        reqParams.cli['--ip-addresses'] = jsonRequestBody.contentString.IpAddresses;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cfn['Direction'] = jsonRequestBody.contentString.Direction;
+        reqParams.cfn['IpAddresses'] = jsonRequestBody.contentString.IpAddresses;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'CreateResolverEndpoint',
+                'boto3': 'create_resolver_endpoint',
+                'cli': 'create-resolver-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('route53', details.requestId),
+            'region': region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverEndpoint',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.CreateResolverRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverRule") {
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['RuleType'] = jsonRequestBody.contentString.RuleType;
+        reqParams.cli['--rule-type'] = jsonRequestBody.contentString.RuleType;
+        reqParams.boto3['DomainName'] = jsonRequestBody.contentString.DomainName;
+        reqParams.cli['--domain-name'] = jsonRequestBody.contentString.DomainName;
+        reqParams.boto3['TargetIps'] = jsonRequestBody.contentString.TargetIps;
+        reqParams.cli['--target-ips'] = jsonRequestBody.contentString.TargetIps;
+        reqParams.boto3['ResolverEndpointId'] = jsonRequestBody.contentString.ResolverEndpointId;
+        reqParams.cli['--resolver-endpoint-id'] = jsonRequestBody.contentString.ResolverEndpointId;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['RuleType'] = jsonRequestBody.contentString.RuleType;
+        reqParams.cfn['DomainName'] = jsonRequestBody.contentString.DomainName;
+        reqParams.cfn['TargetIps'] = jsonRequestBody.contentString.TargetIps;
+        reqParams.cfn['ResolverEndpointId'] = jsonRequestBody.contentString.ResolverEndpointId;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'CreateResolverRule',
+                'boto3': 'create_resolver_rule',
+                'cli': 'create-resolver-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('route53', details.requestId),
+            'region': region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverRule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.AssociateResolverRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "associateResolverRule") {
+        reqParams.boto3['ResolverRuleId'] = jsonRequestBody.contentString.ResolverRuleId;
+        reqParams.cli['--resolver-rule-id'] = jsonRequestBody.contentString.ResolverRuleId;
+        reqParams.boto3['VPCId'] = jsonRequestBody.contentString.VPCId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.contentString.VPCId;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'AssociateResolverRule',
+                'boto3': 'associate_resolver_rule',
+                'cli': 'associate-resolver-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.UpdateResolverRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "getResolverRule" && jsonRequestBody.operation == "updateResolverRule") {
+        reqParams.boto3['ResolverRuleId'] = jsonRequestBody.contentString.ResolverRuleId;
+        reqParams.cli['--resolver-rule-id'] = jsonRequestBody.contentString.ResolverRuleId;
+        reqParams.boto3['Config'] = jsonRequestBody.contentString.Config;
+        reqParams.cli['--config'] = jsonRequestBody.contentString.Config;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'UpdateResolverRule',
+                'boto3': 'update_resolver_rule',
+                'cli': 'update-resolver-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.ListTagsForResource
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listTagsForResource") {
+        reqParams.boto3['ResourceArn'] = jsonRequestBody.contentString.ResourceArn;
+        reqParams.cli['--resource-arn'] = jsonRequestBody.contentString.ResourceArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'ListTagsForResource',
+                'boto3': 'list_tags_for_resource',
+                'cli': 'list-tags-for-resource'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.DeleteResolverRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverRule") {
+        reqParams.boto3['ResolverRuleId'] = jsonRequestBody.contentString.ResolverRuleId;
+        reqParams.cli['--resolver-rule-id'] = jsonRequestBody.contentString.ResolverRuleId;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'DeleteResolverRule',
+                'boto3': 'delete_resolver_rule',
+                'cli': 'delete-resolver-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53resolver.DeleteResolverEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverEndpoint") {
+        reqParams.boto3['ResolverEndpointId'] = jsonRequestBody.contentString.ResolverEndpointId;
+        reqParams.cli['--resolver-endpoint-id'] = jsonRequestBody.contentString.ResolverEndpointId;
+
+        outputs.push({
+            'region': region,
+            'service': 'route53resolver',
+            'method': {
+                'api': 'DeleteResolverEndpoint',
+                'boto3': 'delete_resolver_endpoint',
+                'cli': 'delete-resolver-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.GetGraphqlApi
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "getGraphqlApi") {
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'GetGraphqlApi',
+                'boto3': 'get_graphql_api',
+                'cli': 'get-graphql-api'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.ListApiKeys
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listApiKeys") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'ListApiKeys',
+                'boto3': 'list_api_keys',
+                'cli': 'list-api-keys'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.ListTypes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listTypes") {
+        reqParams.boto3['Format'] = jsonRequestBody.params.format;
+        reqParams.cli['--format'] = jsonRequestBody.params.format;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'ListTypes',
+                'boto3': 'list_types',
+                'cli': 'list-types'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.ListDataSources
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listDataSources") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'ListDataSources',
+                'boto3': 'list_data_sources',
+                'cli': 'list-data-sources'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.ListGraphqlApis
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listGraphqlApis") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'ListGraphqlApis',
+                'boto3': 'list_graphql_apis',
+                'cli': 'list-graphql-apis'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.ListFunctions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listFunctions") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'ListFunctions',
+                'boto3': 'list_functions',
+                'cli': 'list-functions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.CreateFunction
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createFunction") {
+        reqParams.boto3['DataSourceName'] = jsonRequestBody.contentString.dataSourceName;
+        reqParams.cli['--data-source-name'] = jsonRequestBody.contentString.dataSourceName;
+        reqParams.boto3['RequestMappingTemplate'] = jsonRequestBody.contentString.requestMappingTemplate;
+        reqParams.cli['--request-mapping-template'] = jsonRequestBody.contentString.requestMappingTemplate;
+        reqParams.boto3['ResponseMappingTemplate'] = jsonRequestBody.contentString.responseMappingTemplate;
+        reqParams.cli['--response-mapping-template'] = jsonRequestBody.contentString.responseMappingTemplate;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['FunctionVersion'] = jsonRequestBody.contentString.functionVersion;
+        reqParams.cli['--function-version'] = jsonRequestBody.contentString.functionVersion;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+
+        reqParams.cfn['DataSourceName'] = jsonRequestBody.contentString.dataSourceName;
+        reqParams.cfn['RequestMappingTemplate'] = jsonRequestBody.contentString.requestMappingTemplate;
+        reqParams.cfn['ResponseMappingTemplate'] = jsonRequestBody.contentString.responseMappingTemplate;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cfn['FunctionVersion'] = jsonRequestBody.contentString.functionVersion;
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'CreateFunction',
+                'boto3': 'create_function',
+                'cli': 'create-function'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('appsync', details.requestId),
+            'region': region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::FunctionConfiguration',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:appsync:appsync.DeleteFunction
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "deleteFunction") {
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
+        reqParams.boto3['FunctionId'] = jsonRequestBody.path.split("/")[5];
+        reqParams.cli['--function-id'] = jsonRequestBody.path.split("/")[5];
+
+        outputs.push({
+            'region': region,
+            'service': 'appsync',
+            'method': {
+                'api': 'DeleteFunction',
+                'boto3': 'delete_function',
+                'cli': 'delete-function'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
