@@ -1150,6 +1150,7 @@ function mapServiceJs(service) {
         "resourcegroupstaggingapi": "ResourceGroupsTaggingAPI",
         "route53": "Route53",
         "route53domains": "Route53Domains",
+        "route53resolver": "Route53Resolver",
         "s3": "S3",
         "ses": "SES",
         "sms": "SMS",
