@@ -7610,7 +7610,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListAccessKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
         reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
         reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
 
@@ -30211,6 +30211,609 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:s3:s3.ListBuckets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.DescribeRepositories
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/ecr$/g) && jsonRequestBody.operation == "describeRepositories") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'DescribeRepositories',
+                'boto3': 'describe_repositories',
+                'cli': 'describe-repositories'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.DescribeTrails
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "describeTrails") {
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'DescribeTrails',
+                'boto3': 'describe_trails',
+                'cli': 'describe-trails'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.GetEventSelectors
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
+        reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
+        reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'GetEventSelectors',
+                'boto3': 'get_event_selectors',
+                'cli': 'get-event-selectors'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.PutEventSelectors
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "putEventSelectors") {
+        reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
+        reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
+        reqParams.boto3['EventSelectors'] = jsonRequestBody.contentString.EventSelectors;
+        reqParams.cli['--event-selectors'] = jsonRequestBody.contentString.EventSelectors;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'PutEventSelectors',
+                'boto3': 'put_event_selectors',
+                'cli': 'put-event-selectors'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.StartLogging
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "startLogging") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'StartLogging',
+                'boto3': 'start_logging',
+                'cli': 'start-logging'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:events:events.PutRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putRule") {
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['EventPattern'] = jsonRequestBody.contentString.EventPattern;
+        reqParams.cli['--event-pattern'] = jsonRequestBody.contentString.EventPattern;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['State'] = jsonRequestBody.contentString.State;
+        reqParams.cli['--state'] = jsonRequestBody.contentString.State;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutRule',
+                'boto3': 'put_rule',
+                'cli': 'put-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:events:events.PutTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putTargets") {
+        reqParams.boto3['Rule'] = jsonRequestBody.contentString.Rule;
+        reqParams.cli['--rule'] = jsonRequestBody.contentString.Rule;
+        reqParams.boto3['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cli['--targets'] = jsonRequestBody.contentString.Targets;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutTargets',
+                'boto3': 'put_targets',
+                'cli': 'put-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:codepipeline:codepipeline.DisableStageTransition
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "disableStageTransition") {
+        reqParams.boto3['PipelineName'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.cli['--pipeline-name'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.boto3['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+        reqParams.boto3['Reason'] = jsonRequestBody.contentString.reason;
+        reqParams.cli['--reason'] = jsonRequestBody.contentString.reason;
+        reqParams.boto3['TransitionType'] = jsonRequestBody.contentString.transitionType;
+        reqParams.cli['--transition-type'] = jsonRequestBody.contentString.transitionType;
+
+        outputs.push({
+            'region': region,
+            'service': 'codepipeline',
+            'method': {
+                'api': 'DisableStageTransition',
+                'boto3': 'disable_stage_transition',
+                'cli': 'disable-stage-transition'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:codepipeline:codepipeline.EnableStageTransition
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "enableStageTransition") {
+        reqParams.boto3['PipelineName'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.cli['--pipeline-name'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.boto3['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+        reqParams.boto3['TransitionType'] = jsonRequestBody.contentString.transitionType;
+        reqParams.cli['--transition-type'] = jsonRequestBody.contentString.transitionType;
+
+        outputs.push({
+            'region': region,
+            'service': 'codepipeline',
+            'method': {
+                'api': 'EnableStageTransition',
+                'boto3': 'enable_stage_transition',
+                'cli': 'enable-stage-transition'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.PutEventSelectors
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "putEventSelectors") {
+        reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
+        reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
+        reqParams.boto3['EventSelectors'] = jsonRequestBody.contentString.EventSelectors;
+        reqParams.cli['--event-selectors'] = jsonRequestBody.contentString.EventSelectors;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'PutEventSelectors',
+                'boto3': 'put_event_selectors',
+                'cli': 'put-event-selectors'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudtrail:cloudtrail.GetEventSelectors
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
+        reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
+        reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'GetEventSelectors',
+                'boto3': 'get_event_selectors',
+                'cli': 'get-event-selectors'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:events:events.DeleteRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "deleteRule") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'DeleteRule',
+                'boto3': 'delete_rule',
+                'cli': 'delete-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:events:events.ListTargetsByRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "listTargetsByRule") {
+        reqParams.boto3['Rule'] = jsonRequestBody.contentString.Rule;
+        reqParams.cli['--rule'] = jsonRequestBody.contentString.Rule;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'ListTargetsByRule',
+                'boto3': 'list_targets_by_rule',
+                'cli': 'list-targets-by-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:events:events.RemoveTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "removeTargets") {
+        reqParams.boto3['Rule'] = jsonRequestBody.contentString.Rule;
+        reqParams.cli['--rule'] = jsonRequestBody.contentString.Rule;
+        reqParams.boto3['Ids'] = jsonRequestBody.contentString.Ids;
+        reqParams.cli['--ids'] = jsonRequestBody.contentString.Ids;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'RemoveTargets',
+                'boto3': 'remove_targets',
+                'cli': 'remove-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:codepipeline:codepipeline.PutWebhook
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "putWebhook") {
+        reqParams.boto3['Webhook'] = jsonRequestBody.contentString.webhook;
+        reqParams.cli['--webhook'] = jsonRequestBody.contentString.webhook;
+
+        outputs.push({
+            'region': region,
+            'service': 'codepipeline',
+            'method': {
+                'api': 'PutWebhook',
+                'boto3': 'put_webhook',
+                'cli': 'put-webhook'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('codepipeline', details.requestId),
+            'region': region,
+            'service': 'codepipeline',
+            'type': 'AWS::CodePipeline::Webhook',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeDhcpOptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeDhcpOptions\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeDhcpOptions',
+                'boto3': 'describe_dhcp_options',
+                'cli': 'describe-dhcp-options'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateDhcpOptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDhcpOptions\?/g)) {
+        reqParams.boto3['DhcpConfigurations'] = jsonRequestBody.DhcpConfigurations;
+        reqParams.cli['--dhcp-configurations'] = jsonRequestBody.DhcpConfigurations;
+
+        for (var i=0; i<jsonRequestBody.DhcpConfigurations.length; i++) {
+            if (jsonRequestBody.DhcpConfigurations[i]['Key'] == "domain-name") {
+                reqParams.cfn['DomainName'] = jsonRequestBody.DhcpConfigurations[i]['Values'][0];
+            } else if (jsonRequestBody.DhcpConfigurations[i]['Key'] == "domain-name-servers") {
+                reqParams.cfn['DomainNameServers'] = jsonRequestBody.DhcpConfigurations[i]['Values'];
+            } else if (jsonRequestBody.DhcpConfigurations[i]['Key'] == "ntp-servers") {
+                reqParams.cfn['NtpServers'] = jsonRequestBody.DhcpConfigurations[i]['Values'];
+            } else if (jsonRequestBody.DhcpConfigurations[i]['Key'] == "netbios-name-servers") {
+                reqParams.cfn['NetbiosNameServers'] = jsonRequestBody.DhcpConfigurations[i]['Values'];
+            } else if (jsonRequestBody.DhcpConfigurations[i]['Key'] == "netbios-node-type") {
+                reqParams.cfn['NetbiosNodeType'] = jsonRequestBody.DhcpConfigurations[i]['Values'][0];
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateDhcpOptions',
+                'boto3': 'create_dhcp_options',
+                'cli': 'create-dhcp-options'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::DHCPOptions',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AssociateSubnetCidrBlock
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateSubnetCidrBlock\?/g)) {
+        reqParams.boto3['SubnetId'] = jsonRequestBody.subnetId;
+        reqParams.cli['--subnet-id'] = jsonRequestBody.subnetId;
+        reqParams.boto3['Ipv6CidrBlock'] = jsonRequestBody.ipv6CidrBlock;
+        reqParams.cli['--ipv-6-cidr-block'] = jsonRequestBody.ipv6CidrBlock;
+
+        reqParams.cfn['SubnetId'] = jsonRequestBody.subnetId;
+        reqParams.cfn['Ipv6CidrBlock'] = jsonRequestBody.ipv6CidrBlock;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AssociateSubnetCidrBlock',
+                'boto3': 'associate_subnet_cidr_block',
+                'cli': 'associate-subnet-cidr-block'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SubnetCidrBlock',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:iam:iam.CreateAccessKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+
+        reqParams.cfn['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateAccessKey',
+                'boto3': 'create_access_key',
+                'cli': 'create-access-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::AccessKey',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-devices:iot1click-devices.UnclaimDevice
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/unclaim$/g) && jsonRequestBody.method == "PUT") {
+        reqParams.boto3['DeviceId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--device-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-devices',
+            'method': {
+                'api': 'UnclaimDevice',
+                'boto3': 'unclaim_device',
+                'cli': 'unclaim-device'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-devices:iot1click-devices.InitiateDeviceClaim
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/devices\/.+\/initiate\-claim$/g)) {
+        reqParams.boto3['DeviceId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--device-id'] = jsonRequestBody.path.split("/")[2];
+
+        reqParams.cfn['DeviceId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['Enabled'] = false;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-devices',
+            'method': {
+                'api': 'InitiateDeviceClaim',
+                'boto3': 'initiate_device_claim',
+                'cli': 'initiate-device-claim'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot1click-devices', details.requestId),
+            'region': region,
+            'service': 'iot1click-devices',
+            'type': 'AWS::IoT1Click::Device',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot1click-devices:iot1click-devices.FinalizeDeviceClaim
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/finalize\-claim$/g) && jsonRequestBody.method == "PUT") {
+        reqParams.boto3['DeviceId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--device-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot1click-devices',
+            'method': {
+                'api': 'FinalizeDeviceClaim',
+                'boto3': 'finalize_device_claim',
+                'cli': 'finalize-device-claim'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:cloudwatch:cloudwatch.PutDashboard
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/dashboards\.PutDashboard\//g)) {
+        reqParams.boto3['DashboardBody'] = jsonRequestBody.Dashboard;
+        reqParams.cli['dashboard-body'] = jsonRequestBody.Dashboard;
+        reqParams.boto3['DashboardName'] = jsonRequestBody.DashboardName;
+        reqParams.cli['dashboard-name'] = jsonRequestBody.DashboardName;
+
+        reqParams.cfn['DashboardBody'] = jsonRequestBody.Dashboard;
+        reqParams.boto3['DashboardName'] = jsonRequestBody.DashboardName;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudwatch',
+            'method': {
+                'api': 'PutDashboard',
+                'boto3': 'put_dashboard',
+                'cli': 'put-dashboard'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        }); // TODO: Check this call
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cloudwatch', details.requestId),
+            'region': region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::Dashboard',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
