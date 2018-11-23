@@ -1372,6 +1372,9 @@ chrome.runtime.onMessage.addListener(
                 );
             }
 
+            chrome.browserAction.setBadgeText({ text: "REC" });
+			chrome.browserAction.setBadgeBackgroundColor({ color: "#FF2222" });
+
             sendResponse(true);
         } else if (message.action == "setRecordingOff") {
             recording = false;
@@ -1390,6 +1393,8 @@ chrome.runtime.onMessage.addListener(
                     }
                 });
             }
+
+            chrome.browserAction.setBadgeText({ text: "" });
 
             sendResponse(true);
         } else if (message.action == "getRecordingStatus") {
@@ -30811,6 +30816,131 @@ function analyseRequest(details) {
             'region': region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::Dashboard',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.DeleteCertificate
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g)) {
+        reqParams.boto3['CertificateId'] = /.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
+        reqParams.cli['--certificate-id'] = /.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'DeleteCertificate',
+                'boto3': 'delete_certificate',
+                'cli': 'delete-certificate'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.CreateCertificateFromCsr
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/certificate$/g)) {
+        reqParams.boto3['CertificateSigningRequest'] = jsonRequestBody.csr;
+        reqParams.cli['--certificate-signing-request'] = jsonRequestBody.csr;
+        reqParams.boto3['SetAsActive'] = jsonRequestBody.setAsActive;
+        reqParams.cli['--set-as-active'] = jsonRequestBody.setAsActive;
+
+        reqParams.cfn['CertificateSigningRequest'] = jsonRequestBody.csr;
+        reqParams.cfn['Status'] = jsonRequestBody.setAsActive;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateCertificateFromCsr',
+                'boto3': 'create_certificate_from_csr',
+                'cli': 'create-certificate-from-csr'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Certificate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.CreatePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/policy$/g)) {
+        reqParams.boto3['PolicyName'] = jsonRequestBody.name;
+        reqParams.cli['--policy-name'] = jsonRequestBody.name;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.value;
+        reqParams.cli['--policy-document'] = jsonRequestBody.value;
+
+        reqParams.cfn['PolicyName'] = jsonRequestBody.name;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.value;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreatePolicy',
+                'boto3': 'create_policy',
+                'cli': 'create-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.AttachPrincipalPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/principal\/attach$/g)) {
+        reqParams.boto3['PolicyName'] = jsonRequestBody.name;
+        reqParams.cli['--policy-name'] = jsonRequestBody.name;
+        reqParams.boto3['Principal'] = jsonRequestBody.principal;
+        reqParams.cli['--principal'] = jsonRequestBody.principal;
+
+        reqParams.cfn['PolicyName'] = jsonRequestBody.name;
+        reqParams.cfn['Principal'] = jsonRequestBody.principal;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'AttachPrincipalPolicy',
+                'boto3': 'attach_principal_policy',
+                'cli': 'attach-principal-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::PolicyPrincipalAttachment',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
