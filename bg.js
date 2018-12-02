@@ -30949,4 +30949,702 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:servicediscovery:servicediscovery.ListNamespaces
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "listNamespaces") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'ListNamespaces',
+                'boto3': 'list_namespaces',
+                'cli': 'list-namespaces'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:servicediscovery.DeleteNamespace
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "deleteNamespace") {
+        reqParams.boto3['Id'] = jsonRequestBody.contentString.Id;
+        reqParams.cli['--id'] = jsonRequestBody.contentString.Id;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'DeleteNamespace',
+                'boto3': 'delete_namespace',
+                'cli': 'delete-namespace'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:servicediscovery.GetOperation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "getOperation") {
+        reqParams.boto3['OperationId'] = jsonRequestBody.contentString.OperationId;
+        reqParams.cli['--operation-id'] = jsonRequestBody.contentString.OperationId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'GetOperation',
+                'boto3': 'get_operation',
+                'cli': 'get-operation'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:servicediscovery.CreatePrivateDnsNamespace
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPrivateDnsNamespace") {
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Vpc'] = jsonRequestBody.contentString.Vpc;
+        reqParams.cli['--vpc'] = jsonRequestBody.contentString.Vpc;
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Vpc'] = jsonRequestBody.contentString.Vpc;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'CreatePrivateDnsNamespace',
+                'boto3': 'create_private_dns_namespace',
+                'cli': 'create-private-dns-namespace'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('servicediscovery', details.requestId),
+            'region': region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::PrivateDnsNamespace',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:servicediscovery.CreateHttpNamespace
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createHttpNamespace") {
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'CreateHttpNamespace',
+                'boto3': 'create_http_namespace',
+                'cli': 'create-http-namespace'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('servicediscovery', details.requestId),
+            'region': region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::HttpNamespace',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:servicediscovery:servicediscovery.CreatePublicDnsNamespace
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPublicDnsNamespace") {
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicediscovery',
+            'method': {
+                'api': 'CreatePublicDnsNamespace',
+                'boto3': 'create_public_dns_namespace',
+                'cli': 'create-public-dns-namespace'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('servicediscovery', details.requestId),
+            'region': region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::PublicDnsNamespace',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeTransitGateways
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGateways\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeTransitGateways',
+                'boto3': 'describe_transit_gateways',
+                'cli': 'describe-transit-gateways'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateTransitGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGateway\?/g)) {
+        reqParams.boto3['Description'] = jsonRequestBody.Description;
+        reqParams.cli['--description'] = jsonRequestBody.Description;
+        reqParams.boto3['Options'] = jsonRequestBody.Options;
+        reqParams.cli['--options'] = jsonRequestBody.Options;
+        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
+
+        reqParams.cfn['Description'] = jsonRequestBody.Description;
+        reqParams.cfn['AmazonSideAsn'] = jsonRequestBody.Options.AmazonSideAsn;
+        reqParams.cfn['AutoAcceptSharedAttachments'] = jsonRequestBody.Options.AutoAcceptSharedAttachments;
+        reqParams.cfn['DefaultRouteTableAssociation'] = jsonRequestBody.Options.DefaultRouteTableAssociation;
+        reqParams.cfn['DefaultRouteTablePropagation'] = jsonRequestBody.Options.DefaultRouteTablePropagation;
+        reqParams.cfn['DnsSupport'] = jsonRequestBody.Options.DnsSupport;
+        reqParams.cfn['VpnEcmpSupport'] = jsonRequestBody.Options.VpnEcmpSupport;
+        if (jsonRequestBody.TagSpecifications) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
+                if (jsonRequestBody.TagSpecifications[i].ResourceType == "transit-gateway") {
+                    for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
+                        reqParams.cfn['Tags'].push({
+                            'Key': jsonRequestBody.TagSpecifications[i].Tag[j].Key,
+                            'Value': jsonRequestBody.TagSpecifications[i].Tag[j].Value
+                        });
+                    }
+                }
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateTransitGateway',
+                'boto3': 'create_transit_gateway',
+                'cli': 'create-transit-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGateway',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeCustomerGateways
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeCustomerGateways\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeCustomerGateways',
+                'boto3': 'describe_customer_gateways',
+                'cli': 'describe-customer-gateways'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeTransitGatewayRouteTables
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGatewayRouteTables\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeTransitGatewayRouteTables',
+                'boto3': 'describe_transit_gateway_route_tables',
+                'cli': 'describe-transit-gateway-route-tables'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateTransitGatewayVpcAttachment
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayVpcAttachment\?/g)) {
+        reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
+        reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        reqParams.cli['--transit-gateway-id'] = jsonRequestBody.TransitGatewayId;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.SubnetIds;
+        reqParams.boto3['Options'] = jsonRequestBody.Options;
+        reqParams.cli['--options'] = jsonRequestBody.Options;
+        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
+
+        reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cfn['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        reqParams.cfn['SubnetIds'] = jsonRequestBody.SubnetIds;
+        if (jsonRequestBody.TagSpecifications) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
+                if (jsonRequestBody.TagSpecifications[i].ResourceType == "transit-gateway") {
+                    for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
+                        reqParams.cfn['Tags'].push({
+                            'Key': jsonRequestBody.TagSpecifications[i].Tag[j].Key,
+                            'Value': jsonRequestBody.TagSpecifications[i].Tag[j].Value
+                        });
+                    }
+                }
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateTransitGatewayVpcAttachment',
+                'boto3': 'create_transit_gateway_vpc_attachment',
+                'cli': 'create-transit-gateway-vpc-attachment'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpnConnection
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnection\?/g)) {
+        reqParams.boto3['CustomerGatewayId'] = jsonRequestBody.CustomerGatewayId;
+        reqParams.cli['--customer-gateway-id'] = jsonRequestBody.CustomerGatewayId;
+        reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        reqParams.cli['--transit-gateway-id'] = jsonRequestBody.TransitGatewayId;
+        reqParams.boto3['Type'] = jsonRequestBody.Type;
+        reqParams.cli['--type'] = jsonRequestBody.Type;
+        reqParams.boto3['Options'] = jsonRequestBody.options;
+        reqParams.cli['--options'] = jsonRequestBody.options;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpnConnection',
+                'boto3': 'create_vpn_connection',
+                'cli': 'create-vpn-connection'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateTransitGatewayRouteTable
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRouteTable\?/g)) {
+        reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        reqParams.cli['--transit-gateway-id'] = jsonRequestBody.TransitGatewayId;
+        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
+
+        reqParams.cfn['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        if (jsonRequestBody.TagSpecifications) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
+                if (jsonRequestBody.TagSpecifications[i].ResourceType == "transit-gateway") {
+                    for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
+                        reqParams.cfn['Tags'].push({
+                            'Key': jsonRequestBody.TagSpecifications[i].Tag[j].Key,
+                            'Value': jsonRequestBody.TagSpecifications[i].Tag[j].Value
+                        });
+                    }
+                }
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateTransitGatewayRouteTable',
+                'boto3': 'create_transit_gateway_route_table',
+                'cli': 'create-transit-gateway-route-table'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.GetTransitGatewayRouteTableAssociations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTableAssociations\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'GetTransitGatewayRouteTableAssociations',
+                'boto3': 'get_transit_gateway_route_table_associations',
+                'cli': 'get-transit-gateway-route-table-associations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.GetTransitGatewayRouteTablePropagations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTablePropagations\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'GetTransitGatewayRouteTablePropagations',
+                'boto3': 'get_transit_gateway_route_table_propagations',
+                'cli': 'get-transit-gateway-route-table-propagations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.SearchTransitGatewayRoutes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.SearchTransitGatewayRoutes\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'SearchTransitGatewayRoutes',
+                'boto3': 'search_transit_gateway_routes',
+                'cli': 'search-transit-gateway-routes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AssociateTransitGatewayRouteTable
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateTransitGatewayRouteTable\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+        reqParams.cli['--transit-gateway-attachment-id'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        reqParams.cfn['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cfn['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AssociateTransitGatewayRouteTable',
+                'boto3': 'associate_transit_gateway_route_table',
+                'cli': 'associate-transit-gateway-route-table'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayRouteTableAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.EnableTransitGatewayRouteTablePropagation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableTransitGatewayRouteTablePropagation\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+        reqParams.cli['--transit-gateway-attachment-id'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        reqParams.cfn['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cfn['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'EnableTransitGatewayRouteTablePropagation',
+                'boto3': 'enable_transit_gateway_route_table_propagation',
+                'cli': 'enable-transit-gateway-route-table-propagation'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayRouteTablePropagation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateTransitGatewayRoute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRoute\?/g)) {
+        reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.boto3['DestinationCidrBlock'] = jsonRequestBody.DestinationCidrBlock;
+        reqParams.cli['--destination-cidr-block'] = jsonRequestBody.DestinationCidrBlock;
+        reqParams.boto3['Blackhole'] = jsonRequestBody.Blackhole;
+        reqParams.cli['--blackhole'] = jsonRequestBody.Blackhole;
+        reqParams.boto3['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+        reqParams.cli['--transit-gateway-attachment-id'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        reqParams.cfn['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
+        reqParams.cfn['DestinationCidrBlock'] = jsonRequestBody.DestinationCidrBlock;
+        reqParams.cfn['Blackhole'] = jsonRequestBody.Blackhole;
+        reqParams.cfn['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateTransitGatewayRoute',
+                'boto3': 'create_transit_gateway_route',
+                'cli': 'create-transit-gateway-route'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayRoute',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.DeleteLayerVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "deleteLayerVersion") {
+        reqParams.boto3['LayerName'] = jsonRequestBody.layerName;
+        reqParams.cli['--layer-name'] = jsonRequestBody.layerName;
+        reqParams.boto3['VersionNumber'] = jsonRequestBody.version;
+        reqParams.cli['--version-number'] = jsonRequestBody.version;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'DeleteLayerVersion',
+                'boto3': 'delete_layer_version',
+                'cli': 'delete-layer-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.ListLayers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "listLayers") {
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'ListLayers',
+                'boto3': 'list_layers',
+                'cli': 'list-layers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.PublishLayerVersion
+    if (details.method == "POST" && details.url.match(/.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/.+\/versions$/g)) {
+        reqParams.boto3['Description'] = jsonRequestBody.Description;
+        reqParams.cli['--description'] = jsonRequestBody.Description;
+        reqParams.boto3['Content'] = jsonRequestBody.Content;
+        reqParams.cli['--content'] = jsonRequestBody.Content;
+        reqParams.boto3['CompatibleRuntimes'] = jsonRequestBody.CompatibleRuntimes;
+        reqParams.cli['--compatible-runtimes'] = jsonRequestBody.CompatibleRuntimes;
+        reqParams.boto3['LicenseInfo'] = jsonRequestBody.LicenseInfo;
+        reqParams.cli['--license-info'] = jsonRequestBody.LicenseInfo;
+        reqParams.boto3['LayerName'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+        reqParams.cli['--layer-name'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+
+        reqParams.cfn['Description'] = jsonRequestBody.Description;
+        reqParams.cfn['Content'] = jsonRequestBody.Content;
+        reqParams.cfn['CompatibleRuntimes'] = jsonRequestBody.CompatibleRuntimes;
+        reqParams.cfn['LicenseInfo'] = jsonRequestBody.LicenseInfo;
+        reqParams.cfn['LayerName'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'PublishLayerVersion',
+                'boto3': 'publish_layer_version',
+                'cli': 'publish-layer-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lambda', details.requestId),
+            'region': region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::LayerVersion',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
