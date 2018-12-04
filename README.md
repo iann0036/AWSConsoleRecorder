@@ -4,6 +4,7 @@
 
 
 ![Screenshot](assets/screen1.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiann0036%2FAWSConsoleRecorder.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiann0036%2FAWSConsoleRecorder?ref=badge_shield)
 
 :exclamation: **CAUTION:** This project is currently in beta stages. Some components may not work as expected.
 
@@ -47,3 +48,7 @@ Not all actions and resources are supported yet, check [this page](https://githu
 ## Bugs
 
 Given the nature of the extension, and the frequency in which the AWS team make updates, bugs will be frequent and inevitable. If you find these bugs, check [the issues page](https://github.com/iann0036/AWSConsoleRecorder/issues) to see if it has already been raised and if not, feel free to raise it.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiann0036%2FAWSConsoleRecorder.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiann0036%2FAWSConsoleRecorder?ref=badge_large)
