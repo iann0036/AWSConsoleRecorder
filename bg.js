@@ -31315,12 +31315,20 @@ function analyseRequest(details) {
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnection\?/g)) {
         reqParams.boto3['CustomerGatewayId'] = jsonRequestBody.CustomerGatewayId;
         reqParams.cli['--customer-gateway-id'] = jsonRequestBody.CustomerGatewayId;
+        reqParams.boto3['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+        reqParams.cli['--vpn-gateway-id'] = jsonRequestBody.VpnGatewayId;
         reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
         reqParams.cli['--transit-gateway-id'] = jsonRequestBody.TransitGatewayId;
         reqParams.boto3['Type'] = jsonRequestBody.Type;
         reqParams.cli['--type'] = jsonRequestBody.Type;
         reqParams.boto3['Options'] = jsonRequestBody.options;
         reqParams.cli['--options'] = jsonRequestBody.options;
+
+        reqParams.cfn['CustomerGatewayId'] = jsonRequestBody.CustomerGatewayId;
+        reqParams.cfn['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+        //reqParams.cfn['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
+        reqParams.cfn['Type'] = jsonRequestBody.Type;
+        reqParams.cfn['StaticRoutesOnly'] = jsonRequestBody.options.staticRoutesOnly;
 
         outputs.push({
             'region': region,
@@ -31332,6 +31340,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNConnection',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
@@ -31604,7 +31622,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.PublishLayerVersion
-    if (details.method == "POST" && details.url.match(/.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/.+\/versions$/g)) {
+    if (details.method == "POST" && details.url.match(/.+lambda\.[a-zA-Z0-9-]+\.amazonaws\.com\/2018\-10\-31\/layers\/.+\/versions$/g)) {
         reqParams.boto3['Description'] = jsonRequestBody.Description;
         reqParams.cli['--description'] = jsonRequestBody.Description;
         reqParams.boto3['Content'] = jsonRequestBody.Content;
@@ -31613,14 +31631,14 @@ function analyseRequest(details) {
         reqParams.cli['--compatible-runtimes'] = jsonRequestBody.CompatibleRuntimes;
         reqParams.boto3['LicenseInfo'] = jsonRequestBody.LicenseInfo;
         reqParams.cli['--license-info'] = jsonRequestBody.LicenseInfo;
-        reqParams.boto3['LayerName'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
-        reqParams.cli['--layer-name'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+        reqParams.boto3['LayerName'] = /.+lambda\.[a-zA-Z0-9-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+        reqParams.cli['--layer-name'] = /.+lambda\.[a-zA-Z0-9-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
 
         reqParams.cfn['Description'] = jsonRequestBody.Description;
         reqParams.cfn['Content'] = jsonRequestBody.Content;
         reqParams.cfn['CompatibleRuntimes'] = jsonRequestBody.CompatibleRuntimes;
         reqParams.cfn['LicenseInfo'] = jsonRequestBody.LicenseInfo;
-        reqParams.cfn['LayerName'] = /.+lambda\.[a-z-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
+        reqParams.cfn['LayerName'] = /.+lambda\.[a-zA-Z0-9-]+\.amazonaws\.com\/2018\-10\-31\/layers\/(.+)\/versions$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31646,5 +31664,467 @@ function analyseRequest(details) {
         
         return {};
     }
+    
+    // autogen:elasticmapreduce:emr.RunJobFlow
+    // autogen:elasticmapreduce:emr.DescribeCluster
+    // autogen:elasticmapreduce:emr.ListInstanceGroups
+    // autogen:elasticmapreduce:emr.ListSteps
+    // autogen:elasticmapreduce:emr.ListBootstrapActions
+    // autogen:elasticmapreduce:emr.TerminateJobFlows
+    // autogen:elasticmapreduce:emr.CreateSecurityConfiguration
+    // autogen:elasticmapreduce:emr.AddJobFlowSteps
+    // autogen:elasticmapreduce:emr.AddInstanceGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticmapreduce\/srf$/g)) {
+        for (var i in jsonRequestBody.actions) {
+            var action = jsonRequestBody.actions[i];
+ 
+            if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.runJobFlow") {
+                reqParams.boto3['Instances'] = action['parameters'][0]['instances'];
+                reqParams.cli['--instances'] = action['parameters'][0]['instances'];
+                reqParams.boto3['VisibleToAllUsers'] = action['parameters'][0]['visibleToAllUsers'];
+                reqParams.cli['--visible-to-all-users'] = action['parameters'][0]['visibleToAllUsers'];
+                reqParams.boto3['JobFlowRole'] = action['parameters'][0]['jobFlowRole'];
+                reqParams.cli['--job-flow-role'] = action['parameters'][0]['jobFlowRole'];
+                reqParams.boto3['LogUri'] = action['parameters'][0]['logUri'];
+                reqParams.cli['--log-uri'] = action['parameters'][0]['logUri'];
+                reqParams.boto3['Name'] = action['parameters'][0]['name'];
+                reqParams.cli['--name'] = action['parameters'][0]['name'];
+                reqParams.boto3['ReleaseLabel'] = action['parameters'][0]['releaseLabel'];
+                reqParams.cli['--release-label'] = action['parameters'][0]['releaseLabel'];
+                reqParams.boto3['ServiceRole'] = action['parameters'][0]['serviceRole'];
+                reqParams.cli['--service-role'] = action['parameters'][0]['serviceRole'];
+                reqParams.boto3['Applications'] = action['parameters'][0]['applications'];
+                reqParams.cli['--applications'] = action['parameters'][0]['applications'];
+                reqParams.boto3['Configurations'] = action['parameters'][0]['configurations'];
+                reqParams.cli['--configurations'] = action['parameters'][0]['configurations'];
+                reqParams.boto3['Steps'] = action['parameters'][0]['steps'];
+                reqParams.cli['--steps'] = action['parameters'][0]['steps'];
 
+                reqParams.cfn['Instances'] = action['parameters'][0]['instances'];
+                reqParams.cfn['VisibleToAllUsers'] = action['parameters'][0]['visibleToAllUsers'];
+                reqParams.cfn['JobFlowRole'] = action['parameters'][0]['jobFlowRole'];
+                reqParams.cfn['LogUri'] = action['parameters'][0]['logUri'];
+                reqParams.cfn['Name'] = action['parameters'][0]['name'];
+                reqParams.cfn['ReleaseLabel'] = action['parameters'][0]['releaseLabel'];
+                reqParams.cfn['ServiceRole'] = action['parameters'][0]['serviceRole'];
+                reqParams.cfn['Applications'] = action['parameters'][0]['applications'];
+                reqParams.cfn['Configurations'] = action['parameters'][0]['configurations'];
+                reqParams.cfn['Steps'] = action['parameters'][0]['steps'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'RunJobFlow',
+                        'boto3': 'run_job_flow',
+                        'cli': 'run-job-flow'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('emr', details.requestId),
+                    'region': region,
+                    'service': 'emr',
+                    'type': 'AWS::EMR::Cluster',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.describeCluster") {
+                reqParams.boto3['ClusterId'] = action['parameters'][0]['clusterId'];
+                reqParams.cli['--cluster-id'] = action['parameters'][0]['clusterId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'DescribeCluster',
+                        'boto3': 'describe_cluster',
+                        'cli': 'describe-cluster'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.listInstanceGroups") {
+                reqParams.boto3['ClusterId'] = action['parameters'][0]['clusterId'];
+                reqParams.cli['--cluster-id'] = action['parameters'][0]['clusterId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'ListInstanceGroups',
+                        'boto3': 'list_instance_groups',
+                        'cli': 'list-instance-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.listSteps") {
+                reqParams.boto3['ClusterId'] = action['parameters'][0]['clusterId'];
+                reqParams.cli['--cluster-id'] = action['parameters'][0]['clusterId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'ListSteps',
+                        'boto3': 'list_steps',
+                        'cli': 'list-steps'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.listBootstrapActions") {
+                reqParams.boto3['ClusterId'] = action['parameters'][0]['clusterId'];
+                reqParams.cli['--cluster-id'] = action['parameters'][0]['clusterId'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'ListBootstrapActions',
+                        'boto3': 'list_bootstrap_actions',
+                        'cli': 'list-bootstrap-actions'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.terminateJobFlows") {
+                reqParams.boto3['JobFlowIds'] = action['parameters'][0]['jobFlowIds'];
+                reqParams.cli['--job-flow-ids'] = action['parameters'][0]['jobFlowIds'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'TerminateJobFlows',
+                        'boto3': 'terminate_job_flows',
+                        'cli': 'terminate-job-flows'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrHelperRequestContext.createSecurityConfiguration") {
+                reqParams.boto3['Name'] = action['parameters'][0];
+                reqParams.cli['--name'] = action['parameters'][0];
+                reqParams.boto3['SecurityConfiguration'] = action['parameters'][1];
+                reqParams.cli['--security-configuration'] = action['parameters'][1];
+
+                reqParams.cfn['Name'] = action['parameters'][0];
+                reqParams.cfn['SecurityConfiguration'] = action['parameters'][1];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'CreateSecurityConfiguration',
+                        'boto3': 'create_security_configuration',
+                        'cli': 'create-security-configuration'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('emr', details.requestId),
+                    'region': region,
+                    'service': 'emr',
+                    'type': 'AWS::EMR::SecurityConfiguration',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.addJobFlowSteps") {
+                reqParams.boto3['JobFlowId'] = action['parameters'][0]['jobFlowId'];
+                reqParams.cli['--job-flow-id'] = action['parameters'][0]['jobFlowId'];
+                reqParams.boto3['Steps'] = action['parameters'][0]['steps'];
+                reqParams.cli['--steps'] = action['parameters'][0]['steps'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'AddJobFlowSteps',
+                        'boto3': 'add_job_flow_steps',
+                        'cli': 'add-job-flow-steps'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                for (var j=0; j<action['parameters'][0]['steps'].length; j++) {
+                    reqParams = {
+                        'boto3': {},
+                        'go': {},
+                        'cfn': {},
+                        'cli': {},
+                        'tf': {}
+                    };
+
+                    reqParams.cfn['JobFlowId'] = action['parameters'][0]['jobFlowId'];
+                    reqParams.cfn['Name'] = action['parameters'][0]['steps'][j]['name'];
+                    reqParams.cfn['ActionOnFailure'] = action['parameters'][0]['steps'][j]['actionOnFailure'];
+                    reqParams.cfn['HadoopJarStep'] = {
+                        'Jar': action['parameters'][0]['steps'][j]['hadoopJarStep']['jar'],
+                        'Args': action['parameters'][0]['steps'][j]['hadoopJarStep']['args'],
+                        'StepProperties': action['parameters'][0]['steps'][j]['hadoopJarStep']['properties']
+                    };
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('emr', details.requestId),
+                        'region': region,
+                        'service': 'emr',
+                        'type': 'AWS::EMR::Step',
+                        'options': reqParams,
+                        'requestDetails': details,
+                        'was_blocked': blocking
+                    });
+                }
+            } else if (action['action'] == "com.amazon.aws.emr.console.shared.EmrRequestContext.addInstanceGroups") {
+                reqParams.boto3['JobFlowId'] = action['parameters'][0]['jobFlowId'];
+                reqParams.cli['--job-flow-id'] = action['parameters'][0]['jobFlowId'];
+                reqParams.boto3['InstanceGroups'] = action['parameters'][0]['instanceGroups'];
+                reqParams.cli['--instance-groups'] = action['parameters'][0]['instanceGroups'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'emr',
+                    'method': {
+                        'api': 'AddInstanceGroups',
+                        'boto3': 'add_instance_groups',
+                        'cli': 'add-instance-groups'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                for (var j=0; j<action['parameters'][0]['instanceGroups'].length; j++) {
+                    reqParams = {
+                        'boto3': {},
+                        'go': {},
+                        'cfn': {},
+                        'cli': {},
+                        'tf': {}
+                    };
+
+                    var ebsBlockDeviceConfigs = [];
+                    for (var k=0; k<action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsBlockDeviceConfigs'].length; k++) {
+                        ebsBlockDeviceConfigs.push({
+                            'VolumesPerInstance': action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsBlockDeviceConfigs'][k]['volumesPerInstance'],
+                            'VolumeSpecification': {
+                                'Iops': action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsBlockDeviceConfigs'][k]['volumeSpecification']['iops'],
+                                'SizeInGB': action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsBlockDeviceConfigs'][k]['volumeSpecification']['sizeInGB'],
+                                'VolumeType': action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsBlockDeviceConfigs'][k]['volumeSpecification']['volumeType']
+                            }
+                        });
+                    }
+
+                    reqParams.cfn['JobFlowId'] = action['parameters'][0]['jobFlowId'];
+                    reqParams.cfn['EbsConfiguration'] = {
+                        'EbsOptimized': action['parameters'][0]['instanceGroups'][j]['ebsConfiguration']['ebsOptimized'],
+                        'EbsBlockDeviceConfigs': ebsBlockDeviceConfigs
+                    };
+                    reqParams.cfn['InstanceCount'] = action['parameters'][0]['instanceGroups'][j]['instanceCount'];
+                    reqParams.cfn['InstanceRole'] = action['parameters'][0]['instanceGroups'][j]['instanceRole'];
+                    reqParams.cfn['InstanceType'] = action['parameters'][0]['instanceGroups'][j]['instanceType'];
+                    reqParams.cfn['Market'] = action['parameters'][0]['instanceGroups'][j]['market'];
+                    reqParams.cfn['Name'] = action['parameters'][0]['instanceGroups'][j]['name'];
+                    
+                    tracked_resources.push({
+                        'logicalId': getResourceName('emr', details.requestId),
+                        'region': region,
+                        'service': 'emr',
+                        'type': 'AWS::EMR::InstanceGroupConfig',
+                        'options': reqParams,
+                        'requestDetails': details,
+                        'was_blocked': blocking
+                    });
+                }
+            }
+        }
+
+        return {};
+    }
+
+    // autogen:route53:route53.CreateHealthCheck
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/healthchecks\/service\/healthcheck$/g)) {
+        reqParams.boto3['HealthCheckConfig'] = {
+            'IPAddress': jsonRequestBody.ip,
+            'Port': jsonRequestBody.port,
+            'Type': jsonRequestBody.protocol,
+            'ResourcePath': jsonRequestBody.path,
+            'FullyQualifiedDomainName': jsonRequestBody.domainName,
+            'SearchString': jsonRequestBody.searchString,
+            'RequestInterval': jsonRequestBody.interval,
+            'FailureThreshold': jsonRequestBody.threshold,
+            'MeasureLatency': jsonRequestBody.measureLatency,
+            'Inverted': jsonRequestBody.negate,
+            'Disabled': jsonRequestBody.disabled,
+            'HealthThreshold': jsonRequestBody.calculatedHealthCheckThreshold,
+            'ChildHealthChecks': jsonRequestBody.childHealthChecks,
+            'EnableSNI': jsonRequestBody.enableSni,
+            'Regions': jsonRequestBody.regions
+            /*'AlarmIdentifier': {
+                'Region': 'us-east-1'|'us-east-2'|'us-west-1'|'us-west-2'|'ca-central-1'|'eu-central-1'|'eu-west-1'|'eu-west-2'|'eu-west-3'|'ap-south-1'|'ap-southeast-1'|'ap-southeast-2'|'ap-northeast-1'|'ap-northeast-2'|'ap-northeast-3'|'sa-east-1',
+                'Name': 'string'
+            },
+            'InsufficientDataHealthStatus': 'Healthy'|'Unhealthy'|'LastKnownStatus'*/
+        }
+        reqParams.cli['--health-check-config'] = reqParams.boto3['HealthCheckConfig'];
+        reqParams.boto3['CallerReference'] = "unique-id";
+        reqParams.boto3['--caller-reference'] = "unique-id";
+
+        reqParams.cfn['HealthCheckConfig'] = {
+            'IPAddress': jsonRequestBody.ip,
+            'Port': jsonRequestBody.port,
+            'Type': jsonRequestBody.protocol,
+            'ResourcePath': jsonRequestBody.path,
+            'FullyQualifiedDomainName': jsonRequestBody.domainName,
+            'SearchString': jsonRequestBody.searchString,
+            'RequestInterval': jsonRequestBody.interval,
+            'FailureThreshold': jsonRequestBody.threshold,
+            'MeasureLatency': jsonRequestBody.measureLatency,
+            'Inverted': jsonRequestBody.negate,
+            'HealthThreshold': jsonRequestBody.calculatedHealthCheckThreshold,
+            'ChildHealthChecks': jsonRequestBody.childHealthChecks,
+            'EnableSNI': jsonRequestBody.enableSni,
+            'Regions': jsonRequestBody.regions
+            /*'AlarmIdentifier': {
+                'Region': 'us-east-1'|'us-east-2'|'us-west-1'|'us-west-2'|'ca-central-1'|'eu-central-1'|'eu-west-1'|'eu-west-2'|'eu-west-3'|'ap-south-1'|'ap-southeast-1'|'ap-southeast-2'|'ap-northeast-1'|'ap-northeast-2'|'ap-northeast-3'|'sa-east-1',
+                'Name': 'string'
+            },
+            'InsufficientDataHealthStatus': 'Healthy'|'Unhealthy'|'LastKnownStatus'*/
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'CreateHealthCheck',
+                'boto3': 'create_health_check',
+                'cli': 'create-health-check'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('route53', details.requestId),
+            'region': region,
+            'service': 'route53',
+            'type': 'AWS::Route53::HealthCheck',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:route53:route53.DeleteHealthCheck
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/healthchecks\/service\/healthcheck\/delete$/g)) {
+        for (var i=0; i<jsonRequestBody.healthCheckIds.length; i++) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['HealthCheckId'] = jsonRequestBody.healthCheckIds[i];
+            reqParams.cli['--health-check-id'] = jsonRequestBody.healthCheckIds[i];
+
+            outputs.push({
+                'region': region,
+                'service': 'route53',
+                'method': {
+                    'api': 'DeleteHealthCheck',
+                    'boto3': 'delete_health_check',
+                    'cli': 'delete-health-check'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpnConnectionRoute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnectionRoute\?/g)) {
+        reqParams.boto3['VpnConnectionId'] = jsonRequestBody.VpnConnectionId;
+        reqParams.cli['--vpn-connection-id'] = jsonRequestBody.VpnConnectionId;
+        reqParams.boto3['DestinationCidrBlock'] = jsonRequestBody.DestinationCidrBlock;
+        reqParams.cli['--destination-cidr-block'] = jsonRequestBody.DestinationCidrBlock;
+
+        reqParams.cfn['VpnConnectionId'] = jsonRequestBody.VpnConnectionId;
+        reqParams.cfn['DestinationCidrBlock'] = jsonRequestBody.DestinationCidrBlock;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpnConnectionRoute',
+                'boto3': 'create_vpn_connection_route',
+                'cli': 'create-vpn-connection-route'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNConnectionRoute',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:cloudwatch:events.PutPermission
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.PutPermission\//g)) {
+        reqParams.boto3['Action'] = jsonRequestBody.Action;
+        reqParams.cli['--action'] = jsonRequestBody.Action;
+        reqParams.boto3['Principal'] = jsonRequestBody.Principal;
+        reqParams.cli['--principal'] = jsonRequestBody.Principal;
+        reqParams.boto3['StatementId'] = jsonRequestBody.StatementId;
+        reqParams.cli['--statement-id'] = jsonRequestBody.StatementId;
+
+        reqParams.cfn['Action'] = jsonRequestBody.Action;
+        reqParams.cfn['Principal'] = jsonRequestBody.Principal;
+        reqParams.cfn['StatementId'] = jsonRequestBody.StatementId;
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'PutPermission',
+                'boto3': 'put_permission',
+                'cli': 'put-permission'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('events', details.requestId),
+            'region': region,
+            'service': 'events',
+            'type': 'AWS::Events::EventBusPolicy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+    
 }
