@@ -136,6 +136,28 @@ function interpretGwtArg(tracker, expected_type) {
         ret['arn'] = arn;
 
         return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.InboundFilter/855140093") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 2;
+        var allow_boolean = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        ret['cidr'] = cidr;
+        ret['name'] = name;
+        if (allow_boolean) {
+            ret['action'] = 'Allow';
+        } else {
+            ret['action'] = 'Block';
+        }
+
+        return ret;
     } else if (arg_type == "com.amazon.bacon.console.shared.types.configurationSet.EventDestinationStatus/111633783") {
         var ret = {
             'type': arg_type
@@ -371,6 +393,11 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'configurationSetName'
+        });
+    } else if (service == "com.amazon.bacon.console.shared.services.SESService" && method == "createReceiptFilter") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'inboundFilter'
         });
     } else if (service == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && method == "createOai") {
         args.push({
@@ -29401,6 +29428,56 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ses:ses.CreateReceiptFilter
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptFilter") {
+        reqParams.boto3['Filter'] = {
+            'Name': gwtRequest['args'][0].value.name,
+            'IpFilter': {
+                'Policy': gwtRequest['args'][0].value.action,
+                'Cidr': gwtRequest['args'][0].value.cidr
+            }
+        };
+        reqParams.cli['--filter'] = {
+            'Name': gwtRequest['args'][0].value.name,
+            'IpFilter': {
+                'Policy': gwtRequest['args'][0].value.action,
+                'Cidr': gwtRequest['args'][0].value.cidr
+            }
+        };
+
+        reqParams.cfn['Filter'] = {
+            'Name': gwtRequest['args'][0].value.name,
+            'IpFilter': {
+                'Policy': gwtRequest['args'][0].value.action,
+                'Cidr': gwtRequest['args'][0].value.cidr
+            }
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'ses',
+            'method': {
+                'api': 'CreateReceiptFilter',
+                'boto3': 'create_receipt_filter',
+                'cli': 'create-receipt-filter'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ses', details.requestId),
+            'region': region,
+            'service': 'ses',
+            'type': 'AWS::SES::ReceiptFilter',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
     // manual:ses:ses.DescribeConfigurationSet
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "describeConfigurationSet") {
         reqParams.boto3['ConfigurationSetName'] = gwtRequest['args'][0].value.value;
@@ -32716,7 +32793,6 @@ function analyseRequest(details) {
         return {};
     }
 
-
     // autogen:cloudfront:cloudfront.CreateCloudFrontOriginAccessIdentity
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createOai") {
         reqParams.boto3['CloudFrontOriginAccessIdentityConfig'] = {
@@ -32749,6 +32825,767 @@ function analyseRequest(details) {
             'region': region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.PutAggregationAuthorization
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/putAggregationAuthorization\?/g)) {
+        reqParams.boto3['AuthorizedAccountId'] = jsonRequestBody.authorizedAccountId;
+        reqParams.cli['--authorized-account-id'] = jsonRequestBody.authorizedAccountId;
+        reqParams.boto3['AuthorizedAwsRegion'] = jsonRequestBody.authorizedAwsRegion;
+        reqParams.cli['--authorized-aws-region'] = jsonRequestBody.authorizedAwsRegion;
+
+        reqParams.cfn['AuthorizedAccountId'] = jsonRequestBody.authorizedAccountId;
+        reqParams.cfn['AuthorizedAwsRegion'] = jsonRequestBody.authorizedAwsRegion;
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'PutAggregationAuthorization',
+                'boto3': 'put_aggregation_authorization',
+                'cli': 'put-aggregation-authorization'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('config', details.requestId),
+            'region': region,
+            'service': 'config',
+            'type': 'AWS::Config::AggregationAuthorization',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.DescribeAggregationAuthorizations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describeAggregationAuthorizations\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'DescribeAggregationAuthorizations',
+                'boto3': 'describe_aggregation_authorizations',
+                'cli': 'describe-aggregation-authorizations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:config:sns.CreateTopic
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/setupSnsTopic\?/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.topicName;
+        reqParams.cli['--name'] = jsonRequestBody.topicName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'CreateTopic',
+                'boto3': 'create_topic',
+                'cli': 'create-topic'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:config:config.PutConfigurationRecorder
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/subscribeToStarling\?/g)) {
+        reqParams.boto3['ConfigurationRecorder'] = {
+            "ConfigurationRecorder": { 
+               "name": jsonRequestBody.configurationRecorderName,
+               "recordingGroup": { 
+                  "allSupported": jsonRequestBody.recordingGroupJson.allSupported,
+                  "includeGlobalResourceTypes": jsonRequestBody.recordingGroupJson.includeGlobalResourceTypes,
+                  "resourceTypes": jsonRequestBody.recordingGroupJson.resourceTypes
+               },
+               "roleARN": jsonRequestBody.roleArn
+            }
+        };
+        reqParams.cli['--configuration-recorder'] = {
+            "ConfigurationRecorder": { 
+               "name": jsonRequestBody.configurationRecorderName,
+               "recordingGroup": { 
+                  "allSupported": jsonRequestBody.recordingGroupJson.allSupported,
+                  "includeGlobalResourceTypes": jsonRequestBody.recordingGroupJson.includeGlobalResourceTypes,
+                  "resourceTypes": jsonRequestBody.recordingGroupJson.resourceTypes
+               },
+               "roleARN": jsonRequestBody.roleArn
+            }
+        };
+
+        reqParams.cfn['Name'] = jsonRequestBody.configurationRecorderName;
+        reqParams.cfn['RecordingGroup'] = {
+            'AllSupported': jsonRequestBody.recordingGroupJson.allSupported,
+            'IncludeGlobalResourceTypes': jsonRequestBody.recordingGroupJson.includeGlobalResourceTypes,
+            'ResourceTypes': jsonRequestBody.recordingGroupJson.resourceTypes
+        };
+        reqParams.cfn['RoleARN'] = jsonRequestBody.roleArn;
+        
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'PutConfigurationRecorder',
+                'boto3': 'put_configuration_recorder',
+                'cli': 'put-configuration-recorder'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('config', details.requestId),
+            'region': region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigurationRecorder',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        reqParams = {
+            'boto3': {},
+            'go': {},
+            'cfn': {},
+            'cli': {},
+            'tf': {}
+        };
+        
+        reqParams.boto3['DeliveryChannel'] = {
+            "DeliveryChannel": {
+               "name": jsonRequestBody.deliveryChannelName,
+               "s3BucketName": jsonRequestBody.s3BucketName,
+               "s3KeyPrefix": jsonRequestBody.s3BucketPrefix,
+               "snsTopicARN": jsonRequestBody.snsTopicArn
+            }
+        };
+        reqParams.cli['--delivery-channel'] = {
+            "DeliveryChannel": {
+               "name": jsonRequestBody.deliveryChannelName,
+               "s3BucketName": jsonRequestBody.s3BucketName,
+               "s3KeyPrefix": jsonRequestBody.s3BucketPrefix,
+               "snsTopicARN": jsonRequestBody.snsTopicArn
+            }
+        };
+
+        reqParams.cfn['Name'] = jsonRequestBody.deliveryChannelName;
+        reqParams.cfn['S3BucketName'] = jsonRequestBody.s3BucketName;
+        reqParams.cfn['S3KeyPrefix'] = jsonRequestBody.s3BucketPrefix;
+        reqParams.cfn['SnsTopicARN'] = jsonRequestBody.snsTopicArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'config',
+            'method': {
+                'api': 'PutDeliveryChannel',
+                'boto3': 'put_delivery_channel',
+                'cli': 'put-delivery-channel'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('config', details.requestId),
+            'region': region,
+            'service': 'config',
+            'type': 'AWS::Config::DeliveryChannel',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DetachInternetGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachInternetGateway\?/g)) {
+        reqParams.boto3['InternetGatewayId'] = jsonRequestBody.internetGatewayId;
+        reqParams.cli['--internet-gateway-id'] = jsonRequestBody.internetGatewayId;
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DetachInternetGateway',
+                'boto3': 'detach_internet_gateway',
+                'cli': 'detach-internet-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeInternetGateways
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInternetGateways\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeInternetGateways',
+                'boto3': 'describe_internet_gateways',
+                'cli': 'describe-internet-gateways'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AttachInternetGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachInternetGateway\?/g)) {
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+        reqParams.boto3['InternetGatewayId'] = jsonRequestBody.internetGatewayId;
+        reqParams.cli['--internet-gateway-id'] = jsonRequestBody.internetGatewayId;
+
+        reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cfn['InternetGatewayId'] = jsonRequestBody.internetGatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AttachInternetGateway',
+                'boto3': 'attach_internet_gateway',
+                'cli': 'attach-internet-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCGatewayAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AttachVpnGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachVpnGateway\?/g)) {
+        reqParams.boto3['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+        reqParams.cli['--vpn-gateway-id'] = jsonRequestBody.VpnGatewayId;
+        reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
+
+        reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cfn['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AttachVpnGateway',
+                'boto3': 'attach_vpn_gateway',
+                'cli': 'attach-vpn-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCGatewayAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DetachVpnGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachVpnGateway\?/g)) {
+        reqParams.boto3['VpnGatewayId'] = jsonRequestBody.VpnGatewayId;
+        reqParams.cli['--vpn-gateway-id'] = jsonRequestBody.VpnGatewayId;
+        reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DetachVpnGateway',
+                'boto3': 'detach_vpn_gateway',
+                'cli': 'detach-vpn-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.EnableVgwRoutePropagation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableVgwRoutePropagation\?/g)) {
+        reqParams.boto3['RouteTableId'] = jsonRequestBody.RouteTableId;
+        reqParams.cli['--route-table-id'] = jsonRequestBody.RouteTableId;
+        reqParams.boto3['GatewayId'] = jsonRequestBody.GatewayId;
+        reqParams.cli['--gateway-id'] = jsonRequestBody.GatewayId;
+
+        reqParams.cfn['RouteTableIds'] = [jsonRequestBody.RouteTableId];
+        reqParams.cfn['VpnGatewayId'] = jsonRequestBody.GatewayId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'EnableVgwRoutePropagation',
+                'boto3': 'enable_vgw_route_propagation',
+                'cli': 'enable-vgw-route-propagation'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNGatewayRoutePropagation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeRouteTables
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeRouteTables\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.__metaData.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.__metaData.filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeRouteTables',
+                'boto3': 'describe_route_tables',
+                'cli': 'describe-route-tables'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpnGateways
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpnGateways\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpnGateways',
+                'boto3': 'describe_vpn_gateways',
+                'cli': 'describe-vpn-gateways'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.AcceptInvitation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "acceptInvitation") {
+        reqParams.boto3['MasterId'] = jsonRequestBody.contentString.masterId;
+        reqParams.cli['--master-id'] = jsonRequestBody.contentString.masterId;
+        reqParams.boto3['InvitationId'] = jsonRequestBody.contentString.invitationId;
+        reqParams.cli['--invitation-id'] = jsonRequestBody.contentString.invitationId;
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        reqParams.cfn['MasterId'] = jsonRequestBody.contentString.masterId;
+        reqParams.cfn['InvitationId'] = jsonRequestBody.contentString.invitationId;
+        reqParams.cfn['DetectorId'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'AcceptInvitation',
+                'boto3': 'accept_invitation',
+                'cli': 'accept-invitation'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('guardduty', details.requestId),
+            'region': region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Master',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.ListInvitations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "listInvitations") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'ListInvitations',
+                'boto3': 'list_invitations',
+                'cli': 'list-invitations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:guardduty:guardduty.GetMasterAccount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "getMasterAccount") {
+        reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'guardduty',
+            'method': {
+                'api': 'GetMasterAccount',
+                'boto3': 'get_master_account',
+                'cli': 'get-master-account'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.PutUserPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/inlinePolicies$/g)) {
+        reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cli['--policy-document'] = jsonRequestBody.document;
+        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+
+        reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cfn['Users'] = [/.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'PutUserPolicy',
+                'boto3': 'put_user_policy',
+                'cli': 'put-user-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.PutRolePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/inlinePolicies$/g)) {
+        reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cli['--policy-document'] = jsonRequestBody.document;
+        reqParams.boto3['RoleName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.cli['--role-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+
+        reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cfn['Roles'] = [/.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'PutRolePolicy',
+                'boto3': 'put_role_policy',
+                'cli': 'put-role-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.PutGroupPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/PutGroupPolicy$/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+        reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.policyDocument;
+        reqParams.cli['--policy-document'] = jsonRequestBody.policyDocument;
+
+        reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.policyDocument;
+        reqParams.cfn['Groups'] = [jsonRequestBody.groupName];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'PutGroupPolicy',
+                'boto3': 'put_group_policy',
+                'cli': 'put-group-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.CreateEndpointConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpointConfig") {
+        reqParams.boto3['EndpointConfigName'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.cli['--endpoint-config-name'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.boto3['KmsKeyId'] = jsonRequestBody.contentString.KmsKeyId;
+        reqParams.cli['--kms-key-id'] = jsonRequestBody.contentString.KmsKeyId;
+        reqParams.boto3['ProductionVariants'] = jsonRequestBody.contentString.ProductionVariants;
+        reqParams.cli['--production-variants'] = jsonRequestBody.contentString.ProductionVariants;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['EndpointConfigName'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.cfn['KmsKeyId'] = jsonRequestBody.contentString.KmsKeyId;
+        reqParams.cfn['ProductionVariants'] = jsonRequestBody.contentString.ProductionVariants;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'CreateEndpointConfig',
+                'boto3': 'create_endpoint_config',
+                'cli': 'create-endpoint-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('sagemaker', details.requestId),
+            'region': region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::EndpointConfig',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.CreateEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpoint") {
+        reqParams.boto3['EndpointConfigName'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.cli['--endpoint-config-name'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.boto3['EndpointName'] = jsonRequestBody.contentString.EndpointName;
+        reqParams.cli['--endpoint-name'] = jsonRequestBody.contentString.EndpointName;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['EndpointConfigName'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.cfn['EndpointName'] = jsonRequestBody.contentString.EndpointName;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'CreateEndpoint',
+                'boto3': 'create_endpoint',
+                'cli': 'create-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('sagemaker', details.requestId),
+            'region': region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Endpoint',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.DeleteEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpoint") {
+        reqParams.boto3['EndpointName'] = jsonRequestBody.contentString.EndpointName;
+        reqParams.cli['--endpoint-name'] = jsonRequestBody.contentString.EndpointName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'DeleteEndpoint',
+                'boto3': 'delete_endpoint',
+                'cli': 'delete-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.DeleteEndpointConfig
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpointConfig") {
+        reqParams.boto3['EndpointConfigName'] = jsonRequestBody.contentString.EndpointConfigName;
+        reqParams.cli['--endpoint-config-name'] = jsonRequestBody.contentString.EndpointConfigName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'DeleteEndpointConfig',
+                'boto3': 'delete_endpoint_config',
+                'cli': 'delete-endpoint-config'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sagemaker:sagemaker.DeleteModel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteModel") {
+        reqParams.boto3['ModelName'] = jsonRequestBody.contentString.ModelName;
+        reqParams.cli['--model-name'] = jsonRequestBody.contentString.ModelName;
+
+        outputs.push({
+            'region': region,
+            'service': 'sagemaker',
+            'method': {
+                'api': 'DeleteModel',
+                'boto3': 'delete_model',
+                'cli': 'delete-model'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:waf-regional:waf-regional.AssociateWebACL
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers['X-Amz-Target'] == "AWSWAF_Regional_20161128.AssociateWebACL") {
+        reqParams.boto3['ResourceArn'] = jsonRequestBody.content.ResourceArn;
+        reqParams.cli['--resource-arn'] = jsonRequestBody.content.ResourceArn;
+        reqParams.boto3['WebACLId'] = jsonRequestBody.content.WebACLId;
+        reqParams.cli['--web-acl-id'] = jsonRequestBody.content.WebACLId;
+
+        reqParams.cfn['ResourceArn'] = jsonRequestBody.content.ResourceArn;
+        reqParams.cfn['WebACLId'] = jsonRequestBody.content.WebACLId;
+
+        outputs.push({
+            'region': region,
+            'service': 'waf-regional',
+            'method': {
+                'api': 'AssociateWebACL',
+                'boto3': 'associate_web_acl',
+                'cli': 'associate-web-acl'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('waf-regional', details.requestId),
+            'region': region,
+            'service': 'waf-regional',
+            'type': 'AWS::WAFRegional::WebACLAssociation',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
