@@ -27,7 +27,7 @@ Purchase Date:
 2016-01-06 11:00:06 UTC
 
 Downloaded Version:
-LATEST as at 2016-01-06 11:00:06 UTC
+v4.0.0
 
 For any queries related to this document or license please contact Help Team via https://help.author.envato.com
 

@@ -1,5 +1,3 @@
-// awscr@ian.mn
-
 var declared_services;
 var compiled;
 var go_first_output;
@@ -200,6 +198,21 @@ function interpretGwtArg(tracker, expected_type) {
         ret['action'] = action;
 
         return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CloudFrontOriginAccessIdentityConfig/902378263") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var timestamp = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var comment = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['timestamp'] = timestamp;
+        ret['comment'] = comment;
+
+        return ret;
     } else {
         var ret = {
             'type': 'unknown'
@@ -358,6 +371,11 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'configurationSetName'
+        });
+    } else if (service == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && method == "createOai") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'identityConfig'
         });
     }
 
@@ -4407,6 +4425,8 @@ function analyseRequest(details) {
         reqParams.boto3['AWSServiceName'] = 'elasticbeanstalk.amazonaws.com';
         reqParams.cli['--aws-service-name'] = 'elasticbeanstalk.amazonaws.com';
 
+        reqParams.cfn['AWSServiceName'] = 'elasticbeanstalk.amazonaws.com';
+
         outputs.push({
             'region': region,
             'service': 'iam',
@@ -4417,6 +4437,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::ServiceLinkedRole',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
 
         if (blocking) {
@@ -5324,7 +5354,7 @@ function analyseRequest(details) {
                 'time_of_day': jsonRequestBody.contentString.maintenanceWindowStartTime.timeOfDay,
                 'time_zone': jsonRequestBody.contentString.maintenanceWindowStartTime.timeZone
             };
-            reqParams.cfn['maintenance_window_start_time'] = {
+            reqParams.cfn['MaintenanceWindowStartTime'] = {
                 'DayOfWeek': jsonRequestBody.contentString.maintenanceWindowStartTime.dayOfWeek,
                 'TimeOfDay': jsonRequestBody.contentString.maintenanceWindowStartTime.timeOfDay,
                 'TimeZone': jsonRequestBody.contentString.maintenanceWindowStartTime.timeZone
@@ -15714,8 +15744,8 @@ function analyseRequest(details) {
         reqParams.boto3['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
         reqParams.cli['--instance-tenancy'] = getPipeSplitField(requestBody, 19);
 
-        reqParams.cfn['cidr_block'] = getPipeSplitField(requestBody, 18);
-        reqParams.cfn['instance_tenancy'] = getPipeSplitField(requestBody, 19);
+        reqParams.cfn['CidrBlock'] = getPipeSplitField(requestBody, 18);
+        reqParams.cfn['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
 
         outputs.push({
             'region': region,
@@ -17157,8 +17187,8 @@ function analyseRequest(details) {
         reqParams.cfn['Queues'] = [getPipeSplitField(requestBody, 11)];
         reqParams.cfn['PolicyDocument'] = getPipeSplitField(requestBody, 14);
 
-        reqParams.cfn['queue_url'] = getPipeSplitField(requestBody, 11);
-        reqParams.cfn['policy'] = getPipeSplitField(requestBody, 14);
+        reqParams.tf['queue_url'] = getPipeSplitField(requestBody, 11);
+        reqParams.tf['policy'] = getPipeSplitField(requestBody, 14);
 
         outputs.push({
             'region': region,
@@ -24212,10 +24242,10 @@ function analyseRequest(details) {
         reqParams.boto3['endpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
         reqParams.cli['--endpoint-configuration'] = jsonRequestBody.params.endpointConfigurationTypes;
 
-        reqParams.cfn['name'] = jsonRequestBody.contentString.info.title;
-        reqParams.cfn['description'] = jsonRequestBody.contentString.info.description;
-        reqParams.cfn['version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
-        reqParams.cfn['endpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.info.title;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.info.description;
+        reqParams.cfn['Version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+        reqParams.cfn['EndpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
         
         // TODO: More here
 
@@ -27088,9 +27118,9 @@ function analyseRequest(details) {
                 reqParams.cfn['Family'] = action['parameters'][0];
                 reqParams.cfn['Description'] = action['parameters'][2];
 
-                reqParams.cfn['name'] = action['parameters'][1];
-                reqParams.cfn['family'] = action['parameters'][0];
-                reqParams.cfn['description'] = action['parameters'][2];
+                reqParams.tf['name'] = action['parameters'][1];
+                reqParams.tf['family'] = action['parameters'][0];
+                reqParams.tf['description'] = action['parameters'][2];
         
                 outputs.push({
                     'region': region,
@@ -27575,9 +27605,9 @@ function analyseRequest(details) {
         reqParams.cfn['GroupName'] = getUrlValue(details.url, 'groupName');
         reqParams.cfn['VpcId'] = getUrlValue(details.url, 'vpcId');
 
-        reqParams.cfn['description'] = getUrlValue(details.url, 'groupDescription');
-        reqParams.cfn['name'] = getUrlValue(details.url, 'groupName');
-        reqParams.cfn['vpc_id'] = getUrlValue(details.url, 'vpcId');
+        reqParams.tf['description'] = getUrlValue(details.url, 'groupDescription');
+        reqParams.tf['name'] = getUrlValue(details.url, 'groupName');
+        reqParams.tf['vpc_id'] = getUrlValue(details.url, 'vpcId');
 
         outputs.push({
             'region': region,
@@ -27874,9 +27904,9 @@ function analyseRequest(details) {
                 reqParams.cfn['SubnetGroupName'] = action['parameters'][0]['subnetGroupName'];
                 reqParams.cfn['SubnetIds'] = action['parameters'][0]['subnetIds'];
 
-                reqParams.cfn['description'] = action['parameters'][0]['description'];
-                reqParams.cfn['name'] = action['parameters'][0]['subnetGroupName'];
-                reqParams.cfn['subnet_ids'] = action['parameters'][0]['subnetIds'];
+                reqParams.tf['description'] = action['parameters'][0]['description'];
+                reqParams.tf['name'] = action['parameters'][0]['subnetGroupName'];
+                reqParams.tf['subnet_ids'] = action['parameters'][0]['subnetIds'];
 
                 outputs.push({
                     'region': region,
@@ -32126,5 +32156,605 @@ function analyseRequest(details) {
         
         return {};
     }
-    
+
+    // autogen:iot:iot.DisableTopicRule
+    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+\/disable$/g) && formRequestBody._ == "{") {
+        reqParams.boto3['RuleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'DisableTopicRule',
+                'boto3': 'disable_topic_rule',
+                'cli': 'disable-topic-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.EnableTopicRule
+    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+\/enable$/g)) {
+        reqParams.boto3['RuleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'EnableTopicRule',
+                'boto3': 'enable_topic_rule',
+                'cli': 'enable-topic-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.DeleteTopicRule
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+$/g)) {
+        reqParams.boto3['RuleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'DeleteTopicRule',
+                'boto3': 'delete_topic_rule',
+                'cli': 'delete-topic-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.CreateTopicRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule$/g)) {
+        reqParams.boto3['ruleName'] = jsonRequestBody.ruleName; // jsonRequestBody.name ?
+        reqParams.cli['--rule-name'] = jsonRequestBody.ruleName;
+        reqParams.boto3['topicRulePayload'] = {
+            'sql': jsonRequestBody.sql,
+            'description': jsonRequestBody.description,
+            'actions': jsonRequestBody.actions,
+            'ruleDisabled': false,
+            'awsIotSqlVersion': jsonRequestBody.awsIotSqlVersion,
+            'errorAction': jsonRequestBody.errorAction
+        };
+        reqParams.cli['--topic-rule-payload'] = {
+            'sql': jsonRequestBody.sql,
+            'description': jsonRequestBody.description,
+            'actions': jsonRequestBody.actions,
+            'ruleDisabled': false,
+            'awsIotSqlVersion': jsonRequestBody.awsIotSqlVersion,
+            'errorAction': jsonRequestBody.errorAction
+        };
+
+        function convertActionToCfnAction(input) {
+            var action = null;
+
+            if (input.dynamoDB) {
+                action = {
+                    'DynamoDB': {
+                        'TableName': input.dynamoDB.tableName,
+                        'RoleArn': input.dynamoDB.roleArn,
+                        //'Operation': input.dynamoDB.operation,
+                        'HashKeyField': input.dynamoDB.hashKeyField,
+                        'HashKeyValue': input.dynamoDB.hashKeyValue,
+                        'HashKeyType': input.dynamoDB.hashKeyType,
+                        'RangeKeyField': input.dynamoDB.rangeKeyField,
+                        'RangeKeyValue': input.dynamoDB.rangeKeyValue,
+                        'RangeKeyType': input.dynamoDB.rangeKeyType,
+                        'PayloadField': input.dynamoDB.payloadField
+                    }
+                };
+            } else if (input.dynamoDBv2) {
+                action = {
+                    'DynamoDBv2': {
+                        'TableName': input.dynamoDBv2.tableName,
+                        'PutItem': {
+                            'TableName': input.dynamoDBv2.putItem.tableName
+                        }
+                    }
+                };
+            } else if (input.lambda) {
+                action = {
+                    'Lambda': {
+                        'FunctionArn': input.lambda.functionArn
+                    }
+                };
+            } else if (input.sns) {
+                action = {
+                    'Sns': {
+                        'TargetArn': input.lambda.targetArn,
+                        'RoleArn': input.lambda.roleArn,
+                        'MessageFormat': input.lambda.messageFormat
+                    }
+                };
+            } else if (input.sqs) {
+                action = {
+                    'Sqs': {
+                        'RoleArn': input.lambda.roleArn,
+                        'QueueUrl': input.lambda.queueUrl,
+                        'UseBase64': input.lambda.useBase64
+                    }
+                };
+            } else if (input.kinesis) {
+                action = {
+                    'Kinesis': {
+                        'RoleArn': input.lambda.roleArn,
+                        'StreamName': input.lambda.streamName,
+                        'PartitionKey': input.lambda.partitionKey
+                    }
+                };
+            } else if (input.republish) {
+                action = {
+                    'Republish': {
+                        'RoleArn': input.lambda.roleArn,
+                        'Topic': input.lambda.topic
+                    }
+                };
+            } else if (input.s3) {
+                action = {
+                    'S3': {
+                        'RoleArn': input.lambda.roleArn,
+                        'BucketName': input.lambda.bucketName,
+                        'Key': input.lambda.key
+                        //'': input.lambda.cannedAcl
+                    }
+                };
+            } else if (input.firehose) {
+                action = {
+                    'Firehose': {
+                        'RoleArn': input.lambda.roleArn,
+                        'DeliveryStreamName': input.lambda.deliveryStreamName,
+                        'Separator': input.lambda.separator
+                    }
+                };
+            } else if (input.cloudwatchMetric) {
+                action = {
+                    'CloudwatchMetric': {
+                        'RoleArn': input.lambda.roleArn,
+                        'MetricNamespace': input.lambda.metricNamespace,
+                        'MetricName': input.lambda.metricName,
+                        'MetricValue': input.lambda.metricValue,
+                        'MetricUnit': input.lambda.metricUnit,
+                        'MetricTimestamp': input.lambda.metricTimestamp
+                    }
+                };
+            } else if (input.cloudwatchAlarm) {
+                action = {
+                    'CloudwatchAlarm': {
+                        'RoleArn': input.lambda.roleArn,
+                        'AlarmName': input.lambda.alarmName,
+                        'StateReason': input.lambda.stateReason,
+                        'StateValue': input.lambda.stateValue
+                    }
+                };
+            } else if (input.elasticsearch) {
+                action = {
+                    'Elasticsearch': {
+                        'RoleArn': input.lambda.roleArn,
+                        'Endpoint': input.lambda.endpoint,
+                        'Index': input.lambda.index,
+                        'Type': input.lambda.type,
+                        'Id': input.lambda.id
+                    }
+                };
+            /*} else if (input.salesforce) {
+                action = {
+                    '': {
+                        '': input.lambda.token,
+                        '': input.lambda.url
+                    }
+                };*/
+            } else if (input.iotAnalytics) {
+                action = {
+                    'IotAnalytics': {
+                        //'': input.lambda.channelArn,
+                        'ChannelName': input.lambda.channelName,
+                        'RoleArn': input.lambda.roleArn
+                    }
+                };
+            /*} else if (input.iotEvents) {
+                action = {
+                    '': {
+                        '': input.lambda.inputName,
+                        '': input.lambda.messageId,
+                        '': input.lambda.roleArn
+                    }
+                };*/
+            } else if (input.stepFunctions) {
+                action = {
+                    'StepFunctions': {
+                        'ExecutionNamePrefix': input.lambda.executionNamePrefix,
+                        'StateMachineName': input.lambda.stateMachineName,
+                        'RoleArn': input.lambda.roleArn
+                    }
+                };
+            }
+
+            return action;
+        }
+
+        reqParams.cfn['RuleName'] = jsonRequestBody.ruleName;
+        reqParams.cfn['TopicRulePayload'] = {
+            'Sql': jsonRequestBody.sql,
+            'Description': jsonRequestBody.description,
+            'Actions': [],
+            'RuleDisabled': false,
+            'AwsIotSqlVersion': jsonRequestBody.awsIotSqlVersion,
+            'ErrorAction': convertActionToCfnAction(jsonRequestBody.errorAction)
+        };
+
+        for (var i=0; i<jsonRequestBody.actions.length; i++) {
+            reqParams.cfn['TopicRulePayload']['Actions'].push(convertActionToCfnAction(jsonRequestBody.actions[i]));
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateTopicRule',
+                'boto3': 'create_topic_rule',
+                'cli': 'create-topic-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::TopicRule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iot:iot.AttachThingPrincipal
+    if (details.method == "PATCH" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thing\/.+\/principal\/attach$/g)) {
+        reqParams.boto3['ThingName'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.cli['--thing-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.boto3['Principal'] = jsonRequestBody.principal;
+        reqParams.cli['--principal'] = jsonRequestBody.principal;
+
+        reqParams.cfn['ThingName'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.cfn['Principal'] = jsonRequestBody.principal;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'AttachThingPrincipal',
+                'boto3': 'attach_thing_principal',
+                'cli': 'attach-thing-principal'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iot', details.requestId),
+            'region': region,
+            'service': 'iot',
+            'type': 'AWS::IoT::ThingPrincipalAttachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:elbv2.AddListenerCertificates
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2AddListenerCertificates\?/g)) {
+        reqParams.boto3['ListenerArn'] = jsonRequestBody.listenerArn;
+        reqParams.cli['--listener-arn'] = jsonRequestBody.listenerArn;
+        reqParams.boto3['Certificates'] = jsonRequestBody.certificates;
+        reqParams.cli['--certificates'] = jsonRequestBody.certificates;
+
+        reqParams.cfn['ListenerArn'] = jsonRequestBody.listenerArn;
+        reqParams.cfn['Certificates'] = jsonRequestBody.certificates;
+
+        outputs.push({
+            'region': region,
+            'service': 'elbv2',
+            'method': {
+                'api': 'AddListenerCertificates',
+                'boto3': 'add_listener_certificates',
+                'cli': 'add-listener-certificates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('elbv2', details.requestId),
+            'region': region,
+            'service': 'elbv2',
+            'type': 'AWS::ElasticLoadBalancingV2::ListenerCertificate',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateDocumentationVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/documentation\/versions$/g)) {
+        reqParams.boto3['RestApiId'] = /^\/restapis\/(.+)\/documentation\/versions$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/documentation\/versions$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['DocumentationVersion'] = jsonRequestBody.contentString.documentationVersion;
+        reqParams.cli['--documentation-version'] = jsonRequestBody.contentString.documentationVersion;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['StageName'] = jsonRequestBody.contentString.stageName;
+        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
+
+        reqParams.cfn['RestApiId'] = /^\/restapis\/(.+)\/documentation\/versions$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['DocumentationVersion'] = jsonRequestBody.contentString.documentationVersion;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateDocumentationVersion',
+                'boto3': 'create_documentation_version',
+                'cli': 'create-documentation-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::DocumentationVersion',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigateway.CreateBasePathMapping
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/domainname\/.+\/basepathmappings$/g)) {
+        reqParams.boto3['DomainName'] = /^\/domainname\/(.+)\/basepathmappings$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--domain-name'] = /^\/domainname\/(.+)\/basepathmappings$/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['BasePath'] = jsonRequestBody.contentString.basePath;
+        reqParams.cli['--base-path'] = jsonRequestBody.contentString.basePath;
+        reqParams.boto3['RestApiId'] = jsonRequestBody.contentString.restApiId;
+        reqParams.cli['--rest-api-id'] = jsonRequestBody.contentString.restApiId;
+        reqParams.boto3['Stage'] = jsonRequestBody.contentString.stage;
+        reqParams.cli['--stage'] = jsonRequestBody.contentString.stage;
+
+        reqParams.cfn['DomainName'] = /^\/domainname\/(.+)\/basepathmappings$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['BasePath'] = jsonRequestBody.contentString.basePath;
+        reqParams.cfn['RestApiId'] = jsonRequestBody.contentString.restApiId;
+        reqParams.cfn['Stage'] = jsonRequestBody.contentString.stage;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigateway',
+            'method': {
+                'api': 'CreateBasePathMapping',
+                'boto3': 'create_base_path_mapping',
+                'cli': 'create-base-path-mapping'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGateway::BasePathMapping',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpcPeeringConnection
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcPeeringConnection\?/g)) {
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+        reqParams.boto3['PeerVpcId'] = jsonRequestBody.peerVpcId;
+        reqParams.cli['--peer-vpc-id'] = jsonRequestBody.peerVpcId;
+        reqParams.boto3['PeerOwnerId'] = jsonRequestBody.peerOwnerId;
+        reqParams.cli['--peer-owner-id'] = jsonRequestBody.peerOwnerId;
+        reqParams.boto3['PeerRegion'] = jsonRequestBody.PeerRegion;
+        reqParams.cli['--peer-region'] = jsonRequestBody.PeerRegion;
+
+        reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cfn['PeerVpcId'] = jsonRequestBody.peerVpcId;
+        reqParams.cfn['PeerOwnerId'] = jsonRequestBody.peerOwnerId;
+        reqParams.cfn['PeerRegion'] = jsonRequestBody.PeerRegion;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpcPeeringConnection',
+                'boto3': 'create_vpc_peering_connection',
+                'cli': 'create-vpc-peering-connection'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCPeeringConnection',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteVpcPeeringConnection
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcPeeringConnection\?/g)) {
+        reqParams.boto3['VpcPeeringConnectionId'] = jsonRequestBody.vpcPeeringConnectionId;
+        reqParams.cli['--vpc-peering-connection-id'] = jsonRequestBody.vpcPeeringConnectionId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteVpcPeeringConnection',
+                'boto3': 'delete_vpc_peering_connection',
+                'cli': 'delete-vpc-peering-connection'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kms:kms.CreateKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createKey") {
+        reqParams.boto3['Policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.cli['--policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['Origin'] = jsonRequestBody.contentString.Origin;
+        reqParams.cli['--origin'] = jsonRequestBody.contentString.Origin;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cfn['KeyPolicy'] = jsonRequestBody.contentString.Policy;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['description'] = jsonRequestBody.contentString.Description;
+        reqParams.tf['policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.tf['tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'CreateKey',
+                'boto3': 'create_key',
+                'cli': 'create-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kms', details.requestId),
+            'region': region,
+            'service': 'kms',
+            'type': 'AWS::KMS::Key',
+            'terraformType': 'aws_kms_key',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:kms:kms.CreateAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createAlias") {
+        reqParams.boto3['AliasName'] = jsonRequestBody.contentString.AliasName;
+        reqParams.cli['--alias-name'] = jsonRequestBody.contentString.AliasName;
+        reqParams.boto3['TargetKeyId'] = jsonRequestBody.contentString.TargetKeyId;
+        reqParams.cli['--target-key-id'] = jsonRequestBody.contentString.TargetKeyId;
+
+        reqParams.cfn['AliasName'] = jsonRequestBody.contentString.AliasName;
+        reqParams.cfn['TargetKeyId'] = jsonRequestBody.contentString.TargetKeyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'CreateAlias',
+                'boto3': 'create_alias',
+                'cli': 'create-alias'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kms', details.requestId),
+            'region': region,
+            'service': 'kms',
+            'type': 'AWS::KMS::Alias',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+
+    // autogen:cloudfront:cloudfront.CreateCloudFrontOriginAccessIdentity
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createOai") {
+        reqParams.boto3['CloudFrontOriginAccessIdentityConfig'] = {
+            'CallerReference': gwtRequest.args[0].value.timestamp,
+            'Comment': gwtRequest.args[0].value.comment
+        };
+        reqParams.cli['--cloud-front-origin-access-identity-config'] = {
+            'CallerReference': gwtRequest.args[0].value.timestamp,
+            'Comment': gwtRequest.args[0].value.comment
+        };
+
+        reqParams.cfn['CloudFrontOriginAccessIdentityConfig'] = {
+            'Comment': gwtRequest.args[0].value.comment
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudfront',
+            'method': {
+                'api': 'CreateCloudFrontOriginAccessIdentity',
+                'boto3': 'create_cloud_front_origin_access_identity',
+                'cli': 'create-cloud-front-origin-access-identity'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cloudfront', details.requestId),
+            'region': region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
