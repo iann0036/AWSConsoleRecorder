@@ -12356,6 +12356,7 @@ function analyseRequest(details) {
     // manual:elasticache:elasticache.DescribeSnapshots
     // manual:elasticache:elasticache.CreateCacheParameterGroup
     // manual:elasticache:ec2.DescribeAvailabilityZones
+    // manual:elasticache:elasticache.CreateReplicationGroup
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticache\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
@@ -12643,6 +12644,44 @@ function analyseRequest(details) {
                     'options': reqParams,
                     'requestDetails': details
                 });
+            } else if (action['action'] == "amazon.acs.acsconsole.shared.ReplicationGroupContext.create") {
+                reqParams.boto3['PrimaryClusterId'] = action['parameters'][0]['primaryClusterId'];
+                reqParams.cli['--primary-cluster-id'] = action['parameters'][0]['primaryClusterId'];
+                reqParams.boto3['ReplicationGroupDescription'] = action['parameters'][0]['replicationGroupDescription'];
+                reqParams.cli['--replication-group-description'] = action['parameters'][0]['replicationGroupDescription'];
+                reqParams.boto3['ReplicationGroupId'] = action['parameters'][0]['replicationGroupId'];
+                reqParams.cli['--replication-group-id'] = action['parameters'][0]['replicationGroupId'];
+
+                reqParams.cfn['PrimaryClusterId'] = action['parameters'][0]['primaryClusterId'];
+                reqParams.cfn['ReplicationGroupDescription'] = action['parameters'][0]['replicationGroupDescription'];
+                reqParams.cfn['ReplicationGroupId'] = action['parameters'][0]['replicationGroupId'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'elasticache',
+                    'method': {
+                        'api': 'CreateReplicationGroup',
+                        'boto3': 'create_replication_group',
+                        'cli': 'create-replication-group'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', details.requestId),
+                    'region': region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::ReplicationGroup',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+
+                if (blocking) {
+                    notifyBlocked();
+                    return {cancel: true};
+                }
             }
         }
         
@@ -13634,6 +13673,7 @@ function analyseRequest(details) {
     // autogen:rds:rds.DescribeDBClusterParameterGroups
     // autogen:rds:rds.DescribeDBSubnetGroups
     // autogen:rds:ec2.DescribeSecurityGroups
+    // autogen:rds:rds.CreateDBCluster
     // autogen:rds:rds.CreateDBInstance
     // autogen:rds:rds.DescribeEvents
     // autogen:rds:rds.DescribeDBLogFiles
@@ -13760,6 +13800,89 @@ function analyseRequest(details) {
                     'requestDetails': details
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.create") {
+                if (action['parameters'][0]['auroraReplicaCount']) {
+                    reqParams.boto3['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                    reqParams.cli['--backup-retention-period'] = action['parameters'][0]['backupRetentionPeriod'];
+                    reqParams.boto3['DatabaseName'] = action['parameters'][0]['DBName'];
+                    reqParams.cli['--database-name'] = action['parameters'][0]['DBName'];
+                    reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                    reqParams.cli['--db-cluster-identifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                    reqParams.boto3['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                    reqParams.cli['--db-cluster-parameter-group-name'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                    reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                    reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                    reqParams.boto3['DeletionProtection'] = action['parameters'][0]['deletionProtection'];
+                    reqParams.cli['--deletion-protection'] = action['parameters'][0]['deletionProtection'];
+                    reqParams.boto3['EnableCloudwatchLogsExports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
+                    reqParams.cli['--enable-cloudwatch-logs-exports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
+                    reqParams.boto3['Engine'] = action['parameters'][0]['engine'];
+                    reqParams.cli['--engine'] = action['parameters'][0]['engine'];
+                    reqParams.boto3['EngineMode'] = action['parameters'][0]['engineMode'];
+                    reqParams.cli['--engine-mode'] = action['parameters'][0]['engineMode'];
+                    reqParams.boto3['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                    reqParams.cli['--engine-version'] = action['parameters'][0]['engineVersion'];
+                    reqParams.boto3['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                    reqParams.cli['--master-user-password'] = action['parameters'][0]['masterUserPassword'];
+                    reqParams.boto3['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                    reqParams.cli['--master-username'] = action['parameters'][0]['masterUsername'];
+                    reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                    reqParams.cli['--port'] = action['parameters'][0]['port'];
+                    reqParams.boto3['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                    reqParams.cli['--preferred-maintenance-window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                    if (action['parameters'][0]['vpcSecurityGroupIds'] && action['parameters'][0]['vpcSecurityGroupIds'][0] != "-create-rds-default-security-group") {
+                        reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                        reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                    }
+
+                    reqParams.cfn['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                    reqParams.cfn['DatabaseName'] = action['parameters'][0]['DBName'];
+                    reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                    reqParams.cfn['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                    reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                    reqParams.cfn['DeletionProtection'] = action['parameters'][0]['deletionProtection'];
+                    reqParams.cfn['EnableCloudwatchLogsExports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
+                    reqParams.cfn['Engine'] = action['parameters'][0]['engine'];
+                    reqParams.cfn['EngineMode'] = action['parameters'][0]['engineMode'];
+                    reqParams.cfn['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                    reqParams.cfn['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
+                    reqParams.cfn['MasterUsername'] = action['parameters'][0]['masterUsername'];
+                    reqParams.cfn['Port'] = action['parameters'][0]['port'];
+                    reqParams.boto3['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                    if (action['parameters'][0]['vpcSecurityGroupIds'] && action['parameters'][0]['vpcSecurityGroupIds'][0] != "-create-rds-default-security-group") {
+                        reqParams.cfn['VPCSecurityGroups'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                    }
+        
+                    outputs.push({
+                        'region': region,
+                        'service': 'rds',
+                        'method': {
+                            'api': 'CreateDBCluster',
+                            'boto3': 'create_db_cluster',
+                            'cli': 'create-db-cluster'
+                        },
+                        'options': reqParams,
+                        'requestDetails': details
+                    });
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('rds', details.requestId),
+                        'region': region,
+                        'service': 'rds',
+                        'type': 'AWS::RDS::DBCluster',
+                        'options': reqParams,
+                        'requestDetails': details,
+                        'was_blocked': blocking
+                    });
+                }
+
+                var reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {}
+                };
+
                 reqParams.boto3['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
                 reqParams.cli['--auto-minor-version-upgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
                 reqParams.boto3['CopyTagsToSnapshot'] = action['parameters'][0]['copyTagsToSnapshot'];
@@ -13818,8 +13941,11 @@ function analyseRequest(details) {
                 reqParams.cli['--storage-type'] = action['parameters'][0]['storageType'];
                 reqParams.boto3['EnableCloudwatchLogsExports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
                 reqParams.cli['--enable-cloudwatch-logs-exports'] = action['parameters'][0]['enableCloudwatchLogsExports'];
-                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
-                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                if (action['parameters'][0]['vpcSecurityGroupIds'] && action['parameters'][0]['vpcSecurityGroupIds'][0] != "-create-rds-default-security-group") {
+                    reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                    reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                }
 
                 reqParams.cfn['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
                 reqParams.cfn['CopyTagsToSnapshot'] = action['parameters'][0]['copyTagsToSnapshot'];
@@ -13847,7 +13973,9 @@ function analyseRequest(details) {
                 reqParams.cfn['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
                 reqParams.cfn['PreferredMaintenanceWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
                 reqParams.cfn['StorageType'] = action['parameters'][0]['storageType'];
-                reqParams.cfn['VPCSecurityGroups'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                if (action['parameters'][0]['vpcSecurityGroupIds'] && action['parameters'][0]['vpcSecurityGroupIds'][0] != "-create-rds-default-security-group") {
+                    reqParams.cfn['VPCSecurityGroups'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                }
         
                 outputs.push({
                     'region': region,
@@ -26811,6 +26939,7 @@ function analyseRequest(details) {
     // autogen:neptune:neptune.DescribeDBParameterGroups
     // autogen:neptune:neptune.DescribeDBClusterParameterGroups
     // autogen:neptune:neptune.DescribeDBSubnetGroups
+    // autogen:neptune:neptune.CreateDBCluster
     // autogen:neptune:neptune.CreateDBInstance
     // autogen:neptune:ec2.DescribeSecurityGroups
     // autogen:neptune:ec2.DescribeAvailabilityZones
@@ -26951,6 +27080,73 @@ function analyseRequest(details) {
                     'requestDetails': details
                 });
             } else if (action['action'] == "com.amazonaws.console.rds.shared.DbInstanceContext.create") {
+                reqParams.boto3['EnableIAMDatabaseAuthentication'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
+                reqParams.cli['--enable-iam-database-authentication'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
+                reqParams.boto3['StorageEncrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.cli['--storage-encrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.boto3['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.cli['--backup-retention-period'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.boto3['Port'] = action['parameters'][0]['port'];
+                reqParams.cli['--port'] = action['parameters'][0]['port'];
+                reqParams.boto3['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                reqParams.cli['--db-cluster-parameter-group-name'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cli['--db-subnet-group-name'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cli['--db-cluster-identifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.boto3['Engine'] = action['parameters'][0]['engine'];
+                reqParams.cli['--engine'] = action['parameters'][0]['engine'];
+                reqParams.boto3['EngineVersion'] = action['parameters'][0]['engineVersion'];
+                reqParams.cli['--engine-version'] = action['parameters'][0]['engineVersion'];
+                reqParams.boto3['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cli['--kms-key-id'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.boto3['OptionGroupName'] = action['parameters'][0]['optionGroupName'];
+                reqParams.cli['--option-group-name'] = action['parameters'][0]['optionGroupName'];
+                reqParams.boto3['PreferredBackupWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cli['--preferred-backup-window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.boto3['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+                reqParams.cli['--vpc-security-group-ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                reqParams.cfn['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
+                reqParams.cfn['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
+                reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
+                reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
+                reqParams.cfn['PreferredBackupWindow'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.cfn['IamAuthEnabled'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
+                reqParams.cfn['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.cfn['StorageEncrypted'] = action['parameters'][0]['storageEncrypted'];
+                reqParams.cfn['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'neptune',
+                    'method': {
+                        'api': 'CreateDBCluster',
+                        'boto3': 'create_db_cluster',
+                        'cli': 'create-db-cluster'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('neptune', details.requestId),
+                    'region': region,
+                    'service': 'neptune',
+                    'type': 'AWS::Neptune::DBCluster',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {}
+                };
+
                 reqParams.boto3['AutoMinorVersionUpgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
                 reqParams.cli['--auto-minor-version-upgrade'] = action['parameters'][0]['autoMinorVersionUpgrade'];
                 reqParams.boto3['EnableIAMDatabaseAuthentication'] = action['parameters'][0]['enableIAMDatabaseAuthentication'];
@@ -33586,6 +33782,168 @@ function analyseRequest(details) {
             'region': region,
             'service': 'waf-regional',
             'type': 'AWS::WAFRegional::WebACLAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:s3:s3.HeadBucket
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'HeadBucket',
+                'boto3': 'head_bucket',
+                'cli': 'head-bucket'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:cloudformation.DescribeStacks
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "describeStack") {
+        reqParams.boto3['StackName'] = jsonRequestBody.stackArn;
+        reqParams.cli['--stack-name'] = jsonRequestBody.stackArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudformation',
+            'method': {
+                'api': 'DescribeStacks',
+                'boto3': 'describe_stacks',
+                'cli': 'describe-stacks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:secretsmanager:secretsmanager.GetSecretValue
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "GetSecretValue") {
+        reqParams.boto3['SecretId'] = jsonRequestBody.content.SecretId;
+        reqParams.cli['--secret-id'] = jsonRequestBody.content.SecretId;
+
+        outputs.push({
+            'region': region,
+            'service': 'secretsmanager',
+            'method': {
+                'api': 'GetSecretValue',
+                'boto3': 'get_secret_value',
+                'cli': 'get-secret-value'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:kinesisanalytics:kinesisanalyticsv2.AddApplicationReferenceDataSource
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationReferenceDataSource") {
+        reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
+        reqParams.boto3['CurrentApplicationVersionId'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.cli['--current-application-version-id'] = jsonRequestBody.content.CurrentApplicationVersionId;
+        reqParams.boto3['ReferenceDataSource'] = jsonRequestBody.content.ReferenceDataSource;
+        reqParams.cli['--reference-data-source'] = jsonRequestBody.content.ReferenceDataSource;
+
+        reqParams.cfn['ApplicationName'] = jsonRequestBody.content.ApplicationName;
+        reqParams.cfn['ReferenceDataSource'] = jsonRequestBody.content.ReferenceDataSource;
+
+        outputs.push({
+            'region': region,
+            'service': 'kinesisanalyticsv2',
+            'method': {
+                'api': 'AddApplicationReferenceDataSource',
+                'boto3': 'add_application_reference_data_source',
+                'cli': 'add-application-reference-data-source'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('kinesisanalyticsv2', details.requestId),
+            'region': region,
+            'service': 'kinesisanalyticsv2',
+            'type': 'AWS::KinesisAnalytics::ApplicationReferenceDataSource',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-identity.SetIdentityPoolRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/pool\/edit\/\?/g)) {
+        reqParams.boto3['IdentityPoolId'] = getUrlValue(details.url, 'id');
+        reqParams.boto3['Roles'] = {
+            'authenticated': jsonRequestBody.authRoleARN,
+            'unauthenticated': jsonRequestBody.unauthRoleARN
+        };
+        reqParams.boto3['RoleMappings'] = {};
+        
+        role_mappings_obj = JSON.parse(decodeURIComponent(jsonRequestBody.cipRoleMappingPerProviderAsString));
+        for (var k in role_mappings_obj) {
+            rules = [];
+
+            for (var i=0; i<role_mappings_obj[k]['rulesConfiguration']['rules'].length; i++) {
+                rules.push({
+                    'Claim': role_mappings_obj[k]['rulesConfiguration']['rules'][0]['claim'],
+                    'MatchType': role_mappings_obj[k]['rulesConfiguration']['rules'][0]['matchType'],
+                    'RoleARN': role_mappings_obj[k]['rulesConfiguration']['rules'][0]['roleARN'],
+                    'Value': role_mappings_obj[k]['rulesConfiguration']['rules'][0]['value']
+                });
+            }
+
+            reqParams.boto3['RoleMappings'][k] = {
+                'AmbiguousRoleResolution': role_mappings_obj[k]['ambiguousRoleResolution'],
+                'RulesConfiguration': {
+                    'Rules': rules
+                },
+                //'': role_mappings_obj[k]['identityProviderName'],
+                'Type': role_mappings_obj[k]['type']
+            };
+        }
+
+        reqParams.cli['--identity-pool-id'] = reqParams.boto3['IdentityPoolId'];
+        reqParams.cli['--roles'] = reqParams.boto3['Roles'];
+        reqParams.cli['--role-mappings'] = reqParams.boto3['RoleMappings'];
+
+        reqParams.cfn['IdentityPoolId'] = reqParams.boto3['IdentityPoolId'];
+        reqParams.cfn['Roles'] = reqParams.boto3['Roles'];
+        reqParams.cfn['RoleMappings'] = reqParams.boto3['RoleMappings'];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-identity',
+            'method': {
+                'api': 'SetIdentityPoolRoles',
+                'boto3': 'set_identity_pool_roles',
+                'cli': 'set-identity-pool-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-identity', details.requestId),
+            'region': region,
+            'service': 'cognito-identity',
+            'type': 'AWS::Cognito::IdentityPoolRoleAttachment',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
