@@ -11957,6 +11957,63 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:servicecatalog:servicecatalog.ProvisionProduct
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/stack\/launch\?/g)) {
+        reqParams.boto3['Tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        reqParams.boto3['NotificationArns'] = jsonRequestBody.notificationArns;
+        reqParams.cli['--notification-arns'] = jsonRequestBody.notificationArns;
+        reqParams.boto3['ProvisioningParameters'] = jsonRequestBody.provisioningParameters;
+        reqParams.cli['--provisioning-parameters'] = jsonRequestBody.provisioningParameters;
+        reqParams.boto3['ProvisionedProductName'] = jsonRequestBody.provisionedProductName;
+        reqParams.cli['--provisioned-product-name'] = jsonRequestBody.provisionedProductName;
+        reqParams.boto3['ProductId'] = jsonRequestBody.productId;
+        reqParams.cli['--product-id'] = jsonRequestBody.productId;
+        reqParams.boto3['ProvisioningArtifactId'] = jsonRequestBody.provisioningArtifactId;
+        reqParams.cli['--provisioning-artifact-id'] = jsonRequestBody.provisioningArtifactId;
+        reqParams.boto3['PathId'] = jsonRequestBody.pathId;
+        reqParams.cli['--path-id'] = jsonRequestBody.pathId;
+        reqParams.boto3['ProvisionToken'] = jsonRequestBody.provisionToken;
+        reqParams.cli['--provision-token'] = jsonRequestBody.provisionToken;
+
+        reqParams.cfn['Tags'] = jsonRequestBody.tags;
+        reqParams.cfn['NotificationArns'] = jsonRequestBody.notificationArns;
+        reqParams.cfn['ProvisioningParameters'] = jsonRequestBody.provisioningParameters;
+        reqParams.cfn['ProductName'] = jsonRequestBody.provisionedProductName;
+        reqParams.cfn['ProductId'] = jsonRequestBody.productId;
+        reqParams.cfn['ProvisioningArtifactId'] = jsonRequestBody.provisioningArtifactId;
+        reqParams.cfn['PathId'] = jsonRequestBody.pathId;
+
+        outputs.push({
+            'region': region,
+            'service': 'servicecatalog',
+            'method': {
+                'api': 'ProvisionProduct',
+                'boto3': 'provision_product',
+                'cli': 'provision-product'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('servicecatalog', details.requestId),
+            'region': region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::CloudFormationProvisionedProduct',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
     // autogen:servicecatalog:servicecatalog.CreateProduct
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/product\?/g)) {
         reqParams.boto3['Name'] = jsonRequestBody.name;
@@ -33948,6 +34005,105 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+        
+        return {};
+    }
+
+    // manual:ssm:ssm.RegisterTaskWithMaintenanceWindow
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTaskWithMaintenanceWindow") {
+        reqParams.boto3['WindowId'] = jsonRequestBody.contentString.WindowId;
+        reqParams.cli['--window-id'] = jsonRequestBody.contentString.WindowId;
+        reqParams.boto3['TaskType'] = jsonRequestBody.contentString.TaskType;
+        reqParams.cli['--task-type'] = jsonRequestBody.contentString.TaskType;
+        reqParams.boto3['Priority'] = jsonRequestBody.contentString.Priority;
+        reqParams.cli['--priority'] = jsonRequestBody.contentString.Priority;
+        reqParams.boto3['ServiceRoleArn'] = jsonRequestBody.contentString.ServiceRoleArn;
+        reqParams.cli['--service-role-arn'] = jsonRequestBody.contentString.ServiceRoleArn;
+        reqParams.boto3['MaxConcurrency'] = jsonRequestBody.contentString.MaxConcurrency;
+        reqParams.cli['--max-concurrency'] = jsonRequestBody.contentString.MaxConcurrency;
+        reqParams.boto3['MaxErrors'] = jsonRequestBody.contentString.MaxErrors;
+        reqParams.cli['--max-errors'] = jsonRequestBody.contentString.MaxErrors;
+        reqParams.boto3['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cli['--targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.boto3['TaskInvocationParameters'] = jsonRequestBody.contentString.TaskInvocationParameters;
+        reqParams.cli['--task-invocation-parameters'] = jsonRequestBody.contentString.TaskInvocationParameters;
+        reqParams.boto3['TaskArn'] = jsonRequestBody.contentString.TaskArn;
+        reqParams.cli['--task-arn'] = jsonRequestBody.contentString.TaskArn;
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+
+        reqParams.cfn['WindowId'] = jsonRequestBody.contentString.WindowId;
+        reqParams.cfn['TaskType'] = jsonRequestBody.contentString.TaskType;
+        reqParams.cfn['Priority'] = jsonRequestBody.contentString.Priority;
+        reqParams.cfn['ServiceRoleArn'] = jsonRequestBody.contentString.ServiceRoleArn;
+        reqParams.cfn['MaxConcurrency'] = jsonRequestBody.contentString.MaxConcurrency;
+        reqParams.cfn['MaxErrors'] = jsonRequestBody.contentString.MaxErrors;
+        reqParams.cfn['Targets'] = jsonRequestBody.contentString.Targets;
+        reqParams.cfn['TaskInvocationParameters'] = {}
+        if ('RunCommand' in jsonRequestBody.contentString.TaskInvocationParameters) {
+            reqParams.cfn['TaskInvocationParameters']['MaintenanceWindowRunCommandParameters'] = {
+                "TimeoutSeconds": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.TimeoutSeconds,
+                "Comment": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.Comment,
+                "OutputS3KeyPrefix": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.OutputS3KeyPrefix,
+                "Parameters": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.Parameters,
+                "DocumentHashType": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.DocumentHashType,
+                "ServiceRoleArn": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.ServiceRoleArn,
+                "NotificationConfig": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.NotificationConfig,
+                "OutputS3BucketName": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.OutputS3BucketName,
+                "DocumentHash": jsonRequestBody.contentString.TaskInvocationParameters.RunCommand.DocumentHash
+            };
+        }
+        if ('Automation' in jsonRequestBody.contentString.TaskInvocationParameters) {
+            reqParams.cfn['TaskInvocationParameters']['MaintenanceWindowAutomationParameters'] = {
+                "Parameters": jsonRequestBody.contentString.TaskInvocationParameters.Automation.Parameters,
+                "DocumentVersion": jsonRequestBody.contentString.TaskInvocationParameters.Automation.DocumentVersion
+            };
+        }
+        if ('StepFunctions' in jsonRequestBody.contentString.TaskInvocationParameters) {
+            reqParams.cfn['TaskInvocationParameters']['MaintenanceWindowStepFunctionsParameters'] = {
+                "Input": jsonRequestBody.contentString.TaskInvocationParameters.StepFunctions.Input,
+                "Name": jsonRequestBody.contentString.TaskInvocationParameters.StepFunctions.Name
+            };
+        }
+        if ('Lambda' in jsonRequestBody.contentString.TaskInvocationParameters) {
+            reqParams.cfn['TaskInvocationParameters']['MaintenanceWindowLambdaParameters'] = {
+                "ClientContext": jsonRequestBody.contentString.TaskInvocationParameters.Lambda.ClientContext,
+                "Qualifier": jsonRequestBody.contentString.TaskInvocationParameters.Lambda.Qualifier,
+                "Payload": jsonRequestBody.contentString.TaskInvocationParameters.Lambda.Payload
+            };
+        }
+        reqParams.cfn['TaskArn'] = jsonRequestBody.contentString.TaskArn;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cfn['Description'] = jsonRequestBody.contentString.Description;
+        
+        outputs.push({
+            'region': region,
+            'service': 'ssm',
+            'method': {
+                'api': 'RegisterTaskWithMaintenanceWindow',
+                'boto3': 'register_task_with_maintenance_window',
+                'cli': 'register-task-with-maintenance-window'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ssm', details.requestId),
+            'region': region,
+            'service': 'ssm',
+            'type': 'AWS::SSM::MaintenanceWindowTask',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
         
         return {};
     }
