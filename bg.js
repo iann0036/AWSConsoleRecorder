@@ -34294,7 +34294,7 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
-            
+        
         tracked_resources.push({
             'logicalId': getResourceName('ecr', details.requestId),
             'region': region,
@@ -34413,6 +34413,336 @@ function analyseRequest(details) {
                 'api': 'ListClusters',
                 'boto3': 'list_clusters',
                 'cli': 'list-clusters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mq:mq.UpdateBroker
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon\-mq\/api\/mq$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/\/brokers\/.+/g)) {
+        reqParams.boto3['BrokerId'] = /\/brokers\/(.+)/g.exec(jsonRequestBody.path)[1];
+        reqParams.cli['--broker-id'] = /\/brokers\/(.+)/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['Configuration'] = jsonRequestBody.contentString.configuration;
+        reqParams.cli['--configuration'] = jsonRequestBody.contentString.configuration;
+
+        reqParams.boto3['Broker'] = /\/brokers\/(.+)/g.exec(jsonRequestBody.path)[1];
+        reqParams.boto3['Configuration'] = {
+            'Id': jsonRequestBody.contentString.configuration.id,
+            'Revision': jsonRequestBody.contentString.configuration.revision
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'mq',
+            'method': {
+                'api': 'UpdateBroker',
+                'boto3': 'update_broker',
+                'cli': 'update-broker'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('mq', details.requestId),
+            'region': region,
+            'service': 'mq',
+            'type': 'AWS::AmazonMQ::ConfigurationAssociation',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.ListPipelines
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listPipelines") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'ListPipelines',
+                'boto3': 'list_pipelines',
+                'cli': 'list-pipelines'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.CreateChannel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createChannel") {
+        reqParams.boto3['channelName'] = jsonRequestBody.contentString.channelName;
+        reqParams.cli['--channel-name'] = jsonRequestBody.contentString.channelName;
+        reqParams.boto3['retentionPeriod'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.cli['--retention-period'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.boto3['tags'] = jsonRequestBody.contentString.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.tags;
+
+        reqParams.cfn['ChannelName'] = jsonRequestBody.contentString.channelName;
+        reqParams.cfn['RetentionPeriod'] = {
+            'NumberOfDays': jsonRequestBody.contentString.retentionPeriod.numberOfDays,
+            'Unlimited': jsonRequestBody.contentString.retentionPeriod.unlimited
+        };
+        if (jsonRequestBody.contentString.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.contentString.tags.length; i++) {
+                reqParams.cfn['Tags'].push({
+                    'Key': jsonRequestBody.contentString.tags[i].key,
+                    'Value': jsonRequestBody.contentString.tags[i].value
+                });
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'CreateChannel',
+                'boto3': 'create_channel',
+                'cli': 'create-channel'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('iotanalytics', details.requestId),
+            'region': region,
+            'service': 'iotanalytics',
+            'type': 'AWS::IoTAnalytics::Channel',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iot.CreateTopicRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iot$/g) && jsonRequestBody.operation == "createTopicRule") {
+        reqParams.boto3['topicRulePayload'] = jsonRequestBody.contentString;
+        reqParams.cli['--topic-rule-payload'] = jsonRequestBody.contentString;
+        reqParams.boto3['ruleName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--rule-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateTopicRule',
+                'boto3': 'create_topic_rule',
+                'cli': 'create-topic-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.ListChannels
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listChannels") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'ListChannels',
+                'boto3': 'list_channels',
+                'cli': 'list-channels'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.ListDatastores
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatastores") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'ListDatastores',
+                'boto3': 'list_datastores',
+                'cli': 'list-datastores'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.CreatePipeline
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createPipeline") {
+        reqParams.boto3['pipelineName'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.cli['--pipeline-name'] = jsonRequestBody.contentString.pipelineName;
+        reqParams.boto3['pipelineActivities'] = jsonRequestBody.contentString.pipelineActivities;
+        reqParams.cli['--pipeline-activities'] = jsonRequestBody.contentString.pipelineActivities;
+        reqParams.boto3['tags'] = jsonRequestBody.contentString.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'CreatePipeline',
+                'boto3': 'create_pipeline',
+                'cli': 'create-pipeline'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('iotanalytics', details.requestId),
+            'region': region,
+            'service': 'iotanalytics',
+            'type': 'AWS::IoTAnalytics::Channel',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.CreateDatastore
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDatastore") {
+        reqParams.boto3['datastoreName'] = jsonRequestBody.contentString.datastoreName;
+        reqParams.cli['--datastore-name'] = jsonRequestBody.contentString.datastoreName;
+        reqParams.boto3['retentionPeriod'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.cli['--retention-period'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.boto3['tags'] = jsonRequestBody.contentString.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.tags;
+
+        reqParams.cfn['DatastoreName'] = jsonRequestBody.contentString.channelName;
+        reqParams.cfn['RetentionPeriod'] = {
+            'NumberOfDays': jsonRequestBody.contentString.retentionPeriod.numberOfDays,
+            'Unlimited': jsonRequestBody.contentString.retentionPeriod.unlimited
+        };
+        if (jsonRequestBody.contentString.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.contentString.tags.length; i++) {
+                reqParams.cfn['Tags'].push({
+                    'Key': jsonRequestBody.contentString.tags[i].key,
+                    'Value': jsonRequestBody.contentString.tags[i].value
+                });
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'CreateDatastore',
+                'boto3': 'create_datastore',
+                'cli': 'create-datastore'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('iotanalytics', details.requestId),
+            'region': region,
+            'service': 'iotanalytics',
+            'type': 'AWS::IoTAnalytics::Datastore',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.DeleteChannel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteChannel") {
+        reqParams.boto3['channelName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--channel-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'DeleteChannel',
+                'boto3': 'delete_channel',
+                'cli': 'delete-channel'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.DeletePipeline
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deletePipeline") {
+        reqParams.boto3['pipelineName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--pipeline-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'DeletePipeline',
+                'boto3': 'delete_pipeline',
+                'cli': 'delete-pipeline'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.DeleteDatastore
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteDatastore") {
+        reqParams.boto3['datastoreName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--datastore-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'DeleteDatastore',
+                'boto3': 'delete_datastore',
+                'cli': 'delete-datastore'
             },
             'options': reqParams,
             'requestDetails': details
