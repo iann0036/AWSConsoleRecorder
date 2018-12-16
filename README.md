@@ -1,6 +1,6 @@
 # Console Recorder for AWS
 
-![CloudFormation](https://img.shields.io/badge/CloudFormation-96%25-orange.svg) ![Terraform](https://img.shields.io/badge/Terraform-29%25-blue.svg) ![API](https://img.shields.io/badge/SDK%2FCLI-17%25-lightgrey.svg)
+[![CloudFormation](https://img.shields.io/badge/CloudFormation-96%25-orange.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#cloudformation-resource-coverage) [![Terraform](https://img.shields.io/badge/Terraform-29%25-blue.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#terraform-coverage) [![SDK/CLI](https://img.shields.io/badge/SDK%2FCLI-17%25-lightgrey.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#service-coverage)
 
 > Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation/Terraform templates.
 
