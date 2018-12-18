@@ -3,6 +3,27 @@ var compiled;
 var go_first_output;
 var recording = false;
 var intercept = false;
+var theme = "material";
+
+setTimeout(function(){
+    chrome.storage.local.get('blocking', function (isBlocking) {
+        if (isBlocking.blocking !== undefined) {
+            blocking = isBlocking.blocking;
+        }
+    });
+    
+    chrome.storage.local.get('intercept', function (isIntercepting) {
+        if (isIntercepting.intercept !== undefined) {
+            intercept = isIntercepting.intercept;
+        }
+    });
+    
+    chrome.storage.local.get('theme', function (whichTheme) {
+        if (whichTheme.theme !== undefined) {
+            theme = whichTheme.theme;
+        }
+    });
+}, 1);
 
 function interpretGwtArg(tracker, expected_type) {
     var index = parseInt(tracker.pipesplit[tracker.cursor]);
@@ -1335,14 +1356,23 @@ chrome.runtime.onMessage.addListener(
             sendResponse(compileOutputs());
         } else if (message.action == "setBlockingOn") {
             blocking = true;
+            chrome.storage.local.set({blocking: true});
             sendResponse(true);
         } else if (message.action == "setBlockingOff") {
             blocking = false;
+            chrome.storage.local.set({blocking: false});
             sendResponse(true);
         } else if (message.action == "getBlockingStatus") {
             sendResponse(blocking);
+        } else if (message.action == "getTheme") {
+            sendResponse(theme);
+        } else if (message.action == "setTheme") {
+            theme = message.theme;
+            chrome.storage.local.set({theme: theme});
+            sendResponse(true);
         } else if (message.action == "setInterceptOn") {
             intercept = true;
+            chrome.storage.local.set({intercept: true});
 
             /* TODO: Check if required
             chrome.tabs.query(
@@ -1367,6 +1397,7 @@ chrome.runtime.onMessage.addListener(
             sendResponse(true);
         } else if (message.action == "setInterceptOff") {
             intercept = false;
+            chrome.storage.local.set({intercept: false});
 
             /* TODO: Check if required
             chrome.debugger.onEvent.removeListener(allEventHandler);
