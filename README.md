@@ -52,6 +52,10 @@ This option will record the response body from all AWS calls. Setting this allow
 
 :warning: **Note:** When Intercept Responses is set in Google Chrome, a notification telling you the extension is debugging the browser is shown for the duration of the recording for security purposes.
 
+## Security
+
+Network data from the AWS Management Console is recorded and information is extracted from the requests and responses. Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
+
 ## Coverage
 
 Not all actions and resources are supported yet, check [this page](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md) for an up-to-date overview of supported actions and resources. This page is automatically generated.
