@@ -28,6 +28,16 @@ Click the orange _Console Recorder for AWS_ icon in the top-right corner of your
 
 All supported actions will be recorded up until the point in which you click the icon again and select the **Stop Recording** button, at which point you will be presented with the dashboard for you to copy code from.
 
+The following outputs are currently supported:
+
+* Boto3 (Python) SDK
+* AWS CLI (v1)
+* JavaScript SDK
+* Go SDK (v1)
+* CloudFormation
+* HashiCorp Terraform
+* CDK (TypeScript)
+
 ## Settings
 
 In the Settings section, there are a number of options you can set. These options take effect as soon as you change them.

@@ -685,6 +685,74 @@ function processCfnParameter(param, spacing, index) {
     return undefined;
 }
 
+function processCdktsParameter(param, spacing, index) {
+    var paramitems = [];
+
+    if (param === undefined || param === null)
+        return undefined;
+    if (typeof param == "boolean") {
+        if (param)
+            return "true";
+        return "false";
+    }
+    if (typeof param == "number")
+        return `${param}`;
+    if (typeof param == "string") {
+        if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
+            return undefined; // TODO: Fix this
+        }
+
+        for (var i=0; i<index; i++) { // correlate
+            if (tracked_resources[i].returnValues) {
+                if (tracked_resources[i].returnValues.Ref == param) {
+                    return tracked_resources[i].logicalId + ".ref";
+                }
+                if (tracked_resources[i].returnValues.GetAtt) {
+                    for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                            return tracked_resources[i].logicalId + ".getAtt('" + attr_name + "')"
+                        }
+                    }
+                }
+            }
+        }
+
+        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
+    }
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            var item = processCdktsParameter(paramitem, spacing + 4, index);
+            if (item !== undefined) {
+                paramitems.push(item);
+            }
+        });
+
+        return `[
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + ']';
+    }
+    if (typeof param == "object") {
+        Object.keys(param).forEach(function (key) {
+            var item = processCdktsParameter(param[key], spacing + 4, index);
+            if (item !== undefined) {
+                paramitems.push(lcfirststr(key) + ": " + processCdktsParameter(param[key], spacing + 4, index));
+            }
+        });
+
+        return `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + '}';
+    }
+    
+    return undefined;
+}
+
 function processJsParameter(param, spacing) {
     var paramitems = [];
 
@@ -913,6 +981,49 @@ function getResourceName(service, requestId) {
     return service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
 }
 
+function lcfirststr(str) {
+    var ret = str.charAt(0).toLowerCase();
+
+    if (str.length > 1 && str[1].toUpperCase() == str[1]) {
+        var i = 1;
+        while (str.length > i && str[i].toUpperCase() == str[i]) {
+            ret += str[i].toLowerCase();
+            i++;
+        }
+        ret = ret.substring(0, ret.length-1) + ret.charAt(ret.length-1).toUpperCase() + str.substring(ret.length);
+    } else {
+        ret += str.substring(1);
+    }
+
+    return ret;
+}
+
+function outputMapCdkts(index, service, type, options, region, was_blocked, logicalId) {
+    var output = '';
+    var params = '';
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            if (options[option] !== undefined) {
+                var optionvalue = processCdktsParameter(options[option], 12, index);
+                params += `
+            ${lcfirststr(option)}: ${optionvalue},`;
+            }
+        }
+        params = "{" + params.substring(0, params.length - 1) + `
+        }`; // remove last comma
+    }
+
+    cdkservice = type.split("::")[1].toLowerCase();
+    cdktype = type.split("::")[2];
+
+    output += `        const ${logicalId} = new ${cdkservice}.cloudformation.${cdktype}Resource(this, '${logicalId}', ${params});${was_blocked ? ' // blocked' : ''}
+
+`;
+
+    return output;
+}
+
 function outputMapCfn(index, service, type, options, region, was_blocked, logicalId) {
     var output = '';
     var params = '';
@@ -1012,16 +1123,23 @@ function compileOutputs() {
             'cfn': '# No recorded actions yet',
             'tf': '# No recorded actions yet',
             'cli': '# No recorded actions yet',
-            'js': '// No recorded actions yet'
+            'js': '// No recorded actions yet',
+            'cdkts': '// No recorded actions yet'
         };
     }
 
     var services = {
-        'go': []
-    }
+        'go': [],
+        'cdkts': []
+    };
     for (var i=0; i<outputs.length; i++) {
         if (!services['go'].includes(outputs[i].service)) {
             services['go'].push(outputs[i].service);
+        }
+    }
+    for (var i=0; i<tracked_resources.length; i++) {
+        if (tracked_resources[i].type && !services['cdkts'].includes(tracked_resources[i].type.split("::")[1].toLowerCase())) {
+            services['cdkts'].push(tracked_resources[i].type.split("::")[1].toLowerCase());
         }
     }
 
@@ -1061,7 +1179,18 @@ provider "aws" {
 `,
         'js': `// npm install aws-sdk
 
-var AWS = require('aws-sdk');`
+var AWS = require('aws-sdk');`,
+        'cdkts': `// npm i -g aws-cdk
+
+${services.cdkts.map(service => `import ${service} = require('@aws-cdk/aws-${service}');`).join(`
+`)}
+import cdk = require('@aws-cdk/cdk');
+
+class MyStack extends cdk.Stack {
+    constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
+        super(parent, name, props);
+
+`
     }
     declared_services = {
         'boto3': [],
@@ -1087,11 +1216,30 @@ var AWS = require('aws-sdk');`
     for (var i=0; i<tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
         if (tracked_resources[i].terraformType) {
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
     }
+    for (var i=0; i<tracked_resources.length; i++) {
+        if (tracked_resources[i].type) {
+            compiled['cdkts'] = compiled['cdkts'].substring(0, compiled['cdkts'].length-1); // trim a newline
+            compiled['cdkts'] += `
+        new cdk.Output(this, '${tracked_resources[i].logicalId}Ref', { value: ${tracked_resources[i].logicalId}.ref, disableExport: true });`;
+        }
+    }
+
+    compiled['cdkts'] += `
+    }
+}
+
+const app = new cdk.App();
+
+new MyStack(app, 'my-stack-name', { env: { region: '${tracked_resources[0].region}' } });
+
+app.run();
+`;
 
     return compiled;
 }

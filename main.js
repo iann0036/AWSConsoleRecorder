@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor;
+var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor, cdkts_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -24,7 +24,6 @@ window.onload = function(){
     chrome.runtime.sendMessage(null, {
         "action": "getTheme"
     }, null, function(theme){
-        console.dir(theme);
         chrome.runtime.sendMessage(null, {
             "action": "getCompiledOutputs"
         }, null, function(response){
@@ -36,9 +35,6 @@ window.onload = function(){
                 indentUnit: 4
             });
             boto3_editor.getDoc().setValue(response['boto3']);
-            setTimeout(function() {
-                boto3_editor.refresh();
-            },1);
     
             go_editor = CodeMirror.fromTextArea(document.getElementById('go'), {
                 lineNumbers: true,
@@ -48,9 +44,6 @@ window.onload = function(){
                 indentUnit: 4
             });
             go_editor.getDoc().setValue(response['go']);
-            setTimeout(function() {
-                go_editor.refresh();
-            },1);
     
             cfn_editor = CodeMirror.fromTextArea(document.getElementById('cfn'), {
                 lineNumbers: true,
@@ -60,9 +53,6 @@ window.onload = function(){
                 indentUnit: 4
             });
             cfn_editor.getDoc().setValue(response['cfn']);
-            setTimeout(function() {
-                cfn_editor.refresh();
-            },1);
     
             tf_editor = CodeMirror.fromTextArea(document.getElementById('tf'), {
                 lineNumbers: true,
@@ -72,10 +62,7 @@ window.onload = function(){
                 indentUnit: 4
             });
             tf_editor.getDoc().setValue(response['tf']);
-            setTimeout(function() {
-                tf_editor.refresh();
-            },1);
-    
+
             cli_editor = CodeMirror.fromTextArea(document.getElementById('cli'), {
                 lineNumbers: true,
                 lineWrapping: true,
@@ -84,9 +71,6 @@ window.onload = function(){
                 indentUnit: 4
             });
             cli_editor.getDoc().setValue(response['cli']);
-            setTimeout(function() {
-                cli_editor.refresh();
-            },1);
     
             js_editor = CodeMirror.fromTextArea(document.getElementById('js'), {
                 lineNumbers: true,
@@ -96,8 +80,24 @@ window.onload = function(){
                 indentUnit: 4
             });
             js_editor.getDoc().setValue(response['js']);
+    
+            cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: "javascript",
+                theme: theme,
+                indentUnit: 4
+            });
+            cdkts_editor.getDoc().setValue(response['cdkts']);
+            
             setTimeout(function() {
+                boto3_editor.refresh();
+                go_editor.refresh();
+                cfn_editor.refresh();
+                tf_editor.refresh();
+                cli_editor.refresh();
                 js_editor.refresh();
+                cdkts_editor.refresh();
             },1);
 
             $('#theme').val(theme).trigger('change');
@@ -115,6 +115,7 @@ window.onload = function(){
                     tf_editor.setOption("theme", evt.target.value);
                     cli_editor.setOption("theme", evt.target.value);
                     js_editor.setOption("theme", evt.target.value);
+                    cdkts_editor.setOption("theme", evt.target.value);
                 }
             };
         });
@@ -149,33 +150,21 @@ window.onload = function(){
             "action": "clearData"
         }, null, function(result){
             boto3_editor.getDoc().setValue("# No recorded actions yet");
+            go_editor.getDoc().setValue("// No recorded actions yet");
+            cfn_editor.getDoc().setValue("# No recorded actions yet");
+            tf_editor.getDoc().setValue("# No recorded actions yet");
+            cli_editor.getDoc().setValue("# No recorded actions yet");
+            js_editor.getDoc().setValue("// No recorded actions yet");
+            cdkts_editor.getDoc().setValue("// No recorded actions yet");
+
             setTimeout(function() {
                 boto3_editor.refresh();
-            },1);
-    
-            go_editor.getDoc().setValue("// No recorded actions yet");
-            setTimeout(function() {
                 go_editor.refresh();
-            },1);
-            
-            cfn_editor.getDoc().setValue("# No recorded actions yet");
-            setTimeout(function() {
                 cfn_editor.refresh();
-            },1);
-            
-            tf_editor.getDoc().setValue("# No recorded actions yet");
-            setTimeout(function() {
                 tf_editor.refresh();
-            },1);
-            
-            cli_editor.getDoc().setValue("# No recorded actions yet");
-            setTimeout(function() {
                 cli_editor.refresh();
-            },1);
-            
-            js_editor.getDoc().setValue("// No recorded actions yet");
-            setTimeout(function() {
                 js_editor.refresh();
+                cdkts_editor.refresh();
             },1);
             
             document.getElementById('cleardata_btn').innerHTML = "<span class=\"bold\">Cleared!</span>";
@@ -192,6 +181,7 @@ function resetMenu() {
     document.getElementById('cfn_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('tf_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('js_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('cdkts_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
     document.getElementById('boto3_container').style = "display: none;";
@@ -200,6 +190,7 @@ function resetMenu() {
     document.getElementById('cfn_container').style = "display: none;";
     document.getElementById('tf_container').style = "display: none;";
     document.getElementById('js_container').style = "display: none;";
+    document.getElementById('cdkts_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
 }
 
@@ -249,6 +240,14 @@ document.getElementById('js_menubtn').onclick = function(evt) {
     document.getElementById('js_container').style = "";
 
     js_editor.refresh();
+};
+
+document.getElementById('cdkts_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('cdkts_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('cdkts_container').style = "";
+
+    cdkts_editor.refresh();
 };
 
 document.getElementById('settings_menubtn').onclick = function(evt) {
