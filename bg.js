@@ -25,6 +25,17 @@ setTimeout(function(){
     });
 }, 1);
 
+function b64tonumber(str) {
+    var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$_'.split('')
+    var result = 0;
+    var input_tokens = str.split('');
+    var e;
+    for (var e in input_tokens) {
+        result = ( result * 64 ) + alphabet.indexOf( input_tokens[e] );
+    }
+    return result;
+}
+
 function interpretGwtArg(tracker, expected_type) {
     var index = parseInt(tracker.pipesplit[tracker.cursor]);
     if (index == 0) {
@@ -76,6 +87,18 @@ function interpretGwtArg(tracker, expected_type) {
         ret['value'] = val;
 
         return ret;
+    } else if (arg_type == "java.lang.Long/4227064769") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var val = b64tonumber(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        ret['value'] = val;
+
+        return ret;
     } else if (arg_type == "java.lang.Boolean/476441737") {
         var ret = {
             'type': arg_type
@@ -102,6 +125,26 @@ function interpretGwtArg(tracker, expected_type) {
             arr.push(interpretGwtArg(tracker));
         }
 
+        ret['value'] = arr;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.internal.ListWithAutoConstructFlag/2962671489") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var arr = [];
+        var auto_construct_flag = tracker.pipesplit[tracker.cursor];
+        tracker.cursor += 1;
+        var array_length = tracker.pipesplit[tracker.cursor];
+        tracker.cursor += 1;
+
+        for (var i=0; i<array_length; i++) {
+            arr.push(interpretGwtArg(tracker));
+        }
+
+        ret['auto_construct_flag'] = auto_construct_flag;
         ret['value'] = arr;
 
         return ret;
@@ -239,6 +282,52 @@ function interpretGwtArg(tracker, expected_type) {
         ret['cidr'] = cidr;
         ret['destination'] = destination;
         ret['action'] = action;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.route53.model.Change/107219911") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var action = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var recordset = interpretGwtArg(tracker);
+
+        ret['action'] = action;
+        ret['recordset'] = recordset;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.route53.model.ResourceRecordSet/2237386177") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        tracker.cursor += 5;
+        var recordname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 2;
+        var records = interpretGwtArg(tracker);
+
+        ret['recordname'] = recordname;
+        ret['records'] = records;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.route53.model.ResourceRecord/3609806506") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var value = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 2;
+        var ttl = interpretGwtArg(tracker); // oh my god!
+        tracker.cursor += 1;
+        var recordtype = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+
+        ret['value'] = value;
+        ret['ttl'] = ttl;
+        ret['recordtype'] = recordtype;
 
         return ret;
     } else if (arg_type == "com.amazonaws.services.cloudfront.model.CloudFrontOriginAccessIdentityConfig/902378263") {
@@ -425,6 +514,16 @@ function interpretGwtWireRequest(str) {
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'identityConfig'
         });
+    } else if (service == "com.amazonaws.route53.console.gwt.Route53Service" && method == "changeResourceRecordSets") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'zoneid'
+        });
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[1]),
+            'name': 'change'
+        });
+        
     }
 
     return {
@@ -982,6 +1081,10 @@ function getResourceName(service, requestId) {
 }
 
 function lcfirststr(str) {
+    if (str.toUpperCase() == str) {
+        return str.toLowerCase();
+    }
+
     var ret = str.charAt(0).toLowerCase();
 
     if (str.length > 1 && str[1].toUpperCase() == str[1]) {
@@ -1230,7 +1333,8 @@ class MyStack extends cdk.Stack {
         }
     }
 
-    compiled['cdkts'] += `
+    if (tracked_resources.length) {
+        compiled['cdkts'] += `
     }
 }
 
@@ -1240,6 +1344,7 @@ new MyStack(app, 'my-stack-name', { env: { region: '${tracked_resources[0].regio
 
 app.run();
 `;
+    }
 
     return compiled;
 }
@@ -32255,7 +32360,7 @@ function analyseRequest(details) {
             'logicalId': getResourceName('ec2', details.requestId),
             'region': region,
             'service': 'ec2',
-            'type': 'AWS::EC2::TransitGatewayAttachment',
+            'type': 'AWS::EC2::TransitGatewayRouteTable',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -35178,6 +35283,80 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+        
+        return {};
+    }
+
+    // manual:route53:route53.ChangeResourceRecordSets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "changeResourceRecordSets") {
+        reqParams.boto3['HostedZoneId'] = gwtRequest.args[0].value.value;
+        reqParams.cli['--hosted-zone-id'] = gwtRequest.args[0].value.value;
+
+        var changes = [];
+        for (var i=0; i<gwtRequest.args[1].value.value.length; i++) {
+            for (var j=0; j<gwtRequest.args[1].value.value[i].recordset.records.value.length; j++) {
+                changes.push({
+                    'Action': gwtRequest.args[1].value.value[i].action,
+                    'ResourceRecordSet': {
+                        'Name': gwtRequest.args[1].value.value[i].recordset.recordname,
+                        'Type': gwtRequest.args[1].value.value[i].recordset.records.value[j].recordtype,
+                        'TTL': gwtRequest.args[1].value.value[i].recordset.records.value[j].ttl.value,
+                        'ResourceRecords': [{
+                            'Value': gwtRequest.args[1].value.value[i].recordset.records.value[j].value
+                        }]
+                    }
+                });
+            }
+        }
+
+        reqParams.boto3['ChangeBatch'] = {
+            'Changes': changes
+        };
+        reqParams.cli['--change-batch'] = {
+            'Changes': changes
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'route53',
+            'method': {
+                'api': 'ChangeResourceRecordSets',
+                'boto3': 'change_resource_record_sets',
+                'cli': 'change-resource-record-sets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        for (var i=0; i<gwtRequest.args[1].value.value.length; i++) {
+            for (var j=0; j<gwtRequest.args[1].value.value[i].recordset.records.value.length; j++) {
+                if (gwtRequest.args[1].value.value[i].action == "CREATE") {
+                    var reqParams = {
+                        'boto3': {},
+                        'go': {},
+                        'cfn': {},
+                        'cli': {},
+                        'tf': {}
+                    };
+
+                    reqParams.cfn['HostedZoneId'] = gwtRequest.args[0].value.value;
+                    reqParams.cfn['Name'] = gwtRequest.args[1].value.value[i].recordset.recordname;
+                    reqParams.cfn['Type'] = gwtRequest.args[1].value.value[i].recordset.records.value[j].recordtype;
+                    reqParams.cfn['TTL'] = gwtRequest.args[1].value.value[i].recordset.records.value[j].ttl.value;
+                    reqParams.cfn['ResourceRecords'] = [gwtRequest.args[1].value.value[i].recordset.records.value[j].value];
+        
+                    tracked_resources.push({
+                        'logicalId': getResourceName('route53', details.requestId),
+                        'region': region,
+                        'service': 'route53',
+                        'type': 'AWS::Route53::RecordSet',
+                        'options': reqParams,
+                        'requestDetails': details,
+                        'was_blocked': blocking
+                    });
+                }
+            }
+        }
         
         return {};
     }
