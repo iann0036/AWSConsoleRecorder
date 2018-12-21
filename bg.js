@@ -1120,7 +1120,7 @@ function outputMapCdkts(index, service, type, options, region, was_blocked, logi
     cdkservice = type.split("::")[1].toLowerCase();
     cdktype = type.split("::")[2];
 
-    output += `        const ${logicalId} = new ${cdkservice}.cloudformation.${cdktype}Resource(this, '${logicalId}', ${params});${was_blocked ? ' // blocked' : ''}
+    output += `        const ${logicalId} = new ${cdkservice}.Cfn${cdktype}(this, '${logicalId}', ${params});${was_blocked ? ' // blocked' : ''}
 
 `;
 
