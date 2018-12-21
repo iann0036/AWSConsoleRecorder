@@ -18122,8 +18122,8 @@ function analyseRequest(details) {
             'Comment': getPipeSplitField(requestBody, 11)
         };
 
-        reqParams.tf['name'] = getPipeSplitField(requestBody, 11);
-        reqParams.tf['comment'] = getPipeSplitField(requestBody, 12);
+        reqParams.tf['name'] = getPipeSplitField(requestBody, 10);
+        reqParams.tf['comment'] = getPipeSplitField(requestBody, 11);
 
         outputs.push({
             'region': region,
