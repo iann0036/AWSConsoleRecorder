@@ -35557,7 +35557,7 @@ function analyseRequest(details) {
             'logicalId': getResourceName('iotanalytics', details.requestId),
             'region': region,
             'service': 'iotanalytics',
-            'type': 'AWS::IoTAnalytics::Channel',
+            'type': 'AWS::IoTAnalytics::Pipeline',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -35876,6 +35876,367 @@ function analyseRequest(details) {
                 'api': 'RebootInstances',
                 'boto3': 'reboot_instances',
                 'cli': 'reboot-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSpotFleetRequests
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/list_spot_requests\?/g)) {
+        reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'size');
+        reqParams.cli['--max-items'] = getUrlValue(details.url, 'size');
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSpotFleetRequests',
+                'boto3': 'describe_spot_fleet_requests',
+                'cli': 'describe-spot-fleet-requests'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_vpcs$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeKeyPairs
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_keypairs$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeKeyPairs',
+                'boto3': 'describe_key_pairs',
+                'cli': 'describe-key-pairs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAvailabilityZones
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_zones$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSecurityGroups
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_security_groups$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:iam.ListInstanceProfiles
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_instance_profiles$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListInstanceProfiles',
+                'boto3': 'list_instance_profiles',
+                'cli': 'list-instance-profiles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeLaunchTemplates
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/lt\/list_launch_templates$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeLaunchTemplates',
+                'boto3': 'describe_launch_templates',
+                'cli': 'describe-launch-templates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeLaunchTemplateVersions
+    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/lt\/describe_launchtemplate_data\?/g)) {
+        reqParams.boto3['LaunchTemplateId'] = getUrlValue(details.url, 'templateId');
+        reqParams.cli['--launch-template-id'] = getUrlValue(details.url, 'templateId');
+        reqParams.boto3['Versions'] = [getUrlValue(details.url, 'versionNumber')];
+        reqParams.cli['--versions'] = [getUrlValue(details.url, 'versionNumber')];
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeLaunchTemplateVersions',
+                'boto3': 'describe_launch_template_versions',
+                'cli': 'describe-launch-template-versions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.RequestSpotFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/fleet$/g)) {
+        var launch_template_configs = [];
+        for (var i=0; i<jsonRequestBody.launchTemplateConfigs.length; i++) {
+            var overrides = [];
+
+            if (jsonRequestBody.launchTemplateConfigs[i].overrides) {
+                for (var j=0; j<jsonRequestBody.launchTemplateConfigs[i].overrides.length; j++) {
+                    overrides.push({
+                        'InstanceType': jsonRequestBody.launchTemplateConfigs[i].overrides[j].instanceType,
+                        'SpotPrice': jsonRequestBody.launchTemplateConfigs[i].overrides[j].spotPrice,
+                        'SubnetId': jsonRequestBody.launchTemplateConfigs[i].overrides[j].subnetId,
+                        'AvailabilityZone': jsonRequestBody.launchTemplateConfigs[i].overrides[j].availabilityZone,
+                        'WeightedCapacity': jsonRequestBody.launchTemplateConfigs[i].overrides[j].weightedCapacity,
+                        'Priority': jsonRequestBody.launchTemplateConfigs[i].overrides[j].priority
+                    });
+                }
+            }
+
+            launch_template_configs.push({
+                'LaunchTemplateSpecification': {
+                    'LaunchTemplateId': jsonRequestBody.launchTemplateConfigs[i].launchTemplateSpecification.launchTemplateId,
+                    'Version': jsonRequestBody.launchTemplateConfigs[i].launchTemplateSpecification.version
+                },
+                'Overrides': overrides
+            });
+        }
+
+        reqParams.boto3['SpotFleetRequestConfig'] = {
+            'AllocationStrategy': jsonRequestBody.allocationStrategy,
+            'OnDemandAllocationStrategy': jsonRequestBody.onDemandAllocationStrategy,
+            'ExcessCapacityTerminationPolicy': jsonRequestBody.excessCapacityTerminationPolicy,
+            'FulfilledCapacity': jsonRequestBody.fulfilledCapacity,
+            'OnDemandFulfilledCapacity': jsonRequestBody.onDemandFulfilledCapacity,
+            'IamFleetRole': jsonRequestBody.iamFleetRole,
+            'LaunchSpecifications': jsonRequestBody.launchSpecifications, // TODO: Fix this
+            'LaunchTemplateConfigs': launch_template_configs,
+            'SpotPrice': jsonRequestBody.spotPrice,
+            'TargetCapacity': jsonRequestBody.targetCapacity,
+            'OnDemandTargetCapacity': jsonRequestBody.onDemandTargetCapacity,
+            'TerminateInstancesWithExpiration': jsonRequestBody.terminateInstancesWithExpiration,
+            'Type': jsonRequestBody.type,
+            'ValidFrom': jsonRequestBody.validFrom,
+            'ValidUntil': jsonRequestBody.validUntil,
+            'ReplaceUnhealthyInstances': jsonRequestBody.replaceUnhealthyInstances,
+            'InstanceInterruptionBehavior': jsonRequestBody.instanceInterruptionBehavior,
+            'InstancePoolsToUseCount': jsonRequestBody.instancePoolsToUseCount
+        };
+
+        reqParams.cli['--spot-fleet-request-config'] = reqParams.boto3['SpotFleetRequestConfig'];
+
+        reqParams.cfn['SpotFleetRequestConfigData'] = {
+            'AllocationStrategy': jsonRequestBody.allocationStrategy,
+            'ExcessCapacityTerminationPolicy': jsonRequestBody.excessCapacityTerminationPolicy,
+            'IamFleetRole': jsonRequestBody.iamFleetRole,
+            'InstanceInterruptionBehavior': jsonRequestBody.instanceInterruptionBehavior,
+            'LaunchSpecifications': jsonRequestBody.launchSpecifications, // TODO: Fix this
+            'LaunchTemplateConfigs': launch_template_configs,
+            'ReplaceUnhealthyInstances': jsonRequestBody.replaceUnhealthyInstances,
+            'SpotPrice': jsonRequestBody.spotPrice,
+            'TargetCapacity': jsonRequestBody.targetCapacity,
+            'TerminateInstancesWithExpiration': jsonRequestBody.terminateInstancesWithExpiration,
+            'Type': jsonRequestBody.type,
+            'ValidFrom': jsonRequestBody.validFrom,
+            'ValidUntil': jsonRequestBody.validUntils
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'RequestSpotFleet',
+                'boto3': 'request_spot_fleet',
+                'cli': 'request-spot-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SpotFleet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CancelSpotFleetRequests
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/bulkCancelFleets$/g)) {
+        reqParams.boto3['SpotFleetRequestIds'] = jsonRequestBody.spotFleetRequestIds;
+        reqParams.cli['--spot-fleet-request-ids'] = jsonRequestBody.spotFleetRequestIds;
+        reqParams.boto3['TerminateInstances'] = jsonRequestBody.terminateInstances;
+        reqParams.cli['--terminate-instances'] = jsonRequestBody.terminateInstances;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CancelSpotFleetRequests',
+                'boto3': 'cancel_spot_fleet_requests',
+                'cli': 'cancel-spot-fleet-requests'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.CreateDataset
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDataset") {
+        reqParams.boto3['DatasetName'] = jsonRequestBody.contentString.datasetName;
+        reqParams.cli['--dataset-name'] = jsonRequestBody.contentString.datasetName;
+        reqParams.boto3['Actions'] = jsonRequestBody.contentString.actions;
+        reqParams.cli['--actions'] = jsonRequestBody.contentString.actions;
+        reqParams.boto3['RetentionPeriod'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.cli['--retention-period'] = jsonRequestBody.contentString.retentionPeriod;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.tags;
+        reqParams.boto3['Triggers'] = jsonRequestBody.contentString.triggers;
+        reqParams.cli['--triggers'] = jsonRequestBody.contentString.triggers;
+
+        reqParams.cfn['DatasetName'] = jsonRequestBody.contentString.datasetName;
+        if (jsonRequestBody.contentString.actions) {
+            reqParams.cfn['Actions'] = [];
+
+            for (var i=0; i<jsonRequestBody.contentString.actions.length; i++) {
+                reqParams.cfn['Actions'].push({
+                    'ActionName': jsonRequestBody.contentString.actions[i].actionName,
+                    'QueryAction': {
+                        'SqlQuery': jsonRequestBody.contentString.actions[i].queryAction.sqlQuery,
+                        'Filters': jsonRequestBody.contentString.actions[i].queryAction.filters
+                    }
+                });
+            }
+        }
+        reqParams.cfn['RetentionPeriod'] = {
+            'Unlimited': jsonRequestBody.contentString.retentionPeriod.unlimited,
+            'NumberOfDays': jsonRequestBody.contentString.retentionPeriod.numberOfDays
+        };
+        if (jsonRequestBody.contentString.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var i=0; i<jsonRequestBody.contentString.tags.length; i++) {
+                reqParams.cfn['Tags'].push({
+                    'Key': jsonRequestBody.contentString.tags[i].key,
+                    'Value': jsonRequestBody.contentString.tags[i].value
+                });
+            }
+        }
+        if (jsonRequestBody.contentString.triggers) {
+            reqParams.cfn['Triggers'] = [];
+
+            for (var i=0; i<jsonRequestBody.contentString.triggers.length; i++) {
+                reqParams.cfn['Triggers'].push({
+                    'Schedule': {
+                        'ScheduleExpression': jsonRequestBody.contentString.triggers[i].schedule.expression
+                    }
+                });
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'CreateDataset',
+                'boto3': 'create_dataset',
+                'cli': 'create-dataset'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('iotanalytics', details.requestId),
+            'region': region,
+            'service': 'iotanalytics',
+            'type': 'AWS::IoTAnalytics::Dataset',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });s
+        
+        return {};
+    }
+
+    // autogen:iotanalytics:iotanalytics.ListDatasets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatasets") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'iotanalytics',
+            'method': {
+                'api': 'ListDatasets',
+                'boto3': 'list_datasets',
+                'cli': 'list-datasets'
             },
             'options': reqParams,
             'requestDetails': details
