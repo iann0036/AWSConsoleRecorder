@@ -1168,6 +1168,10 @@ function processGoParameter(service, paramkey, param, spacing) {
             }
         });
 
+        if (paramitems.length == 0) {
+            return `[]*${service}.${paramkey}{}`;
+        }
+
         slicetype = `*${service}.${paramkey}`;
         if (paramitems[0].startsWith("aws.String(")) {
             slicetype = "*string";
@@ -1329,8 +1333,11 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
         for (option in options) {
             if (options[option] !== undefined) {
                 var optionvalue = processCfnParameter(options[option], 12, index);
-                params += `
+
+                if (optionvalue !== undefined) {
+                    params += `
             ${option}: ${optionvalue}`;
+                }
             }
         }
         params += `
@@ -2971,8 +2978,10 @@ function analyseRequest(details) {
         reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
         reqParams.cli['--description'] = jsonRequestBody.groupDescription;
         reqParams.cli['--group-name'] = jsonRequestBody.groupName;
-        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
-        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+        if (jsonRequestBody.vpcId && jsonRequestBody.vpcId.length) {
+            reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+            reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+        }
 
         reqParams.cfn['GroupDescription'] = jsonRequestBody.groupDescription;
         reqParams.cfn['GroupName'] = jsonRequestBody.groupName;
@@ -2980,7 +2989,9 @@ function analyseRequest(details) {
 
         reqParams.tf['description'] = jsonRequestBody.groupDescription;
         reqParams.tf['name'] = jsonRequestBody.groupName;
-        reqParams.tf['vpc_id'] = jsonRequestBody.vpcId;
+        if (jsonRequestBody.vpcId && jsonRequestBody.vpcId.length) {
+            reqParams.tf['vpc_id'] = jsonRequestBody.vpcId;
+        }
 
         outputs.push({
             'region': region,
@@ -3025,19 +3036,23 @@ function analyseRequest(details) {
         if (jsonRequestBody['ipPermissions']) {
             jsonRequestBody['ipPermissions'].forEach(ipPermission => {
                 var ipRangeObjects = [];
-                ipPermission['ipRangeObjects'].forEach(ipRangeObject => {
-                    ipRangeObjects.push({
-                        'Description': ipRangeObject['description'],
-                        'CidrIp': ipRangeObject['cidrIp']
+                if (ipPermission['ipRangeObjects']) {
+                    ipPermission['ipRangeObjects'].forEach(ipRangeObject => {
+                        ipRangeObjects.push({
+                            'Description': ipRangeObject['description'],
+                            'CidrIp': ipRangeObject['cidrIp']
+                        });
                     });
-                });
+                }
                 var ipv6RangeObjects = [];
-                ipPermission['ipv6RangeObjects'].forEach(ipv6RangeObject => {
-                    ipv6RangeObjects.push({
-                        'Description': ipv6RangeObject['description'],
-                        'CidrIpv6': ipv6RangeObject['CidrIpv6']
+                if (ipPermission['ipv6RangeObjects']) {
+                    ipPermission['ipv6RangeObjects'].forEach(ipv6RangeObject => {
+                        ipv6RangeObjects.push({
+                            'Description': ipv6RangeObject['description'],
+                            'CidrIpv6': ipv6RangeObject['CidrIpv6']
+                        });
                     });
-                });
+                }
                 reqParams.boto3['IpPermissions'].push({
                     'IpProtocol': ipPermission['ipProtocol'],
                     'FromPort': ipPermission['fromPort'],
@@ -10564,10 +10579,25 @@ function analyseRequest(details) {
 
         reqParams.cfn['UserData'] = jsonRequestBody.UserData;
         reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
-        reqParams.cfn['BlockDeviceMappings'] = jsonRequestBody.AutoScalingBlockDeviceMappings;
+        if (jsonRequestBody.AutoScalingBlockDeviceMappings) {
+            reqParams.cfn['BlockDeviceMappings'] = [];
+            for (var i=0; i<jsonRequestBody.AutoScalingBlockDeviceMappings.length; i++) {
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingDeviceName,
+                    'Ebs': {
+                        'VolumeSize': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeSize,
+                        'DeleteOnTermination': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingDeleteOnTermination,
+                        'SnapshotId': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingSnapshotId,
+                        'VolumeType': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeType,
+                        'Encrypted': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingEncrypted,
+                        'Iops': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingIops
+                    }
+                });
+            }
+        }
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cfn['IamInstanceProfile'] = jsonRequestBody.IamInstanceProfile;
-        reqParams.cfn['InstanceMonitoring'] = jsonRequestBody.InstanceMonitoring;
+        reqParams.cfn['InstanceMonitoring'] = jsonRequestBody.InstanceMonitoring.Enabled;
         reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
         reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
         reqParams.cfn['LaunchConfigurationName'] = jsonRequestBody.LaunchConfigurationName;
@@ -10662,8 +10692,8 @@ function analyseRequest(details) {
         reqParams.cli['--new-instances-protected-from-scale-in'] = jsonRequestBody.NewInstancesProtectedFromScaleIn;
         reqParams.boto3['ServiceLinkedRoleARN'] = jsonRequestBody.ServiceLinkedRoleARN;
         reqParams.cli['--service-linked-role-arn'] = jsonRequestBody.ServiceLinkedRoleARN;
-        reqParams.boto3['VPCZoneIdentifier'] = jsonRequestBody.VPCZoneIdentifier;
-        reqParams.cli['--vpc-zone-identifier'] = jsonRequestBody.VPCZoneIdentifier;
+        reqParams.boto3['VPCZoneIdentifier'] = jsonRequestBody.VPCZoneIdentifier.split(",");
+        reqParams.cli['--vpc-zone-identifier'] = jsonRequestBody.VPCZoneIdentifier.split(",");
 
         reqParams.cfn['AutoScalingGroupName'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.cfn['LaunchConfigurationName'] = jsonRequestBody.LaunchConfigurationName;
@@ -10673,7 +10703,7 @@ function analyseRequest(details) {
         reqParams.cfn['HealthCheckGracePeriod'] = jsonRequestBody.HealthCheckGracePeriod;
         reqParams.cfn['Tags'] = jsonRequestBody.Tags;
         reqParams.cfn['ServiceLinkedRoleARN'] = jsonRequestBody.ServiceLinkedRoleARN;
-        reqParams.cfn['VPCZoneIdentifier'] = jsonRequestBody.VPCZoneIdentifier;
+        reqParams.cfn['VPCZoneIdentifier'] = jsonRequestBody.VPCZoneIdentifier.split(",");
 
         outputs.push({
             'region': region,
@@ -36608,6 +36638,87 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
+        });
+        
+        return {};
+    }
+ 
+    // autogen:autoscaling-plans:autoscaling-plans.CreateScalingPlan
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "createScalingPlan") {
+        reqParams.boto3['ApplicationSource'] = jsonRequestBody.contentString.ApplicationSource;
+        reqParams.cli['--application-source'] = jsonRequestBody.contentString.ApplicationSource;
+        reqParams.boto3['ScalingInstructions'] = jsonRequestBody.contentString.ScalingInstructions;
+        reqParams.cli['--scaling-instructions'] = jsonRequestBody.contentString.ScalingInstructions;
+        reqParams.boto3['ScalingPlanName'] = jsonRequestBody.contentString.ScalingPlanName;
+        reqParams.cli['--scaling-plan-name'] = jsonRequestBody.contentString.ScalingPlanName;
+
+        reqParams.cfn['ApplicationSource'] = jsonRequestBody.contentString.ApplicationSource;
+        reqParams.cfn['ScalingInstructions'] = jsonRequestBody.contentString.ScalingInstructions;
+
+        outputs.push({
+            'region': region,
+            'service': 'autoscaling-plans',
+            'method': {
+                'api': 'CreateScalingPlan',
+                'boto3': 'create_scaling_plan',
+                'cli': 'create-scaling-plan'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'autoscaling-plans',
+            'type': 'AWS::AutoScalingPlans::ScalingPlan',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:autoscaling-plans:autoscaling-plans.DescribeScalingPlans
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "describeScalingPlans") {
+        reqParams.boto3['ScalingPlanNames'] = jsonRequestBody.contentString.ScalingPlanNames;
+        reqParams.cli['--scaling-plan-names'] = jsonRequestBody.contentString.ScalingPlanNames;
+        reqParams.boto3['ScalingPlanVersion'] = jsonRequestBody.contentString.ScalingPlanVersion;
+        reqParams.cli['--scaling-plan-version'] = jsonRequestBody.contentString.ScalingPlanVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'autoscaling-plans',
+            'method': {
+                'api': 'DescribeScalingPlans',
+                'boto3': 'describe_scaling_plans',
+                'cli': 'describe-scaling-plans'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:autoscaling-plans:autoscaling-plans.DeleteScalingPlan
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "deleteScalingPlan") {
+        reqParams.boto3['ScalingPlanName'] = jsonRequestBody.contentString.ScalingPlanName;
+        reqParams.cli['--scaling-plan-name'] = jsonRequestBody.contentString.ScalingPlanName;
+        reqParams.boto3['ScalingPlanVersion'] = jsonRequestBody.contentString.ScalingPlanVersion;
+        reqParams.cli['--scaling-plan-version'] = jsonRequestBody.contentString.ScalingPlanVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'autoscaling-plans',
+            'method': {
+                'api': 'DeleteScalingPlan',
+                'boto3': 'delete_scaling_plan',
+                'cli': 'delete-scaling-plan'
+            },
+            'options': reqParams,
+            'requestDetails': details
         });
         
         return {};
