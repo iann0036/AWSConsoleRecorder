@@ -36724,4 +36724,45 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.CreateVpc
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpc\?/g)) {
+        reqParams.boto3['CidrBlock'] = jsonRequestBody.CidrBlock;
+        reqParams.cli['--cidr-block'] = jsonRequestBody.CidrBlock;
+        reqParams.boto3['AmazonProvidedIpv6CidrBlock'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
+        reqParams.cli['--amazon-provided-ipv-6-cidr-block'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
+        reqParams.boto3['InstanceTenancy'] = jsonRequestBody.instanceTenancy;
+        reqParams.cli['--instance-tenancy'] = jsonRequestBody.instanceTenancy;
+
+        reqParams.cfn['CidrBlock'] = jsonRequestBody.CidrBlock;
+        reqParams.cfn['InstanceTenancy'] = jsonRequestBody.instanceTenancy;
+
+        reqParams.tf['cidr_block'] = jsonRequestBody.CidrBlock;
+        reqParams.tf['instance_tenancy'] = jsonRequestBody.instanceTenancy;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpc',
+                'boto3': 'create_vpc',
+                'cli': 'create-vpc'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPC',
+            'terraformType': 'aws_vpc',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
