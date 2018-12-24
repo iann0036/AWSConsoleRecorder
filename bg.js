@@ -30799,9 +30799,11 @@ function analyseRequest(details) {
             tls_policy = "Optional"
         }
 
-        var receipts = [];
-        for (var i=0; i<gwtRequest['args'][2].value.receipts.value.length; i++) {
-            receipts.push(gwtRequest['args'][2].value.receipts.value[i].value);
+        console.dir(gwtRequest);
+
+        var recipients = [];
+        for (var i=0; i<gwtRequest['args'][2].value.recipients.value.length; i++) {
+            recipients.push(gwtRequest['args'][2].value.recipients.value[i].value);
         }
 
         var actions = [];
@@ -30870,7 +30872,7 @@ function analyseRequest(details) {
             'TlsPolicy': tls_policy,
             'Recipients': recipients,
             'Actions': actions,
-            'ScanEnabled': gwtRequest['args'][2].value.spamvirusscanning
+            'ScanEnabled': (gwtRequest['args'][2].value.spamvirusscanning == 1)
         };
         reqParams.cli['--rule'] = reqParams.boto3['Rule'];
 
