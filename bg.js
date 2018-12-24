@@ -2247,7 +2247,13 @@ function setOutputsForTrackedResource(index) {
                 }
             };
         } else if (tracked_resources[index].type == "AWS::EC2::VPC") {
-            ; // TODO
+            tracked_resources[index].returnValues = {
+                'Ref': jsonRequestBody.Vpc.VpcId,
+                'GetAtt': {
+                    'CidrBlock': jsonRequestBody.Vpc.CidrBlock
+                    // TODO: More
+                }
+            };
         } else if (tracked_resources[index].type == "AWS::EC2::VPCCidrBlock") {
             ; // TODO
         } else if (tracked_resources[index].type == "AWS::EC2::VPCDHCPOptionsAssociation") {
