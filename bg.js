@@ -38,6 +38,7 @@ function b64tonumber(str) {
 
 function interpretGwtArg(tracker, expected_type) {
     var index = parseInt(tracker.pipesplit[tracker.cursor]);
+
     if (index == 0) {
         tracker.cursor += 1;
         return {
@@ -232,6 +233,182 @@ function interpretGwtArg(tracker, expected_type) {
         tracker.cursor += 1;
 
         ret['status'] = status;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.AddHeaderAction/467599610") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var headername = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var headervalue = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val3 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val4 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['headername'] = headername;
+        ret['headervalue'] = headervalue;
+        ret['val3'] = val3;
+        ret['val4'] = val4;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.BounceAction/1812843977") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var message = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var sender = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var smtpreplycode = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var statuscode = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val5 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['message'] = message;
+        ret['sender'] = sender;
+        ret['smtpreplycode'] = smtpreplycode;
+        ret['statuscode'] = statuscode;
+        ret['val5'] = val5;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.LambdaAction/1097769813") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var functionarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var invocationtype = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val3 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['functionarn'] = functionarn;
+        ret['invocationtype'] = invocationtype;
+        ret['val3'] = val3;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.S3Action/3998072397") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var bucketname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var kmskeyarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var objectkeyprefix = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val5 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['bucketname'] = bucketname;
+        ret['val2'] = val2;
+        ret['kmskeyarn'] = kmskeyarn;
+        ret['objectkeyprefix'] = objectkeyprefix;
+        ret['val5'] = val5;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.SNSAction/1093049066") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var encoding = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['encoding'] = encoding;
+        ret['val2'] = val2;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.WorkMailAction/4106534622") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var organizationarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var val2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['organizationarn'] = organizationarn;
+        ret['val2'] = val2;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.StopAction/708585167") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var val1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var topicarn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['val1'] = val1;
+        ret['topicarn'] = topicarn;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.inbound.ReceiptRule/4059515547") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var actions = interpretGwtArg(tracker);
+
+        var enabled = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        var recipients = interpretGwtArg(tracker);
+
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        var spamvirusscanning = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var tls = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        ret['actions'] = actions;
+        ret['recipients'] = recipients;
+        ret['name'] = name;
+        ret['enabled'] = enabled;
+        ret['spamvirusscanning'] = spamvirusscanning;
+        ret['tls'] = tls;
 
         return ret;
     } else if (arg_type == "amazonaws.console.vpc.dtos.FirewallRule/883972025") {
@@ -508,6 +685,23 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'inboundFilter'
+        });
+    } else if (service == "com.amazon.bacon.console.shared.services.SESService" && method == "createReceiptRule") {
+        args.push({
+            'value': tracker.params[parseInt(tracker.pipesplit[tracker.cursor])],
+            'name': 'ruleset'
+        });
+        tracker.cursor += 1;
+
+        args.push({
+            'value': tracker.params[parseInt(tracker.pipesplit[tracker.cursor])],
+            'name': 'afterrule'
+        });
+        tracker.cursor += 1;
+
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[2]),
+            'name': 'rule'
         });
     } else if (service == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && method == "createOai") {
         args.push({
@@ -30593,6 +30787,122 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ses:ses.CreateReceiptRule
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptRule") {
+        reqParams.boto3['RuleSetName'] = gwtRequest['args'][0].value;
+        reqParams.cli['--rule-set-name'] = gwtRequest['args'][0].value;
+        reqParams.boto3['After'] = gwtRequest['args'][1].value;
+        reqParams.cli['--after'] = gwtRequest['args'][1].value;
+
+        var tls_policy = "Require";
+        if (gwtRequest['args'][2].value.tls == 0) {
+            tls_policy = "Optional"
+        }
+
+        var receipts = [];
+        for (var i=0; i<gwtRequest['args'][2].value.receipts.value.length; i++) {
+            receipts.push(gwtRequest['args'][2].value.receipts.value[i].value);
+        }
+
+        var actions = [];
+        for (var i=0; i<gwtRequest['args'][2].value.actions.value.length; i++) {
+            if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.AddHeaderAction/467599610") {
+                actions.push({
+                    'AddHeaderAction': {
+                        'HeaderName': gwtRequest['args'][2].value.actions.value[i].headername,
+                        'HeaderValue': gwtRequest['args'][2].value.actions.value[i].headervalue
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.BounceAction/1812843977") {
+                actions.push({
+                    'BounceAction': {
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn,
+                        'SmtpReplyCode': gwtRequest['args'][2].value.actions.value[i].smtpreplycode,
+                        'StatusCode': gwtRequest['args'][2].value.actions.value[i].statuscode,
+                        'Message': gwtRequest['args'][2].value.actions.value[i].message,
+                        'Sender': gwtRequest['args'][2].value.actions.value[i].sender
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.LambdaAction/1097769813") {
+                actions.push({
+                    'LambdaAction': {
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn,
+                        'FunctionArn': gwtRequest['args'][2].value.actions.value[i].functionarn,
+                        'InvocationType': gwtRequest['args'][2].value.actions.value[i].invocationtype
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.S3Action/3998072397") {
+                actions.push({
+                    'S3Action': {
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn,
+                        'BucketName': gwtRequest['args'][2].value.actions.value[i].bucketname,
+                        'ObjectKeyPrefix': gwtRequest['args'][2].value.actions.value[i].objectkeyprefix,
+                        'KmsKeyArn': gwtRequest['args'][2].value.actions.value[i].kmskeyarn
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.SNSAction/1093049066") {
+                actions.push({
+                    'SNSAction': {
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn,
+                        'Encoding': gwtRequest['args'][2].value.actions.value[i].encoding
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.WorkMailAction/4106534622") {
+                actions.push({
+                    'WorkmailAction': {
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn,
+                        'OrganizationArn': gwtRequest['args'][2].value.actions.value[i].organizationarn
+                    }
+                });
+            } else if (gwtRequest['args'][2].value.actions.value[i].type == "com.amazon.bacon.console.shared.types.inbound.StopAction/708585167") {
+                actions.push({
+                    'StopAction': {
+                        'Scope': 'RuleSet',
+                        'TopicArn': gwtRequest['args'][2].value.actions.value[i].topicarn
+                    }
+                });
+            }
+        }
+
+        reqParams.boto3['Rule'] = {
+            'Name': gwtRequest['args'][2].value.name,
+            'Enabled': (gwtRequest['args'][2].value.enabled == 1),
+            'TlsPolicy': tls_policy,
+            'Recipients': recipients,
+            'Actions': actions,
+            'ScanEnabled': gwtRequest['args'][2].value.spamvirusscanning
+        };
+        reqParams.cli['--rule'] = reqParams.boto3['Rule'];
+
+        reqParams.cfn['RuleSetName'] = gwtRequest['args'][0].value;
+        reqParams.cfn['After'] = gwtRequest['args'][1].value;
+        reqParams.cfn['Rule'] = reqParams.boto3['Rule'];
+        
+        outputs.push({
+            'region': region,
+            'service': 'ses',
+            'method': {
+                'api': 'CreateReceiptRule',
+                'boto3': 'create_receipt_rule',
+                'cli': 'create-receipt-rule'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ses', details.requestId),
+            'region': region,
+            'service': 'ses',
+            'type': 'AWS::SES::ReceiptRule',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
     // manual:ses:sns.ListTopics
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SNSService" && gwtRequest['method'] == "listTopics") {
 
@@ -36220,7 +36530,7 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
-        });s
+        });
         
         return {};
     }
@@ -36240,6 +36550,62 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateRoute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRoute\?/g)) {
+        reqParams.boto3['RouteTableId'] = jsonRequestBody.routeTableId;
+        reqParams.cli['--route-table-id'] = jsonRequestBody.routeTableId;
+        reqParams.boto3['DestinationCidrBlock'] = jsonRequestBody.destinationCidrBlock;
+        reqParams.cli['--destination-cidr-block'] = jsonRequestBody.destinationCidrBlock;
+        reqParams.boto3['DestinationIpv6CidrBlock'] = jsonRequestBody.destinationIpv6CidrBlock;
+        reqParams.cli['--destination-ipv-6-cidr-block'] = jsonRequestBody.destinationIpv6CidrBlock;
+        reqParams.boto3['EgressOnlyInternetGatewayId'] = jsonRequestBody.egressOnlyInternetGatewayId;
+        reqParams.cli['--egress-only-internet-gateway-id'] = jsonRequestBody.egressOnlyInternetGatewayId;
+        reqParams.boto3['GatewayId'] = jsonRequestBody.gatewayId;
+        reqParams.cli['--gateway-id'] = jsonRequestBody.gatewayId;
+        reqParams.boto3['InterfaceId'] = jsonRequestBody.interfaceId;
+        reqParams.cli['--interface-id'] = jsonRequestBody.interfaceId;
+        reqParams.boto3['NatGatewayId'] = jsonRequestBody.natGatewayId;
+        reqParams.cli['--nat-gateway-id'] = jsonRequestBody.natGatewayId;
+        reqParams.boto3['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+        reqParams.cli['--network-interface-id'] = jsonRequestBody.networkInterfaceId;
+        reqParams.boto3['VpcPeeringConnectionId'] = jsonRequestBody.vpcPeeringConnectionId;
+        reqParams.cli['--vpc-peering-connection-id'] = jsonRequestBody.vpcPeeringConnectionId;
+
+        reqParams.cfn['RouteTableId'] = jsonRequestBody.routeTableId;
+        reqParams.cfn['DestinationCidrBlock'] = jsonRequestBody.destinationCidrBlock;
+        reqParams.cfn['GatewayId'] = jsonRequestBody.gatewayId;
+        reqParams.cfn['DestinationIpv6CidrBlock'] = jsonRequestBody.destinationIpv6CidrBlock;
+        reqParams.cfn['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+        reqParams.cfn['EgressOnlyInternetGatewayId'] = jsonRequestBody.egressOnlyInternetGatewayId;
+        reqParams.cfn['InterfaceId'] = jsonRequestBody.interfaceId;
+        reqParams.cfn['NatGatewayId'] = jsonRequestBody.natGatewayId;
+        reqParams.cfn['VpcPeeringConnectionId'] = jsonRequestBody.vpcPeeringConnectionId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateRoute',
+                'boto3': 'create_route',
+                'cli': 'create-route'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Route',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
