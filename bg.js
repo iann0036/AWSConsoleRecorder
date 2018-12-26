@@ -29016,6 +29016,11 @@ function analyseRequest(details) {
         reqParams.cfn['ResourceId'] = jsonRequestBody.resourceId[0];
         reqParams.cfn['RoleARN'] = jsonRequestBody.roleArn[0];
 
+        reqParams.tf['max_capacity'] = jsonRequestBody.maxCapacity[0];
+        reqParams.tf['min_capacity'] = jsonRequestBody.minCapacity[0];
+        reqParams.tf['resource_id'] = jsonRequestBody.resourceId[0];
+        reqParams.tf['role_arn'] = jsonRequestBody.roleArn[0];
+
         outputs.push({
             'region': region,
             'service': 'application-autoscaling',
@@ -29032,6 +29037,7 @@ function analyseRequest(details) {
             'logicalId': getResourceName('application-autoscaling', details.requestId),
             'region': region,
             'service': 'application-autoscaling',
+            'terraformType': 'aws_appautoscaling_target',
             'type': 'AWS::ApplicationAutoScaling::ScalableTarget',
             'options': reqParams,
             'requestDetails': details,
@@ -29084,6 +29090,20 @@ function analyseRequest(details) {
             }
         };
 
+        reqParams.tf['resource_id'] = jsonRequestBody.resourceId;
+        reqParams.tf['policy_type'] = jsonRequestBody.policyType;
+        reqParams.tf['name'] = jsonRequestBody.policyName;
+        reqParams.tf['service_namespace'] = "ecs";
+        reqParams.tf['scalable_dimension'] = "ecs:service:DesiredCount";
+        reqParams.tf['target_tracking_scaling_policy_configuration'] = {
+            'target_value': jsonRequestBody.targetValue,
+            'scale_out_cooldown': jsonRequestBody.scaleOutCooldown,
+            'scale_in_cooldown': jsonRequestBody.scaleInCooldown,
+            'predefined_metric_specification': {
+                'predefined_metric_type': jsonRequestBody.predefinedMetricSpecification.predefinedMetricType
+            }
+        };
+
         outputs.push({
             'region': region,
             'service': 'application-autoscaling',
@@ -29101,6 +29121,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'application-autoscaling',
             'type': 'AWS::ApplicationAutoScaling::ScalingPolicy',
+            'terraformType': 'aws_appautoscaling_policy',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -36763,6 +36784,238 @@ function analyseRequest(details) {
             'service': 'ec2',
             'type': 'AWS::EC2::VPC',
             'terraformType': 'aws_vpc',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:acm-pca:acm-pca.CreateCertificateAuthority
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.CreateCertificateAuthority") {
+        reqParams.boto3['CertificateAuthorityConfiguration'] = jsonRequestBody.contentString.CertificateAuthorityConfiguration;
+        reqParams.cli['--certificate-authority-configuration'] = jsonRequestBody.contentString.CertificateAuthorityConfiguration;
+        reqParams.boto3['RevocationConfiguration'] = jsonRequestBody.contentString.RevocationConfiguration;
+        reqParams.cli['--revocation-configuration'] = jsonRequestBody.contentString.RevocationConfiguration;
+        reqParams.boto3['CertificateAuthorityType'] = jsonRequestBody.contentString.CertificateAuthorityType;
+        reqParams.cli['--certificate-authority-type'] = jsonRequestBody.contentString.CertificateAuthorityType;
+
+        reqParams.tf['certificate_authority_configuration'] = {
+            'key_algorithm': jsonRequestBody.contentString.CertificateAuthorityConfiguration.KeyAlgorithm,
+            'signing_algorithm': jsonRequestBody.contentString.CertificateAuthorityConfiguration.SigningAlgorithm,
+            'subject': {
+                'country': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.Country,
+                'organization': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.Organization,
+                'organizational_unit': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.OrganizationalUnit,
+                'state': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.State,
+                'locality': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.Locality,
+                'common_name': jsonRequestBody.contentString.CertificateAuthorityConfiguration.Subject.CommonName
+            }
+        };
+        reqParams.tf['revocation_configuration'] = {
+            'crl_configuration': {
+                'enabled': jsonRequestBody.contentString.RevocationConfiguration.CrlConfiguration.Enabled,
+                'expiration_in_days': jsonRequestBody.contentString.RevocationConfiguration.CrlConfiguration.ExpirationInDays,
+                'custom_cname': jsonRequestBody.contentString.RevocationConfiguration.CrlConfiguration.CustomCname,
+                's3_bucket_name': jsonRequestBody.contentString.RevocationConfiguration.CrlConfiguration.S3BucketName,
+            }
+        };
+        reqParams.tf['type'] = jsonRequestBody.contentString.CertificateAuthorityType;
+
+        outputs.push({
+            'region': region,
+            'service': 'acm-pca',
+            'method': {
+                'api': 'CreateCertificateAuthority',
+                'boto3': 'create_certificate_authority',
+                'cli': 'create-certificate-authority'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('acm-pca', details.requestId),
+            'region': region,
+            'service': 'acm-pca',
+            'terraformType': 'aws_acmpca_certificate_authority',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:acm-pca:acm-pca.ListCertificateAuthorities
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.ListCertificateAuthorities") {
+
+        outputs.push({
+            'region': region,
+            'service': 'acm-pca',
+            'method': {
+                'api': 'ListCertificateAuthorities',
+                'boto3': 'list_certificate_authorities',
+                'cli': 'list-certificate-authorities'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.ListAgents
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listAgents") {
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'ListAgents',
+                'boto3': 'list_agents',
+                'cli': 'list-agents'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.ListLocations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listLocations") {
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'ListLocations',
+                'boto3': 'list_locations',
+                'cli': 'list-locations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:sts.GetCallerIdentity
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/sts$/g) && jsonRequestBody.operation == "getCallerIdentity") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sts',
+            'method': {
+                'api': 'GetCallerIdentity',
+                'boto3': 'get_caller_identity',
+                'cli': 'get-caller-identity'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:glacier:glacier.ListVaults
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "ListVaults") {
+
+        outputs.push({
+            'region': region,
+            'service': 'glacier',
+            'method': {
+                'api': 'ListVaults',
+                'boto3': 'list_vaults',
+                'cli': 'list-vaults'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:glacier:sns.ListTopics
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/sns\-proxy$/g) && jsonRequestBody.params.Action == "ListTopics") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:glacier:glacier.CreateVault
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "CreateVault") {
+        reqParams.boto3['VaultName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--vault-name'] = jsonRequestBody.path.split("/")[3];
+
+        reqParams.tf['name'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'glacier',
+            'method': {
+                'api': 'CreateVault',
+                'boto3': 'create_vault',
+                'cli': 'create-vault'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('glacier', details.requestId),
+            'region': region,
+            'service': 'glacier',
+            'terraformType': 'aws_glacier_vault',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:glacier:glacier.InitiateVaultLock
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.path.split("/")[4] == "lock-policy") {
+        reqParams.boto3['Policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.cli['--policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.boto3['VaultName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--vault-name'] = jsonRequestBody.path.split("/")[3];
+
+        reqParams.tf['policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.tf['vault_name'] = jsonRequestBody.path.split("/")[3];
+        reqParams.tf['complete_lock'] = false;
+
+        outputs.push({
+            'region': region,
+            'service': 'glacier',
+            'method': {
+                'api': 'InitiateVaultLock',
+                'boto3': 'initiate_vault_lock',
+                'cli': 'initiate-vault-lock'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('glacier', details.requestId),
+            'region': region,
+            'service': 'glacier',
+            'terraformType': 'aws_glacier_vault_lock',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
