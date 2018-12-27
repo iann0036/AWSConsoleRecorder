@@ -24,8 +24,7 @@
     "tabs",
     "notifications",
     "storage",
-    "*://*.console.aws.amazon.com/*",
-    "*://console.aws.amazon.com/*",
+    "*://*.aws.amazon.com/*",
     "*://*.amazonaws.com/*",
     "*://developer.amazon.com/*"
   ]

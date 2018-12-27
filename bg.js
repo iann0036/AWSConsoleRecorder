@@ -1875,8 +1875,7 @@ chrome.runtime.onMessage.addListener(
             chrome.webRequest.onBeforeRequest.addListener(
                 analyseRequest,
                 {urls: [
-                    "*://*.console.aws.amazon.com/*",
-                    "*://console.aws.amazon.com/*",
+                    "*://*.aws.amazon.com/*",
                     "*://*.amazonaws.com/*"
                 ]},
                 ["requestBody","blocking"]
@@ -1886,8 +1885,7 @@ chrome.runtime.onMessage.addListener(
                 chrome.tabs.query(
                     {
                         url: [
-                            "*://*.console.aws.amazon.com/*",
-                            "*://console.aws.amazon.com/*",
+                            "*://*.aws.amazon.com/*",
                             "*://*.amazonaws.com/*"
                         ]
                     },
@@ -2706,11 +2704,11 @@ function analyseRequest(details) {
         }
     }
 
-    var region_check = /.+\/\/([a-zA-Z0-9-]+)\.console\.aws\.amazon\.com/g.exec(details.url);
+    var region_check = /.+\/\/([a-zA-Z-]+\-[0-9]+)\.(?:console|lightsail)\.aws\.amazon\.com/g.exec(details.url);
     if (region_check && region_check[1]) {
         region = region_check[1];
     } else {
-        region_check = /.+\/\/[a-z0-9-]+.([a-zA-Z0-9-]+)\.amazonaws\.com/g.exec(details.url);
+        region_check = /.+\/\/[a-z0-9-]+.([a-zA-Z-]+\-[0-9]+)\.amazonaws\.com/g.exec(details.url);
         if (region_check && region_check[1]) {
             region = region_check[1];
         }
@@ -37019,6 +37017,981 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.ListLicenseConfigurations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListLicenseConfigurations") {
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'ListLicenseConfigurations',
+                'boto3': 'list_license_configurations',
+                'cli': 'list-license-configurations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.CreateLicenseConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.CreateLicenseConfiguration") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.Description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.Description;
+        reqParams.boto3['LicenseCountingType'] = jsonRequestBody.contentString.LicenseCountingType;
+        reqParams.cli['--license-counting-type'] = jsonRequestBody.contentString.LicenseCountingType;
+        reqParams.boto3['LicenseCount'] = jsonRequestBody.contentString.LicenseCount;
+        reqParams.cli['--license-count'] = jsonRequestBody.contentString.LicenseCount;
+        reqParams.boto3['LicenseCountHardLimit'] = jsonRequestBody.contentString.LicenseCountHardLimit;
+        reqParams.cli['--license-count-hard-limit'] = jsonRequestBody.contentString.LicenseCountHardLimit;
+        reqParams.boto3['LicenseRules'] = jsonRequestBody.contentString.LicenseRules;
+        reqParams.cli['--license-rules'] = jsonRequestBody.contentString.LicenseRules;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['name'] = jsonRequestBody.contentString.Name;
+        reqParams.tf['description'] = jsonRequestBody.contentString.Description;
+        reqParams.tf['license_counting_type'] = jsonRequestBody.contentString.LicenseCountingType;
+        reqParams.tf['license_count'] = jsonRequestBody.contentString.LicenseCount;
+        reqParams.tf['license_count_hard_limit'] = jsonRequestBody.contentString.LicenseCountHardLimit;
+        reqParams.tf['license_rules'] = jsonRequestBody.contentString.LicenseRules;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'CreateLicenseConfiguration',
+                'boto3': 'create_license_configuration',
+                'cli': 'create-license-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('license-manager', details.requestId),
+            'region': region,
+            'service': 'license-manager',
+            'terraformType': 'aws_licensemanager_license_configuration',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.GetLicenseConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.GetLicenseConfiguration") {
+        reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+        reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'GetLicenseConfiguration',
+                'boto3': 'get_license_configuration',
+                'cli': 'get-license-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.ListUsageForLicenseConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListUsageForLicenseConfiguration") {
+        reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+        reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+        reqParams.boto3['NextToken'] = jsonRequestBody.contentString.NextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.contentString.NextToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'ListUsageForLicenseConfiguration',
+                'boto3': 'list_usage_for_license_configuration',
+                'cli': 'list-usage-for-license-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeRegions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getRegions\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeRegions',
+                'boto3': 'describe_regions',
+                'cli': 'describe-regions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:kms.DescribeKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=describeKey\?/g)) {
+        reqParams.boto3['KeyId'] = jsonRequestBody.keyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.keyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'DescribeKey',
+                'boto3': 'describe_key',
+                'cli': 'describe-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CopyImage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=copyImage\?/g)) {
+        reqParams.boto3['SourceImageId'] = jsonRequestBody.sourceImageId;
+        reqParams.cli['--source-image-id'] = jsonRequestBody.sourceImageId;
+        reqParams.boto3['SourceRegion'] = jsonRequestBody.sourceRegion;
+        reqParams.cli['--source-region'] = jsonRequestBody.sourceRegion;
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+
+        reqParams.tf['source_ami_id'] = jsonRequestBody.sourceImageId;
+        reqParams.tf['source_ami_region'] = jsonRequestBody.sourceRegion;
+        reqParams.tf['name'] = jsonRequestBody.name;
+        reqParams.tf['description'] = jsonRequestBody.description;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CopyImage',
+                'boto3': 'copy_image',
+                'cli': 'copy-image'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'terraformType': 'aws_ami_copy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcEndpoints
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpoints\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcEndpoints',
+                'boto3': 'describe_vpc_endpoints',
+                'cli': 'describe-vpc-endpoints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVolumes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getVolumes\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVolumes',
+                'boto3': 'describe_volumes',
+                'cli': 'describe-volumes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateImage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=createImage\?/g)) {
+        reqParams.boto3['BlockDeviceMappings'] = jsonRequestBody.blockDeviceMapping;
+        reqParams.cli['--block-device-mappings'] = jsonRequestBody.blockDeviceMapping;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['InstanceId'] = jsonRequestBody.instanceId;
+        reqParams.cli['--instance-id'] = jsonRequestBody.instanceId;
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['NoReboot'] = jsonRequestBody.noReboot;
+        reqParams.cli['--no-reboot'] = jsonRequestBody.noReboot;
+        
+        reqParams.tf['source_instance_id'] = jsonRequestBody.instanceId;
+        reqParams.tf['name'] = jsonRequestBody.name;
+        reqParams.tf['snapshot_without_reboot'] = jsonRequestBody.noReboot;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateImage',
+                'boto3': 'create_image',
+                'cli': 'create-image'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'terraformType': 'aws_ami_from_instance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeImageAttribute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getImageAttribute\?/g)) {
+        reqParams.boto3['ImageId'] = jsonRequestBody.imageId;
+        reqParams.cli['--image-id'] = jsonRequestBody.imageId;
+        reqParams.boto3['Attribute'] = jsonRequestBody.attribute;
+        reqParams.cli['--attribute'] = jsonRequestBody.attribute;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeImageAttribute',
+                'boto3': 'describe_image_attribute',
+                'cli': 'describe-image-attribute'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSnapshots
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshots\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSnapshots',
+                'boto3': 'describe_snapshots',
+                'cli': 'describe-snapshots'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVolumes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getMergedVolumes\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVolumes',
+                'boto3': 'describe_volumes',
+                'cli': 'describe-volumes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.ListAssociationsForLicenseConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListAssociationsForLicenseConfiguration") {
+        reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+        reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
+        reqParams.boto3['NextToken'] = jsonRequestBody.contentString.NextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.contentString.NextToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'ListAssociationsForLicenseConfiguration',
+                'boto3': 'list_associations_for_license_configuration',
+                'cli': 'list-associations-for-license-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:license-manager:license-manager.UpdateLicenseSpecificationsForResource
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.UpdateLicenseSpecificationsForResource") {
+        reqParams.boto3['ResourceArn'] = jsonRequestBody.contentString.ResourceArn;
+        reqParams.cli['--resource-arn'] = jsonRequestBody.contentString.ResourceArn;
+        reqParams.boto3['AddLicenseSpecifications'] = jsonRequestBody.contentString.AddLicenseSpecifications;
+        reqParams.cli['--add-license-specifications'] = jsonRequestBody.contentString.AddLicenseSpecifications;
+
+        reqParams.tf['resource_arn'] = jsonRequestBody.contentString.ResourceArn;
+        reqParams.tf['license_configuration_arn'] = jsonRequestBody.contentString.AddLicenseSpecifications[0]['LicenseConfigurationArn'];
+
+        outputs.push({
+            'region': region,
+            'service': 'license-manager',
+            'method': {
+                'api': 'UpdateLicenseSpecificationsForResource',
+                'boto3': 'update_license_specifications_for_resource',
+                'cli': 'update-license-specifications-for-resource'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('license-manager', details.requestId),
+            'region': region,
+            'service': 'license-manager',
+            'terraformType': 'aws_licensemanager_association',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAddresses
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getAddresses\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAddresses',
+                'boto3': 'describe_addresses',
+                'cli': 'describe-addresses'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteSnapshot
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteSnapshot\?/g)) {
+        reqParams.boto3['SnapshotId'] = jsonRequestBody.snapshotId;
+        reqParams.cli['--snapshot-id'] = jsonRequestBody.snapshotId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteSnapshot',
+                'boto3': 'delete_snapshot',
+                'cli': 'delete-snapshot'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSnapshotAttribute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshotAttribute\?/g)) {
+        reqParams.boto3['SnapshotId'] = jsonRequestBody.snapshotId;
+        reqParams.cli['--snapshot-id'] = jsonRequestBody.snapshotId;
+        reqParams.boto3['Attribute'] = jsonRequestBody.attribute;
+        reqParams.cli['--attribute'] = jsonRequestBody.attribute;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSnapshotAttribute',
+                'boto3': 'describe_snapshot_attribute',
+                'cli': 'describe-snapshot-attribute'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeregisterImage
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deregisterImage\?/g)) {
+        reqParams.boto3['ImageId'] = jsonRequestBody.imageIds[0];
+        reqParams.cli['--image-id'] = jsonRequestBody.imageIds[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeregisterImage',
+                'boto3': 'deregister_image',
+                'cli': 'deregister-image'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetInstances
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetInstances\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetInstances',
+                'boto3': 'get_instances',
+                'cli': 'get-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetExportSnapshotRecords
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetExportSnapshotRecords\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetExportSnapshotRecords',
+                'boto3': 'get_export_snapshot_records',
+                'cli': 'get-export-snapshot-records'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetCloudFormationStackRecords
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetCloudFormationStackRecords\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetCloudFormationStackRecords',
+                'boto3': 'get_cloud_formation_stack_records',
+                'cli': 'get-cloud-formation-stack-records'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetRegions
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetRegions\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetRegions',
+                'boto3': 'get_regions',
+                'cli': 'get-regions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetBundles
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetBundles\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetBundles',
+                'boto3': 'get_bundles',
+                'cli': 'get-bundles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetBlueprints
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetBlueprints\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetBlueprints',
+                'boto3': 'get_blueprints',
+                'cli': 'get-blueprints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetDisks
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetDisks\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetDisks',
+                'boto3': 'get_disks',
+                'cli': 'get-disks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetStaticIps
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetStaticIps\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetStaticIps',
+                'boto3': 'get_static_ips',
+                'cli': 'get-static-ips'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.GetOperations
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetOperations\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'GetOperations',
+                'boto3': 'get_operations',
+                'cli': 'get-operations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.StopInstance
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/StopInstance\?/g)) {
+        reqParams.boto3['instanceName'] = jsonRequestBody.instanceName;
+        reqParams.cli['--instance-name'] = jsonRequestBody.instanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'StopInstance',
+                'boto3': 'stop_instance',
+                'cli': 'stop-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.StartInstance
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/StartInstance\?/g)) {
+        reqParams.boto3['instanceName'] = jsonRequestBody.instanceName;
+        reqParams.cli['--instance-name'] = jsonRequestBody.instanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'StartInstance',
+                'boto3': 'start_instance',
+                'cli': 'start-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.RebootInstance
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/RebootInstance\?/g)) {
+        reqParams.boto3['instanceName'] = jsonRequestBody.instanceName;
+        reqParams.cli['--instance-name'] = jsonRequestBody.instanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'RebootInstance',
+                'boto3': 'reboot_instance',
+                'cli': 'reboot-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.DeleteInstance
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DeleteInstance\?/g)) {
+        reqParams.boto3['instanceName'] = jsonRequestBody.instanceName;
+        reqParams.cli['--instance-name'] = jsonRequestBody.instanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'DeleteInstance',
+                'boto3': 'delete_instance',
+                'cli': 'delete-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.CreateKeyPair
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateKeyPair\?/g)) {
+        reqParams.boto3['keyPairName'] = jsonRequestBody.keyPairName;
+        reqParams.cli['--key-pair-name'] = jsonRequestBody.keyPairName;
+
+        reqParams.tf['name'] = jsonRequestBody.keyPairName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'CreateKeyPair',
+                'boto3': 'create_key_pair',
+                'cli': 'create-key-pair'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lightsail', details.requestId),
+            'region': region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_key_pair',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.CreateInstances
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateInstances\?/g)) {
+        reqParams.boto3['availabilityZone'] = jsonRequestBody.availabilityZone;
+        reqParams.cli['--availability-zone'] = jsonRequestBody.availabilityZone;
+        reqParams.boto3['blueprintId'] = jsonRequestBody.blueprintId;
+        reqParams.cli['--blueprint-id'] = jsonRequestBody.blueprintId;
+        reqParams.boto3['bundleId'] = jsonRequestBody.bundleId;
+        reqParams.cli['--bundle-id'] = jsonRequestBody.bundleId;
+        reqParams.boto3['customImageName'] = jsonRequestBody.customImageName;
+        reqParams.cli['--custom-image-name'] = jsonRequestBody.customImageName;
+        reqParams.boto3['instanceNames'] = jsonRequestBody.instanceNames;
+        reqParams.cli['--instance-names'] = jsonRequestBody.instanceNames;
+        reqParams.boto3['keyPairName'] = jsonRequestBody.keyPairName;
+        reqParams.cli['--key-pair-name'] = jsonRequestBody.keyPairName;
+        reqParams.boto3['tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        reqParams.boto3['userData'] = jsonRequestBody.userData;
+        reqParams.cli['--user-data'] = jsonRequestBody.userData;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'CreateInstances',
+                'boto3': 'create_instances',
+                'cli': 'create-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        for (var i=0; i<jsonRequestBody.instanceNames.length; i++) {
+            var reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.tf['availability_zone'] = jsonRequestBody.availabilityZone;
+            reqParams.tf['blueprint_id'] = jsonRequestBody.blueprintId;
+            reqParams.tf['bundle_id'] = jsonRequestBody.bundleId;
+            reqParams.tf['name'] = jsonRequestBody.instanceNames[i];
+            reqParams.tf['key_pair_name'] = jsonRequestBody.keyPairName;
+            reqParams.tf['user_data'] = jsonRequestBody.userData;
+
+            tracked_resources.push({
+                'logicalId': getResourceName('lightsail', details.requestId),
+                'region': region,
+                'service': 'lightsail',
+                'terraformType': 'aws_lightsail_instance',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.AllocateStaticIp
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/AllocateStaticIp\?/g)) {
+        reqParams.boto3['staticIpName'] = jsonRequestBody.staticIpName;
+        reqParams.cli['--static-ip-name'] = jsonRequestBody.staticIpName;
+
+        reqParams.tf['name'] = jsonRequestBody.staticIpName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'AllocateStaticIp',
+                'boto3': 'allocate_static_ip',
+                'cli': 'allocate-static-ip'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lightsail', details.requestId),
+            'region': region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_static_ip',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.AttachStaticIp
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/AttachStaticIp\?/g)) {
+        reqParams.boto3['staticIpName'] = jsonRequestBody.staticIpName;
+        reqParams.cli['--static-ip-name'] = jsonRequestBody.staticIpName;
+        reqParams.boto3['instanceName'] = jsonRequestBody.instanceName;
+        reqParams.cli['--instance-name'] = jsonRequestBody.instanceName;
+        
+        reqParams.tf['static_ip_name'] = jsonRequestBody.staticIpName;
+        reqParams.tf['instance_name'] = jsonRequestBody.instanceName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'AttachStaticIp',
+                'boto3': 'attach_static_ip',
+                'cli': 'attach-static-ip'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lightsail', details.requestId),
+            'region': region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_static_ip_attachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.DetachStaticIp
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DetachStaticIp\?/g)) {
+        reqParams.boto3['staticIpName'] = jsonRequestBody.staticIpName;
+        reqParams.cli['--static-ip-name'] = jsonRequestBody.staticIpName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'DetachStaticIp',
+                'boto3': 'detach_static_ip',
+                'cli': 'detach-static-ip'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.ReleaseStaticIp
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/ReleaseStaticIp\?/g)) {
+        reqParams.boto3['staticIpName'] = jsonRequestBody.staticIpName;
+        reqParams.cli['--static-ip-name'] = jsonRequestBody.staticIpName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'ReleaseStaticIp',
+                'boto3': 'release_static_ip',
+                'cli': 'release-static-ip'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.CreateDomain
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateDomain\?/g)) {
+        reqParams.boto3['domainName'] = jsonRequestBody.domainName;
+        reqParams.cli['--domain-name'] = jsonRequestBody.domainName;
+        reqParams.boto3['tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+        
+        reqParams.tf['domain_name'] = jsonRequestBody.domainName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'CreateDomain',
+                'boto3': 'create_domain',
+                'cli': 'create-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lightsail', details.requestId),
+            'region': region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_domain',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:lightsail:lightsail.DeleteDomain
+    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DeleteDomain\?/g)) {
+        reqParams.boto3['domainName'] = jsonRequestBody.domainName;
+        reqParams.cli['--domain-name'] = jsonRequestBody.domainName;
+
+        outputs.push({
+            'region': region,
+            'service': 'lightsail',
+            'method': {
+                'api': 'DeleteDomain',
+                'boto3': 'delete_domain',
+                'cli': 'delete-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
         });
         
         return {};
