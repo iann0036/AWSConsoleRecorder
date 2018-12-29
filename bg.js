@@ -1145,6 +1145,10 @@ function processBoto3Parameter(param, spacing) {
 function processGoParameter(service, paramkey, param, spacing) {
     var paramitems = [];
 
+    if (paramkey.endsWith("s")) { // TODO: Fix very primitive check
+        paramkey = paramkey.substring(0,paramkey.length-1);
+    }
+
     if (param === undefined || param === null)
         return undefined;
     if (typeof param == "boolean") {
@@ -37989,6 +37993,877 @@ function analyseRequest(details) {
                 'api': 'DeleteDomain',
                 'boto3': 'delete_domain',
                 'cli': 'delete-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListGateways
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listGateways") {
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListGateways',
+                'boto3': 'list_gateways',
+                'cli': 'list-gateways'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListFileShares
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listFileShares") {
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListFileShares',
+                'boto3': 'list_file_shares',
+                'cli': 'list-file-shares'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListVolumes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumes") {
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListVolumes',
+                'boto3': 'list_volumes',
+                'cli': 'list-volumes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListTapes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listTapes") {
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListTapes',
+                'boto3': 'list_tapes',
+                'cli': 'list-tapes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeStaleSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeStaleSecurityGroups\?/g)) {
+        reqParams.boto3['VpcId'] = jsonRequestBody.request.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.request.vpcId;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.request.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.request.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeStaleSecurityGroups',
+                'boto3': 'describe_stale_security_groups',
+                'cli': 'describe-stale-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.RevokeSecurityGroupIngress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=revokeIngress\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+        reqParams.boto3['IpPermissions'] = jsonRequestBody.ipPermissions;
+        reqParams.cli['--ip-permissions'] = jsonRequestBody.ipPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'RevokeSecurityGroupIngress',
+                'boto3': 'revoke_security_group_ingress',
+                'cli': 'revoke-security-group-ingress'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcs\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ActivateGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "activateGateway") {
+        reqParams.boto3['ActivationKey'] = jsonRequestBody.activationKey[0];
+        reqParams.cli['--activation-key'] = jsonRequestBody.activationKey[0];
+        reqParams.boto3['GatewayName'] = jsonRequestBody.gatewayName[0];
+        reqParams.cli['--gateway-name'] = jsonRequestBody.gatewayName[0];
+        reqParams.boto3['GatewayRegion'] = jsonRequestBody.gatewayRegion[0];
+        reqParams.cli['--gateway-region'] = jsonRequestBody.gatewayRegion[0];
+        reqParams.boto3['GatewayTimezone'] = jsonRequestBody.gatewayTimeZone[0];
+        reqParams.cli['--gateway-timezone'] = jsonRequestBody.gatewayTimeZone[0];
+        reqParams.boto3['GatewayType'] = jsonRequestBody.gatewayType[0];
+        reqParams.cli['--gateway-type'] = jsonRequestBody.gatewayType[0];
+        if (jsonRequestBody.mediumChangerType) {
+            reqParams.boto3['MediumChangerType'] = jsonRequestBody.mediumChangerType[0];
+            reqParams.cli['--medium-changer-type'] = jsonRequestBody.mediumChangerType[0];
+            reqParams.tf['media_changer_type'] = jsonRequestBody.mediumChangerType[0];
+        }
+        if (jsonRequestBody.tapeDriveType) {
+            reqParams.boto3['TapeDriveType'] = jsonRequestBody.tapeDriveType[0];
+            reqParams.cli['--tape-drive-type'] = jsonRequestBody.tapeDriveType[0];
+            reqParams.tf['tape_drive_type'] = jsonRequestBody.tapeDriveType[0];
+        }
+
+        reqParams.tf['activation_key'] = jsonRequestBody.activationKey[0];
+        reqParams.tf['gateway_name'] = jsonRequestBody.gatewayName[0];
+        reqParams.tf['gateway_timezone'] = jsonRequestBody.gatewayTimeZone[0];
+        reqParams.tf['gateway_type'] = jsonRequestBody.gatewayType[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ActivateGateway',
+                'boto3': 'activate_gateway',
+                'cli': 'activate-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('storagegateway', details.requestId),
+            'region': region,
+            'service': 'storagegateway',
+            'terraformType': 'aws_storagegateway_gateway',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListLocalDisks
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listLocalDisks") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListLocalDisks',
+                'boto3': 'list_local_disks',
+                'cli': 'list-local-disks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.CreateNFSFileShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createNfsFileShare") {
+        reqParams.boto3['ClientList'] = jsonRequestBody["clientList[]"];
+        reqParams.cli['--client-list'] = jsonRequestBody["clientList[]"];
+        reqParams.boto3['DefaultStorageClass'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.cli['--default-storage-class'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.boto3['GuessMIMETypeEnabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.cli['--guess-mime-type-enabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.boto3['LocationARN'] = jsonRequestBody.locationArn[0];
+        reqParams.cli['--location-arn'] = jsonRequestBody.locationArn[0];
+        reqParams.boto3['ObjectACL'] = jsonRequestBody.objectAcl[0];
+        reqParams.cli['--object-acl'] = jsonRequestBody.objectAcl[0];
+        reqParams.boto3['ReadOnly'] = jsonRequestBody.readOnly[0];
+        reqParams.cli['--read-only'] = jsonRequestBody.readOnly[0];
+        reqParams.boto3['RequesterPays'] = jsonRequestBody.requesterPays[0];
+        reqParams.cli['--requester-pays'] = jsonRequestBody.requesterPays[0];
+        reqParams.boto3['Role'] = jsonRequestBody.role[0];
+        reqParams.cli['--role'] = jsonRequestBody.role[0];
+        reqParams.boto3['Squash'] = jsonRequestBody.squash[0];
+        reqParams.cli['--squash'] = jsonRequestBody.squash[0];
+
+        reqParams.tf['client_list'] = jsonRequestBody["clientList[]"];
+        reqParams.tf['default_storage_class'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.tf['gateway_arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.tf['guess_mime_type_enabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.tf['location_arn'] = jsonRequestBody.locationArn[0];
+        reqParams.tf['object_acl'] = jsonRequestBody.objectAcl[0];
+        reqParams.tf['read_only'] = jsonRequestBody.readOnly[0];
+        reqParams.tf['requester_pays'] = jsonRequestBody.requesterPays[0];
+        reqParams.tf['role_arn'] = jsonRequestBody.role[0];
+        reqParams.tf['squash'] = jsonRequestBody.squash[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'CreateNFSFileShare',
+                'boto3': 'create_nfs_file_share',
+                'cli': 'create-nfs-file-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('storagegateway', details.requestId),
+            'region': region,
+            'service': 'storagegateway',
+            'terraformType': 'aws_storagegateway_nfs_file_share',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeNFSFileShares
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeNfsFileShares") {
+        reqParams.boto3['FileShareARNList'] = jsonRequestBody.fileShareArnList;
+        reqParams.cli['--file-share-arn-list'] = jsonRequestBody.fileShareArnList;
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeNFSFileShares',
+                'boto3': 'describe_nfs_file_shares',
+                'cli': 'describe-nfs-file-shares'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeGatewayInformation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeGateway") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeGatewayInformation',
+                'boto3': 'describe_gateway_information',
+                'cli': 'describe-gateway-information'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DeleteGateway
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteGateway") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DeleteGateway',
+                'boto3': 'delete_gateway',
+                'cli': 'delete-gateway'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeSMBSettings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeSmbSettings") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeSMBSettings',
+                'boto3': 'describe_smb_settings',
+                'cli': 'describe-smb-settings'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeMaintenanceStartTime
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeMaintenanceStartTime") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeMaintenanceStartTime',
+                'boto3': 'describe_maintenance_start_time',
+                'cli': 'describe-maintenance-start-time'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.AddCache
+    // autogen:storagegateway:storagegateway.AddUploadBuffer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "configureLocalStorage") {
+        if (jsonRequestBody["cacheDiskIds[]"]) {
+            reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+            reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+            reqParams.boto3['DiskIds'] = jsonRequestBody["cacheDiskIds[]"];
+            reqParams.cli['--disk-ids'] = jsonRequestBody["cacheDiskIds[]"];
+
+            outputs.push({
+                'region': region,
+                'service': 'storagegateway',
+                'method': {
+                    'api': 'AddCache',
+                    'boto3': 'add_cache',
+                    'cli': 'add-cache'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            for (var i=0; i<jsonRequestBody["cacheDiskIds[]"].length; i++) {
+                var reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {}
+                };
+
+                reqParams.tf['gateway_arn'] = jsonRequestBody.gatewayArn[0];
+                reqParams.tf['disk_id'] = jsonRequestBody["cacheDiskIds[]"][i];
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('storagegateway', details.requestId),
+                    'region': region,
+                    'service': 'storagegateway',
+                    'terraformType': 'aws_storagegateway_cache',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+        }
+
+        if (jsonRequestBody["uploadBufferDiskIds[]"]) {
+            var reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+            reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+            reqParams.boto3['DiskIds'] = jsonRequestBody["uploadBufferDiskIds[]"];
+            reqParams.cli['--disk-ids'] = jsonRequestBody["uploadBufferDiskIds[]"];
+
+            outputs.push({
+                'region': region,
+                'service': 'storagegateway',
+                'method': {
+                    'api': 'AddUploadBuffer',
+                    'boto3': 'add_upload_buffer',
+                    'cli': 'add-upload-buffer'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            for (var i=0; i<jsonRequestBody["uploadBufferDiskIds[]"].length; i++) {
+                var reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {}
+                };
+                
+                reqParams.tf['gateway_arn'] = jsonRequestBody.gatewayArn[0];
+                reqParams.tf['disk_id'] = jsonRequestBody["uploadBufferDiskIds[]"][i];
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('storagegateway', details.requestId),
+                    'region': region,
+                    'service': 'storagegateway',
+                    'terraformType': 'aws_storagegateway_upload_buffer',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+        }
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.CreateSMBFileShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createSmbFileShare") {
+        reqParams.boto3['Authentication'] = jsonRequestBody.authentication[0];
+        reqParams.cli['--authentication'] = jsonRequestBody.authentication[0];
+        reqParams.boto3['DefaultStorageClass'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.cli['--default-storage-class'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.boto3['GuessMIMETypeEnabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.cli['--guess-mime-type-enabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.boto3['LocationARN'] = jsonRequestBody.locationArn[0];
+        reqParams.cli['--location-arn'] = jsonRequestBody.locationArn[0];
+        reqParams.boto3['ObjectACL'] = jsonRequestBody.objectAcl[0];
+        reqParams.cli['--object-acl'] = jsonRequestBody.objectAcl[0];
+        reqParams.boto3['ReadOnly'] = jsonRequestBody.readOnly[0];
+        reqParams.cli['--read-only'] = jsonRequestBody.readOnly[0];
+        reqParams.boto3['RequesterPays'] = jsonRequestBody.requesterPays[0];
+        reqParams.cli['--requester-pays'] = jsonRequestBody.requesterPays[0];
+        reqParams.boto3['Role'] = jsonRequestBody.role[0];
+        reqParams.cli['--role'] = jsonRequestBody.role[0];
+
+        reqParams.tf['authentication'] = jsonRequestBody.authentication[0];
+        reqParams.tf['default_storage_class'] = jsonRequestBody.defaultStorageClass[0];
+        reqParams.tf['gateway_arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.tf['guess_mime_type_enabled'] = jsonRequestBody.guessMimeTypeEnabled[0];
+        reqParams.tf['location_arn'] = jsonRequestBody.locationArn[0];
+        reqParams.tf['object_acl'] = jsonRequestBody.objectAcl[0];
+        reqParams.tf['read_only'] = jsonRequestBody.readOnly[0];
+        reqParams.tf['requester_pays'] = jsonRequestBody.requesterPays[0];
+        reqParams.tf['role_arn'] = jsonRequestBody.role[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'CreateSMBFileShare',
+                'boto3': 'create_smb_file_share',
+                'cli': 'create-smb-file-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('storagegateway', details.requestId),
+            'region': region,
+            'service': 'storagegateway',
+            'terraformType': 'aws_storagegateway_smb_file_share',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.SetSMBGuestPassword
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "setSmbGuestPassword") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.boto3['Password'] = jsonRequestBody.smbGuestPassword[0];
+        reqParams.cli['--password'] = jsonRequestBody.smbGuestPassword[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'SetSMBGuestPassword',
+                'boto3': 'set_smb_guest_password',
+                'cli': 'set-smb-guest-password'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.RefreshCache
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "refreshCache") {
+        reqParams.boto3['FileShareARN'] = jsonRequestBody.fileShareArn[0];
+        reqParams.cli['--file-share-arn'] = jsonRequestBody.fileShareArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'RefreshCache',
+                'boto3': 'refresh_cache',
+                'cli': 'refresh-cache'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DeleteFileShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteFileShare") {
+        reqParams.boto3['FileShareARN'] = jsonRequestBody.fileShareArn[0];
+        reqParams.cli['--file-share-arn'] = jsonRequestBody.fileShareArn[0];
+        reqParams.boto3['ForceDelete'] = jsonRequestBody.forceDelete[0];
+        reqParams.cli['--force-delete'] = jsonRequestBody.forceDelete[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DeleteFileShare',
+                'boto3': 'delete_file_share',
+                'cli': 'delete-file-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteVolume
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteVolume\?/g)) {
+        reqParams.boto3['VolumeId'] = jsonRequestBody.volumeId;
+        reqParams.cli['--volume-id'] = jsonRequestBody.volumeId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteVolume',
+                'boto3': 'delete_volume',
+                'cli': 'delete-volume'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.CreateTapes
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createTapes") {
+        reqParams.boto3['TapeBarcodePrefix'] = jsonRequestBody.barcodePrefix[0];
+        reqParams.cli['--tape-barcode-prefix'] = jsonRequestBody.barcodePrefix[0];
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+        reqParams.boto3['NumTapesToCreate'] = jsonRequestBody.numToCreate[0];
+        reqParams.cli['--num-tapes-to-create'] = jsonRequestBody.numToCreate[0];
+        reqParams.boto3['TapeSizeInBytes'] = jsonRequestBody.tapeSizeInBytes[0];
+        reqParams.cli['--tape-size-in-bytes'] = jsonRequestBody.tapeSizeInBytes[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'CreateTapes',
+                'boto3': 'create_tapes',
+                'cli': 'create-tapes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DeleteTape
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteTape") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+        reqParams.boto3['TapeARN'] = jsonRequestBody.tapeArn[0];
+        reqParams.cli['--tape-arn'] = jsonRequestBody.tapeArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DeleteTape',
+                'boto3': 'delete_tape',
+                'cli': 'delete-tape'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeUploadBuffer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeUploadBuffer") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeUploadBuffer',
+                'boto3': 'describe_upload_buffer',
+                'cli': 'describe-upload-buffer'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeBandwidthRateLimit
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeBandwidthRateLimit") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeBandwidthRateLimit',
+                'boto3': 'describe_bandwidth_rate_limit',
+                'cli': 'describe-bandwidth-rate-limit'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DescribeVTLDevices
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeVtlDevices") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DescribeVTLDevices',
+                'boto3': 'describe_vtl_devices',
+                'cli': 'describe-vtl-devices'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.UpdateVTLDeviceType
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateVtlDeviceType") {
+        reqParams.boto3['DeviceType'] = jsonRequestBody.deviceType[0];
+        reqParams.cli['--device-type'] = jsonRequestBody.deviceType[0];
+        reqParams.boto3['VTLDeviceARN'] = jsonRequestBody.vtlDeviceArn[0];
+        reqParams.cli['--vtl-device-arn'] = jsonRequestBody.vtlDeviceArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'UpdateVTLDeviceType',
+                'boto3': 'update_vtl_device_type',
+                'cli': 'update-vtl-device-type'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DeleteBandwidthRateLimit
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteBandwidthRateLimit") {
+        reqParams.boto3['BandwidthType'] = jsonRequestBody.bandwidthType[0];
+        reqParams.cli['--bandwidth-type'] = jsonRequestBody.bandwidthType[0];
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DeleteBandwidthRateLimit',
+                'boto3': 'delete_bandwidth_rate_limit',
+                'cli': 'delete-bandwidth-rate-limit'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.UpdateBandwidthRateLimit
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateBandwidthRateLimit") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
+        if (jsonRequestBody.uploadRate.length) {
+            reqParams.boto3['AverageUploadRateLimitInBitsPerSec'] = jsonRequestBody.uploadRate[0];
+            reqParams.cli['--average-upload-rate-limit-in-bits-per-sec'] = jsonRequestBody.uploadRate[0];
+        }
+        if (jsonRequestBody.downloadRate.length) {
+            reqParams.boto3['AverageDownloadRateLimitInBitsPerSec'] = jsonRequestBody.downloadRate[0];
+            reqParams.cli['--average-download-rate-limit-in-bits-per-sec'] = jsonRequestBody.downloadRate[0];
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'UpdateBandwidthRateLimit',
+                'boto3': 'update_bandwidth_rate_limit',
+                'cli': 'update-bandwidth-rate-limit'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.CreateCachediSCSIVolume
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createVolume" && jsonRequestBody.gatewayType[0] == "CACHED") {
+        reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
+        reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
+        reqParams.boto3['NetworkInterfaceId'] = jsonRequestBody.nicId[0];
+        reqParams.cli['--network-interface-id'] = jsonRequestBody.nicId[0];
+        reqParams.boto3['SnapshotId'] = jsonRequestBody.snapshotId[0];
+        reqParams.cli['--snapshot-id'] = jsonRequestBody.snapshotId[0];
+        reqParams.boto3['SourceVolumeARN'] = jsonRequestBody.sourceVolumeArn[0];
+        reqParams.cli['--source-volume-arn'] = jsonRequestBody.sourceVolumeArn[0];
+        reqParams.boto3['TargetName'] = jsonRequestBody.targetName[0];
+        reqParams.cli['--target-name'] = jsonRequestBody.targetName[0];
+        reqParams.boto3['VolumeSizeInBytes'] = jsonRequestBody.volumeSizeInBytes[0];
+        reqParams.cli['--volume-size-in-bytes'] = jsonRequestBody.volumeSizeInBytes[0];
+
+        reqParams.tf['gateway_arn'] = jsonRequestBody.gatewayARN[0];
+        reqParams.tf['network_interface_id'] = jsonRequestBody.nicId[0];
+        reqParams.tf['snapshot_id'] = jsonRequestBody.snapshotId[0];
+        reqParams.tf['source_volume_arn'] = jsonRequestBody.sourceVolumeArn[0];
+        reqParams.tf['target_name'] = jsonRequestBody.targetName[0];
+        reqParams.tf['volume_size_in_bytes'] = jsonRequestBody.volumeSizeInBytes[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'CreateCachediSCSIVolume',
+                'boto3': 'create_cachedi_scsi_volume',
+                'cli': 'create-cachedi-scsi-volume'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('storagegateway', details.requestId),
+            'region': region,
+            'service': 'storagegateway',
+            'terraformType': 'aws_storagegateway_cached_iscsi_volume',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.DeleteVolume
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteVolume") {
+        reqParams.boto3['VolumeARN'] = jsonRequestBody.volumeArn[0];
+        reqParams.cli['--volume-arn'] = jsonRequestBody.volumeArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'DeleteVolume',
+                'boto3': 'delete_volume',
+                'cli': 'delete-volume'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:storagegateway:storagegateway.ListVolumeInitiators
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumeInitiators") {
+        reqParams.boto3['VolumeARN'] = jsonRequestBody.volumeArn[0];
+        reqParams.cli['--volume-arn'] = jsonRequestBody.volumeArn[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'storagegateway',
+            'method': {
+                'api': 'ListVolumeInitiators',
+                'boto3': 'list_volume_initiators',
+                'cli': 'list-volume-initiators'
             },
             'options': reqParams,
             'requestDetails': details
