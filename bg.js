@@ -167,25 +167,21 @@ function interpretGwtArg(tracker, expected_type) {
         }
         tracker.resolvedObjects.push(ret);
 
-        parseInt(tracker.pipesplit[tracker.cursor]); // ?
+        var cloudwatchdestination = interpretGwtArg(tracker);
+        var enabled = (parseInt(tracker.pipesplit[tracker.cursor]) == 1);
         tracker.cursor += 1;
-        parseInt(tracker.pipesplit[tracker.cursor]); // ?
-        tracker.cursor += 1;
-
         var eventtypes = interpretGwtArg(tracker);
-        
-        parseInt(tracker.pipesplit[tracker.cursor]); // ?
+        var kinesisdestination = interpretGwtArg(tracker);
+        var eventname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
-
-        var setname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
-        tracker.cursor += 1;
-
-        var destination = interpretGwtArg(tracker);
+        interpretGwtArg(tracker); // probably SNSDestination?
         var eventdestinationstatus = interpretGwtArg(tracker);
 
+        ret['enabled'] = enabled;
         ret['eventtypes'] = eventtypes;
-        ret['setname'] = setname;
-        ret['destination'] = destination;
+        ret['cloudwatchdestination'] = cloudwatchdestination;
+        ret['kinesisdestination'] = kinesisdestination;
+        ret['eventname'] = eventname;
         ret['eventdestinationstatus'] = eventdestinationstatus;
 
         return ret;
@@ -195,10 +191,57 @@ function interpretGwtArg(tracker, expected_type) {
         }
         tracker.resolvedObjects.push(ret);
 
-        var eventtype = parseInt(tracker.pipesplit[tracker.cursor]); // ENUM?
+        var eventtypes_enum = ['send','reject','bounce','complaint','delivery','open','click','renderingFailure'];
+
+        var eventtype = eventtypes_enum[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
 
         ret['eventtype'] = eventtype;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.configurationSet.KinesisFirehoseDestination/2935040581") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var arn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var role = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        tracker.cursor += 1; // verified domain ?
+
+        ret['arn'] = arn;
+        ret['role'] = role;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.configurationSet.CloudWatchDestination/2780889431") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var dimensions = interpretGwtArg(tracker);
+
+        ret['dimensions'] = dimensions;
+
+        return ret;
+    } else if (arg_type == "com.amazon.bacon.console.shared.types.configurationSet.CloudWatchDimensionConfigurations/1770148543") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var value = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var source = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['value'] = value;
+        ret['name'] = name;
+        ret['source'] = source;
 
         return ret;
     } else if (arg_type == "com.amazon.bacon.console.shared.types.configurationSet.SNSDestination/60332510") {
@@ -241,7 +284,7 @@ function interpretGwtArg(tracker, expected_type) {
         }
         tracker.resolvedObjects.push(ret);
 
-        var status = parseInt(tracker.pipesplit[tracker.cursor]); // ENUM?
+        var status = (parseInt(tracker.pipesplit[tracker.cursor]) == 1); // cast boolean
         tracker.cursor += 1;
 
         ret['status'] = status;
@@ -31020,6 +31063,81 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:ses:ses.CreateConfigurationSetEventDestination
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "saveConfigurationSetEventDestination") {
+        var eventtypes = [];
+        for (var i=0; i<gwtRequest['args'][1].value.value[0].eventtypes.value.length; i++) {
+            eventtypes.push(gwtRequest['args'][1].value.value[0].eventtypes.value[i].eventtype);
+        }
+        
+        reqParams.boto3['ConfigurationSetName'] = gwtRequest['args'][0].value.value;
+        reqParams.cfn['ConfigurationSetName'] = gwtRequest['args'][0].value.value;
+        reqParams.boto3['EventDestination'] = {
+            'Name': gwtRequest['args'][1].value.value[0].eventname,
+            'Enabled': gwtRequest['args'][1].value.value[0].enabled,
+            'MatchingEventTypes': eventtypes
+        };
+        reqParams.cfn['EventDestination'] = {
+            'Name': gwtRequest['args'][1].value.value[0].eventname,
+            'Enabled': gwtRequest['args'][1].value.value[0].enabled,
+            'MatchingEventTypes': eventtypes
+        };
+
+        if (gwtRequest['args'][1].value.value[0].cloudwatchdestination.dimensions) {
+            var dimensionconfigurations = [];
+
+            for (var i=0; i<gwtRequest['args'][1].value.value[0].cloudwatchdestination.dimensions.value.length; i++) {
+                dimensionconfigurations.push({
+                    'DimensionName': gwtRequest['args'][1].value.value[0].cloudwatchdestination.dimensions.value[i].name,
+                    'DimensionValueSource': gwtRequest['args'][1].value.value[0].cloudwatchdestination.dimensions.value[i].source,
+                    'DefaultDimensionValue': gwtRequest['args'][1].value.value[0].cloudwatchdestination.dimensions.value[i].value
+                });
+            }
+
+            reqParams.boto3['EventDestination']['CloudWatchDestination'] = {
+                'DimensionConfigurations': dimensionconfigurations
+            };
+            reqParams.cfn['EventDestination']['CloudWatchDestination'] = {
+                'DimensionConfigurations': dimensionconfigurations
+            };
+        } else if (gwtRequest['args'][1].value.value[0].kinesisdestination.arn) {
+            reqParams.boto3['EventDestination']['CloudWatchDestination'] = {
+                'IAMRoleARN': gwtRequest['args'][1].value.value[0].kinesisdestination.role,
+                'DeliveryStreamARN': gwtRequest['args'][1].value.value[0].kinesisdestination.arn
+            };
+            reqParams.cfn['EventDestination']['CloudWatchDestination'] = {
+                'IAMRoleARN': gwtRequest['args'][1].value.value[0].kinesisdestination.role,
+                'DeliveryStreamARN': gwtRequest['args'][1].value.value[0].kinesisdestination.arn
+            };
+        } else {
+            console.log("Unknown configuration set destination");
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ses',
+            'method': {
+                'api': 'CreateConfigurationSetEventDestination',
+                'boto3': 'create_configuration_set_event_destination',
+                'cli': 'create-configuration-set-event-destination'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ses', details.requestId),
+            'region': region,
+            'service': 'ses',
+            'type': 'AWS::SES::ConfigurationSetEventDestination',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
     // manual:ses:ses.CreateReceiptFilter
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptFilter") {
         reqParams.boto3['Filter'] = {
@@ -31303,47 +31421,6 @@ function analyseRequest(details) {
         
         return {};
     }
-
-    /*
-    // manual:ses:ses.CreateReceiptRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "saveConfigurationSetEventDestination") {
-        reqParams.boto3['configurationSetName'] = gwtRequest['args'][0].value.value;
-        reqParams.cli['--configuration-set-name'] = gwtRequest['args'][0].value.value;
-        
-        reqParams.boto3['RuleSetName'] = gwtRequest['args'][1].value.value[0]['setname'];
-        reqParams.cli['--rule-set-name'] = gwtRequest['args'][1].value.value[0]['setname'];
-
-        reqParams.boto3['Rule'] = {
-            'Enabled': (gwtRequest['args'][1].value.value[0]['eventdestinationstatus']['status'] == 1),
-            'Name': '',
-            'Actions': [{
-                'SNSAction': {
-                    'TopicArn': gwtRequest['args'][1].value.value[0]['destination']['arn']
-                }
-            }]
-        };
-
-        var eventtypes = [];
-        for (var i=0; i<gwtRequest['args'][1].value.value[0]['eventtypes'].value.length; i++) {
-            eventtypes.push(reqParams.boto3['eventtypes'] = gwtRequest['args'][1].value.value[0]['eventtypes'].value[i]['eventtype']);
-        }
-        reqParams.boto3['eventtypes'] = eventtypes;
-
-        outputs.push({
-            'region': region,
-            'service': 'ses',
-            'method': {
-                'api': 'CreateReceiptRule',
-                'boto3': 'create_receipt_rule',
-                'cli': 'create-receipt-rule'
-            },
-            'options': reqParams,
-            'requestDetails': details
-        });
-        
-        return {};
-    }
-    */
 
     // autogen:servicecatalog:servicecatalog.CreateConstraint
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/constraint\?/g)) {
@@ -39199,6 +39276,52 @@ function analyseRequest(details) {
             'region': region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::StreamingDistribution',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:lambda:lambda.CreateEventSourceMapping
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "createRelation") {
+        reqParams.boto3['EventSourceArn'] = jsonRequestBody.source;
+        reqParams.cli['--event-source-arn'] = jsonRequestBody.source;
+        reqParams.boto3['FunctionName'] = jsonRequestBody.target;
+        reqParams.cli['--function-name'] = jsonRequestBody.target;
+        reqParams.boto3['Enabled'] = jsonRequestBody.data.enabled;
+        reqParams.cli['--enabled'] = jsonRequestBody.data.enabled;
+        reqParams.boto3['BatchSize'] = jsonRequestBody.data.batchSize;
+        reqParams.cli['--batch-size'] = jsonRequestBody.data.batchSize;
+        reqParams.boto3['StartingPosition'] = jsonRequestBody.data.startingPosition;
+        reqParams.cli['--starting-position'] = jsonRequestBody.data.startingPosition;
+        reqParams.boto3['StartingPositionTimestamp'] = jsonRequestBody.data.startingPositionTimestamp;
+        reqParams.cli['--starting-position-timestamp'] = jsonRequestBody.data.startingPositionTimestamp;
+
+        reqParams.cfn['EventSourceArn'] = jsonRequestBody.source;
+        reqParams.cfn['FunctionName'] = jsonRequestBody.target;
+        reqParams.cfn['Enabled'] = jsonRequestBody.data.enabled;
+        reqParams.cfn['BatchSize'] = jsonRequestBody.data.batchSize;
+        reqParams.cfn['StartingPosition'] = jsonRequestBody.data.startingPosition;
+
+        outputs.push({
+            'region': region,
+            'service': 'lambda',
+            'method': {
+                'api': 'CreateEventSourceMapping',
+                'boto3': 'create_event_source_mapping',
+                'cli': 'create-event-source-mapping'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('lambda', details.requestId),
+            'region': region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::EventSourceMapping',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
