@@ -620,6 +620,24 @@ function interpretGwtArg(tracker, expected_type) {
         ret['quantity'] = quantity;
 
         return ret;
+    } else if (arg_type == "com.amazonaws.swf.console.gwtcoral.client.com.amazonaws.swf.service.model.RegisterDomainInput/54427647") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var description = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var days = parseInt(tracker.params[parseInt(tracker.pipesplit[tracker.cursor])]);
+        tracker.cursor += 1;
+
+        ret['description'] = description;
+        ret['name'] = name;
+        ret['days'] = days;
+
+        return ret;
     } else if (arg_type == "com.amazonaws.services.cloudfront.model.StreamingLoggingConfig/2911843366") {
         var ret = {
             'type': arg_type
@@ -857,6 +875,15 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'streamingDistributionConfig'
+        });
+    } else if (service == "com.amazonaws.swf.console.gwtcoral.client.com.amazonaws.swf.service.model.SimpleWorkflowService" && method == "RegisterDomain") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'registerdomaininput'
+        });
+        args.push({
+            'value': tracker.params[parseInt(tracker.pipesplit[tracker.cursor])],
+            'name': 'region'
         });
     } else if (service == "com.amazonaws.route53.console.gwt.Route53Service" && method == "changeResourceRecordSets") {
         args.push({
@@ -1513,13 +1540,29 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined && options[option] !== null) {
-                var optionvalue = processTfParameter(options[option], 4, index);
-                if (optionvalue[0] == '{') {
-                    params += `
-    ${option} ${optionvalue}`;
-                } else {
-                    params += `
+                if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
+                    for (var i=0; i<options[option].length; i++) {
+                        var optionvalue = processTfParameter(options[option][i], 4, index);
+                        if (optionvalue[0] == '{') {
+                            params += `
+    ${option} ${optionvalue}
+`;
+                        } else {
+                            params += `
     ${option} = ${optionvalue}`;
+                        }
+
+                    }
+                } else {
+                    var optionvalue = processTfParameter(options[option], 4, index);
+                    if (optionvalue[0] == '{') {
+                        params += `
+    ${option} ${optionvalue}
+`;
+                    } else {
+                        params += `
+    ${option} = ${optionvalue}`;
+                    }
                 }
             }
         }
@@ -16966,46 +17009,6 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createRouteTable") {
-        reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
-        reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
-
-        reqParams.cfn['VpcId'] = getPipeSplitField(requestBody, 17);
-
-        reqParams.tf['vpc_id'] = getPipeSplitField(requestBody, 17);
-
-        outputs.push({
-            'region': region,
-            'service': 'ec2',
-            'method': {
-                'api': 'CreateRouteTable',
-                'boto3': 'create_route_table',
-                'cli': 'create-route-table'
-            },
-            'options': reqParams,
-            'requestDetails': details
-        });
-
-        tracked_resources.push({
-            'logicalId': getResourceName('ec2', details.requestId),
-            'region': region,
-            'service': 'ec2',
-            'type': 'AWS::EC2::RouteTable',
-            'terraformType': 'aws_route_table',
-            'options': reqParams,
-            'requestDetails': details,
-            'was_blocked': blocking
-        });
-
-        if (blocking) {
-            notifyBlocked();
-            return {cancel: true};
-        }
-        
-        return {};
-    }
-
     // autogen:ec2:ec2.DescribeNetworkAcls
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createDHCPOption" && gwtRequest['method'] == "getNetworkACLs") {
 
@@ -25410,25 +25413,6 @@ function analyseRequest(details) {
         return {};
     }
 
-    // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "updateRoutesForARouteTable") {
-        // TODO console.log(gwtRequest);
-
-        outputs.push({
-            'region': region,
-            'service': 'ec2',
-            'method': {
-                'api': 'CreateRouteTable',
-                'boto3': 'create_route_table',
-                'cli': 'create-route-table'
-            },
-            'options': reqParams,
-            'requestDetails': details
-        });
-        
-        return {};
-    }
-
     // autogen:ec2:ec2.CreatePlacementGroup
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreatePlacementGroup\?/g)) {
         reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
@@ -29424,6 +29408,7 @@ function analyseRequest(details) {
         return {};
     }
 
+    // manual:dynamodb:dynamodb.CreateTable
     // autogen:dynamodb:dynamodb.ListTables
     // autogen:dynamodb:dynamodb.DescribeTable
     // autogen:dynamodb:dax.DescribeClusters
@@ -29442,7 +29427,185 @@ function analyseRequest(details) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
 
-            if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBRequestContext.listTables") {
+            if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBRequestContext.createTable") {
+                reqParams.boto3['TableName'] = action['parameters'][0]['name'];
+                reqParams.cli['--table-name'] = action['parameters'][0]['name'];
+                reqParams.cfn['TableName'] = action['parameters'][0]['name'];
+                reqParams.tf['name'] = action['parameters'][0]['name'];
+
+                reqParams.boto3['BillingMode'] = action['parameters'][0]['billingModeSummary']['billingMode'];
+                reqParams.cli['--billing-mode'] = action['parameters'][0]['billingModeSummary']['billingMode'];
+                reqParams.cfn['BillingMode'] = action['parameters'][0]['billingModeSummary']['billingMode'];
+                reqParams.tf['billing_mode'] = action['parameters'][0]['billingModeSummary']['billingMode'];
+
+                var keyschema = [];
+                if (action['parameters'][0]['hashKey']) {
+                    keyschema.push({
+                        'AttributeName': action['parameters'][0]['hashKey']['attributeName'],
+                        'KeyType': 'HASH'
+                    });
+                    reqParams.tf['hash_key'] = action['parameters'][0]['hashKey']['attributeName'];
+                }
+                if (action['parameters'][0]['rangeKey']) {
+                    keyschema.push({
+                        'AttributeName': action['parameters'][0]['rangeKey']['attributeName'],
+                        'KeyType': 'RANGE'
+                    });
+                    reqParams.tf['range_key'] = action['parameters'][0]['rangeKey']['attributeName'];
+                }
+                reqParams.boto3['KeySchema'] = keyschema;
+                reqParams.cli['--key-schema'] = keyschema;
+                reqParams.cfn['KeySchema'] = keyschema;
+
+                if (action['parameters'][0]['provisionedThroughput']) {
+                    var provisionedthroughput = {
+                        'ReadCapacityUnits': parseInt(action['parameters'][0]['provisionedThroughput']['readCapacityUnits']),
+                        'WriteCapacityUnits': parseInt(action['parameters'][0]['provisionedThroughput']['writeCapacityUnits'])
+                    };
+                    reqParams.boto3['ProvisionedThroughput'] = provisionedthroughput;
+                    reqParams.cli['--provisioned-throughput'] = provisionedthroughput;
+                    reqParams.cfn['ProvisionedThroughput'] = provisionedthroughput;
+                    reqParams.tf['read_capacity'] = parseInt(action['parameters'][0]['provisionedThroughput']['readCapacityUnits']);
+                    reqParams.tf['write_capacity'] = parseInt(action['parameters'][0]['provisionedThroughput']['writeCapacityUnits']);
+                }
+
+                if (action['parameters'][0]['localIndexes'] && action['parameters'][0]['localIndexes'].length) {
+                    var localindexes = [];
+                    reqParams.tf['local_secondary_index'] = [];
+
+                    for (var j=0; j<action['parameters'][0]['localIndexes'].length; j++) {
+                        var keyschema = [];
+                        if (action['parameters'][0]['hashKey']) {
+                            keyschema.push({
+                                'AttributeName': action['parameters'][0]['localIndexes'][j]['hashKey']['attributeName'],
+                                'KeyType': 'HASH'
+                            });
+                        }
+                        if (action['parameters'][0]['rangeKey']) {
+                            keyschema.push({
+                                'AttributeName': action['parameters'][0]['localIndexes'][j]['rangeKey']['attributeName'],
+                                'KeyType': 'RANGE'
+                            });
+                        }
+
+                        localindexes.push({
+                            'IndexName': action['parameters'][0]['localIndexes'][j]['name'],
+                            'KeySchema': keyschema,
+                            'Projection': {
+                                'ProjectionType': action['parameters'][0]['localIndexes'][j]['projection']['projectionType'],
+                                'NonKeyAttributes': action['parameters'][0]['localIndexes'][j]['projection']['nonKeyAttributes']
+                            }
+                        });
+                        reqParams.tf['local_secondary_index'].push({
+                            'name': action['parameters'][0]['localIndexes'][j]['name'],
+                            'range_key': action['parameters'][0]['localIndexes'][j]['rangeKey']['attributeName'],
+                            'projection_type': action['parameters'][0]['localIndexes'][j]['projection']['projectionType'],
+                            'non_key_attributes': action['parameters'][0]['localIndexes'][j]['projection']['nonKeyAttributes']
+                        });
+                    }
+
+                    reqParams.boto3['LocalSecondaryIndexes'] = localindexes;
+                    reqParams.cli['--local-secondary-indexes'] = localindexes;
+                    reqParams.cfn['LocalSecondaryIndexes'] = localindexes;
+                }
+
+                if (action['parameters'][0]['globalIndexes'] && action['parameters'][0]['globalIndexes'].length) {
+                    var globalindexes = [];
+                    reqParams.tf['global_secondary_index'] = [];
+
+                    for (var j=0; j<action['parameters'][0]['globalIndexes'].length; j++) {
+                        var keyschema = [];
+                        var rangekey = null;
+
+                        if (action['parameters'][0]['hashKey']) {
+                            keyschema.push({
+                                'AttributeName': action['parameters'][0]['globalIndexes'][j]['hashKey']['attributeName'],
+                                'KeyType': 'HASH'
+                            });
+                        }
+                        if (action['parameters'][0]['rangeKey']) {
+                            keyschema.push({
+                                'AttributeName': action['parameters'][0]['globalIndexes'][j]['rangeKey']['attributeName'],
+                                'KeyType': 'RANGE'
+                            });
+                            rangekey = action['parameters'][0]['globalIndexes'][j]['rangeKey']['attributeName'];
+                        }
+
+                        var provisionedthroughput = null;
+                        var rcu = null;
+                        var wcu = null;
+                        if (action['parameters'][0]['globalIndexes'][j]['provisionedThroughput']) {
+                            provisionedthroughput = {
+                                'ReadCapacityUnits': parseInt(action['parameters'][0]['globalIndexes'][j]['provisionedThroughput']['readCapacityUnits']),
+                                'WriteCapacityUnits': parseInt(action['parameters'][0]['globalIndexes'][j]['provisionedThroughput']['writeCapacityUnits'])
+                            };
+                            rcu = parseInt(action['parameters'][0]['globalIndexes'][j]['provisionedThroughput']['readCapacityUnits']);
+                            wcu = parseInt(action['parameters'][0]['globalIndexes'][j]['provisionedThroughput']['writeCapacityUnits']);
+                        }
+
+                        globalindexes.push({
+                            'IndexName': action['parameters'][0]['globalIndexes'][j]['name'],
+                            'KeySchema': keyschema,
+                            'Projection': {
+                                'ProjectionType': action['parameters'][0]['globalIndexes'][j]['projection']['projectionType'],
+                                'NonKeyAttributes': action['parameters'][0]['globalIndexes'][j]['projection']['nonKeyAttributes']
+                            },
+                            'ProvisionedThroughput': provisionedthroughput
+                        });
+                        reqParams.tf['global_secondary_index'].push({
+                            'name': action['parameters'][0]['globalIndexes'][j]['name'],
+                            'hash_key': action['parameters'][0]['globalIndexes'][j]['hashKey']['attributeName'],
+                            'range_key': rangekey,
+                            'projection_type': action['parameters'][0]['globalIndexes'][j]['projection']['projectionType'],
+                            'non_key_attributes': action['parameters'][0]['globalIndexes'][j]['projection']['nonKeyAttributes'],
+                            'read_capacity': rcu,
+                            'write_capacity': wcu
+                        });
+                    }
+
+                    reqParams.boto3['GlobalSecondaryIndexes'] = globalindexes;
+                    reqParams.cli['--global-secondary-indexes'] = globalindexes;
+                    reqParams.cfn['GlobalSecondaryIndexes'] = globalindexes;
+                }
+
+                if (action['parameters'][0]['sseSpecification']) {
+                    var ssespec = {
+                        'Enabled': action['parameters'][0]['sseSpecification']['enabled'],
+                        'SSEType': action['parameters'][0]['sseSpecification']['SSEType'],
+                        'KMSMasterKeyId': action['parameters'][0]['sseSpecification']['KMSMasterKeyId']
+                    };
+
+                    reqParams.boto3['SSESpecification'] = ssespec;
+                    reqParams.cli['--sse-specification'] = ssespec;
+                    reqParams.cfn['SSESpecification'] = ssespec;
+                    reqParams.tf['server_side_encryption'] = {
+                        'enabled': action['parameters'][0]['sseSpecification']['enabled']
+                    };
+                }
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dynamodb',
+                    'method': {
+                        'api': 'CreateTable',
+                        'boto3': 'create_table',
+                        'cli': 'create-table'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+        
+                tracked_resources.push({
+                    'logicalId': getResourceName('dynamodb', details.requestId),
+                    'region': region,
+                    'service': 'dynamodb',
+                    'type': 'AWS::DynamoDB::Table',
+                    'terraformType': 'aws_dynamodb_table',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBRequestContext.listTables") {
                 outputs.push({
                     'region': region,
                     'service': 'dynamodb',
@@ -31224,8 +31387,6 @@ function analyseRequest(details) {
         if (gwtRequest['args'][2].value.tls == 0) {
             tls_policy = "Optional"
         }
-
-        console.dir(gwtRequest);
 
         var recipients = [];
         for (var i=0; i<gwtRequest['args'][2].value.recipients.value.length; i++) {
@@ -39200,8 +39361,6 @@ function analyseRequest(details) {
 
     // manual:cloudfront:cloudfront.CreateStreamingDistribution
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createStreamingDistribution") {
-        console.dir(gwtRequest);
-
         var ts_items = [];
         for (var i=0; i<gwtRequest.args[0].value.trustedsigners.items.value.length; i++) {
             ts_items.push(gwtRequest.args[0].value.trustedsigners.items.value[i].value);
@@ -39305,6 +39464,13 @@ function analyseRequest(details) {
         reqParams.cfn['BatchSize'] = jsonRequestBody.data.batchSize;
         reqParams.cfn['StartingPosition'] = jsonRequestBody.data.startingPosition;
 
+        reqParams.tf['event_source_arn'] = jsonRequestBody.source;
+        reqParams.tf['function_name'] = jsonRequestBody.target;
+        reqParams.tf['enabled'] = jsonRequestBody.data.enabled;
+        reqParams.tf['batch_size'] = jsonRequestBody.data.batchSize;
+        reqParams.tf['starting_position'] = jsonRequestBody.data.startingPosition;
+        reqParams.tf['starting_position_timestamp'] = jsonRequestBody.data.startingPositionTimestamp;
+
         outputs.push({
             'region': region,
             'service': 'lambda',
@@ -39322,6 +39488,45 @@ function analyseRequest(details) {
             'region': region,
             'service': 'lambda',
             'type': 'AWS::Lambda::EventSourceMapping',
+            'terraformType': 'aws_lambda_event_source_mapping',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:swf:swf.RegisterDomain
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/swf\/console\/SWFService$/g) && gwtRequest['service'] == "com.amazonaws.swf.console.gwtcoral.client.com.amazonaws.swf.service.model.SimpleWorkflowService" && gwtRequest['method'] == "RegisterDomain") {
+        reqParams.boto3['name'] = gwtRequest.args[0].value.name;
+        reqParams.cli['--name'] = gwtRequest.args[0].value.name;
+        reqParams.boto3['description'] = gwtRequest.args[0].value.description;
+        reqParams.cli['--description'] = gwtRequest.args[0].value.description;
+        reqParams.boto3['workflowExecutionRetentionPeriodInDays'] = gwtRequest.args[0].value.days;
+        reqParams.cli['--workflow-execution-retention-period-in-days'] = gwtRequest.args[0].value.days;
+
+        reqParams.tf['name'] = gwtRequest.args[0].value.name;
+        reqParams.tf['description'] = gwtRequest.args[0].value.description;
+        reqParams.tf['workflow_execution_retention_period_in_days'] = gwtRequest.args[0].value.days;
+
+        outputs.push({
+            'region': region,
+            'service': 'swf',
+            'method': {
+                'api': 'RegisterDomain',
+                'boto3': 'register_domain',
+                'cli': 'register-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('swf', details.requestId),
+            'region': region,
+            'service': 'swf',
+            'terraformType': 'aws_swf_domain',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
