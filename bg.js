@@ -3672,6 +3672,9 @@ function analyseRequest(details) {
             reqParams.boto3['UserData'] = atob(jsonRequestBody.UserData);
         }
         reqParams.boto3['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
+        reqParams.boto3['IamInstanceProfile'] = {
+            'Arn': jsonRequestBody.IamInstanceProfile.Arn
+        };
 
         reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
         reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
@@ -3694,6 +3697,7 @@ function analyseRequest(details) {
         reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         reqParams.cfn['UserData'] = jsonRequestBody.UserData;
         reqParams.cfn['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
+        reqParams.cfn['IamInstanceProfile'] = jsonRequestBody.IamInstanceProfile.Arn;
 
         reqParams.cli['--image-id'] = jsonRequestBody.ImageId;
         if (jsonRequestBody.MaxCount == jsonRequestBody.MinCount) {
@@ -3715,12 +3719,14 @@ function analyseRequest(details) {
         reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
         reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
-        reqParams.cli['--capacity-reservation-specification'] = jsonRequestBody.CapacityReservationSpecification;
         reqParams.cli['--elastic-inference-accelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         if (jsonRequestBody.UserData) {
             reqParams.cli['--user-data'] = atob(jsonRequestBody.UserData);
         }
         reqParams.cli['--network-interfaces'] = jsonRequestBody.NetworkInterface;
+        reqParams.cli['--iam-instance-profile'] = {
+            'Arn': jsonRequestBody.IamInstanceProfile.Arn
+        };
 
         reqParams.tf['ami'] = jsonRequestBody.ImageId;
         reqParams.tf['key_name'] = jsonRequestBody.KeyName;
@@ -3751,6 +3757,7 @@ function analyseRequest(details) {
             }
         }
         reqParams.tf['ebs_optimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.tf['iam_instance_profile'] = jsonRequestBody.IamInstanceProfile.Arn;
 
         for (var i=0; i<jsonRequestBody.BlockDeviceMappings.length; i++) {
             if (jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/sda1" || jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/xvda") {
@@ -19465,6 +19472,11 @@ function analyseRequest(details) {
             terraformType = "aws_opsworks_memcached_layer";
 
             reqParams.tf['allocated_memory'] = jsonRequestBody.Attributes.MemcachedMemory;
+        } else if (jsonRequestBody.Type == "db-master") {
+            terraformType = "aws_opsworks_mysql_layer";
+
+            reqParams.tf['root_password'] = jsonRequestBody.Attributes.MysqlRootPassword;
+            reqParams.tf['root_password_on_all_instances'] = jsonRequestBody.Attributes.MysqlRootPasswordUbiquitous;
         } else if (jsonRequestBody.Type == "nodejs-app") {
             terraformType = "aws_opsworks_nodejs_app_layer";
             
@@ -40099,6 +40111,410 @@ function analyseRequest(details) {
             'requestDetails': details,
             'was_blocked': blocking
         });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DescribeLayers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-layers\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DescribeLayers',
+                'boto3': 'describe_layers',
+                'cli': 'describe-layers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.DescribeInstances
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-instances\?/g)) {
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'DescribeInstances',
+                'boto3': 'describe_instances',
+                'cli': 'describe-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.DescribeDBInstances
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeDBInstances") {
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'DescribeDBInstances',
+                'boto3': 'describe_db_instances',
+                'cli': 'describe-db-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.DescribeGlobalClusters
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeGlobalClusters") {
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'DescribeGlobalClusters',
+                'boto3': 'describe_global_clusters',
+                'cli': 'describe-global-clusters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.DescribePendingMaintenanceActions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'DescribePendingMaintenanceActions',
+                'boto3': 'describe_pending_maintenance_actions',
+                'cli': 'describe-pending-maintenance-actions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworks.RegisterRdsDbInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/register\-rds\-db\-instance\?/g)) {
+        reqParams.boto3['RdsDbInstanceArn'] = jsonRequestBody.RdsDbInstanceArn;
+        reqParams.cli['--rds-db-instance-arn'] = jsonRequestBody.RdsDbInstanceArn;
+        reqParams.boto3['StackId'] = jsonRequestBody.StackId;
+        reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
+        reqParams.boto3['DbUser'] = jsonRequestBody.DbUser;
+        reqParams.cli['--db-user'] = jsonRequestBody.DbUser;
+        reqParams.boto3['DbPassword'] = jsonRequestBody.DbPassword;
+        reqParams.cli['--db-password'] = jsonRequestBody.DbPassword;
+
+        reqParams.tf['rds_db_instance_arn'] = jsonRequestBody.RdsDbInstanceArn;
+        reqParams.tf['stack_id'] = jsonRequestBody.StackId;
+        reqParams.tf['db_user'] = jsonRequestBody.DbUser;
+        reqParams.tf['db_password'] = jsonRequestBody.DbPassword;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworks',
+            'method': {
+                'api': 'RegisterRdsDbInstance',
+                'boto3': 'register_rds_db_instance',
+                'cli': 'register-rds-db-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworks', details.requestId),
+            'region': region,
+            'service': 'opsworks',
+            'terraformType': 'aws_opsworks_rds_db_instance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:pinpoint:pinpoint.CreateApp
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/pinpoint\/api\/apps$/g)) {
+        reqParams.boto3['CreateApplicationRequest'] = {
+            'Name': jsonRequestBody.Name
+        };
+        reqParams.cli['--create-application-request'] = {
+            'Name': jsonRequestBody.Name
+        };
+
+        outputs.push({
+            'region': region,
+            'service': 'pinpoint',
+            'method': {
+                'api': 'CreateApp',
+                'boto3': 'create_app',
+                'cli': 'create-app'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:pinpoint:pinpoint.UpdateSmsChannel
+    // autogen:pinpoint:pinpoint.UpdateApnsChannel
+    // autogen:pinpoint:pinpoint.UpdateGcmChannel
+    // autogen:pinpoint:pinpoint.UpdateBaiduChannel
+    // autogen:pinpoint:pinpoint.UpdateAdmChannel
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/pinpoint\/api\/app\/settings\/channels$/g)) {
+        if (jsonRequestBody.sms) {
+            reqParams.boto3['SMSChannelRequest'] = {
+                'Enabled': jsonRequestBody.sms.enabled
+            };
+            reqParams.cli['--sms-channel-request'] = {
+                'Enabled': jsonRequestBody.sms.enabled
+            };
+            reqParams.boto3['ApplicationId'] = jsonRequestBody.appId;
+            reqParams.cli['--application-id'] = jsonRequestBody.appId;
+
+            reqParams.tf['application_id'] = jsonRequestBody.appId;
+            reqParams.tf['enabled'] = jsonRequestBody.sms.enabled;
+
+            outputs.push({
+                'region': region,
+                'service': 'pinpoint',
+                'method': {
+                    'api': 'UpdateSmsChannel',
+                    'boto3': 'update_sms_channel',
+                    'cli': 'update-sms-channel'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('pinpoint', details.requestId),
+                'region': region,
+                'service': 'pinpoint',
+                'terraformType': 'aws_pinpoint_sms_channel',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+
+        if (jsonRequestBody.apns) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['ApplicationId'] = jsonRequestBody.appId;
+            reqParams.cli['--application-id'] = jsonRequestBody.appId;
+            reqParams.boto3['APNSChannelRequest'] = {
+                'DefaultAuthenticationMethod': jsonRequestBody.apns.authModeDefault,
+                'Enabled': jsonRequestBody.apns.enabled,
+                'PrivateKey': jsonRequestBody.apns.privateKey,
+                'Certificate': jsonRequestBody.apns.certificate
+            };
+            reqParams.cli['--apns-channel-request'] = {
+                'DefaultAuthenticationMethod': jsonRequestBody.apns.authModeDefault,
+                'Enabled': jsonRequestBody.apns.enabled,
+                'PrivateKey': jsonRequestBody.apns.privateKey,
+                'Certificate': jsonRequestBody.apns.certificate
+            };
+
+            reqParams.tf['application_id'] = jsonRequestBody.appId;
+            reqParams.tf['enabled'] = jsonRequestBody.apns.enabled;
+            reqParams.tf['certificate'] = jsonRequestBody.apns.certificate;
+            reqParams.tf['private_key'] = jsonRequestBody.apns.privateKey;
+            reqParams.tf['default_authentication_method'] = jsonRequestBody.apns.authModeDefault;
+
+            outputs.push({
+                'region': region,
+                'service': 'pinpoint',
+                'method': {
+                    'api': 'UpdateApnsChannel',
+                    'boto3': 'update_apns_channel',
+                    'cli': 'update-apns-channel'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('pinpoint', details.requestId),
+                'region': region,
+                'service': 'pinpoint',
+                'terraformType': 'aws_pinpoint_apns_channel',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+
+        if (jsonRequestBody.gcm) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['ApplicationId'] = jsonRequestBody.appId;
+            reqParams.cli['--application-id'] = jsonRequestBody.appId;
+            reqParams.boto3['GCMChannelRequest'] = {
+                'ApiKey': jsonRequestBody.gcm.apiKey,
+                'Enabled': jsonRequestBody.gcm.enabled
+            };
+            reqParams.cli['--gcm-channel-request'] = {
+                'ApiKey': jsonRequestBody.gcm.apiKey,
+                'Enabled': jsonRequestBody.gcm.enabled
+            };
+
+            reqParams.tf['application_id'] = jsonRequestBody.appId;
+            reqParams.tf['enabled'] = jsonRequestBody.gcm.enabled;
+            reqParams.tf['api_key'] = jsonRequestBody.gcm.apiKey;
+
+            outputs.push({
+                'region': region,
+                'service': 'pinpoint',
+                'method': {
+                    'api': 'UpdateGcmChannel',
+                    'boto3': 'update_gcm_channel',
+                    'cli': 'update-gcm-channel'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('pinpoint', details.requestId),
+                'region': region,
+                'service': 'pinpoint',
+                'terraformType': 'aws_pinpoint_gcm_channel',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+
+        if (jsonRequestBody.baidu) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['ApplicationId'] = jsonRequestBody.appId;
+            reqParams.cli['--application-id'] = jsonRequestBody.appId;
+            reqParams.boto3['BaiduChannelRequest'] = {
+                'ApiKey': jsonRequestBody.baidu.apiKey,
+                'SecretKey': jsonRequestBody.baidu.secretKey,
+                'Enabled': jsonRequestBody.baidu.enabled
+            };
+            reqParams.cli['--baidu-channel-request'] = {
+                'ApiKey': jsonRequestBody.baidu.apiKey,
+                'SecretKey': jsonRequestBody.baidu.secretKey,
+                'Enabled': jsonRequestBody.baidu.enabled
+            };
+
+            reqParams.tf['application_id'] = jsonRequestBody.appId;
+            reqParams.tf['enabled'] = jsonRequestBody.baidu.enabled;
+            reqParams.tf['api_key'] = jsonRequestBody.baidu.apiKey;
+            reqParams.tf['secret_key'] = jsonRequestBody.baidu.secretKey;
+
+            outputs.push({
+                'region': region,
+                'service': 'pinpoint',
+                'method': {
+                    'api': 'UpdateBaiduChannel',
+                    'boto3': 'update_baidu_channel',
+                    'cli': 'update-baidu-channel'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('pinpoint', details.requestId),
+                'region': region,
+                'service': 'pinpoint',
+                'terraformType': 'aws_pinpoint_baidu_channel',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+
+        if (jsonRequestBody.adm) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {}
+            };
+
+            reqParams.boto3['ApplicationId'] = jsonRequestBody.appId;
+            reqParams.cli['--application-id'] = jsonRequestBody.appId;
+            reqParams.boto3['ADMChannelRequest'] = {
+                'ClientId': jsonRequestBody.adm.clientId,
+                'ClientSecret': jsonRequestBody.adm.clientSecret,
+                'Enabled': jsonRequestBody.adm.enabled
+            };
+            reqParams.cli['--adm-channel-request'] = {
+                'ClientId': jsonRequestBody.adm.clientId,
+                'ClientSecret': jsonRequestBody.adm.clientSecret,
+                'Enabled': jsonRequestBody.adm.enabled
+            };
+
+            reqParams.tf['application_id'] = jsonRequestBody.appId;
+            reqParams.tf['enabled'] = jsonRequestBody.adm.enabled;
+            reqParams.tf['client_id'] = jsonRequestBody.adm.clientId;
+            reqParams.tf['client_secret'] = jsonRequestBody.adm.clientSecret;
+
+            outputs.push({
+                'region': region,
+                'service': 'pinpoint',
+                'method': {
+                    'api': 'UpdateAdmChannel',
+                    'boto3': 'update_adm_channel',
+                    'cli': 'update-adm-channel'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('pinpoint', details.requestId),
+                'region': region,
+                'service': 'pinpoint',
+                'terraformType': 'aws_pinpoint_adm_channel',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
         
         return {};
     }
