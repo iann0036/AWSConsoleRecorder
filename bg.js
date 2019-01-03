@@ -1306,7 +1306,7 @@ function processBoto3Parameter(param, spacing) {
         Object.keys(param).forEach(function (key) {
             var item = processBoto3Parameter(param[key], spacing + 4);
             if (item !== undefined) {
-                paramitems.push(key + "=" + processBoto3Parameter(param[key], spacing + 4));
+                paramitems.push("'" + key + "': " + processBoto3Parameter(param[key], spacing + 4));
             }
         });
 
@@ -3298,7 +3298,7 @@ function analyseRequest(details) {
         reqParams.boto3['MaxCount'] = jsonRequestBody.MaxCount;
         reqParams.boto3['MinCount'] = jsonRequestBody.MinCount;
         reqParams.boto3['KeyName'] = jsonRequestBody.KeyName;
-        reqParams.boto3['SecurityGroupId'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
         reqParams.boto3['InstanceType'] = jsonRequestBody.InstanceType;
         reqParams.boto3['Placement'] = jsonRequestBody.Placement;
         reqParams.boto3['Monitoring'] = jsonRequestBody.Monitoring;
@@ -3307,7 +3307,13 @@ function analyseRequest(details) {
         reqParams.boto3['CreditSpecification'] = jsonRequestBody.CreditSpecification;
         reqParams.boto3['TagSpecification'] = jsonRequestBody.TagSpecifications;
         reqParams.boto3['EbsOptimized'] = jsonRequestBody.EbsOptimized;
-        reqParams.boto3['BlockDeviceMapping'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.boto3['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.boto3['CapacityReservationSpecification'] = jsonRequestBody.CapacityReservationSpecification;
+        reqParams.boto3['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        if (jsonRequestBody.UserData) {
+            reqParams.boto3['UserData'] = atob(jsonRequestBody.UserData);
+        }
+        reqParams.boto3['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
 
         reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
         reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
@@ -3327,6 +3333,9 @@ function analyseRequest(details) {
         reqParams.cfn['Tags'] = jsonRequestBody.TagSpecifications;
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cfn['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        reqParams.cfn['UserData'] = jsonRequestBody.UserData;
+        reqParams.cfn['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
 
         reqParams.cli['--image-id'] = jsonRequestBody.ImageId;
         if (jsonRequestBody.MaxCount == jsonRequestBody.MinCount) {
@@ -3348,6 +3357,12 @@ function analyseRequest(details) {
         reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
         reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
+        reqParams.cli['--capacity-reservation-specification'] = jsonRequestBody.CapacityReservationSpecification;
+        reqParams.cli['--elastic-inference-accelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        if (jsonRequestBody.UserData) {
+            reqParams.cli['--user-data'] = atob(jsonRequestBody.UserData);
+        }
+        reqParams.cli['--network-interfaces'] = jsonRequestBody.NetworkInterface;
 
         reqParams.tf['ami'] = jsonRequestBody.ImageId;
         reqParams.tf['key_name'] = jsonRequestBody.KeyName;
@@ -3399,6 +3414,20 @@ function analyseRequest(details) {
                     'iops': jsonRequestBody.BlockDeviceMappings[i].Ebs.Iops,
                     'snapshot_id': jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId
                 };
+            }
+        }
+
+        if (jsonRequestBody.UserData) {
+            reqParams.tf['user_data'] = atob(jsonRequestBody.UserData);
+        }
+        if (jsonRequestBody.NetworkInterface) {
+            reqParams.tf['network_interface'] = [];
+            for (var i=0; i<jsonRequestBody.NetworkInterface.length; i++) {
+                reqParams.tf['network_interface'].push({
+                    'device_index': jsonRequestBody.NetworkInterface[i].DeviceIndex,
+                    'network_interface_id': jsonRequestBody.NetworkInterface[i].NetworkInterfaceId,
+                    'delete_on_termination': jsonRequestBody.NetworkInterface[i].DeleteOnTermination
+                });
             }
         }
 
