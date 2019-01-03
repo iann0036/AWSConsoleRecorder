@@ -40519,4 +40519,486 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:datasync:datasync.CreateAgent
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createAgent") {
+        reqParams.boto3['ActivationKey'] = jsonRequestBody.contentString.ActivationKey;
+        reqParams.cli['--activation-key'] = jsonRequestBody.contentString.ActivationKey;
+        reqParams.boto3['AgentName'] = jsonRequestBody.contentString.AgentName;
+        reqParams.cli['--agent-name'] = jsonRequestBody.contentString.AgentName;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['activation_key'] = jsonRequestBody.contentString.ActivationKey;
+        reqParams.tf['name'] = jsonRequestBody.contentString.AgentName;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'CreateAgent',
+                'boto3': 'create_agent',
+                'cli': 'create-agent'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datasync', details.requestId),
+            'region': region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_agent',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.ListTasks
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listTasks") {
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'ListTasks',
+                'boto3': 'list_tasks',
+                'cli': 'list-tasks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DescribeAgent
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeAgent") {
+        reqParams.boto3['AgentArn'] = jsonRequestBody.contentString.AgentArn;
+        reqParams.cli['--agent-arn'] = jsonRequestBody.contentString.AgentArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DescribeAgent',
+                'boto3': 'describe_agent',
+                'cli': 'describe-agent'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:s3.ListBuckets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:efs.DescribeFileSystems
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeFileSystems") {
+
+        outputs.push({
+            'region': region,
+            'service': 'efs',
+            'method': {
+                'api': 'DescribeFileSystems',
+                'boto3': 'describe_file_systems',
+                'cli': 'describe-file-systems'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.CreateLocationS3
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationS3") {
+        reqParams.boto3['S3BucketArn'] = jsonRequestBody.contentString.S3BucketArn;
+        reqParams.cli['--s3-bucket-arn'] = jsonRequestBody.contentString.S3BucketArn;
+        reqParams.boto3['S3Config'] = jsonRequestBody.contentString.S3Config;
+        reqParams.cli['--s3-config'] = jsonRequestBody.contentString.S3Config;
+        reqParams.boto3['Subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.cli['--subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['s3_bucket_arn'] = jsonRequestBody.contentString.S3BucketArn;
+        reqParams.tf['s3_config'] = {
+            'bucket_access_role_arn': jsonRequestBody.contentString.S3Config.BucketAccessRoleArn
+        };
+        reqParams.tf['subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'CreateLocationS3',
+                'boto3': 'create_location_s3',
+                'cli': 'create-location-s3'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datasync', details.requestId),
+            'region': region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_s3',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.CreateLocationNfs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationNfs") {
+        reqParams.boto3['OnPremConfig'] = jsonRequestBody.contentString.OnPremConfig;
+        reqParams.cli['--on-prem-config'] = jsonRequestBody.contentString.OnPremConfig;
+        reqParams.boto3['ServerHostname'] = jsonRequestBody.contentString.ServerHostname;
+        reqParams.cli['--server-hostname'] = jsonRequestBody.contentString.ServerHostname;
+        reqParams.boto3['Subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.cli['--subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['server_hostname'] = jsonRequestBody.contentString.ServerHostname;
+        reqParams.tf['on_prem_config'] = {
+            'agent_arns': jsonRequestBody.contentString.OnPremConfig.AgentArns
+        };
+        reqParams.tf['subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'CreateLocationNfs',
+                'boto3': 'create_location_nfs',
+                'cli': 'create-location-nfs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datasync', details.requestId),
+            'region': region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_nfs',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DescribeLocationNfs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
+        reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
+        reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DescribeLocationNfs',
+                'boto3': 'describe_location_nfs',
+                'cli': 'describe-location-nfs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:efs.DescribeMountTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeMountTargets") {
+        reqParams.boto3['FileSystemId'] = jsonRequestBody.params.FileSystemId;
+        reqParams.cli['--file-system-id'] = jsonRequestBody.params.FileSystemId;
+
+        outputs.push({
+            'region': region,
+            'service': 'efs',
+            'method': {
+                'api': 'DescribeMountTargets',
+                'boto3': 'describe_mount_targets',
+                'cli': 'describe-mount-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.CreateLocationEfs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationEfs") {
+        reqParams.boto3['Ec2Config'] = jsonRequestBody.contentString.Ec2Config;
+        reqParams.cli['--ec-2-config'] = jsonRequestBody.contentString.Ec2Config;
+        reqParams.boto3['EfsFilesystemArn'] = jsonRequestBody.contentString.EfsFilesystemArn;
+        reqParams.cli['--efs-filesystem-arn'] = jsonRequestBody.contentString.EfsFilesystemArn;
+        reqParams.boto3['Subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.cli['--subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['efs_file_system_arn'] = jsonRequestBody.contentString.EfsFilesystemArn;
+        reqParams.tf['ec2_config'] = {
+            'security_group_arns': jsonRequestBody.contentString.Ec2Config.SecurityGroupArns,
+            'subnet_arn': jsonRequestBody.contentString.Ec2Config.SubnetArn
+        };
+        reqParams.tf['subdirectory'] = jsonRequestBody.contentString.Subdirectory;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'CreateLocationEfs',
+                'boto3': 'create_location_efs',
+                'cli': 'create-location-efs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datasync', details.requestId),
+            'region': region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_efs',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DescribeLocationNfs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
+        reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
+        reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DescribeLocationNfs',
+                'boto3': 'describe_location_nfs',
+                'cli': 'describe-location-nfs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.CreateTask
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createTask") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+        reqParams.boto3['SourceLocationArn'] = jsonRequestBody.contentString.SourceLocationArn;
+        reqParams.cli['--source-location-arn'] = jsonRequestBody.contentString.SourceLocationArn;
+        reqParams.boto3['DestinationLocationArn'] = jsonRequestBody.contentString.DestinationLocationArn;
+        reqParams.cli['--destination-location-arn'] = jsonRequestBody.contentString.DestinationLocationArn;
+        reqParams.boto3['CloudWatchLogGroupArn'] = jsonRequestBody.contentString.CloudWatchLogGroupArn;
+        reqParams.cli['--cloud-watch-log-group-arn'] = jsonRequestBody.contentString.CloudWatchLogGroupArn;
+        reqParams.boto3['Options'] = jsonRequestBody.contentString.Options;
+        reqParams.cli['--options'] = jsonRequestBody.contentString.Options;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+
+        reqParams.tf['name'] = jsonRequestBody.contentString.Name;
+        reqParams.tf['source_location_arn'] = jsonRequestBody.contentString.SourceLocationArn;
+        reqParams.tf['destination_location_arn'] = jsonRequestBody.contentString.DestinationLocationArn;
+        reqParams.tf['cloudwatch_log_group_arn'] = jsonRequestBody.contentString.CloudWatchLogGroupArn;
+        reqParams.tf['options'] = {
+            'atime': jsonRequestBody.contentString.Options.Atime,
+            'bytes_per_second': jsonRequestBody.contentString.Options.BytesPerSecond,
+            'gid': jsonRequestBody.contentString.Options.Gid,
+            'mtime': jsonRequestBody.contentString.Options.Mtime,
+            'posix_permissions': jsonRequestBody.contentString.Options.PosixPermissions,
+            'preserve_deleted_files': jsonRequestBody.contentString.Options.PreserveDeletedFiles,
+            'preserve_devices': jsonRequestBody.contentString.Options.PreserveDevices,
+            'uid': jsonRequestBody.contentString.Options.Uid,
+            'verify_mode': jsonRequestBody.contentString.Options.VerifyMode
+        };
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'CreateTask',
+                'boto3': 'create_task',
+                'cli': 'create-task'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datasync', details.requestId),
+            'region': region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_task',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DescribeTask
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeTask") {
+        reqParams.boto3['TaskArn'] = jsonRequestBody.contentString.TaskArn;
+        reqParams.cli['--task-arn'] = jsonRequestBody.contentString.TaskArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DescribeTask',
+                'boto3': 'describe_task',
+                'cli': 'describe-task'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DeleteTask
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteTask") {
+        reqParams.boto3['TaskArn'] = jsonRequestBody.contentString.TaskArn;
+        reqParams.cli['--task-arn'] = jsonRequestBody.contentString.TaskArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DeleteTask',
+                'boto3': 'delete_task',
+                'cli': 'delete-task'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DeleteAgent
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteAgent") {
+        reqParams.boto3['AgentArn'] = jsonRequestBody.contentString.AgentArn;
+        reqParams.cli['--agent-arn'] = jsonRequestBody.contentString.AgentArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DeleteAgent',
+                'boto3': 'delete_agent',
+                'cli': 'delete-agent'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:datasync:datasync.DeleteLocation
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteLocation") {
+        reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
+        reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'datasync',
+            'method': {
+                'api': 'DeleteLocation',
+                'boto3': 'delete_location',
+                'cli': 'delete-location'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
