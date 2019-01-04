@@ -37,6 +37,7 @@ The following outputs are currently supported:
 * CloudFormation
 * HashiCorp Terraform
 * CDK (TypeScript)
+* IAM Policy
 
 ## Settings
 
