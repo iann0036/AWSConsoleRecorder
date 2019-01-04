@@ -1550,26 +1550,49 @@ function outputMapIam(compiled_iam_outputs) {
     console.dir(compiled_iam_outputs);
 
     for (var i=0; i<compiled_iam_outputs.length; i++) {
-        compiled_iam_outputs[i].action = [...new Set(compiled_iam_outputs[i].action)]; // dedup
-        if (compiled_iam_outputs[i].action.length == 1) {
-            compiled_iam_outputs[i].action = compiled_iam_outputs[i].action[0];
-        }
-        compiled_iam_outputs[i].resource = [...new Set(compiled_iam_outputs[i].resource)]; // dedup
-        if (compiled_iam_outputs[i].resource.length == 1) {
-            compiled_iam_outputs[i].resource = compiled_iam_outputs[i].resource[0];
-        }
-        var sid = "unmappedactions";
         if (compiled_iam_outputs[i].mapped) {
-            sid = "mapped" + MD5(Math.random().toString()).substring(0,7);
-        }
+            compiled_iam_outputs[i].action = [...new Set(compiled_iam_outputs[i].action)]; // dedup
+            if (compiled_iam_outputs[i].action.length == 1) {
+                compiled_iam_outputs[i].action = compiled_iam_outputs[i].action[0];
+            }
+            compiled_iam_outputs[i].resource = [...new Set(compiled_iam_outputs[i].resource)]; // dedup
+            if (compiled_iam_outputs[i].resource.length == 1) {
+                compiled_iam_outputs[i].resource = compiled_iam_outputs[i].resource[0];
+            }
 
-        output += `        {
+            var sid = "mapped" + MD5(Math.random().toString()).substring(0,7);
+
+            output += `        {
             "Sid": "${sid}",
             "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
             "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
             "Effect": ${JSON.stringify(compiled_iam_outputs[i].effect)}
         },
 `;
+        }
+    }
+
+    for (var i=0; i<compiled_iam_outputs.length; i++) {
+        if (!compiled_iam_outputs[i].mapped) {
+            compiled_iam_outputs[i].action = [...new Set(compiled_iam_outputs[i].action)]; // dedup
+            if (compiled_iam_outputs[i].action.length == 1) {
+                compiled_iam_outputs[i].action = compiled_iam_outputs[i].action[0];
+            }
+            compiled_iam_outputs[i].resource = [...new Set(compiled_iam_outputs[i].resource)]; // dedup
+            if (compiled_iam_outputs[i].resource.length == 1) {
+                compiled_iam_outputs[i].resource = compiled_iam_outputs[i].resource[0];
+            }
+            
+            var sid = "unmappedactions";
+
+            output += `        {
+            "Sid": "${sid}",
+            "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
+            "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
+            "Effect": ${JSON.stringify(compiled_iam_outputs[i].effect)}
+        },
+`;
+        }
     }
 
     output = output.substring(0, output.length - 2); // strip last comma
@@ -29559,7 +29582,7 @@ function analyseRequest(details) {
     // autogen:waf:waf-regional.UpdateByteMatchSet
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateByteMatchSet") {
         reqParams.iam['Resource'] = [
-            "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId;
+            "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
 
         reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
@@ -29592,7 +29615,7 @@ function analyseRequest(details) {
     // autogen:waf:waf-regional.DeleteByteMatchSet
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteByteMatchSet") {
         reqParams.iam['Resource'] = [
-            "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId;
+            "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
 
         reqParams.boto3['ByteMatchSetId'] = jsonRequestBody.content.ByteMatchSetId;
@@ -32943,7 +32966,7 @@ function analyseRequest(details) {
     // autogen:organizations:organizations.MoveAccount
     if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
         reqParams.iam['Resource'] = [
-            'arn:aws:organizations::${MasterAccountId}:account/*/' + getUrlValue(details.url, 'accountId')
+            'arn:aws:organizations::${MasterAccountId}:account/*/' + getUrlValue(details.url, 'accountId'),
             'arn:aws:organizations::${MasterAccountId}:ou/*/*',
             'arn:aws:organizations::${MasterAccountId}:root/*/*'
         ];
