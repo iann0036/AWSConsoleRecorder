@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor, cdkts_editor;
+var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor, cdkts_editor, iam_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -89,6 +89,15 @@ window.onload = function(){
                 indentUnit: 4
             });
             cdkts_editor.getDoc().setValue(response['cdkts']);
+    
+            iam_editor = CodeMirror.fromTextArea(document.getElementById('iam'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: "javascript",
+                theme: theme,
+                indentUnit: 4
+            });
+            iam_editor.getDoc().setValue(response['iam']);
             
             setTimeout(function() {
                 boto3_editor.refresh();
@@ -98,6 +107,7 @@ window.onload = function(){
                 cli_editor.refresh();
                 js_editor.refresh();
                 cdkts_editor.refresh();
+                iam_editor.refresh();
             },1);
 
             $('#theme').val(theme).trigger('change');
@@ -116,6 +126,7 @@ window.onload = function(){
                     cli_editor.setOption("theme", evt.target.value);
                     js_editor.setOption("theme", evt.target.value);
                     cdkts_editor.setOption("theme", evt.target.value);
+                    iams_editor.setOption("theme", evt.target.value);
                 }
             };
         });
@@ -156,6 +167,7 @@ window.onload = function(){
             cli_editor.getDoc().setValue("# No recorded actions yet");
             js_editor.getDoc().setValue("// No recorded actions yet");
             cdkts_editor.getDoc().setValue("// No recorded actions yet");
+            iam_editor.getDoc().setValue("// No recorded actions yet");
 
             setTimeout(function() {
                 boto3_editor.refresh();
@@ -165,6 +177,7 @@ window.onload = function(){
                 cli_editor.refresh();
                 js_editor.refresh();
                 cdkts_editor.refresh();
+                iam_editor.refresh();
             },1);
             
             document.getElementById('cleardata_btn').innerHTML = "<span class=\"bold\">Cleared!</span>";
@@ -182,6 +195,7 @@ function resetMenu() {
     document.getElementById('tf_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('js_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('cdkts_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('iam_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
     document.getElementById('boto3_container').style = "display: none;";
@@ -191,6 +205,7 @@ function resetMenu() {
     document.getElementById('tf_container').style = "display: none;";
     document.getElementById('js_container').style = "display: none;";
     document.getElementById('cdkts_container').style = "display: none;";
+    document.getElementById('iam_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
 }
 
@@ -248,6 +263,14 @@ document.getElementById('cdkts_menubtn').onclick = function(evt) {
     document.getElementById('cdkts_container').style = "";
 
     cdkts_editor.refresh();
+};
+
+document.getElementById('iam_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('iam_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('iam_container').style = "";
+
+    iam_editor.refresh();
 };
 
 document.getElementById('settings_menubtn').onclick = function(evt) {
