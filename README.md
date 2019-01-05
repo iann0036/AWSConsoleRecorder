@@ -31,13 +31,14 @@ All supported actions will be recorded up until the point in which you click the
 The following outputs are currently supported:
 
 * Boto3 (Python) SDK
-* AWS CLI (v1)
-* JavaScript SDK
-* Go SDK (v1)
 * CloudFormation
 * HashiCorp Terraform
+* Troposphere
 * CDK (TypeScript)
+* AWS CLI (v1)
 * IAM Policy
+* JavaScript SDK
+* Go SDK (v1)
 
 ## Settings
 
