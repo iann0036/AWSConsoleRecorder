@@ -1139,7 +1139,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         for (var i=0; i<index; i++) { // correlate
-            if (tracked_resources[i].returnValues) {
+            if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "!Ref " + tracked_resources[i].logicalId;
                 }
@@ -1208,7 +1208,7 @@ function processCdktsParameter(param, spacing, index) {
         }
 
         for (var i=0; i<index; i++) { // correlate
-            if (tracked_resources[i].returnValues) {
+            if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return tracked_resources[i].logicalId + ".ref";
                 }
@@ -1245,7 +1245,7 @@ function processCdktsParameter(param, spacing, index) {
         Object.keys(param).forEach(function (key) {
             var item = processCdktsParameter(param[key], spacing + 4, index);
             if (item !== undefined) {
-                paramitems.push(lcfirststr(key) + ": " + processCdktsParameter(param[key], spacing + 4, index));
+                paramitems.push(lcfirststr(key) + ": " + item);
             }
         });
 
@@ -1256,6 +1256,614 @@ function processCdktsParameter(param, spacing, index) {
     }
     
     return undefined;
+}
+
+function processTroposphereParameter(param, spacing, keyname) {
+    var paramitems = [];
+
+    if (param === undefined || param === null)
+        return undefined;
+    if (typeof param == "boolean") {
+        if (param)
+            return `'true'`;
+        return `'false'`;
+    }
+    if (typeof param == "number")
+        return `'${param}'`;
+    if (typeof param == "string")
+        return `'${param}'`;
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            var item = processTroposphereParameter(paramitem, spacing + 4, keyname);
+            if (item !== undefined) {
+                paramitems.push(item);
+            }
+        });
+
+        return `[
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + ']';
+    }
+    if (typeof param == "object") {
+        Object.keys(param).forEach(function (key) {
+            var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key);
+            if (item !== undefined) {
+                paramitems.push(key + "=" + item);
+            }
+        });
+
+        return `${getTropospherePropertyName(keyname)}(
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + ')';
+    }
+    
+    return undefined;
+}
+
+function getTropospherePropertyName(keyname) {
+    auto_generated_property_mapping = {
+        "BaseRecordSet.AliasTarget": "AliasTarget",
+        "BaseRecordSet.GeoLocation": "GeoLocation",
+        "CreationPolicy.AutoScalingCreationPolicy": "AutoScalingCreationPolicy",
+        "CreationPolicy.ResourceSignal": "ResourceSignal",
+        "InitFile.context": "InitFileContext",
+        "LambdaConfigurations.Filter.S3Key.Rules": "Rules",
+        "RoleMapping.RulesConfiguration": "RulesConfiguration",
+        "RoleMapping.RulesConfiguration.Rules": "MappingRule",
+        "UpdatePolicy.AutoScalingReplacingUpdate": "AutoScalingReplacingUpdate",
+        "UpdatePolicy.AutoScalingRollingUpdate": "AutoScalingRollingUpdate",
+        "UpdatePolicy.AutoScalingScheduledAction": "AutoScalingScheduledAction",
+        "UpdatePolicy.CodeDeployLambdaAliasUpdate": "CodeDeployLambdaAliasUpdate",
+        "amazonmq.Configuration": "ConfigurationId",
+        "amazonmq.Logs": "LogsConfiguration",
+        "amazonmq.MaintenanceWindowStartTime": "MaintenanceWindow",
+        "amazonmq.Users": "User",
+        "analytics.Inputs": "Input",
+        "analytics.Inputs.InputParallelism": "InputParallelism",
+        "analytics.Inputs.InputProcessingConfiguration": "InputProcessingConfiguration",
+        "analytics.Inputs.InputProcessingConfiguration.InputLambdaProcessor": "InputLambdaProcessor",
+        "analytics.Inputs.InputSchema": "InputSchema",
+        "analytics.Inputs.InputSchema.RecordColumns": "RecordColumn",
+        "analytics.Inputs.InputSchema.RecordFormat": "RecordFormat",
+        "analytics.Inputs.InputSchema.RecordFormat.MappingParameters": "JSONMappingParameters",
+        "analytics.Inputs.KinesisFirehoseInput": "KinesisFirehoseInput",
+        "analytics.Inputs.KinesisStreamsInput": "KinesisStreamsInput",
+        "analytics.Output": "Output",
+        "analytics.Output.DestinationSchema": "DestinationSchema",
+        "analytics.Output.KinesisFirehoseOutput": "KinesisFirehoseOutput",
+        "analytics.Output.KinesisStreamsOutput": "KinesisStreamsOutput",
+        "analytics.Output.LambdaOutput": "LambdaOutput",
+        "analytics.ReferenceDataSource": "ReferenceDataSource",
+        "analytics.ReferenceDataSource.ReferenceSchema": "ReferenceSchema",
+        "analytics.ReferenceDataSource.ReferenceSchema.RecordColumns": "RecordColumn",
+        "analytics.ReferenceDataSource.ReferenceSchema.RecordFormat": "MappingParameters",
+        "analytics.ReferenceDataSource.S3ReferenceDataSource": "S3ReferenceDataSource",
+        "apigateway.AccesLogSetting": "AccessLogSetting",
+        "apigateway.ApiStages": "ApiStage",
+        "apigateway.ApiStages.Throttle": "ThrottleSettings",
+        "apigateway.BodyS3Location": "S3Location",
+        "apigateway.CanarySetting": "CanarySetting",
+        "apigateway.DeploymentCanarySettings": "DeploymentCanarySettings",
+        "apigateway.EndpointConfiguration": "EndpointConfiguration",
+        "apigateway.Integration": "Integration",
+        "apigateway.Integration.IntegrationResponses": "IntegrationResponse",
+        "apigateway.Location": "Location",
+        "apigateway.MethodResponses": "MethodResponse",
+        "apigateway.MethodSettings": "MethodSetting",
+        "apigateway.Quota": "QuotaSettings",
+        "apigateway.StageDescription": "StageDescription",
+        "apigateway.StageDescription.AccessLogSetting": "AccessLogSetting",
+        "apigateway.StageDescription.CanarySetting": "DeploymentCanarySettings",
+        "apigateway.StageDescription.MethodSettings": "MethodSetting",
+        "apigateway.StageKeys": "StageKey",
+        "apigateway.Throttle": "ThrottleSettings",
+        "applicationautoscaling.ScheduledActions": "ScheduledAction",
+        "applicationautoscaling.ScheduledActions.ScalableTargetAction": "ScalableTargetAction",
+        "applicationautoscaling.StepScalingPolicyConfiguration": "StepScalingPolicyConfiguration",
+        "applicationautoscaling.StepScalingPolicyConfiguration.StepAdjustments": "StepAdjustment",
+        "applicationautoscaling.TargetTrackingScalingPolicyConfiguration": "TargetTrackingScalingPolicyConfiguration",
+        "applicationautoscaling.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification": "MetricDimension",
+        "applicationautoscaling.TargetTrackingScalingPolicyConfiguration.PredefinedMetricSpecification": "PredefinedMetricSpecification",
+        "appsync.DynamoDBConfig": "DynamoDBConfig",
+        "appsync.ElasticsearchConfig": "ElasticsearchConfig",
+        "appsync.HttpConfig": "HttpConfig",
+        "appsync.LambdaConfig": "LambdaConfig",
+        "appsync.LogConfig": "LogConfig",
+        "appsync.OpenIDConnectConfig": "OpenIDConnectConfig",
+        "appsync.UserPoolConfig": "UserPoolConfig",
+        "autoscaling.BlockDeviceMappings": "BlockDeviceMapping",
+        "autoscaling.BlockDeviceMappings.Ebs": "EBSBlockDevice",
+        "autoscaling.LaunchTemplate": "LaunchTemplateSpecification",
+        "autoscaling.LifecycleHookSpecificationList": "LifecycleHookSpecification",
+        "autoscaling.Metadata": "Metadata",
+        "autoscaling.MetricsCollection": "MetricsCollection",
+        "autoscaling.NotificationConfigurations": "NotificationConfigurations",
+        "autoscaling.StepAdjustments": "StepAdjustments",
+        "autoscaling.TargetTrackingConfiguration": "TargetTrackingConfiguration",
+        "autoscaling.TargetTrackingConfiguration.CustomizedMetricSpecification": "MetricDimension",
+        "autoscaling.TargetTrackingConfiguration.PredefinedMetricSpecification": "PredefinedMetricSpecification",
+        "awslambda.Code": "Code",
+        "awslambda.DeadLetterConfig": "DeadLetterConfig",
+        "awslambda.Environment": "Environment",
+        "awslambda.RoutingConfig": "AliasRoutingConfiguration",
+        "awslambda.RoutingConfig.AdditionalVersionWeights": "VersionWeight",
+        "awslambda.TracingConfig": "TracingConfig",
+        "awslambda.VpcConfig": "VPCConfig",
+        "batch.ComputeEnvironmentOrder": "ComputeEnvironmentOrder",
+        "batch.ComputeResources": "ComputeResources",
+        "batch.ContainerProperties": "ContainerProperties",
+        "batch.ContainerProperties.Environment": "Environment",
+        "batch.ContainerProperties.MountPoints": "MountPoints",
+        "batch.ContainerProperties.Ulimits": "Ulimit",
+        "batch.ContainerProperties.Volumes": "Volumes",
+        "batch.ContainerProperties.Volumes.Host": "VolumesHost",
+        "batch.RetryStrategy": "RetryStrategy",
+        "batch.Timeout": "Timeout",
+        "budgets.Budget": "BudgetData",
+        "budgets.Budget.BudgetLimit": "Spend",
+        "budgets.Budget.CostTypes": "CostTypes",
+        "budgets.Budget.TimePeriod": "TimePeriod",
+        "budgets.NotificationsWithSubscribers": "NotificationWithSubscribers",
+        "budgets.NotificationsWithSubscribers.Notification": "Notification",
+        "budgets.NotificationsWithSubscribers.Subscribers": "Subscriber",
+        "certificatemanager.DomainValidationOptions": "DomainValidationOption",
+        "cloud9.Repositories": "Repository",
+        "cloudfront.CloudFrontOriginAccessIdentityConfig": "CloudFrontOriginAccessIdentityConfig",
+        "cloudfront.DistributionConfig": "DistributionConfig",
+        "cloudfront.DistributionConfig.CacheBehaviors": "Cookies",
+        "cloudfront.DistributionConfig.CustomErrorResponses": "CustomErrorResponse",
+        "cloudfront.DistributionConfig.DefaultCacheBehavior": "LambdaFunctionAssociation",
+        "cloudfront.DistributionConfig.Logging": "Logging",
+        "cloudfront.DistributionConfig.Restrictions": "Restrictions",
+        "cloudfront.DistributionConfig.Restrictions.GeoRestriction": "GeoRestriction",
+        "cloudfront.DistributionConfig.ViewerCertificate": "ViewerCertificate",
+        "cloudfront.Origins": "Origin",
+        "cloudfront.Origins.CustomOriginConfig": "CustomOrigin",
+        "cloudfront.Origins.OriginCustomHeaders": "OriginCustomHeader",
+        "cloudfront.Origins.S3OriginConfig": "S3Origin",
+        "cloudfront.StreamingDistributionConfig": "StreamingDistributionConfig",
+        "cloudfront.StreamingDistributionConfig.Logging": "Logging",
+        "cloudfront.StreamingDistributionConfig.S3Origin": "S3Origin",
+        "cloudfront.StreamingDistributionConfig.TrustedSigners": "TrustedSigners",
+        "cloudtrail.EventSelectors": "EventSelector",
+        "cloudtrail.EventSelectors.DataResources": "DataResource",
+        "cloudwatch.Dimensions": "MetricDimension",
+        "codebuild.Artifacts": "Artifacts",
+        "codebuild.Cache": "ProjectCache",
+        "codebuild.Environment": "Environment",
+        "codebuild.LogsConfig": "LogsConfig",
+        "codebuild.LogsConfig.CloudWatchLogs": "CloudWatchLogs",
+        "codebuild.LogsConfig.S3Logs": "S3Logs",
+        "codebuild.SecondaryArtifacts": "Artifacts",
+        "codebuild.SecondarySources": "Source",
+        "codebuild.SecondarySources.Auth": "SourceAuth",
+        "codebuild.Source": "Source",
+        "codebuild.Triggers": "ProjectTriggers",
+        "codebuild.VpcConfig": "VpcConfig",
+        "codecommit.Triggers": "Trigger",
+        "codedeploy.AlarmConfiguration": "AlarmConfiguration",
+        "codedeploy.AlarmConfiguration.Alarms": "Alarm",
+        "codedeploy.AutoRollbackConfiguration": "AutoRollbackConfiguration",
+        "codedeploy.Deployment": "Deployment",
+        "codedeploy.Deployment.Revision": "Revision",
+        "codedeploy.Deployment.Revision.GitHubLocation": "GitHubLocation",
+        "codedeploy.Deployment.Revision.S3Location": "S3Location",
+        "codedeploy.DeploymentStyle": "DeploymentStyle",
+        "codedeploy.Ec2TagFilters": "Ec2TagFilters",
+        "codedeploy.Ec2TagSet": "Ec2TagSet",
+        "codedeploy.Ec2TagSet.Ec2TagSet": "Ec2TagSetList",
+        "codedeploy.Ec2TagSet.Ec2TagSet.Ec2TagSetList": "Ec2TagSetListObject",
+        "codedeploy.Ec2TagSet.Ec2TagSet.Ec2TagSetList.Ec2TagGroup": "Ec2TagFilters",
+        "codedeploy.LoadBalancerInfo": "LoadBalancerInfo",
+        "codedeploy.LoadBalancerInfo.ElbInfoList": "ElbInfoList",
+        "codedeploy.LoadBalancerInfo.TargetGroupInfoList": "TargetGroupInfoList",
+        "codedeploy.MinimumHealthyHosts": "MinimumHealthyHosts",
+        "codedeploy.OnPremisesInstanceTagFilters": "OnPremisesInstanceTagFilters",
+        "codedeploy.OnPremisesInstanceTagSet": "OnPremisesTagSet",
+        "codedeploy.OnPremisesInstanceTagSet.OnPremisesTagSetList": "OnPremisesTagSetList",
+        "codedeploy.OnPremisesInstanceTagSet.OnPremisesTagSetList.OnPremisesTagSetList": "OnPremisesTagSetObject",
+        "codedeploy.OnPremisesInstanceTagSet.OnPremisesTagSetList.OnPremisesTagSetList.OnPremisesTagGroup": "TagFilters",
+        "codedeploy.TriggerConfigurations": "TriggerConfig",
+        "codepipeline.ArtifactStore": "ArtifactStore",
+        "codepipeline.ArtifactStore.EncryptionKey": "EncryptionKey",
+        "codepipeline.AuthenticationConfiguration": "WebhookAuthConfiguration",
+        "codepipeline.ConfigurationProperties": "ConfigurationProperties",
+        "codepipeline.DisableInboundStageTransitions": "DisableInboundStageTransitions",
+        "codepipeline.Filters": "WebhookFilterRule",
+        "codepipeline.InputArtifactDetails": "ArtifactDetails",
+        "codepipeline.OutputArtifactDetails": "ArtifactDetails",
+        "codepipeline.Settings": "Settings",
+        "codepipeline.Stages": "Stages",
+        "codepipeline.Stages.Actions": "OutputArtifacts",
+        "codepipeline.Stages.Blockers": "Blockers",
+        "cognito.AdminCreateUserConfig": "AdminCreateUserConfig",
+        "cognito.AdminCreateUserConfig.InviteMessageTemplate": "InviteMessageTemplate",
+        "cognito.CognitoIdentityProviders": "CognitoIdentityProvider",
+        "cognito.CognitoStreams": "CognitoStreams",
+        "cognito.DeviceConfiguration": "DeviceConfiguration",
+        "cognito.EmailConfiguration": "EmailConfiguration",
+        "cognito.LambdaConfig": "LambdaConfig",
+        "cognito.Policies": "Policies",
+        "cognito.Policies.PasswordPolicy": "PasswordPolicy",
+        "cognito.PushSync": "PushSync",
+        "cognito.Schema": "SchemaAttribute",
+        "cognito.Schema.NumberAttributeConstraints": "NumberAttributeConstraints",
+        "cognito.Schema.StringAttributeConstraints": "StringAttributeConstraints",
+        "cognito.SmsConfiguration": "SmsConfiguration",
+        "cognito.UserAttributes": "AttributeType",
+        "cognito.ValidationData": "AttributeType",
+        "config.AccountAggregationSources": "AccountAggregationSources",
+        "config.ConfigSnapshotDeliveryProperties": "ConfigSnapshotDeliveryProperties",
+        "config.OrganizationAggregationSource": "OrganizationAggregationSource",
+        "config.RecordingGroup": "RecordingGroup",
+        "config.Scope": "Scope",
+        "config.Source": "Source",
+        "config.Source.SourceDetails": "SourceDetails",
+        "datapipeline.ParameterObjects": "ParameterObject",
+        "datapipeline.ParameterObjects.Attributes": "ParameterObjectAttribute",
+        "datapipeline.ParameterValues": "ParameterValue",
+        "datapipeline.PipelineObjects": "PipelineObject",
+        "datapipeline.PipelineObjects.Fields": "ObjectField",
+        "datapipeline.PipelineTags": "PipelineTag",
+        "dax.SSESpecification": "SSESpecification",
+        "directoryservice.VpcSettings": "VpcSettings",
+        "dms.DynamoDbSettings": "DynamoDBSettings",
+        "dms.MongoDbSettings": "MongoDbSettings",
+        "dms.S3Settings": "S3Settings",
+        "dynamodb.AttributeDefinitions": "AttributeDefinition",
+        "dynamodb.GlobalSecondaryIndexes": "GlobalSecondaryIndex",
+        "dynamodb.GlobalSecondaryIndexes.KeySchema": "KeySchema",
+        "dynamodb.GlobalSecondaryIndexes.Projection": "Projection",
+        "dynamodb.GlobalSecondaryIndexes.ProvisionedThroughput": "ProvisionedThroughput",
+        "dynamodb.KeySchema": "KeySchema",
+        "dynamodb.LocalSecondaryIndexes": "LocalSecondaryIndex",
+        "dynamodb.LocalSecondaryIndexes.KeySchema": "KeySchema",
+        "dynamodb.LocalSecondaryIndexes.Projection": "Projection",
+        "dynamodb.PointInTimeRecoverySpecification": "PointInTimeRecoverySpecification",
+        "dynamodb.ProvisionedThroughput": "ProvisionedThroughput",
+        "dynamodb.SSESpecification": "SSESpecification",
+        "dynamodb.StreamSpecification": "StreamSpecification",
+        "dynamodb.TimeToLiveSpecification": "TimeToLiveSpecification",
+        "ec2.BlockDeviceMappings": "BlockDeviceMapping",
+        "ec2.BlockDeviceMappings.Ebs": "EBSBlockDevice",
+        "ec2.CreditSpecification": "CreditSpecification",
+        "ec2.ElasticGpuSpecifications": "ElasticGpuSpecification",
+        "ec2.Icmp": "ICMP",
+        "ec2.Ipv6Addresses": "Ipv6Addresses",
+        "ec2.LaunchTemplate": "LaunchTemplateSpecification",
+        "ec2.LaunchTemplateData": "LaunchTemplateData",
+        "ec2.LaunchTemplateData.BlockDeviceMappings": "BlockDeviceMapping",
+        "ec2.LaunchTemplateData.CreditSpecification": "LaunchTemplateCreditSpecification",
+        "ec2.LaunchTemplateData.ElasticGpuSpecifications": "ElasticGpuSpecification",
+        "ec2.LaunchTemplateData.IamInstanceProfile": "IamInstanceProfile",
+        "ec2.LaunchTemplateData.InstanceMarketOptions": "SpotOptions",
+        "ec2.LaunchTemplateData.Monitoring": "Monitoring",
+        "ec2.LaunchTemplateData.NetworkInterfaces": "NetworkInterfaces",
+        "ec2.LaunchTemplateData.Placement": "Placement",
+        "ec2.LaunchTemplateData.TagSpecifications": "TagSpecifications",
+        "ec2.NetworkInterfaces": "NetworkInterfaceProperty",
+        "ec2.NetworkInterfaces.Ipv6Addresses": "Ipv6Addresses",
+        "ec2.NetworkInterfaces.PrivateIpAddresses": "PrivateIpAddressSpecification",
+        "ec2.PortRange": "PortRange",
+        "ec2.PrivateIpAddresses": "PrivateIpAddressSpecification",
+        "ec2.SecurityGroupEgress": "SecurityGroupRule",
+        "ec2.SecurityGroupIngress": "SecurityGroupRule",
+        "ec2.SpotFleetRequestConfigData": "SpotFleetRequestConfigData",
+        "ec2.SpotFleetRequestConfigData.LaunchSpecifications": "PrivateIpAddressSpecification",
+        "ec2.SpotFleetRequestConfigData.LaunchTemplateConfigs": "LaunchTemplateOverrides",
+        "ec2.SpotFleetRequestConfigData.LoadBalancersConfig": "TargetGroup",
+        "ec2.SsmAssociations": "SsmAssociations",
+        "ec2.SsmAssociations.AssociationParameters": "AssociationParameters",
+        "ec2.Volumes": "MountPoint",
+        "ec2.VpnTunnelOptionsSpecifications": "VpnTunnelOptionsSpecification",
+        "ecr.LifecyclePolicy": "LifecyclePolicy",
+        "ecs.ContainerDefinitions": "ContainerDefinition",
+        "ecs.ContainerDefinitions.Environment": "Environment",
+        "ecs.ContainerDefinitions.ExtraHosts": "HostEntry",
+        "ecs.ContainerDefinitions.HealthCheck": "HealthCheck",
+        "ecs.ContainerDefinitions.LinuxParameters": "LinuxParameters",
+        "ecs.ContainerDefinitions.LinuxParameters.Capabilities": "KernelCapabilities",
+        "ecs.ContainerDefinitions.LinuxParameters.Devices": "Device",
+        "ecs.ContainerDefinitions.LogConfiguration": "LogConfiguration",
+        "ecs.ContainerDefinitions.MountPoints": "MountPoint",
+        "ecs.ContainerDefinitions.PortMappings": "PortMapping",
+        "ecs.ContainerDefinitions.RepositoryCredentials": "RepositoryCredentials",
+        "ecs.ContainerDefinitions.Ulimits": "Ulimit",
+        "ecs.ContainerDefinitions.VolumesFrom": "VolumesFrom",
+        "ecs.DeploymentConfiguration": "DeploymentConfiguration",
+        "ecs.LoadBalancers": "LoadBalancer",
+        "ecs.NetworkConfiguration": "NetworkConfiguration",
+        "ecs.NetworkConfiguration.AwsvpcConfiguration": "AwsvpcConfiguration",
+        "ecs.PlacementConstraints": "PlacementConstraint",
+        "ecs.PlacementStrategies": "PlacementStrategy",
+        "ecs.ServiceRegistries": "ServiceRegistry",
+        "ecs.Volumes": "Volume",
+        "ecs.Volumes.DockerVolumeConfiguration": "DockerVolumeConfiguration",
+        "ecs.Volumes.Host": "Host",
+        "eks.ResourcesVpcConfig": "ResourcesVpcConfig",
+        "elasticache.NodeGroupConfiguration": "NodeGroupConfiguration",
+        "elasticbeanstalk.OptionSettings": "OptionSettings",
+        "elasticbeanstalk.ResourceLifecycleConfig": "ApplicationResourceLifecycleConfig",
+        "elasticbeanstalk.ResourceLifecycleConfig.VersionLifecycleConfig": "ApplicationVersionLifecycleConfig",
+        "elasticbeanstalk.ResourceLifecycleConfig.VersionLifecycleConfig.MaxAgeRule": "MaxAgeRule",
+        "elasticbeanstalk.ResourceLifecycleConfig.VersionLifecycleConfig.MaxCountRule": "MaxCountRule",
+        "elasticbeanstalk.SourceBundle": "SourceBundle",
+        "elasticbeanstalk.SourceConfiguration": "SourceConfiguration",
+        "elasticbeanstalk.Tier": "Tier",
+        "elasticloadbalancing.AccessLoggingPolicy": "AccessLoggingPolicy",
+        "elasticloadbalancing.AppCookieStickinessPolicy": "AppCookieStickinessPolicy",
+        "elasticloadbalancing.ConnectionDrainingPolicy": "ConnectionDrainingPolicy",
+        "elasticloadbalancing.ConnectionSettings": "ConnectionSettings",
+        "elasticloadbalancing.HealthCheck": "HealthCheck",
+        "elasticloadbalancing.LBCookieStickinessPolicy": "LBCookieStickinessPolicy",
+        "elasticloadbalancing.Listeners": "Listener",
+        "elasticloadbalancing.Policies": "Policy",
+        "elasticloadbalancingv2.Actions": "Action",
+        "elasticloadbalancingv2.Certificates": "Certificate",
+        "elasticloadbalancingv2.Conditions": "Condition",
+        "elasticloadbalancingv2.DefaultActions": "Action",
+        "elasticloadbalancingv2.LoadBalancerAttributes": "LoadBalancerAttributes",
+        "elasticloadbalancingv2.Matcher": "Matcher",
+        "elasticloadbalancingv2.SubnetMappings": "SubnetMapping",
+        "elasticloadbalancingv2.TargetGroupAttributes": "TargetGroupAttribute",
+        "elasticloadbalancingv2.Targets": "TargetDescription",
+        "elasticsearch.EBSOptions": "EBSOptions",
+        "elasticsearch.ElasticsearchClusterConfig": "ElasticsearchClusterConfig",
+        "elasticsearch.EncryptionAtRestOptions": "EncryptionAtRestOptions",
+        "elasticsearch.SnapshotOptions": "SnapshotOptions",
+        "elasticsearch.VPCOptions": "VPCOptions",
+        "emr.Applications": "Application",
+        "emr.AutoScalingPolicy": "AutoScalingPolicy",
+        "emr.AutoScalingPolicy.Constraints": "ScalingConstraints",
+        "emr.AutoScalingPolicy.Rules": "ScalingRule",
+        "emr.AutoScalingPolicy.Rules.Action": "SimpleScalingPolicyConfiguration",
+        "emr.AutoScalingPolicy.Rules.Trigger": "ScalingTrigger",
+        "emr.AutoScalingPolicy.Rules.Trigger.CloudWatchAlarmDefinition": "KeyValue",
+        "emr.BootstrapActions": "BootstrapActionConfig",
+        "emr.BootstrapActions.ScriptBootstrapAction": "ScriptBootstrapActionConfig",
+        "emr.Configurations": "Configuration",
+        "emr.Configurations.Configurations": "Configuration",
+        "emr.EbsConfiguration": "EbsConfiguration",
+        "emr.EbsConfiguration.EbsBlockDeviceConfigs": "VolumeSpecification",
+        "emr.HadoopJarStep": "HadoopJarStepConfig",
+        "emr.HadoopJarStep.StepProperties": "KeyValue",
+        "emr.InstanceTypeConfigs": "InstanceTypeConfig",
+        "emr.InstanceTypeConfigs.Configurations": "Configuration",
+        "emr.InstanceTypeConfigs.EbsConfiguration": "EbsConfiguration",
+        "emr.Instances": "JobFlowInstancesConfig",
+        "emr.Instances.CoreInstanceFleet": "InstanceFleetProvisioningSpecifications",
+        "emr.Instances.CoreInstanceGroup": "EbsConfiguration",
+        "emr.Instances.MasterInstanceFleet": "InstanceFleetConfigProperty",
+        "emr.Instances.MasterInstanceGroup": "InstanceGroupConfigProperty",
+        "emr.Instances.Placement": "PlacementType",
+        "emr.KerberosAttributes": "KerberosAttributes",
+        "emr.LaunchSpecifications": "InstanceFleetProvisioningSpecifications",
+        "emr.LaunchSpecifications.SpotSpecification": "SpotProvisioningSpecification",
+        "events.Targets": "Target",
+        "events.Targets.EcsParameters": "EcsParameters",
+        "events.Targets.InputTransformer": "InputTransformer",
+        "events.Targets.KinesisParameters": "KinesisParameters",
+        "events.Targets.RunCommandParameters": "RunCommandTarget",
+        "firehose.ElasticsearchDestinationConfiguration": "ElasticsearchDestinationConfiguration",
+        "firehose.ElasticsearchDestinationConfiguration.BufferingHints": "BufferingHints",
+        "firehose.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.ElasticsearchDestinationConfiguration.ProcessingConfiguration": "ProcessingConfiguration",
+        "firehose.ElasticsearchDestinationConfiguration.RetryOptions": "RetryOptions",
+        "firehose.ElasticsearchDestinationConfiguration.S3Configuration": "S3Configuration",
+        "firehose.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints": "BufferingHints",
+        "firehose.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration": "EncryptionConfiguration",
+        "firehose.ExtendedS3DestinationConfiguration": "ExtendedS3DestinationConfiguration",
+        "firehose.ExtendedS3DestinationConfiguration.BufferingHints": "BufferingHints",
+        "firehose.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.ExtendedS3DestinationConfiguration.EncryptionConfiguration": "KMSEncryptionConfig",
+        "firehose.ExtendedS3DestinationConfiguration.ProcessingConfiguration": "ProcessingConfiguration",
+        "firehose.ExtendedS3DestinationConfiguration.S3BackupConfiguration": "S3DestinationConfiguration",
+        "firehose.KinesisStreamSourceConfiguration": "KinesisStreamSourceConfiguration",
+        "firehose.RedshiftDestinationConfiguration": "RedshiftDestinationConfiguration",
+        "firehose.RedshiftDestinationConfiguration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.RedshiftDestinationConfiguration.CopyCommand": "CopyCommand",
+        "firehose.RedshiftDestinationConfiguration.ProcessingConfiguration": "ProcessorParameter",
+        "firehose.RedshiftDestinationConfiguration.S3Configuration": "S3Configuration",
+        "firehose.S3DestinationConfiguration": "S3DestinationConfiguration",
+        "firehose.S3DestinationConfiguration.BufferingHints": "BufferingHints",
+        "firehose.S3DestinationConfiguration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.S3DestinationConfiguration.EncryptionConfiguration": "EncryptionConfiguration",
+        "firehose.SplunkDestinationConfiguration": "SplunkDestinationConfiguration",
+        "firehose.SplunkDestinationConfiguration.CloudWatchLoggingOptions": "CloudWatchLoggingOptions",
+        "firehose.SplunkDestinationConfiguration.ProcessingConfiguration": "ProcessingConfiguration",
+        "firehose.SplunkDestinationConfiguration.RetryOptions": "SplunkRetryOptions",
+        "firehose.SplunkDestinationConfiguration.S3Configuration": "S3DestinationConfiguration",
+        "glue.Actions": "Action",
+        "glue.Command": "JobCommand",
+        "glue.ConnectionInput": "ConnectionInput",
+        "glue.ConnectionInput.PhysicalConnectionRequirements": "PhysicalConnectionRequirements",
+        "glue.Connections": "ConnectionsList",
+        "glue.DatabaseInput": "DatabaseInput",
+        "glue.ExecutionProperty": "ExecutionProperty",
+        "glue.GrokClassifier": "GrokClassifier",
+        "glue.JsonClassifier": "JsonClassifier",
+        "glue.PartitionInput": "PartitionInput",
+        "glue.PartitionInput.StorageDescriptor": "StorageDescriptor",
+        "glue.Predicate": "Predicate",
+        "glue.Predicate.Conditions": "Condition",
+        "glue.Schedule": "Schedule",
+        "glue.SchemaChangePolicy": "SchemaChangePolicy",
+        "glue.TableInput": "TableInput",
+        "glue.TableInput.PartitionKeys": "Column",
+        "glue.TableInput.StorageDescriptor": "Order",
+        "glue.Targets": "Targets",
+        "glue.Targets.JdbcTargets": "JdbcTarget",
+        "glue.Targets.S3Targets": "S3Target",
+        "glue.XMLClassifier": "XMLClassifier",
+        "guardduty.FindingCriteria": "FindingCriteria",
+        "guardduty.FindingCriteria.ItemType": "Condition",
+        "iam.LoginProfile": "LoginProfile",
+        "iam.Policies": "Policy",
+        "iot.TopicRulePayload": "TopicRulePayload",
+        "iot.TopicRulePayload.Actions": "PutItemInput",
+        "kinesis.StreamEncryption": "StreamEncryption",
+        "logs.MetricTransformations": "MetricTransformation",
+        "opsworks.AppSource": "Source",
+        "opsworks.BlockDeviceMappings": "BlockDeviceMapping",
+        "opsworks.BlockDeviceMappings.Ebs": "EbsBlockDevice",
+        "opsworks.ChefConfiguration": "ChefConfiguration",
+        "opsworks.ConfigurationManager": "StackConfigurationManager",
+        "opsworks.CustomCookbooksSource": "Source",
+        "opsworks.CustomRecipes": "Recipes",
+        "opsworks.DataSources": "DataSource",
+        "opsworks.ElasticIps": "ElasticIp",
+        "opsworks.Environment": "Environment",
+        "opsworks.LifecycleEventConfiguration": "LifeCycleConfiguration",
+        "opsworks.LifecycleEventConfiguration.ShutdownEventConfiguration": "ShutdownEventConfiguration",
+        "opsworks.LoadBasedAutoScaling": "LoadBasedAutoScaling",
+        "opsworks.LoadBasedAutoScaling.DownScaling": "AutoScalingThresholds",
+        "opsworks.LoadBasedAutoScaling.UpScaling": "AutoScalingThresholds",
+        "opsworks.RdsDbInstances": "RdsDbInstance",
+        "opsworks.SslConfiguration": "SslConfiguration",
+        "opsworks.TimeBasedAutoScaling": "TimeBasedAutoScaling",
+        "opsworks.VolumeConfigurations": "VolumeConfiguration",
+        "rds.DBSecurityGroupIngress": "RDSSecurityGroup",
+        "rds.OptionConfigurations": "OptionConfiguration",
+        "rds.OptionConfigurations.OptionSettings": "OptionSetting",
+        "rds.ScalingConfiguration": "ScalingConfiguration",
+        "redshift.LoggingProperties": "LoggingProperties",
+        "redshift.Parameters": "AmazonRedshiftParameter",
+        "route53.AliasTarget": "AliasTarget",
+        "route53.GeoLocation": "GeoLocation",
+        "route53.HealthCheckConfig": "HealthCheckConfiguration",
+        "route53.HealthCheckConfig.AlarmIdentifier": "AlarmIdentifier",
+        "route53.HostedZoneConfig": "HostedZoneConfiguration",
+        "route53.QueryLoggingConfig": "QueryLoggingConfig",
+        "route53.RecordSets": "RecordSet",
+        "route53.RecordSets.AliasTarget": "AliasTarget",
+        "route53.RecordSets.GeoLocation": "GeoLocation",
+        "route53.VPCs": "HostedZoneVPCs",
+        "s3.AccelerateConfiguration": "AccelerateConfiguration",
+        "s3.AnalyticsConfigurations": "AnalyticsConfiguration",
+        "s3.AnalyticsConfigurations.StorageClassAnalysis": "StorageClassAnalysis",
+        "s3.AnalyticsConfigurations.StorageClassAnalysis.DataExport": "Destination",
+        "s3.AnalyticsConfigurations.TagFilters": "TagFilter",
+        "s3.BucketEncryption": "BucketEncryption",
+        "s3.BucketEncryption.ServerSideEncryptionConfiguration": "ServerSideEncryptionRule",
+        "s3.BucketEncryption.ServerSideEncryptionConfiguration.ServerSideEncryptionByDefault": "ServerSideEncryptionByDefault",
+        "s3.CorsConfiguration": "CorsConfiguration",
+        "s3.CorsConfiguration.CorsRules": "CorsRules",
+        "s3.InventoryConfigurations": "InventoryConfiguration",
+        "s3.InventoryConfigurations.Destination": "Destination",
+        "s3.LifecycleConfiguration": "LifecycleConfiguration",
+        "s3.LifecycleConfiguration.Rules": "LifecycleRule",
+        "s3.LifecycleConfiguration.Rules.AbortIncompleteMultipartUpload": "AbortIncompleteMultipartUpload",
+        "s3.LifecycleConfiguration.Rules.NoncurrentVersionTransition": "NoncurrentVersionTransition",
+        "s3.LifecycleConfiguration.Rules.NoncurrentVersionTransitions": "NoncurrentVersionTransition",
+        "s3.LifecycleConfiguration.Rules.TagFilters": "TagFilter",
+        "s3.LifecycleConfiguration.Rules.Transition": "LifecycleRuleTransition",
+        "s3.LifecycleConfiguration.Rules.Transitions": "LifecycleRuleTransition",
+        "s3.LoggingConfiguration": "LoggingConfiguration",
+        "s3.MetricsConfigurations": "MetricsConfiguration",
+        "s3.MetricsConfigurations.TagFilters": "TagFilter",
+        "s3.NotificationConfiguration": "NotificationConfiguration",
+        "s3.NotificationConfiguration.LambdaConfigurations": "Filter",
+        "s3.NotificationConfiguration.LambdaConfigurations.Filter": "S3Key",
+        "s3.NotificationConfiguration.QueueConfigurations": "QueueConfigurations",
+        "s3.NotificationConfiguration.QueueConfigurations.Filter": "Filter",
+        "s3.NotificationConfiguration.TopicConfigurations": "TopicConfigurations",
+        "s3.NotificationConfiguration.TopicConfigurations.Filter": "Filter",
+        "s3.ReplicationConfiguration": "ReplicationConfiguration",
+        "s3.ReplicationConfiguration.Rules": "ReplicationConfigurationRules",
+        "s3.ReplicationConfiguration.Rules.Destination": "ReplicationConfigurationRulesDestination",
+        "s3.ReplicationConfiguration.Rules.Destination.AccessControlTranslation": "AccessControlTranslation",
+        "s3.ReplicationConfiguration.Rules.Destination.EncryptionConfiguration": "EncryptionConfiguration",
+        "s3.ReplicationConfiguration.Rules.SourceSelectionCriteria": "SourceSelectionCriteria",
+        "s3.ReplicationConfiguration.Rules.SourceSelectionCriteria.SseKmsEncryptedObjects": "SseKmsEncryptedObjects",
+        "s3.VersioningConfiguration": "VersioningConfiguration",
+        "s3.WebsiteConfiguration": "WebsiteConfiguration",
+        "s3.WebsiteConfiguration.RedirectAllRequestsTo": "RedirectAllRequestsTo",
+        "s3.WebsiteConfiguration.RoutingRules": "RoutingRuleCondition",
+        "sagemaker.OnCreate": "NotebookInstanceLifecycleConfig",
+        "sagemaker.OnStart": "NotebookInstanceLifecycleConfig",
+        "sagemaker.PrimaryContainer": "ContainerDefinition",
+        "sagemaker.ProductionVariants": "ProductionVariant",
+        "serverless.DeadLetterQueue": "DeadLetterQueue",
+        "serverless.PrimaryKey": "PrimaryKey",
+        "servicecatalog.ProvisioningArtifactParameters": "ProvisioningArtifactProperties",
+        "servicecatalog.ProvisioningParameters": "ProvisioningParameter",
+        "servicediscovery.DnsConfig": "DnsConfig",
+        "servicediscovery.DnsConfig.DnsRecords": "DnsRecord",
+        "servicediscovery.HealthCheckConfig": "HealthCheckConfig",
+        "servicediscovery.HealthCheckCustomConfig": "HealthCheckCustomConfig",
+        "ses.EventDestination": "EventDestination",
+        "ses.EventDestination.CloudWatchDestination": "DimensionConfiguration",
+        "ses.EventDestination.KinesisFirehoseDestination": "KinesisFirehoseDestination",
+        "ses.Filter": "Filter",
+        "ses.Filter.IpFilter": "IpFilter",
+        "ses.Rule": "Rule",
+        "ses.Rule.Actions": "WorkmailAction",
+        "ses.Template": "EmailTemplate",
+        "sns.Subscription": "Subscription",
+        "sqs.RedrivePolicy": "RedrivePolicy",
+        "ssm.ApprovalRules": "RuleGroup",
+        "ssm.ApprovalRules.PatchRules": "PatchFilterGroup",
+        "ssm.GlobalFilters": "PatchFilterGroup",
+        "ssm.GlobalFilters.PatchFilters": "PatchFilter",
+        "ssm.LoggingInfo": "LoggingInfo",
+        "ssm.OutputLocation": "InstanceAssociationOutputLocation",
+        "ssm.OutputLocation.S3Location": "S3OutputLocation",
+        "ssm.Targets": "Targets",
+        "ssm.TaskInvocationParameters": "TaskInvocationParameters",
+        "ssm.TaskInvocationParameters.MaintenanceWindowAutomationParameters": "MaintenanceWindowAutomationParameters",
+        "ssm.TaskInvocationParameters.MaintenanceWindowLambdaParameters": "MaintenanceWindowLambdaParameters",
+        "ssm.TaskInvocationParameters.MaintenanceWindowRunCommandParameters": "NotificationConfig",
+        "ssm.TaskInvocationParameters.MaintenanceWindowStepFunctionsParameters": "MaintenanceWindowStepFunctionsParameters",
+        "waf.ByteMatchTuples": "ByteMatchTuples",
+        "waf.ByteMatchTuples.FieldToMatch": "FieldToMatch",
+        "waf.DefaultAction": "Action",
+        "waf.IPSetDescriptors": "IPSetDescriptors",
+        "waf.Predicates": "Predicates",
+        "waf.Rules": "Rules",
+        "waf.Rules.Action": "Action",
+        "waf.SizeConstraints": "SizeConstraint",
+        "waf.SizeConstraints.FieldToMatch": "FieldToMatch",
+        "waf.SqlInjectionMatchTuples": "SqlInjectionMatchTuples",
+        "waf.SqlInjectionMatchTuples.FieldToMatch": "FieldToMatch",
+        "waf.XssMatchTuples": "XssMatchTuple",
+        "waf.XssMatchTuples.FieldToMatch": "FieldToMatch",
+        "wafregional.ByteMatchTuples": "ByteMatchTuples",
+        "wafregional.ByteMatchTuples.FieldToMatch": "FieldToMatch",
+        "wafregional.DefaultAction": "Action",
+        "wafregional.IPSetDescriptors": "IPSetDescriptors",
+        "wafregional.Predicates": "Predicates",
+        "wafregional.Rules": "Rules",
+        "wafregional.Rules.Action": "Action",
+        "wafregional.SizeConstraints": "SizeConstraint",
+        "wafregional.SizeConstraints.FieldToMatch": "FieldToMatch",
+        "wafregional.SqlInjectionMatchTuples": "SqlInjectionMatchTuples",
+        "wafregional.SqlInjectionMatchTuples.FieldToMatch": "FieldToMatch",
+        "wafregional.XssMatchTuples": "XssMatchTuple",
+        "wafregional.XssMatchTuples.FieldToMatch": "FieldToMatch"
+    };
+
+    if (keyname in auto_generated_property_mapping) {
+        return keyname.split(".")[0] + "." + auto_generated_property_mapping[keyname];
+    } else {
+        var partial = keyname.split(".");
+        while (partial.length > 1) {
+            partial.splice(0, 1);
+            if (partial.join(".") in auto_generated_property_mapping) {
+                return keyname.split(".")[0] + "." + auto_generated_property_mapping[partial.join(".")]
+            }
+        }
+    }
+
+    console.log("Unknown Troposphere mapping: " + keyname + ", guessing...");
+
+    return keyname.split(".")[0] + "." + deplural(keyname.split(".").pop());
 }
 
 function processJsParameter(param, spacing) {
@@ -1354,12 +1962,26 @@ function processBoto3Parameter(param, spacing) {
     return undefined;
 }
 
+function deplural(str) {
+    if (typeof str != "string") {
+        return str;
+    }
+
+    if (str.endsWith("ies")) { // TODO: Fix very primitive checks
+        str = str.substring(0,str.length-3) + "y";
+    } else if (str.endsWith("ses")) {
+        str = str.substring(0,str.length-2);
+    } else if (str.endsWith("s") && !str.endsWith("ss")) {
+        str = str.substring(0,str.length-1);
+    }
+
+    return str;
+}
+
 function processGoParameter(service, paramkey, param, spacing) {
     var paramitems = [];
 
-    if (paramkey.endsWith("s")) { // TODO: Fix very primitive check
-        paramkey = paramkey.substring(0,paramkey.length-1);
-    }
+    paramkey = deplural(paramkey);
 
     if (param === undefined || param === null)
         return undefined;
@@ -1515,6 +2137,51 @@ function lcfirststr(str) {
     return ret;
 }
 
+function outputMapTroposphere(index, service, type, options, region, was_blocked, logicalId) {
+    var output = '';
+    var params = '';
+
+    troposervice = type.split("::")[1].toLowerCase();
+
+    if (troposervice == "kinesisanalytics") {
+        troposervice = "analytics";
+    } else if (troposervice == "lambda") {
+        troposervice = "awslambda";
+    } else if (troposervice == "kinesisfirehose") {
+        troposervice = "firehose";
+    }
+
+    tropotype = type.split("::")[2];
+
+    if (troposervice == "elasticsearch" && tropotype == "Domain") {
+        tropotype = "ElasticsearchDomain";
+    } else if (troposervice == "iam" && tropotype == "Policy") {
+        tropotype = "PolicyType";
+    } else if (troposervice == "route53" && tropotype == "RecordSet") {
+        tropotype = "RecordSetType";
+    } else if (troposervice == "sns" && tropotype == "Subscription") {
+        tropotype = "SubscriptionResource";
+    }
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            if (options[option] !== undefined && options[option] !== null) {
+                var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option);
+                params += `,
+    ${option}=${optionvalue}`;
+            }
+        }
+    }
+
+    output += `${logicalId} = template.add_resource(${troposervice}.${tropotype}(
+    "${logicalId}"${params}
+))${was_blocked ? ' # blocked' : ''}
+
+`;
+
+    return output;
+}
+
 function outputMapCdkts(index, service, type, options, region, was_blocked, logicalId) {
     var output = '';
     var params = '';
@@ -1546,8 +2213,6 @@ function outputMapIam(compiled_iam_outputs) {
     "Version": "2012-10-17",
     "Statement": [
 `;
-
-    console.dir(compiled_iam_outputs);
 
     for (var i=0; i<compiled_iam_outputs.length; i++) {
         if (compiled_iam_outputs[i].mapped) {
@@ -1609,9 +2274,6 @@ function compileMapIam(compiled_iam_outputs, service, method, options, region, w
     var action = [
         service + ":" + method
     ];
-
-    console.log(service + ":" + method);
-    console.dir(options);
 
     if (options.Action) {
         action = options.Action;
@@ -1775,13 +2437,15 @@ function compileOutputs() {
             'cli': '# No recorded actions yet',
             'js': '// No recorded actions yet',
             'cdkts': '// No recorded actions yet',
-            'iam': '// No recorded actions yet'
+            'iam': '// No recorded actions yet',
+            'troposphere': '# No recorded actions yet'
         };
     }
 
     var services = {
         'go': [],
-        'cdkts': []
+        'cdkts': [],
+        'troposphere': []
     };
     for (var i=0; i<outputs.length; i++) {
         if (!services['go'].includes(outputs[i].service)) {
@@ -1790,7 +2454,18 @@ function compileOutputs() {
     }
     for (var i=0; i<tracked_resources.length; i++) {
         if (tracked_resources[i].type && !services['cdkts'].includes(tracked_resources[i].type.split("::")[1].toLowerCase())) {
+            var troposervice = tracked_resources[i].type.split("::")[1].toLowerCase();
+
+            if (troposervice == "kinesisanalytics") {
+                troposervice = "analytics";
+            } else if (troposervice == "lambda") {
+                troposervice = "awslambda";
+            } else if (troposervice == "kinesisfirehose") {
+                troposervice = "firehose";
+            }
+
             services['cdkts'].push(tracked_resources[i].type.split("::")[1].toLowerCase());
+            services['troposphere'].push(troposervice);
         }
     }
 
@@ -1806,6 +2481,7 @@ function compileOutputs() {
     }
 
     var region = outputs[0].region;
+
     compiled = {
         'boto3': `# pip install boto3
 
@@ -1853,8 +2529,19 @@ class MyStack extends cdk.Stack {
         super(parent, name, props);
 
 `}`,
-        'iam': null
+        'iam': null,
+        'troposphere': `${!has_cfn ? '# No resources created in recording' : `# pip install troposphere
+
+from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
+from troposphere import Template
+
+template = Template()
+
+template.add_version("2010-09-09")
+
+`}`
     }
+
     declared_services = {
         'boto3': [],
         'go': [],
@@ -1883,6 +2570,7 @@ class MyStack extends cdk.Stack {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
             compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
         if (tracked_resources[i].terraformType) {
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
@@ -1906,6 +2594,8 @@ const app = new cdk.App();
 new MyStack(app, 'my-stack-name', { env: { region: '${tracked_resources[0].region}' } });
 
 app.run();
+`;
+        compiled['troposphere'] += `print(template.to_yaml())
 `;
     }
 
@@ -2142,26 +2832,28 @@ function allEventHandler(debuggeeId, message, params) {
         }, "Network.getResponseBody", {
             "requestId": params.requestId
         }, function(response) {
-            var body = response.body;
+            try {
+                var body = response.body;
 
-            if (response.base64Encoded) {
-                body = window.atob(response.body);
-            }
-            
-            for (var i=tracked_resources.length-1; i>=0; i--) {
-                if (params.requestId == tracked_resources[i].debuggerRequestId) {
-                    tracked_resources[i]["response"] = {
-                        'timestamp': params.timestamp,
-                        'properties': params.response,
-                        'body': body
-                    };
-                    setOutputsForTrackedResource(i);
+                if (response.base64Encoded) {
+                    body = window.atob(response.body);
                 }
-            }
+                
+                for (var i=tracked_resources.length-1; i>=0; i--) {
+                    if (params.requestId == tracked_resources[i].debuggerRequestId) {
+                        tracked_resources[i]["response"] = {
+                            'timestamp': params.timestamp,
+                            'properties': params.response,
+                            'body': body
+                        };
+                        setOutputsForTrackedResource(i);
+                    }
+                }
 
-            for (var i=0; i<outputs.length; i++) { // TODO
-                ;
-            }
+                for (var i=0; i<outputs.length; i++) { // TODO
+                    ;
+                }
+            } catch(err) { ; }
         });
     }
 }

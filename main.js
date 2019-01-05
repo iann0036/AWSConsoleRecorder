@@ -1,4 +1,4 @@
-var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor, cdkts_editor, iam_editor;
+var boto3_editor, go_editor, cfn_editor, tf_editor, cli_editor, js_editor, cdkts_editor, iam_editor, troposphere_editor;
 
 window.onload = function(){
     chrome.runtime.sendMessage(null, {
@@ -98,6 +98,15 @@ window.onload = function(){
                 indentUnit: 4
             });
             iam_editor.getDoc().setValue(response['iam']);
+    
+            troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: "python",
+                theme: theme,
+                indentUnit: 4
+            });
+            troposphere_editor.getDoc().setValue(response['troposphere']);
             
             setTimeout(function() {
                 boto3_editor.refresh();
@@ -108,6 +117,7 @@ window.onload = function(){
                 js_editor.refresh();
                 cdkts_editor.refresh();
                 iam_editor.refresh();
+                troposphere_editor.refresh();
             },1);
 
             $('#theme').val(theme).trigger('change');
@@ -126,7 +136,8 @@ window.onload = function(){
                     cli_editor.setOption("theme", evt.target.value);
                     js_editor.setOption("theme", evt.target.value);
                     cdkts_editor.setOption("theme", evt.target.value);
-                    iams_editor.setOption("theme", evt.target.value);
+                    iam_editor.setOption("theme", evt.target.value);
+                    troposphere_editor.setOption("theme", evt.target.value);
                 }
             };
         });
@@ -168,6 +179,7 @@ window.onload = function(){
             js_editor.getDoc().setValue("// No recorded actions yet");
             cdkts_editor.getDoc().setValue("// No recorded actions yet");
             iam_editor.getDoc().setValue("// No recorded actions yet");
+            troposphere_editor.getDoc().setValue("# No recorded actions yet");
 
             setTimeout(function() {
                 boto3_editor.refresh();
@@ -178,6 +190,7 @@ window.onload = function(){
                 js_editor.refresh();
                 cdkts_editor.refresh();
                 iam_editor.refresh();
+                troposphere_editor.refresh();
             },1);
             
             document.getElementById('cleardata_btn').innerHTML = "<span class=\"bold\">Cleared!</span>";
@@ -196,6 +209,7 @@ function resetMenu() {
     document.getElementById('js_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('cdkts_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('iam_menubtn').setAttribute("class", "btn btn-default m-t-10");
+    document.getElementById('troposphere_menubtn').setAttribute("class", "btn btn-default m-t-10");
     document.getElementById('settings_menubtn').setAttribute("class", "btn btn-default m-t-10");
 
     document.getElementById('boto3_container').style = "display: none;";
@@ -206,6 +220,7 @@ function resetMenu() {
     document.getElementById('js_container').style = "display: none;";
     document.getElementById('cdkts_container').style = "display: none;";
     document.getElementById('iam_container').style = "display: none;";
+    document.getElementById('troposphere_container').style = "display: none;";
     document.getElementById('settings_container').style = "display: none;";
 }
 
@@ -271,6 +286,14 @@ document.getElementById('iam_menubtn').onclick = function(evt) {
     document.getElementById('iam_container').style = "";
 
     iam_editor.refresh();
+};
+
+document.getElementById('troposphere_menubtn').onclick = function(evt) {
+    resetMenu();
+    document.getElementById('troposphere_menubtn').setAttribute("class", "btn btn-primary m-t-10");
+    document.getElementById('troposphere_container').style = "";
+
+    troposphere_editor.refresh();
 };
 
 document.getElementById('settings_menubtn').onclick = function(evt) {
