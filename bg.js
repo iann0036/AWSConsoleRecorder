@@ -1258,27 +1258,68 @@ function processCdktsParameter(param, spacing, index) {
     return undefined;
 }
 
-function processTroposphereParameter(param, spacing, keyname) {
+function processTroposphereParameter(param, spacing, keyname, index) {
     var paramitems = [];
 
     if (param === undefined || param === null)
         return undefined;
     if (typeof param == "boolean") {
         if (param)
-            return `'true'`;
-        return `'false'`;
+            return `True`;
+        return `False`;
     }
-    if (typeof param == "number")
-        return `'${param}'`;
-    if (typeof param == "string")
-        return `'${param}'`;
+    if (typeof param == "number") {
+        for (var i=0; i<index; i++) { // correlate
+            if (tracked_resources[i].returnValues && param != "") {
+                if (tracked_resources[i].returnValues.Ref == param) {
+                    return "Ref(" + tracked_resources[i].logicalId + ")";
+                }
+                if (tracked_resources[i].returnValues.GetAtt) {
+                    for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                            return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
+                        }
+                    }
+                }
+            }
+        }
+
+        return `${param}`;
+    }
+    if (typeof param == "string") {
+        if (param.startsWith("!Ref ")) {
+            return `Ref(${param.substring(5)})`;
+        }
+        if (param.startsWith("!GetAtt ")) {
+            return undefined;
+        }
+
+        for (var i=0; i<index; i++) { // correlate
+            if (tracked_resources[i].returnValues && param != "") {
+                if (tracked_resources[i].returnValues.Ref == param) {
+                    return "Ref(" + tracked_resources[i].logicalId + ")";
+                }
+                if (tracked_resources[i].returnValues.GetAtt) {
+                    for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                            return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
+                        }
+                    }
+                }
+            }
+        }
+
+        // TODO: Check for multiline
+
+        return `'${param.replace(/\"/g,`\"`)}'`; // TODO: Check this works
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
         }
 
         param.forEach(paramitem => {
-            var item = processTroposphereParameter(paramitem, spacing + 4, keyname);
+            var item = processTroposphereParameter(paramitem, spacing + 4, keyname, index);
             if (item !== undefined) {
                 paramitems.push(item);
             }
@@ -1290,14 +1331,30 @@ function processTroposphereParameter(param, spacing, keyname) {
 ` + ' '.repeat(spacing) + ']';
     }
     if (typeof param == "object") {
+        var propertyname = getTropospherePropertyName(keyname);
+
+        if (!propertyname) {
+            Object.keys(param).forEach(function (key) {
+                var item = processBoto3Parameter(param[key], spacing + 4); // intentional, to do raw array stuff
+                if (item !== undefined) {
+                    paramitems.push("\"" + key + "\": " + item);
+                }
+            });
+
+            return `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + '}';
+        }
+
         Object.keys(param).forEach(function (key) {
-            var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key);
+            var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key, index);
             if (item !== undefined) {
                 paramitems.push(key + "=" + item);
             }
         });
 
-        return `${getTropospherePropertyName(keyname)}(
+        return `${propertyname}(
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + ')';
@@ -1861,9 +1918,9 @@ function getTropospherePropertyName(keyname) {
         }
     }
 
-    console.log("Unknown Troposphere mapping: " + keyname + ", guessing...");
+    console.log("Unknown Troposphere mapping: " + keyname);
 
-    return keyname.split(".")[0] + "." + deplural(keyname.split(".").pop());
+    return null;
 }
 
 function processJsParameter(param, spacing) {
@@ -2166,7 +2223,7 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined && options[option] !== null) {
-                var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option);
+                var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option, index);
                 params += `,
     ${option}=${optionvalue}`;
             }
@@ -2533,7 +2590,7 @@ class MyStack extends cdk.Stack {
         'troposphere': `${!has_cfn ? '# No resources created in recording' : `# pip install troposphere
 
 from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
-from troposphere import Template
+from troposphere import Ref, GetAtt, Template
 
 template = Template()
 
@@ -16211,7 +16268,7 @@ function analyseRequest(details) {
                 reqParams.cli['--database-input'] = action['parameters'][0]['databaseInput'];
 
                 reqParams.cfn['DatabaseInput'] = action['parameters'][0]['databaseInput'];
-                reqParams.cfn['CatalogId'] = "!Ref AWS::AccountId";
+                reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
         
                 outputs.push({
                     'region': region,
