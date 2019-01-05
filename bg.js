@@ -21803,8 +21803,8 @@ function analyseRequest(details) {
     // autogen:opsworks:opsworks.AttachElasticLoadBalancer
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/attach\-elastic\-load\-balancer\?/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
-        ]; // TODO: Check StackId is present
+            "arn:aws:opsworks:*:*:stack/*/"
+        ];
 
         reqParams.boto3['ElasticLoadBalancerName'] = jsonRequestBody.ElasticLoadBalancerName;
         reqParams.cli['--elastic-load-balancer-name'] = jsonRequestBody.ElasticLoadBalancerName;
@@ -21847,8 +21847,8 @@ function analyseRequest(details) {
     // autogen:opsworks:opsworks.DeleteInstance
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-instance\?/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
-        ]; // TODO: Check StackId is present
+            "arn:aws:opsworks:*:*:stack/*/"
+        ];
 
         reqParams.boto3['InstanceId'] = jsonRequestBody.InstanceId;
         reqParams.cli['--instance-id'] = jsonRequestBody.InstanceId;
@@ -21905,8 +21905,8 @@ function analyseRequest(details) {
     // autogen:opsworks:opsworks.DetachElasticLoadBalancer
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/detach\-elastic\-load\-balancer\?/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
-        ]; // TODO: Check StackId is present
+            "arn:aws:opsworks:*:*:stack/*/"
+        ];
 
         reqParams.boto3['ElasticLoadBalancerName'] = jsonRequestBody.ElasticLoadBalancerName;
         reqParams.cli['--elastic-load-balancer-name'] = jsonRequestBody.ElasticLoadBalancerName;
@@ -21931,8 +21931,8 @@ function analyseRequest(details) {
     // autogen:opsworks:opsworks.DeleteLayer
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-layer\?/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
-        ]; // TODO: Check StackId is present
+            "arn:aws:opsworks:*:*:stack/*/"
+        ];
 
         reqParams.boto3['LayerId'] = jsonRequestBody.LayerId;
         reqParams.cli['--layer-id'] = jsonRequestBody.LayerId;
@@ -21960,8 +21960,8 @@ function analyseRequest(details) {
     // autogen:opsworks:opsworks.DeleteApp
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-app\?/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
-        ]; // TODO: Check StackId is present
+            "arn:aws:opsworks:*:*:stack/*/"
+        ];
 
         reqParams.boto3['AppId'] = jsonRequestBody.AppId;
         reqParams.cli['--app-id'] = jsonRequestBody.AppId;
