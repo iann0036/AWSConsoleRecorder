@@ -44968,8 +44968,6 @@ function analyseRequest(details) {
     // manual:ec2:ec2.CreateTags
     // manual:ec2:ec2.CreateTags
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "createVpcWithPublicSubnet") {
-        console.dir(gwtRequest);
-
         if (gwtRequest['args'][1]['value']['stepnumber']['stepnumber'] == 12) { // only record at the end of the wizard
             // Create VPC
             reqParams.iam['Resource'] = [
@@ -45016,7 +45014,18 @@ function analyseRequest(details) {
                 'terraformType': 'aws_vpc',
                 'options': reqParams,
                 'requestDetails': details,
-                'was_blocked': blocking
+                'was_blocked': blocking,
+                'returnValues': {
+                    'Ref': gwtRequest['args'][1]['value']['vpcobject']['vpcid'],
+                    'GetAtt': {
+                        'CidrBlock': gwtRequest['args'][1]['value']['vpccidr']
+                        // TODO: More
+                    },
+                    'Terraform': {
+                        'id': gwtRequest['args'][1]['value']['vpcobject']['vpcid'],
+                        'cidr_block': gwtRequest['args'][1]['value']['vpccidr']
+                    }
+                }
             });
 
             if (gwtRequest['args'][1]['value']['amazonprovidedipv6']['value']) {
@@ -45082,7 +45091,13 @@ function analyseRequest(details) {
                 'terraformType': 'aws_route_table',
                 'options': reqParams,
                 'requestDetails': details,
-                'was_blocked': blocking
+                'was_blocked': blocking,
+                'returnValues': {
+                    'Ref': gwtRequest['args'][1]['value']['routetable']['routetableid'],
+                    'Terraform': {
+                        'id': gwtRequest['args'][1]['value']['routetable']['routetableid']
+                    }
+                }
             });
 
             // Create Subnet
@@ -45141,7 +45156,17 @@ function analyseRequest(details) {
                 'terraformType': 'aws_subnet',
                 'options': reqParams,
                 'requestDetails': details,
-                'was_blocked': blocking
+                'was_blocked': blocking,
+                'returnValues': {
+                    'Ref': gwtRequest['args'][1]['value']['subnet']['subnetid'],
+                    'GetAtt': {
+                        'AvailabilityZone': gwtRequest['args'][1]['value']['subnet']['availabilityzone'],
+                        'VpcId': gwtRequest['args'][1]['value']['vpcobject']['vpcid']
+                    },
+                    'Terraform': {
+                        'id': gwtRequest['args'][1]['value']['subnet']['subnetid']
+                    }
+                }
             });
 
             // Allocate Subnet to Route Table
@@ -45226,7 +45251,13 @@ function analyseRequest(details) {
                 'terraformType': 'aws_internet_gateway',
                 'options': reqParams,
                 'requestDetails': details,
-                'was_blocked': blocking
+                'was_blocked': blocking,
+                'returnValues': {
+                    'Ref': gwtRequest['args'][1]['value']['igw']['igwid'],
+                    'Terraform': {
+                        'id': gwtRequest['args'][1]['value']['igw']['igwid']
+                    }
+                }
             });
             
             // Attach Internet Gateway
@@ -45272,7 +45303,7 @@ function analyseRequest(details) {
                 };
 
                 reqParams.iam['Resource'] = [
-                    "arn:aws:ec2:*:*:route-table/" + jsonRequestBody.routeTableId
+                    "arn:aws:ec2:*:*:route-table/" + gwtRequest['args'][1]['value']['routetable']['routetableid']
                 ];
         
                 reqParams.boto3['RouteTableId'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
