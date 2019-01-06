@@ -509,11 +509,71 @@ function interpretGwtArg(tracker, expected_type) {
         var destination = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 5;
         var action = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
-        tracker.cursor += 7;
+        tracker.cursor += 1;
+        var status = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 4;
+        var ipv6cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 2;
 
         ret['cidr'] = cidr;
         ret['destination'] = destination;
         ret['action'] = action;
+        ret['status'] = status;
+        ret['ipv6cidr'] = ipv6cidr;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.RouteTable/2977847614") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknownarray1 = interpretGwtArg(tracker);
+        var cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknownboolean1 = interpretGwtArg(tracker);
+        var unknown2 = interpretGwtArg(tracker);
+        var unknownarray2 = interpretGwtArg(tracker);
+        var routetableid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var routes = interpretGwtArg(tracker);
+        var unknownarray3 = interpretGwtArg(tracker);
+        var vpcid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown3 = interpretGwtArg(tracker);
+
+        ret['unknownarray1'] = unknownarray1;
+        ret['cidr'] = vpccidr;
+        ret['unknownboolean1'] = unknownboolean1;
+        ret['unknown2'] = unknown2;
+        ret['unknownarray2'] = unknownarray2;
+        ret['routetableid'] = routetableid;
+        ret['routes'] = routes;
+        ret['unknownarray3'] = unknownarray3;
+        ret['vpcid'] = vpcid;
+        ret['unknown3'] = unknown3;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.IGW/344372469") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var igwid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+        var unknown2 = interpretGwtArg(tracker);
+        var unknown3 = interpretGwtArg(tracker);
+        var unknownarray1 = interpretGwtArg(tracker);
+        var unknownarray2 = interpretGwtArg(tracker);
+
+        ret['igwid'] = igwid;
+        ret['unknown1'] = unknown1;
+        ret['unknown2'] = unknown2;
+        ret['unknown3'] = unknown3;
+        ret['unknownarray1'] = unknownarray1;
+        ret['unknownarray2'] = unknownarray2;
 
         return ret;
     } else if (arg_type == "com.amazonaws.services.route53.model.Change/107219911") {
@@ -685,6 +745,252 @@ function interpretGwtArg(tracker, expected_type) {
         ret['quantity'] = quantity;
 
         return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.wizard.CreateVPCWithPublicSubnet/3792845633") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var amazonprovidedipv6 = interpretGwtArg(tracker);
+        var publicsubnetlocation = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var igw = interpretGwtArg(tracker);
+        var stepnumber = interpretGwtArg(tracker);
+        var subnetcustomipv6 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var routetable = interpretGwtArg(tracker);
+        var routetableassociationid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var subnet = interpretGwtArg(tracker);
+        var subnetcidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var subnetname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown5 = interpretGwtArg(tracker);
+        var unknown6 = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var unknown7 = interpretGwtArg(tracker);
+        var enablednshostnames = (parseInt(tracker.pipesplit[tracker.cursor]) == 1);
+        tracker.cursor += 1;
+        var unknown9 = interpretGwtArg(tracker);
+        var unknown10 = interpretGwtArg(tracker);
+        var tenancy = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var vpcobject = interpretGwtArg(tracker);
+        var vpccidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var vpcname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+
+        ret['amazonprovidedipv6'] = amazonprovidedipv6;
+        ret['publicsubnetlocation'] = publicsubnetlocation;
+        ret['igw'] = igw;
+        ret['stepnumber'] = stepnumber;
+        ret['subnetcustomipv6'] = subnetcustomipv6;
+        ret['routetable'] = routetable;
+        ret['routetableassociationid'] = routetableassociationid;
+        ret['subnet'] = subnet;
+        ret['subnetcidr'] = subnetcidr;
+        ret['subnetname'] = subnetname;
+        ret['unknown5'] = unknown5;
+        ret['unknown6'] = unknown6;
+        ret['unknown7'] = unknown7;
+        ret['enablednshostnames'] = enablednshostnames;
+        ret['unknown9'] = unknown9;
+        ret['unknown10'] = unknown10;
+        ret['tenancy'] = tenancy;
+        ret['vpcobject'] = vpcobject;
+        ret['vpccidr'] = vpccidr;
+        ret['vpcname'] = vpcname;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.wizard.CreateVPCWithPublicSubnet$PublicOnlySteps/3843543372") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var stepnumber = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        ret['stepnumber'] = stepnumber;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.Vpc/3236476168") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var vpcid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var vpcstatus = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var vpccidrblock = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var dhcpoptionsid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var dhcpoptionsid2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var routetableid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var routetableid2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var aclid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var aclid2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var tenancy = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+        var tags = interpretGwtArg(tracker);
+        var unknown2 = interpretGwtArg(tracker);
+        var unknown3 = interpretGwtArg(tracker);
+        var cidrblockassociations = interpretGwtArg(tracker);
+        var ipv6cidrblockassociations = interpretGwtArg(tracker);
+        var unknownstring1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['vpcid'] = vpcid;
+        ret['vpcstatus'] = vpcstatus;
+        ret['vpccidrblock'] = vpccidrblock;
+        ret['dhcpoptionsid'] = dhcpoptionsid;
+        ret['dhcpoptionsid2'] = dhcpoptionsid2;
+        ret['routetableid'] = routetableid;
+        ret['routetableid2'] = routetableid2;
+        ret['aclid'] = aclid;
+        ret['aclid2'] = aclid2;
+        ret['tenancy'] = tenancy;
+        ret['unknown1'] = unknown1;
+        ret['tags'] = tags;
+        ret['unknown2'] = unknown2;
+        ret['unknown3'] = unknown3;
+        ret['cidrblockassociations'] = cidrblockassociations;
+        ret['ipv6cidrblockassociations'] = ipv6cidrblockassociations;
+        ret['unknownstring1'] = unknownstring1;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.Subnet/3680019525") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var subnetid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var status = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var vpcid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+        var subnetcidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var ipv6cidrassociations = interpretGwtArg(tracker);
+        var unknownint = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var availabilityzone = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown3 = interpretGwtArg(tracker);
+        var unknown4 = interpretGwtArg(tracker);
+        var unknown5 = interpretGwtArg(tracker);
+        var tags = interpretGwtArg(tracker);
+        var unknown6 = interpretGwtArg(tracker);
+        var unknown7 = interpretGwtArg(tracker);
+        var unknown8 = interpretGwtArg(tracker);
+        var unknown9 = interpretGwtArg(tracker);
+
+        ret['subnetid'] = subnetid;
+        ret['status'] = status;
+        ret['vpcid'] = vpcid;
+        ret['unknown1'] = unknown1;
+        ret['subnetcidr'] = subnetcidr;
+        ret['ipv6cidrassociations'] = ipv6cidrassociations;
+        ret['unknownint'] = unknownint;
+        ret['availabilityzone'] = availabilityzone;
+        ret['unknown3'] = unknown3;
+        ret['unknown4'] = unknown4;
+        ret['unknown5'] = unknown5;
+        ret['tags'] = tags;
+        ret['unknown6'] = unknown6;
+        ret['unknown7'] = unknown7;
+        ret['unknown8'] = unknown8;
+        ret['unknown9'] = unknown9;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.Tag/2711077645") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var key = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var value = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['key'] = key;
+        ret['value'] = value;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.CidrBlockAssociation/2848919076") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var associationid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var status = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['associationid'] = associationid;
+        ret['cidr'] = cidr;
+        ret['status'] = status;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.IPv6SubnetCidrBlockAssociation/3374664153") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var associationid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var status = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['associationid'] = associationid;
+        ret['cidr'] = cidr;
+        ret['status'] = status;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "amazonaws.console.vpc.dtos.IPv6VpcCidrBlockAssociation/1461627452") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var associationid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var cidr = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var status = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['associationid'] = associationid;
+        ret['cidr'] = cidr;
+        ret['status'] = status;
+        ret['unknown1'] = unknown1;
+
+        return ret;
     } else {
         var ret = {
             'type': 'unknown'
@@ -692,6 +998,8 @@ function interpretGwtArg(tracker, expected_type) {
         tracker.resolvedObjects.push(ret);
 
         console.log("Unknown GWT type: " + arg_type);
+        console.log(tracker.cursor);
+        console.dir(tracker);
 
         var val = tracker.pipesplit[tracker.cursor];
         tracker.cursor += 1;
@@ -770,6 +1078,16 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[2]),
             'name': 'rules'
+        });
+    } else if (service == "amazonaws.console.vpc.client.VpcConsoleService" && method == "createVpcWithPublicSubnet") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'region'
+        });
+
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[1]),
+            'name': 'createvpcwithpublicsubnetargs'
         });
     } else if (service == "amazonaws.console.vpc.client.VpcConsoleService" && method == "getVpcs") {
         args.push({
@@ -8951,7 +9269,6 @@ function analyseRequest(details) {
         reqParams.cfn['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
 
         reqParams.tf['cidr_block'] = getPipeSplitField(requestBody, 18);
-        reqParams.tf['instance_tenancy'] = getPipeSplitField(requestBody, 19);
 
         outputs.push({
             'region': region,
@@ -18927,7 +19244,7 @@ function analyseRequest(details) {
         reqParams.boto3['AvailabilityZone'] = jsonRequestBody.AvailabilityZone;
         reqParams.cli['--availability-zone'] = jsonRequestBody.AvailabilityZone;
         reqParams.boto3['Ipv6CidrBlock'] = jsonRequestBody.Ipv6CidrBlock;
-        reqParams.cli['--ipv-6-cidr-block'] = jsonRequestBody.Ipv6CidrBlock;
+        reqParams.cli['--ipv6-cidr-block'] = jsonRequestBody.Ipv6CidrBlock;
 
         reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
         reqParams.cfn['CidrBlock'] = jsonRequestBody.CidrBlock;
@@ -19108,6 +19425,8 @@ function analyseRequest(details) {
 
         reqParams.cfn['CidrBlock'] = getPipeSplitField(requestBody, 18);
         reqParams.cfn['InstanceTenancy'] = getPipeSplitField(requestBody, 19);
+
+        reqParams.tf['cidr_block'] = getPipeSplitField(requestBody, 18);
 
         outputs.push({
             'region': region,
@@ -19553,7 +19872,7 @@ function analyseRequest(details) {
         reqParams.boto3['CidrBlock'] = jsonRequestBody.cidrBlock;
         reqParams.cli['--cidr-block'] = jsonRequestBody.cidrBlock;
         reqParams.boto3['AmazonProvidedIpv6CidrBlock'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
-        reqParams.cli['--amazon-provided-ipv-6-cidr-block'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
+        reqParams.cli['--amazon-provided-ipv6-cidr-block'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
 
         reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
         reqParams.cfn['CidrBlock'] = jsonRequestBody.cidrBlock;
@@ -36243,7 +36562,7 @@ function analyseRequest(details) {
         reqParams.boto3['SubnetId'] = jsonRequestBody.subnetId;
         reqParams.cli['--subnet-id'] = jsonRequestBody.subnetId;
         reqParams.boto3['Ipv6CidrBlock'] = jsonRequestBody.ipv6CidrBlock;
-        reqParams.cli['--ipv-6-cidr-block'] = jsonRequestBody.ipv6CidrBlock;
+        reqParams.cli['--ipv6-cidr-block'] = jsonRequestBody.ipv6CidrBlock;
 
         reqParams.cfn['SubnetId'] = jsonRequestBody.subnetId;
         reqParams.cfn['Ipv6CidrBlock'] = jsonRequestBody.ipv6CidrBlock;
@@ -40967,7 +41286,7 @@ function analyseRequest(details) {
         reqParams.boto3['DestinationCidrBlock'] = jsonRequestBody.destinationCidrBlock;
         reqParams.cli['--destination-cidr-block'] = jsonRequestBody.destinationCidrBlock;
         reqParams.boto3['DestinationIpv6CidrBlock'] = jsonRequestBody.destinationIpv6CidrBlock;
-        reqParams.cli['--destination-ipv-6-cidr-block'] = jsonRequestBody.destinationIpv6CidrBlock;
+        reqParams.cli['--destination-ipv6-cidr-block'] = jsonRequestBody.destinationIpv6CidrBlock;
         reqParams.boto3['EgressOnlyInternetGatewayId'] = jsonRequestBody.egressOnlyInternetGatewayId;
         reqParams.cli['--egress-only-internet-gateway-id'] = jsonRequestBody.egressOnlyInternetGatewayId;
         reqParams.boto3['GatewayId'] = jsonRequestBody.gatewayId;
@@ -41114,7 +41433,7 @@ function analyseRequest(details) {
         reqParams.boto3['CidrBlock'] = jsonRequestBody.CidrBlock;
         reqParams.cli['--cidr-block'] = jsonRequestBody.CidrBlock;
         reqParams.boto3['AmazonProvidedIpv6CidrBlock'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
-        reqParams.cli['--amazon-provided-ipv-6-cidr-block'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
+        reqParams.cli['--amazon-provided-ipv6-cidr-block'] = jsonRequestBody.amazonProvidedIpv6CidrBlock;
         reqParams.boto3['InstanceTenancy'] = jsonRequestBody.instanceTenancy;
         reqParams.cli['--instance-tenancy'] = jsonRequestBody.instanceTenancy;
 
@@ -41122,7 +41441,6 @@ function analyseRequest(details) {
         reqParams.cfn['InstanceTenancy'] = jsonRequestBody.instanceTenancy;
 
         reqParams.tf['cidr_block'] = jsonRequestBody.CidrBlock;
-        reqParams.tf['instance_tenancy'] = jsonRequestBody.instanceTenancy;
 
         outputs.push({
             'region': region,
@@ -44609,6 +44927,501 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details
         });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateVpcEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_createVpcEndpoint\?/g)) {
+        reqParams.boto3['VpcId'] = jsonRequestBody.request.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.request.vpcId;
+        reqParams.boto3['RouteTableIds'] = jsonRequestBody.request.routeTableIds;
+        reqParams.cli['--route-table-ids'] = jsonRequestBody.request.routeTableIds;
+        reqParams.boto3['ServiceName'] = jsonRequestBody.request.serviceName;
+        reqParams.cli['--service-name'] = jsonRequestBody.request.serviceName;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.request.policyDocument;
+        reqParams.cli['--policy-document'] = jsonRequestBody.request.policyDocument;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpcEndpoint',
+                'boto3': 'create_vpc_endpoint',
+                'cli': 'create-vpc-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // manual:ec2:ec2.CreateVpc
+    // manual:ec2:ec2.CreateRouteTable
+    // manual:ec2:ec2.CreateSubnet
+    // manual:ec2:ec2.AssociateRouteTable
+    // manual:ec2:ec2.CreateInternetGateway
+    // manual:ec2:ec2.AttachInternetGateway
+    // manual:ec2:ec2.CreateRoute
+    // manual:ec2:ec2.ModifyVpcAttribute
+    // manual:ec2:ec2.CreateTags
+    // manual:ec2:ec2.CreateTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "createVpcWithPublicSubnet") {
+        console.dir(gwtRequest);
+
+        if (gwtRequest['args'][1]['value']['stepnumber']['stepnumber'] == 12) { // only record at the end of the wizard
+            // Create VPC
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+
+            reqParams.boto3['CidrBlock'] = gwtRequest['args'][1]['value']['vpccidr'];
+            reqParams.cli['--cidr-block'] = gwtRequest['args'][1]['value']['vpccidr'];
+            reqParams.boto3['InstanceTenancy'] = gwtRequest['args'][1]['value']['tenancy'];
+            reqParams.cli['--instance-tenancy'] = gwtRequest['args'][1]['value']['tenancy'];
+            reqParams.boto3['AmazonProvidedIpv6CidrBlock'] = gwtRequest['args'][1]['value']['amazonprovidedipv6']['value'];
+            reqParams.cli['--amazon-provided-ipv6-cidr-block'] = gwtRequest['args'][1]['value']['amazonprovidedipv6']['value'];
+    
+            reqParams.cfn['CidrBlock'] = gwtRequest['args'][1]['value']['vpccidr'];
+            reqParams.cfn['InstanceTenancy'] = gwtRequest['args'][1]['value']['tenancy'];
+            reqParams.cfn['EnableDnsSupport'] = true;
+            if (gwtRequest['args'][1]['value']['enablednshostnames']) {
+                reqParams.cfn['EnableDnsHostnames'] = true;
+            }
+            reqParams.cfn['Tags'] = [{
+                'Key': 'Name',
+                'Value': gwtRequest['args'][1]['value']['vpcname']
+            }];
+
+            reqParams.tf['cidr_block'] = gwtRequest['args'][1]['value']['vpccidr'];
+    
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateVpc',
+                    'boto3': 'create_vpc',
+                    'cli': 'create-vpc'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+    
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::VPC',
+                'terraformType': 'aws_vpc',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+
+            if (gwtRequest['args'][1]['value']['amazonprovidedipv6']['value']) {
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.cfn['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+                reqParams.cfn['AmazonProvidedIpv6CidrBlock'] = true;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', details.requestId),
+                    'region': region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCCidrBlock',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+
+            // Create Route Table
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+
+            reqParams.boto3['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cli['--vpc-id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cfn['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.tf['vpc_id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateRouteTable',
+                    'boto3': 'create_route_table',
+                    'cli': 'create-route-table'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::RouteTable',
+                'terraformType': 'aws_route_table',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+
+            // Create Subnet
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+
+            reqParams.boto3['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cli['--vpc-id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.boto3['CidrBlock'] = gwtRequest['args'][1]['value']['subnet']['subnetcidr'];
+            reqParams.cli['--cidr-block'] = gwtRequest['args'][1]['value']['subnet']['subnetcidr'];
+            reqParams.boto3['AvailabilityZone'] = gwtRequest['args'][1]['value']['subnet']['availabilityzone'];
+            reqParams.cli['--availability-zone'] = gwtRequest['args'][1]['value']['subnet']['availabilityzone'];
+    
+            reqParams.cfn['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cfn['CidrBlock'] = gwtRequest['args'][1]['value']['subnet']['subnetcidr'];
+            reqParams.cfn['AvailabilityZone'] = gwtRequest['args'][1]['value']['subnet']['availabilityzone'];
+    
+            reqParams.tf['vpc_id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.tf['cidr_block'] = gwtRequest['args'][1]['value']['subnet']['subnetcidr'];
+            reqParams.tf['availability_zone'] = gwtRequest['args'][1]['value']['subnet']['availabilityzone'];
+
+            if (gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'] && gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'][0]) {
+                reqParams.boto3['Ipv6CidrBlock'] = gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'][0]['cidr'];
+                reqParams.cli['--ipv6-cidr-block'] = gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'][0]['cidr'];
+                reqParams.cfn['Ipv6CidrBlock'] = gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'][0]['cidr'];
+                reqParams.tf['ipv6_cidr_block'] = gwtRequest['args'][1]['value']['subnet']['ipv6cidrassociations']['value'][0]['cidr'];
+            }
+    
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateSubnet',
+                    'boto3': 'create_subnet',
+                    'cli': 'create-subnet'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+    
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::Subnet',
+                'terraformType': 'aws_subnet',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+
+            // Allocate Subnet to Route Table
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+    
+            reqParams.boto3['SubnetId'] = gwtRequest['args'][1]['value']['subnet']['subnetid'];
+            reqParams.cli['--subnet-id'] = gwtRequest['args'][1]['value']['subnet']['subnetid'];
+            reqParams.boto3['RouteTableId'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+            reqParams.cli['--route-table-id'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+    
+            reqParams.cfn['SubnetId'] = gwtRequest['args'][1]['value']['subnet']['subnetid'];
+            reqParams.cfn['RouteTableId'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+    
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'AssociateRouteTable',
+                    'boto3': 'associate_route_table',
+                    'cli': 'associate-route-table'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+                
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::SubnetRouteTableAssociation',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+
+            // Create Internet Gateway
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+            
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+    
+            reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
+    
+            reqParams.tf['vpc_id'] = jsonRequestBody.VpcId;
+    
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateInternetGateway',
+                    'boto3': 'create_internet_gateway',
+                    'cli': 'create-internet-gateway'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+    
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::InternetGateway',
+                'terraformType': 'aws_internet_gateway',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+            
+            // Attach Internet Gateway
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.iam['Resource'] = [
+                "*"
+            ];
+    
+            reqParams.boto3['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cli['--vpc-id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.boto3['InternetGatewayId'] = gwtRequest['args'][1]['value']['igw']['igwid'];
+            reqParams.cli['--internet-gateway-id'] = gwtRequest['args'][1]['value']['igw']['igwid'];
+    
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'AttachInternetGateway',
+                    'boto3': 'attach_internet_gateway',
+                    'cli': 'attach-internet-gateway'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            // Set up routes
+            for (var i=0; i<gwtRequest['args'][1]['value']['routetable']['routes']['value'].length; i++) {
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.iam['Resource'] = [
+                    "arn:aws:ec2:*:*:route-table/" + jsonRequestBody.routeTableId
+                ];
+        
+                reqParams.boto3['RouteTableId'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+                reqParams.cli['--route-table-id'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+                reqParams.boto3['DestinationCidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['cidr'];
+                reqParams.cli['--destination-cidr-block'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['cidr'];
+                reqParams.boto3['DestinationIpv6CidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['ipv6cidr'];
+                reqParams.cli['--destination-ipv6-cidr-block'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['ipv6cidr'];
+        
+                reqParams.cfn['RouteTableId'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+                reqParams.cfn['DestinationCidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['cidr'];
+                reqParams.cfn['DestinationIpv6CidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['ipv6cidr'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'CreateRoute',
+                        'boto3': 'create_route',
+                        'cli': 'create-route'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+                
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', details.requestId),
+                    'region': region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::Route',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+
+            // Enable DNS
+            if (gwtRequest['args'][1]['value']['enablednshostnames']) {
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.boto3['EnableDnsHostnames'] = {
+                    'Value': true
+                };
+                reqParams.cli['--enable-dns-hostnames'] = {
+                    'Value': true
+                };
+                reqParams.boto3['EnableDnsSupport'] = {
+                    'Value': true
+                };
+                reqParams.cli['--enable-dns-support'] = {
+                    'Value': true
+                };
+                reqParams.boto3['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+                reqParams.cli['--vpc-id'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+
+                outputs.push({
+                    'region': region,
+                    'service': 'ec2',
+                    'method': {
+                        'api': 'ModifyVpcAttribute',
+                        'boto3': 'modify_vpc_attribute',
+                        'cli': 'modify-vpc-attribute'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+            }
+
+            // Name VPC
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.boto3['Resources'] = [
+                gwtRequest['args'][1]['value']['vpcobject']['vpcid']
+            ];
+            reqParams.cli['--resources'] = [
+                gwtRequest['args'][1]['value']['vpcobject']['vpcid']
+            ];
+            reqParams.boto3['Tags'] = [{
+                'Key': 'Name',
+                'Value': gwtRequest['args'][1]['value']['vpcname']
+            }];
+            reqParams.cli['--tags'] = [{
+                'Key': 'Name',
+                'Value': gwtRequest['args'][1]['value']['vpcname']
+            }];
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateTags',
+                    'boto3': 'create_tags',
+                    'cli': 'create-tags'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            // Name Subnet
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.boto3['Resources'] = [
+                gwtRequest['args'][1]['value']['subnet']['subnetid']
+            ];
+            reqParams.cli['--resources'] = [
+                gwtRequest['args'][1]['value']['subnet']['subnetid']
+            ];
+            reqParams.boto3['Tags'] = [{
+                'Key': 'Name',
+                'Value': gwtRequest['args'][1]['value']['subnetname']
+            }];
+            reqParams.cli['--tags'] = [{
+                'Key': 'Name',
+                'Value': gwtRequest['args'][1]['value']['subnetname']
+            }];
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'CreateTags',
+                    'boto3': 'create_tags',
+                    'cli': 'create-tags'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+        }
         
         return {};
     }
