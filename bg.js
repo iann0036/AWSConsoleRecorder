@@ -11956,6 +11956,16 @@ function analyseRequest(details) {
         reqParams.tf['schedule_expression'] = jsonRequestBody.Rule.ScheduleExpression;
         reqParams.tf['event_pattern'] = jsonRequestBody.Rule.EventPattern;
 
+        if (jsonRequestBody.Targets && jsonRequestBody.Targets.length) {
+            reqParams.cfn['Targets'] = [];
+            for (var i=0; i<jsonRequestBody.Targets.length; i++) {
+                reqParams.cfn['Targets'].push({
+                    'Arn': jsonRequestBody.Targets[i].Arn,
+                    'Id': jsonRequestBody.Targets[i].Id
+                })
+            }
+        }
+
         outputs.push({
             'region': region,
             'service': 'events',
@@ -11969,9 +11979,9 @@ function analyseRequest(details) {
         });
 
         tracked_resources.push({
-            'logicalId': getResourceName('apigateway', details.requestId),
+            'logicalId': getResourceName('events', details.requestId),
             'region': region,
-            'service': 'apigateway',
+            'service': 'events',
             'type': 'AWS::Events::Rule',
             'terraformType': 'aws_cloudwatch_event_rule',
             'options': reqParams,
