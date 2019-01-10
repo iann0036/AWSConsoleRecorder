@@ -2788,8 +2788,13 @@ function outputMapCli(service, method, options, region, was_blocked) {
                         params += ` --no-${option.substr(2)}`
                 } else {
                     var optionvalue = JSON.stringify(options[option]);
-                    if (typeof options[option] == "object")
-                        optionvalue = "'" + optionvalue + "'";
+                    if (typeof options[option] == "object") {
+                        if (navigator.appVersion.indexOf("Win")!=-1) {
+                            optionvalue = "\"" + optionvalue.replace("\"", "\\\"") + "\"";
+                        } else {
+                            optionvalue = "'" + optionvalue + "'";
+                        }
+                    }
                     params += ` ${option} ${optionvalue}`
                 }
             }
@@ -45463,6 +45468,191 @@ function analyseRequest(details) {
                 'requestDetails': details
             });
         }
+        
+        return {};
+    }
+
+    // autogen:s3:s3.GetObjectLockConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetObjectLockConfiguration") {
+        reqParams.boto3['Bucket'] = jsonRequestBody.path;
+        reqParams.cli['--bucket'] = jsonRequestBody.path;
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'GetObjectLockConfiguration',
+                'boto3': 'get_object_lock_configuration',
+                'cli': 'get-object-lock-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.CreateContainer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.CreateContainer") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+
+        reqParams.tf['name'] = jsonRequestBody.contentString.ContainerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'CreateContainer',
+                'boto3': 'create_container',
+                'cli': 'create-container'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('mediastore', details.requestId),
+            'region': region,
+            'service': 'mediastore',
+            'terraformType': 'aws_media_store_container',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.ListContainers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.ListContainers") {
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'ListContainers',
+                'boto3': 'list_containers',
+                'cli': 'list-containers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.GetCorsPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetCorsPolicy") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'GetCorsPolicy',
+                'boto3': 'get_cors_policy',
+                'cli': 'get-cors-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.GetContainerPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetContainerPolicy") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'GetContainerPolicy',
+                'boto3': 'get_container_policy',
+                'cli': 'get-container-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.DescribeContainer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DescribeContainer") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'DescribeContainer',
+                'boto3': 'describe_container',
+                'cli': 'describe-container'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.PutContainerPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.PutContainerPolicy") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.boto3['Policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.cli['--policy'] = jsonRequestBody.contentString.Policy;
+
+        reqParams.tf['container_name'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.tf['policy'] = jsonRequestBody.contentString.Policy;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'PutContainerPolicy',
+                'boto3': 'put_container_policy',
+                'cli': 'put-container-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('mediastore', details.requestId),
+            'region': region,
+            'service': 'mediastore',
+            'terraformType': 'aws_media_store_container_policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:mediastore:mediastore.DeleteContainer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DeleteContainer") {
+        reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
+        reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'mediastore',
+            'method': {
+                'api': 'DeleteContainer',
+                'boto3': 'delete_container',
+                'cli': 'delete-container'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
         
         return {};
     }
