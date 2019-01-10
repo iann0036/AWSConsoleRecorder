@@ -1500,6 +1500,10 @@ function processCfnParameter(param, spacing, index) {
             }
         });
 
+        if (paramitems.length < 1) {
+            return "!Ref \"AWS::NoValue\"";
+        }
+
         return `
 ` + ' '.repeat(spacing + 4) + paramitems.join(`
 ` + ' '.repeat(spacing + 4))
@@ -24247,152 +24251,162 @@ function analyseRequest(details) {
     // autogen:cognito-idp:cognito-idp.CreateUserPool
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool$/g)) {
         var pools = JSON.parse(jsonRequestBody.pool);
-        for (var i=0; i<pools.length; i++) {
+
+        function processPool(pool) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
             reqParams.iam['Resource'] = [
                 "arn:aws:cognito-idp:*:*:userpool/*"
             ];
 
-            reqParams.boto3['PoolName'] = pools[i].name;
-            reqParams.cli['--pool-name'] = pools[i].name;
+            reqParams.boto3['PoolName'] = pool.name;
+            reqParams.cli['--pool-name'] = pool.name;
             reqParams.boto3['Policies'] = {
                 'PasswordPolicy': {
-                    'MinimumLength': pools[i].passPolicyMinLength,
-                    'RequireUppercase': pools[i].passPolicyRequireUppercase,
-                    'RequireLowercase': pools[i].passPolicyRequireLowercase,
-                    'RequireNumbers': pools[i].passPolicyRequireNumbers,
-                    'RequireSymbols': pools[i].passPolicyRequireSymbols
+                    'MinimumLength': pool.passPolicyMinLength,
+                    'RequireUppercase': pool.passPolicyRequireUppercase,
+                    'RequireLowercase': pool.passPolicyRequireLowercase,
+                    'RequireNumbers': pool.passPolicyRequireNumbers,
+                    'RequireSymbols': pool.passPolicyRequireSymbols
                 }
             };
             reqParams.cli['--policies'] = {
                 'PasswordPolicy': {
-                    'MinimumLength': pools[i].passPolicyMinLength,
-                    'RequireUppercase': pools[i].passPolicyRequireUppercase,
-                    'RequireLowercase': pools[i].passPolicyRequireLowercase,
-                    'RequireNumbers': pools[i].passPolicyRequireNumbers,
-                    'RequireSymbols': pools[i].passPolicyRequireSymbols
+                    'MinimumLength': pool.passPolicyMinLength,
+                    'RequireUppercase': pool.passPolicyRequireUppercase,
+                    'RequireLowercase': pool.passPolicyRequireLowercase,
+                    'RequireNumbers': pool.passPolicyRequireNumbers,
+                    'RequireSymbols': pool.passPolicyRequireSymbols
                 }
             };
             reqParams.boto3['AutoVerifiedAttributes'] = [];
             reqParams.cli['--auto-verified-attributes'] = [];
-            if (pools[i].verifySMS == false) {
+            if (pool.verifySMS == false) {
                 reqParams.boto3['AutoVerifiedAttributes'].push("phone_number");
                 reqParams.cli['--auto-verified-attributes'].push("phone_number");
             }
-            if (pools[i].verifyEmail == false) {
+            if (pool.verifyEmail == false) {
                 reqParams.boto3['AutoVerifiedAttributes'].push("email");
                 reqParams.cli['--auto-verified-attributes'].push("email");
             }
-            reqParams.boto3['AliasAttributes'] = pools[i].aliasAttributes;
-            reqParams.cli['--alias-attributes'] = pools[i].aliasAttributes;
-            reqParams.boto3['UsernameAttributes'] = pools[i].usernameAttributes;
-            reqParams.cli['--username-attributes'] = pools[i].usernameAttributes;
-            reqParams.boto3['SmsVerificationMessage'] = pools[i].smsVerificationMessage;
-            reqParams.cli['--sms-verification-message'] = pools[i].smsVerificationMessage;
-            reqParams.boto3['EmailVerificationMessage'] = pools[i].emailVerificationMessage;
-            reqParams.cli['--email-verification-message'] = pools[i].emailVerificationMessage;
-            reqParams.boto3['EmailVerificationSubject'] = pools[i].emailVerificationSubject;
-            reqParams.cli['--email-verification-subject'] = pools[i].emailVerificationSubject;
+            reqParams.boto3['AliasAttributes'] = pool.aliasAttributes;
+            reqParams.cli['--alias-attributes'] = pool.aliasAttributes;
+            reqParams.boto3['UsernameAttributes'] = pool.usernameAttributes;
+            reqParams.cli['--username-attributes'] = pool.usernameAttributes;
+            reqParams.boto3['SmsVerificationMessage'] = pool.smsVerificationMessage;
+            reqParams.cli['--sms-verification-message'] = pool.smsVerificationMessage;
+            reqParams.boto3['EmailVerificationMessage'] = pool.emailVerificationMessage;
+            reqParams.cli['--email-verification-message'] = pool.emailVerificationMessage;
+            reqParams.boto3['EmailVerificationSubject'] = pool.emailVerificationSubject;
+            reqParams.cli['--email-verification-subject'] = pool.emailVerificationSubject;
             reqParams.boto3['VerificationMessageTemplate'] = {
-                'SmsMessage': pools[i].smsVerificationMessage,
-                'EmailMessage': pools[i].emailVerificationMessage,
-                'EmailSubject': pools[i].emailVerificationSubject,
-                'EmailMessageByLink': pools[i].emailVerificationMessageByLink,
-                'EmailSubjectByLink': pools[i].emailVerificationSubjectByLink,
-                'DefaultEmailOption': pools[i].defaultEmailOption
+                'SmsMessage': pool.smsVerificationMessage,
+                'EmailMessage': pool.emailVerificationMessage,
+                'EmailSubject': pool.emailVerificationSubject,
+                'EmailMessageByLink': pool.emailVerificationMessageByLink,
+                'EmailSubjectByLink': pool.emailVerificationSubjectByLink,
+                'DefaultEmailOption': pool.defaultEmailOption
             };
             reqParams.cli['--verification-message-template'] = {
-                'SmsMessage': pools[i].smsVerificationMessage,
-                'EmailMessage': pools[i].emailVerificationMessage,
-                'EmailSubject': pools[i].emailVerificationSubject,
-                'EmailMessageByLink': pools[i].emailVerificationMessageByLink,
-                'EmailSubjectByLink': pools[i].emailVerificationSubjectByLink,
-                'DefaultEmailOption': pools[i].defaultEmailOption
+                'SmsMessage': pool.smsVerificationMessage,
+                'EmailMessage': pool.emailVerificationMessage,
+                'EmailSubject': pool.emailVerificationSubject,
+                'EmailMessageByLink': pool.emailVerificationMessageByLink,
+                'EmailSubjectByLink': pool.emailVerificationSubjectByLink,
+                'DefaultEmailOption': pool.defaultEmailOption
             };
-            reqParams.boto3['MfaConfiguration'] = pools[i].mfaEnabledLevel;
-            reqParams.cli['--mfa-configuration'] = pools[i].mfaEnabledLevel;
+            reqParams.boto3['MfaConfiguration'] = pool.mfaEnabledLevel;
+            reqParams.cli['--mfa-configuration'] = pool.mfaEnabledLevel;
             reqParams.boto3['DeviceConfiguration'] = {
-                'ChallengeRequiredOnNewDevice': pools[i].challengeRequiredOnNewDevice,
-                'DeviceOnlyRememberedOnUserPrompt': pools[i].deviceOnlyRememberedOnUserPrompt
+                'ChallengeRequiredOnNewDevice': pool.challengeRequiredOnNewDevice,
+                'DeviceOnlyRememberedOnUserPrompt': pool.deviceOnlyRememberedOnUserPrompt
             };
             reqParams.cli['--device-configuration'] = {
-                'ChallengeRequiredOnNewDevice': pools[i].challengeRequiredOnNewDevice,
-                'DeviceOnlyRememberedOnUserPrompt': pools[i].deviceOnlyRememberedOnUserPrompt
+                'ChallengeRequiredOnNewDevice': pool.challengeRequiredOnNewDevice,
+                'DeviceOnlyRememberedOnUserPrompt': pool.deviceOnlyRememberedOnUserPrompt
             };
             reqParams.boto3['EmailConfiguration'] = {
-                'SourceArn': pools[i].fromEmailAddressArn,
-                'ReplyToEmailAddress': pools[i].replyToEmailAddress
+                'SourceArn': pool.fromEmailAddressArn,
+                'ReplyToEmailAddress': pool.replyToEmailAddress
             };
             reqParams.cli['--email-configuration'] = {
-                'SourceArn': pools[i].fromEmailAddressArn,
-                'ReplyToEmailAddress': pools[i].replyToEmailAddress
+                'SourceArn': pool.fromEmailAddressArn,
+                'ReplyToEmailAddress': pool.replyToEmailAddress
             };
             reqParams.boto3['SmsConfiguration'] = {
-                'SnsCallerArn': pools[i].snsCallerArn,
-                'ExternalId': pools[i].externalId
+                'SnsCallerArn': pool.snsCallerArn,
+                'ExternalId': pool.externalId
             };
             reqParams.cli['--sms-configuration'] = {
-                'SnsCallerArn': pools[i].snsCallerArn,
-                'ExternalId': pools[i].externalId
+                'SnsCallerArn': pool.snsCallerArn,
+                'ExternalId': pool.externalId
             };
             reqParams.boto3['UserPoolTags'] = {};
             reqParams.cli['--user-pool-tags'] = {};
-            for (var j=0; j<pools[i].userpoolTags.length; j++) {
-                reqParams.boto3['UserPoolTags'][pools[i].userpoolTags[j].tagName] = pools[i].userpoolTags[j].tagValue;
-                reqParams.cli['--user-pool-tags'][pools[i].userpoolTags[j].tagName] = pools[i].userpoolTags[j].tagValue;
+            for (var j=0; j<pool.userpoolTags.length; j++) {
+                reqParams.boto3['UserPoolTags'][pool.userpoolTags[j].tagName] = pool.userpoolTags[j].tagValue;
+                reqParams.cli['--user-pool-tags'][pool.userpoolTags[j].tagName] = pool.userpoolTags[j].tagValue;
             }
             reqParams.boto3['AdminCreateUserConfig'] = {
-                'AllowAdminCreateUserOnly': pools[i].allowAdminCreateUserOnly,
-                'UnusedAccountValidityDays': pools[i].adminCreateUserUnusedAccountValidityDays
+                'AllowAdminCreateUserOnly': pool.allowAdminCreateUserOnly,
+                'UnusedAccountValidityDays': pool.adminCreateUserUnusedAccountValidityDays
             };
             reqParams.cli['--admin-create-user-config'] = {
-                'AllowAdminCreateUserOnly': pools[i].allowAdminCreateUserOnly,
-                'UnusedAccountValidityDays': pools[i].adminCreateUserUnusedAccountValidityDays
+                'AllowAdminCreateUserOnly': pool.allowAdminCreateUserOnly,
+                'UnusedAccountValidityDays': pool.adminCreateUserUnusedAccountValidityDays
             };
             reqParams.boto3['Schema'] = [];
             reqParams.cli['--schema'] = [];
-            for (var j=0; j<pools[i].customAttributes.length; j++) {
+            for (var j=0; j<pool.customAttributes.length; j++) {
                 reqParams.boto3['Schema'].push({
-                    'Name': pools[i].customAttributes[j].name,
-                    'AttributeDataType': pools[i].customAttributes[j].dataType,
-                    'Mutable': pools[i].customAttributes[j].mutable,
+                    'Name': pool.customAttributes[j].name,
+                    'AttributeDataType': pool.customAttributes[j].dataType,
+                    'Mutable': pool.customAttributes[j].mutable,
                     'NumberAttributeConstraints': {
-                        'MinValue': pools[i].customAttributes[j].numMinValue,
-                        'MaxValue': pools[i].customAttributes[j].numMaxValue
+                        'MinValue': pool.customAttributes[j].numMinValue,
+                        'MaxValue': pool.customAttributes[j].numMaxValue
                     },
                     'StringAttributeConstraints': {
-                        'MinLength': pools[i].customAttributes[j].strMinLength,
-                        'MaxLength': pools[i].customAttributes[j].strMaxLength
+                        'MinLength': pool.customAttributes[j].strMinLength,
+                        'MaxLength': pool.customAttributes[j].strMaxLength
                     }
                 });
                 reqParams.cli['--schema'].push({
-                    'Name': pools[i].customAttributes[j].name,
-                    'AttributeDataType': pools[i].customAttributes[j].dataType,
-                    'Mutable': pools[i].customAttributes[j].mutable,
+                    'Name': pool.customAttributes[j].name,
+                    'AttributeDataType': pool.customAttributes[j].dataType,
+                    'Mutable': pool.customAttributes[j].mutable,
                     'NumberAttributeConstraints': {
-                        'MinValue': pools[i].customAttributes[j].numMinValue,
-                        'MaxValue': pools[i].customAttributes[j].numMaxValue
+                        'MinValue': pool.customAttributes[j].numMinValue,
+                        'MaxValue': pool.customAttributes[j].numMaxValue
                     },
                     'StringAttributeConstraints': {
-                        'MinLength': pools[i].customAttributes[j].strMinLength,
-                        'MaxLength': pools[i].customAttributes[j].strMaxLength
+                        'MinLength': pool.customAttributes[j].strMinLength,
+                        'MaxLength': pool.customAttributes[j].strMaxLength
                     }
                 });
             }
 
             reqParams.cfn['AdminCreateUserConfig'] = reqParams.boto3['AdminCreateUserConfig'];
-            reqParams.cfn['AliasAttributes'] = pools[i].aliasAttributes;
+            reqParams.cfn['AliasAttributes'] = pool.aliasAttributes;
             reqParams.cfn['AutoVerifiedAttributes'] = reqParams.boto3['AutoVerifiedAttributes'];
             reqParams.cfn['DeviceConfiguration'] = reqParams.boto3['DeviceConfiguration'];
             reqParams.cfn['EmailConfiguration'] = reqParams.boto3['EmailConfiguration'];
-            reqParams.cfn['EmailVerificationMessage'] = pools[i].emailVerificationMessage;
-            reqParams.cfn['EmailVerificationSubject'] = pools[i].emailVerificationSubject;
-            reqParams.cfn['MfaConfiguration'] = pools[i].mfaEnabledLevel;
+            reqParams.cfn['EmailVerificationMessage'] = pool.emailVerificationMessage;
+            reqParams.cfn['EmailVerificationSubject'] = pool.emailVerificationSubject;
+            reqParams.cfn['MfaConfiguration'] = pool.mfaEnabledLevel;
             reqParams.cfn['Policies'] = reqParams.boto3['Policies'];
             reqParams.cfn['Schema'] = reqParams.boto3['Schema'];
             reqParams.cfn['SmsConfiguration'] = reqParams.boto3['SmsConfiguration'];
-            reqParams.cfn['SmsVerificationMessage'] = pools[i].smsVerificationMessage;
-            reqParams.cfn['UsernameAttributes'] = pools[i].usernameAttributes;
-            reqParams.cfn['UserPoolName'] = pools[i].name;
+            reqParams.cfn['SmsVerificationMessage'] = pool.smsVerificationMessage;
+            reqParams.cfn['UsernameAttributes'] = pool.usernameAttributes;
+            reqParams.cfn['UserPoolName'] = pool.name;
             reqParams.cfn['UserPoolTags'] = reqParams.boto3['UserPoolTags'];
 
             outputs.push({
@@ -24417,7 +24431,7 @@ function analyseRequest(details) {
                 'was_blocked': blocking
             });
 
-            for (var j=0; j<pools[i].userPoolClients.length; j++) {
+            for (var j=0; j<pool.userPoolClients.length; j++) {
                 reqParams = {
                     'boto3': {},
                     'go': {},
@@ -24429,11 +24443,19 @@ function analyseRequest(details) {
 
                 // TODO
             }
+        }
 
-            if (blocking) {
-                notifyBlocked();
-                return {cancel: true};
+        if (Array.isArray(pools)) {
+            for (var i=0; i<pools.length; i++) {
+                processPool(pools[i]);
             }
+        } else {
+            processPool(pools);
+        }
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
         }
         
         return {};
@@ -24561,7 +24583,7 @@ function analyseRequest(details) {
     // autogen:cognito-idp:cognito-idp.AdminCreateUser
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/user$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
+            "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.poolId[0]
         ];
 
         reqParams.boto3['UserAttributes'] = [];
