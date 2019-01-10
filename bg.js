@@ -2793,7 +2793,7 @@ function outputMapCli(service, method, options, region, was_blocked) {
                 } else {
                     var optionvalue = JSON.stringify(options[option]);
                     if (typeof options[option] == "object") {
-                        if (navigator.appVersion.indexOf("Mac")!=-1) {
+                        if (navigator.appVersion.indexOf("Win")!=-1) {
                             optionvalue = "\"" + optionvalue.replace(/\"/g, "\\\"") + "\"";
                         } else {
                             optionvalue = "'" + optionvalue + "'";
