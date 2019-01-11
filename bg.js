@@ -3395,9 +3395,14 @@ function getPipeSplitField(str, index) { // DEPRECATED, use interpretGwtWireRequ
 
 function setOutputsForTrackedResource(index) {
     var jsonResponseBody = {};
+    var xmlResponseBody = {};
 
     try {
-        jsonResponseBody = JSON.parse(tracked_resources[index].response.body);
+        if (tracked_resources[index].response.body.startsWith("<")) {
+            xmlResponseBody = new DOMParser().parseFromString(tracked_resources[index].response.body, "text/xml");
+        } else {
+            jsonResponseBody = JSON.parse(tracked_resources[index].response.body);
+        }
 
         if (tracked_resources[index].type == "AWS::AmazonMQ::Broker") {
             tracked_resources[index].returnValues = {
@@ -3692,6 +3697,28 @@ function setOutputsForTrackedResource(index) {
                 'Terraform': {
                     'id': jsonResponseBody.DirectoryId
                 }
+            };
+        } else if (tracked_resources[index].type == "AWS::DocDB::DBCluster") {
+            tracked_resources[index].returnValues = {
+                'Ref': xmlResponseBody.getElementsByTagName("DBClusterIdentifier")[0].textContent,
+                'GetAtt': {
+                    'ClusterResourceId': xmlResponseBody.getElementsByTagName("DbClusterResourceId")[0].textContent,
+                    'Endpoint': xmlResponseBody.getElementsByTagName("Endpoint")[0].textContent,
+                    'Port': xmlResponseBody.getElementsByTagName("Port")[0].textContent,
+                    'ReadEndpoint': xmlResponseBody.getElementsByTagName("ReaderEndpoint")[0].textContent
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::DocDB::DBClusterParameterGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': xmlResponseBody.getElementsByTagName("DBClusterParameterGroupName")[0].textContent
+            };
+        } else if (tracked_resources[index].type == "AWS::DocDB::DBInstance") {
+            tracked_resources[index].returnValues = {
+                'Ref': xmlResponseBody.getElementsByTagName("DBInstanceIdentifier")[0].textContent
+            };
+        } else if (tracked_resources[index].type == "AWS::DocDB::DBSubnetGroup") {
+            tracked_resources[index].returnValues = {
+                'Ref': xmlResponseBody.getElementsByTagName("DBSubnetGroupName")[0].textContent
             };
         } else if (tracked_resources[index].type == "AWS::EC2::CustomerGateway") {
             tracked_resources[index].returnValues = {
@@ -45671,6 +45698,473 @@ function analyseRequest(details) {
                 'api': 'DeleteContainer',
                 'boto3': 'delete_container',
                 'cli': 'delete-container'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DescribeDBClusters
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DescribeDBClusters',
+                'boto3': 'describe_db_clusters',
+                'cli': 'describe-db-clusters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DescribePendingMaintenanceActions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DescribePendingMaintenanceActions',
+                'boto3': 'describe_pending_maintenance_actions',
+                'cli': 'describe-pending-maintenance-actions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DescribeDBSubnetGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBSubnetGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DescribeDBSubnetGroups',
+                'boto3': 'describe_db_subnet_groups',
+                'cli': 'describe-db-subnet-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DescribeDBClusterParameterGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusterParameterGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DescribeDBClusterParameterGroups',
+                'boto3': 'describe_db_cluster_parameter_groups',
+                'cli': 'describe-db-cluster-parameter-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.CreateDBSubnetGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBSubnetGroup") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+        
+        reqParams.boto3['SubnetIds'] = [];
+        reqParams.cli['--subnet-ids'] = [];
+        reqParams.boto3['DBSubnetGroupDescription'] = splitContentString.DBSubnetGroupDescription;
+        reqParams.cli['--db-subnet-group-description'] = splitContentString.DBSubnetGroupDescription;
+        reqParams.boto3['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
+        reqParams.cli['--db-subnet-group-name'] = splitContentString.DBSubnetGroupName;
+
+        reqParams.cfn['SubnetIds'] = [];
+        reqParams.cfn['DBSubnetGroupDescription'] = splitContentString.DBSubnetGroupDescription;
+        reqParams.cfn['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
+
+        var i=1;
+        while (splitContentString['SubnetIds.SubnetIdentifier.' + i]) {
+            reqParams.boto3['SubnetIds'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
+            reqParams.cli['--subnet-ids'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
+            reqParams.cfn['SubnetIds'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
+            i++;
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'CreateDBSubnetGroup',
+                'boto3': 'create_db_subnet_group',
+                'cli': 'create-db-subnet-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('docdb', details.requestId),
+            'region': region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBSubnetGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.CreateDBClusterParameterGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBClusterParameterGroup") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['Description'] = splitContentString.Description;
+        reqParams.cli['--description'] = splitContentString.Description;
+        reqParams.boto3['DBParameterGroupFamily'] = splitContentString.DBParameterGroupFamily;
+        reqParams.cli['--db-parameter-group-family'] = splitContentString.DBParameterGroupFamily;
+        reqParams.boto3['DBClusterParameterGroupName'] = splitContentString.DBClusterParameterGroupName;
+        reqParams.cli['--db-cluster-parameter-group-name'] = splitContentString.DBClusterParameterGroupName;
+
+        reqParams.cfn['Description'] = splitContentString.Description;
+        reqParams.cfn['Family'] = splitContentString.DBParameterGroupFamily;
+        reqParams.cfn['Name'] = splitContentString.DBClusterParameterGroupName;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'CreateDBClusterParameterGroup',
+                'boto3': 'create_db_cluster_parameter_group',
+                'cli': 'create-db-cluster-parameter-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('docdb', details.requestId),
+            'region': region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBClusterParameterGroup',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:kms.DescribeKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+        reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'DescribeKey',
+                'boto3': 'describe_key',
+                'cli': 'describe-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.CreateDBCluster
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBCluster") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['EngineVersion'] = splitContentString.EngineVersion;
+        reqParams.cli['--engine-version'] = splitContentString.EngineVersion;
+        reqParams.boto3['Engine'] = splitContentString.Engine;
+        reqParams.cli['--engine'] = splitContentString.Engine;
+        reqParams.boto3['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
+        reqParams.cli['--db-subnet-group-name'] = splitContentString.DBSubnetGroupName;
+        reqParams.boto3['DBClusterParameterGroupName'] = splitContentString.DBClusterParameterGroupName;
+        reqParams.cli['--db-cluster-parameter-group-name'] = splitContentString.DBClusterParameterGroupName;
+        reqParams.boto3['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.cli['--db-cluster-identifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.boto3['BackupRetentionPeriod'] = splitContentString.BackupRetentionPeriod;
+        reqParams.cli['--backup-retention-period'] = splitContentString.BackupRetentionPeriod;
+        reqParams.boto3['KmsKeyId'] = splitContentString.KmsKeyId;
+        reqParams.cli['--kms-key-id'] = splitContentString.KmsKeyId;
+        reqParams.boto3['StorageEncrypted'] = splitContentString.StorageEncrypted;
+        reqParams.cli['--storage-encrypted'] = splitContentString.StorageEncrypted;
+        reqParams.boto3['PreferredMaintenanceWindow'] = splitContentString.PreferredMaintenanceWindow;
+        reqParams.cli['--preferred-maintenance-window'] = splitContentString.PreferredMaintenanceWindow;
+        reqParams.boto3['PreferredBackupWindow'] = splitContentString.PreferredBackupWindow;
+        reqParams.cli['--preferred-backup-window'] = splitContentString.PreferredBackupWindow;
+        reqParams.boto3['MasterUserPassword'] = splitContentString.MasterUserPassword;
+        reqParams.cli['--master-user-password'] = splitContentString.MasterUserPassword;
+        reqParams.boto3['MasterUsername'] = splitContentString.MasterUsername;
+        reqParams.cli['--master-username'] = splitContentString.MasterUsername;
+        reqParams.boto3['Port'] = splitContentString.Port;
+        reqParams.cli['--port'] = splitContentString.Port;
+
+        reqParams.cfn['EngineVersion'] = splitContentString.EngineVersion;
+        reqParams.cfn['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
+        reqParams.cfn['DBClusterParameterGroupName'] = splitContentString.DBClusterParameterGroupName;
+        reqParams.cfn['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.cfn['BackupRetentionPeriod'] = splitContentString.BackupRetentionPeriod;
+        reqParams.cfn['KmsKeyId'] = splitContentString.KmsKeyId;
+        reqParams.cfn['StorageEncrypted'] = splitContentString.StorageEncrypted;
+        reqParams.cfn['PreferredMaintenanceWindow'] = splitContentString.PreferredMaintenanceWindow;
+        reqParams.cfn['PreferredBackupWindow'] = splitContentString.PreferredBackupWindow;
+        reqParams.cfn['MasterUserPassword'] = splitContentString.MasterUserPassword;
+        reqParams.cfn['MasterUsername'] = splitContentString.MasterUsername;
+        reqParams.cfn['Port'] = splitContentString.Port;
+
+        if (splitContentString['VpcSecurityGroupIds.VpcSecurityGroupId.1']) {
+            reqParams.boto3['VpcSecurityGroupIds'] = [];
+            reqParams.cli['--vpc-security-group-ids'] = [];
+
+            var i=1;
+            while (splitContentString['VpcSecurityGroupIds.VpcSecurityGroupId.' + i]) {
+                reqParams.boto3['VpcSecurityGroupIds'].push(splitContentString['VpcSecurityGroupIds.VpcSecurityGroupId.' + i]);
+                reqParams.cli['--vpc-security-group-ids'].push(splitContentString['VpcSecurityGroupIds.VpcSecurityGroupId.' + i]);
+                i++;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'CreateDBCluster',
+                'boto3': 'create_db_cluster',
+                'cli': 'create-db-cluster'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('docdb', details.requestId),
+            'region': region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBCluster',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.CreateDBInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBInstance") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.cli['--db-cluster-identifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.boto3['Engine'] = splitContentString.Engine;
+        reqParams.cli['--engine'] = splitContentString.Engine;
+        reqParams.boto3['DBInstanceClass'] = splitContentString.DBInstanceClass;
+        reqParams.cli['--db-instance-class'] = splitContentString.DBInstanceClass;
+        reqParams.boto3['DBInstanceIdentifier'] = splitContentString.DBInstanceIdentifier;
+        reqParams.cli['--db-instance-identifier'] = splitContentString.DBInstanceIdentifier;
+
+        reqParams.cfn['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.cfn['DBInstanceClass'] = splitContentString.DBInstanceClass;
+        reqParams.cfn['DBInstanceIdentifier'] = splitContentString.DBInstanceIdentifier;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'CreateDBInstance',
+                'boto3': 'create_db_instance',
+                'cli': 'create-db-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('docdb', details.requestId),
+            'region': region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBInstance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DeleteDBInstance
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBInstance") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['DBInstanceIdentifier'] = splitContentString.DBInstanceIdentifier;
+        reqParams.cli['--db-instance-identifier'] = splitContentString.DBInstanceIdentifier;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DeleteDBInstance',
+                'boto3': 'delete_db_instance',
+                'cli': 'delete-db-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DeleteDBCluster
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBCluster") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['FinalDBSnapshotIdentifier'] = splitContentString.FinalDBSnapshotIdentifier;
+        reqParams.cli['--final-db-snapshot-identifier'] = splitContentString.FinalDBSnapshotIdentifier;
+        reqParams.boto3['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.cli['--db-cluster-identifier'] = splitContentString.DBClusterIdentifier;
+        reqParams.boto3['SkipFinalSnapshot'] = splitContentString.SkipFinalSnapshot;
+        reqParams.cli['--skip-final-snapshot'] = splitContentString.SkipFinalSnapshot;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DeleteDBCluster',
+                'boto3': 'delete_db_cluster',
+                'cli': 'delete-db-cluster'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DeleteDBSubnetGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBSubnetGroup") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
+        reqParams.cli['--db-subnet-group-name'] = splitContentString.DBSubnetGroupName;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DeleteDBSubnetGroup',
+                'boto3': 'delete_db_subnet_group',
+                'cli': 'delete-db-subnet-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:docdb:docdb.DeleteDBClusterParameterGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBClusterParameterGroup") {
+        var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+        reqParams.boto3['DBClusterParameterGroupName'] = splitContentString.DBClusterParameterGroupName;
+        reqParams.cli['--db-cluster-parameter-group-name'] = splitContentString.DBClusterParameterGroupName;
+
+        outputs.push({
+            'region': region,
+            'service': 'docdb',
+            'method': {
+                'api': 'DeleteDBClusterParameterGroup',
+                'boto3': 'delete_db_cluster_parameter_group',
+                'cli': 'delete-db-cluster-parameter-group'
             },
             'options': reqParams,
             'requestDetails': details
