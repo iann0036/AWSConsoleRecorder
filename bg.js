@@ -991,6 +991,360 @@ function interpretGwtArg(tracker, expected_type) {
         ret['unknown1'] = unknown1;
 
         return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CustomErrorResponses/1121464496") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CacheBehaviors/2829792424") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CookiePreference/3547444623") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var preference = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['preference'] = preference;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CookieNames/65691594") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var cookienames = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['cookienames'] = cookienames;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.Headers/1360842881") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var headers = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['headers'] = headers;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.QueryStringCacheKeys/3357483778") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var keys = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['keys'] = keys;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.LambdaFunctionAssociations/968553882") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var associations = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['associations'] = associations;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.Origins/2653494639") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var origins = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['origins'] = origins;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.CustomHeaders/706640089") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var headers = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+
+        ret['headers'] = headers;
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.S3OriginConfig/3065886742") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var originaccessid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['originaccessid'] = originaccessid;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.OriginCustomHeader/4282815861") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var key = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var value = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['key'] = key;
+        ret['value'] = value;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.Origin/1619145402") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var customheaders = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+        var domainname = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var originid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var path = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var s3originconfig = interpretGwtArg(tracker);
+
+        ret['customheaders'] = customheaders;
+        ret['unknown1'] = unknown1;
+        ret['domainname'] = domainname;
+        ret['originid'] = originid;
+        ret['path'] = path;
+        ret['s3originconfig'] = s3originconfig;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.LoggingConfig/2208632355") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var bucket = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var enabled = interpretGwtArg(tracker);
+        var includecookies = interpretGwtArg(tracker);
+        var prefix = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['bucket'] = bucket;
+        ret['enabled'] = enabled;
+        ret['includecookies'] = includecookies;
+        ret['prefix'] = prefix;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.ForwardedValues/1684831373") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var cookiepreference = interpretGwtArg(tracker);
+        var cookienames = interpretGwtArg(tracker);
+        var headers = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+        var querystringcachekeys = interpretGwtArg(tracker);
+
+        ret['cookiepreference'] = cookiepreference;
+        ret['cookienames'] = cookienames;
+        ret['headers'] = headers;
+        ret['unknown1'] = unknown1;
+        ret['querystringcachekeys'] = querystringcachekeys;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.Restrictions/923540952") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var geo = interpretGwtArg(tracker);
+        
+        ret['geo'] = geo;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.GeoRestriction/1846888439") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+        
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.ViewerCertificate/2542029139") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+        
+        ret['unknown1'] = unknown1;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.DefaultCacheBehavior/3349440463") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var type1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var type2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var listtype1 = interpretGwtArg(tracker);
+        var counttype1 = interpretGwtArg(tracker);
+        var listtype2 = interpretGwtArg(tracker);
+        var counttype2 = interpretGwtArg(tracker);
+        var unknownboolean1 = interpretGwtArg(tracker);
+        var defaultttl = interpretGwtArg(tracker);
+        var unknownstring1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var forwardvalues = interpretGwtArg(tracker);
+        var lambdafunctionassociations = interpretGwtArg(tracker);
+        var maxttl = interpretGwtArg(tracker);
+        var minttl = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+        var targetoriginid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var trustedsigners = interpretGwtArg(tracker);
+        
+        ret['type1'] = type1;
+        ret['type2'] = type2;
+        ret['listtype1'] = listtype1;
+        ret['counttype1'] = counttype1;
+        ret['listtype2'] = listtype2;
+        ret['counttype2'] = counttype2;
+        ret['unknownboolean1'] = unknownboolean1;
+        ret['defaultttl'] = defaultttl;
+        ret['unknownstring1'] = unknownstring1;
+        ret['forwardvalues'] = forwardvalues;
+        ret['lambdafunctionassociations'] = lambdafunctionassociations;
+        ret['maxttl'] = maxttl;
+        ret['minttl'] = minttl;
+        ret['unknown1'] = unknown1;
+        ret['targetoriginid'] = targetoriginid;
+        ret['trustedsigners'] = trustedsigners;
+
+        return ret;
+    } else if (arg_type == "com.amazonaws.services.cloudfront.model.DistributionConfig/1312485537") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var aliases = interpretGwtArg(tracker);
+        var cachebehaviours = interpretGwtArg(tracker);
+        var unknownint1 = interpretGwtArg(tracker);
+        var timestamp = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var comment = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var customerrorresponses = interpretGwtArg(tracker);
+        var unknown1 = interpretGwtArg(tracker);
+        var defaultcachebehaviour = interpretGwtArg(tracker);
+        var viewerprotocolpolicy = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var rootobject = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown2 = interpretGwtArg(tracker);
+        var supportedhttpversion = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknown3 = interpretGwtArg(tracker);
+        var loggingconfig = interpretGwtArg(tracker);
+        var unknown4 = interpretGwtArg(tracker);
+        var origins = interpretGwtArg(tracker);
+        var priceclass = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var restrictions = interpretGwtArg(tracker);
+        var unknown5 = interpretGwtArg(tracker);
+        var unknownstring1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var viewercertificate = interpretGwtArg(tracker);
+        var unknown6 = interpretGwtArg(tracker);
+        var unknown7 = interpretGwtArg(tracker);
+        var unknown8 = interpretGwtArg(tracker);
+        var unknown9 = interpretGwtArg(tracker);
+        var tlsversion = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknownstring2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknownstring3 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+
+        ret['aliases'] = aliases;
+        ret['cachebehaviours'] = cachebehaviours;
+        ret['unknownint1'] = unknownint1;
+        ret['timestamp'] = timestamp;
+        ret['comment'] = comment;
+        ret['customerrorresponses'] = customerrorresponses;
+        ret['unknown1'] = unknown1;
+        ret['defaultcachebehaviour'] = defaultcachebehaviour;
+        ret['viewerprotocolpolicy'] = viewerprotocolpolicy;
+        ret['rootobject'] = rootobject;
+        ret['unknown2'] = unknown2;
+        ret['supportedhttpversion'] = supportedhttpversion;
+        ret['unknown3'] = unknown3;
+        ret['loggingconfig'] = loggingconfig;
+        ret['unknown4'] = unknown4;
+        ret['origins'] = origins;
+        ret['priceclass'] = priceclass;
+        ret['restrictions'] = restrictions;
+        ret['unknown5'] = unknown5;
+        ret['unknownstring1'] = unknownstring1;
+        ret['viewercertificate'] = viewercertificate;
+        ret['unknown6'] = unknown6;
+        ret['unknown7'] = unknown7;
+        ret['unknown8'] = unknown8;
+        ret['unknown9'] = unknown9;
+        ret['tlsversion'] = tlsversion;
+        ret['unknownstring2'] = unknownstring2;
+        ret['unknownstring3'] = unknownstring3;
+
+        return ret;
     } else {
         var ret = {
             'type': 'unknown'
@@ -1212,7 +1566,11 @@ function interpretGwtWireRequest(str) {
             'value': interpretGwtArg(tracker, arg_types[1]),
             'name': 'change'
         });
-        
+    } else if (service == "com.amazonaws.cloudfront.console.shared.service.DistributionService" && method == "createDistribution") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'distributionconfigs'
+        });
     }
 
     return {
@@ -2294,6 +2652,8 @@ function processJsParameter(param, spacing) {
 }
 
 function processBoto3Parameter(param, spacing) {
+    console.dir(param);
+
     var paramitems = [];
 
     if (param === undefined || param === null)
@@ -46165,6 +46525,190 @@ function analyseRequest(details) {
                 'api': 'DeleteDBClusterParameterGroup',
                 'boto3': 'delete_db_cluster_parameter_group',
                 'cli': 'delete-db-cluster-parameter-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cloudfront:cloudfront.CreateDistribution
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/service\/distribution$/g) && gwtRequest['method'] == "createDistribution" && gwtRequest['service'] == "com.amazonaws.cloudfront.console.shared.service.DistributionService") {
+        console.dir(gwtRequest);
+
+        aliases = null;
+        if (gwtRequest.args[0].value.aliases.items.value.length) {
+            aliases = [];
+            for (var i=0; i<gwtRequest.args[0].value.aliases.items.value.length; i++) {
+                aliases.push(gwtRequest.args[0].value.aliases.items.value[i].value);
+            }
+        }
+
+        origins = [];
+        for (var i=0; i<gwtRequest.args[0].value.origins.origins.value.length; i++) {
+            var customheaders = null;
+
+            var origin = {
+                'Id': gwtRequest.args[0].value.origins.origins.value[i].originid,
+                'DomainName': gwtRequest.args[0].value.origins.origins.value[i].domainname,
+                'OriginPath': gwtRequest.args[0].value.origins.origins.value[i].path
+            };
+
+            if (gwtRequest.args[0].value.origins.origins.value[i].customheaders && gwtRequest.args[0].value.origins.origins.value[i].customheaders.headers && Array.isArray(gwtRequest.args[0].value.origins.origins.value[i].customheaders.headers.value)) {
+                var customheaders = [];
+
+                for (var j=0; j<gwtRequest.args[0].value.origins.origins.value[i].customheaders.headers.value.length; j++) {
+                    customheaders.push({
+                        'HeaderName': gwtRequest.args[0].value.origins.origins.value[i].customheaders.headers.value[j].key,
+                        'HeaderValue': gwtRequest.args[0].value.origins.origins.value[i].customheaders.headers.value[j].value
+                    });
+                }
+
+                origin['CustomHeaders'] = {
+                    'Quantity': customheaders.length,
+                    'Items': customheaders
+                };
+
+                if (gwtRequest.args[0].value.origins.origins.value[i].s3originconfig && gwtRequest.args[0].value.origins.origins.value[i].s3originconfig.originaccessid) {
+                    origin['S3OriginConfig'] = {
+                        'OriginAccessIdentity': gwtRequest.args[0].value.origins.origins.value[i].s3originconfig.originaccessid
+                    };
+                }
+
+                // TODO: CustomOriginConfig
+            }
+
+            origins.push(origin);
+        }
+
+        // TODO: OriginGroups
+
+        var trustedsigners = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.items.length; i++) {
+            trustedsigners.push(gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.items[i].value);
+        }
+        var allowedmethods = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.listtype1.value.length; i++) {
+            allowedmethods.push(gwtRequest.args[0].value.defaultcachebehaviour.listtype1.value[i].value);
+        }
+        var cachedmethods = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.listtype2.value.length; i++) {
+            cachedmethods.push(gwtRequest.args[0].value.defaultcachebehaviour.listtype2.value[i].value);
+        }
+        var cookienames = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookienames.cookienames.value.length; i++) {
+            cookienames.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookienames.cookienames.value[i].value);
+        }
+        var headers = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value.length; i++) {
+            headers.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value[i].value);
+        }
+        var querystringcachekeys = [];
+        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value.length; i++) {
+            querystringcachekeys.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value[i].value);
+        }
+
+        var lambdafunctionassociations = null; // TODO
+
+        var cachebehaviours = null; // TODO
+
+        var customerrorresponses = null; // TODO
+
+        var georestriction = {
+            'RestrictionType': 'none'
+        }; // TODO
+
+        var viewercertificate = null; // TODO
+
+        var ipv6enabled = false; // TODO
+
+        var webaclid = null; // TODO
+
+        var enabled = true; // TODO
+
+        reqParams.boto3['DistributionConfig'] = {
+            'CallerReference': gwtRequest.args[0].value.timestamp,
+            'Aliases': {
+                'Quantity': aliases.length,
+                'Items': aliases
+            },
+            'DefaultRootObject': gwtRequest.args[0].value.rootobject,
+            'Origins': {
+                'Quantity': origins.length,
+                'Items': origins
+            },
+            'DefaultCacheBehavior': {
+                'TargetOriginId': gwtRequest.args[0].value.defaultcachebehaviour.targetoriginid,
+                'ForwardedValues': {
+                    'QueryString': true, // TODO
+                    'Cookies': {
+                        'Forward': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookiepreference.preference,
+                        'WhitelistedNames': {
+                            'Quantity': cookienames.length,
+                            'Items': cookienames
+                        }
+                    },
+                    'Headers': {
+                        'Quantity': headers.length,
+                        'Items': headers
+                    },
+                    'QueryStringCacheKeys': {
+                        'Quantity': querystringcachekeys.length,
+                        'Items': querystringcachekeys
+                    }
+                },
+                'TrustedSigners': {
+                    'Enabled': gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.enabled.value,
+                    'Quantity': trustedsigners.length,
+                    'Items': trustedsigners
+                },
+                'ViewerProtocolPolicy': gwtRequest.args[0].value.defaultcachebehaviour.viewerprotocolpolicy,
+                'MinTTL': gwtRequest.args[0].value.defaultcachebehaviour.minttl,
+                'AllowedMethods': {
+                    'Quantity': allowedmethods.length,
+                    'Items': allowedmethods,
+                    'CachedMethods': {
+                        'Quantity': cachedmethods.length,
+                        'Items': cachedmethods
+                    }
+                },
+                'SmoothStreaming': true, // TODO
+                'DefaultTTL': gwtRequest.args[0].value.defaultcachebehaviour.defaultttl,
+                'MaxTTL': gwtRequest.args[0].value.defaultcachebehaviour.maxttl,
+                'Compress': true, // TODO
+                'LambdaFunctionAssociations': lambdafunctionassociations,
+                'FieldLevelEncryptionId': 'string' // TODO
+            },
+            'CacheBehaviors': cachebehaviours,
+            'CustomErrorResponses': customerrorresponses,
+            'Comment': gwtRequest.args[0].value.comment,
+            'Logging': {
+                'Enabled': gwtRequest.args[0].value.loggingconfig.enabled.value,
+                'IncludeCookies': gwtRequest.args[0].value.loggingconfig.includecookies.value,
+                'Bucket': gwtRequest.args[0].value.loggingconfig.bucket,
+                'Prefix': gwtRequest.args[0].value.loggingconfig.prefix
+            },
+            'PriceClass': gwtRequest.args[0].value.priceclass,
+            'Enabled': enabled,
+            'ViewerCertificate': viewercertificate,
+            'Restrictions': {
+                'GeoRestriction': georestriction
+            },
+            'WebACLId': webaclid,
+            'HttpVersion': gwtRequest.args[0].value.supportedhttpversion,
+            'IsIPV6Enabled': ipv6enabled
+        };
+
+        reqParams.cli['--distribution-config'] = reqParams.boto3['DistributionConfig'];
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudfront',
+            'method': {
+                'api': 'CreateDistribution',
+                'boto3': 'create_distribution',
+                'cli': 'create-distribution'
             },
             'options': reqParams,
             'requestDetails': details
