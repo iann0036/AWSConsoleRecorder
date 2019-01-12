@@ -671,6 +671,7 @@ function interpretGwtArg(tracker, expected_type) {
         var ret = {
             'type': arg_type
         }
+        tracker.resolvedObjects.push("###TEMP"); // TODO: Fix
         tracker.resolvedObjects.push(ret);
 
         var items = interpretGwtArg(tracker);
@@ -995,6 +996,8 @@ function interpretGwtArg(tracker, expected_type) {
         var ret = {
             'type': arg_type
         }
+        tracker.resolvedObjects.push("###TEMP"); // TODO: Fix
+        tracker.resolvedObjects.push("###TEMP"); // TODO: Fix
         tracker.resolvedObjects.push(ret);
 
         var unknown1 = interpretGwtArg(tracker);
@@ -1182,13 +1185,13 @@ function interpretGwtArg(tracker, expected_type) {
         var cookiepreference = interpretGwtArg(tracker);
         var cookienames = interpretGwtArg(tracker);
         var headers = interpretGwtArg(tracker);
-        var unknown1 = interpretGwtArg(tracker);
+        var querystring = interpretGwtArg(tracker);
         var querystringcachekeys = interpretGwtArg(tracker);
 
         ret['cookiepreference'] = cookiepreference;
         ret['cookienames'] = cookienames;
         ret['headers'] = headers;
-        ret['unknown1'] = unknown1;
+        ret['querystring'] = querystring;
         ret['querystringcachekeys'] = querystringcachekeys;
 
         return ret;
@@ -1239,7 +1242,7 @@ function interpretGwtArg(tracker, expected_type) {
         var counttype1 = interpretGwtArg(tracker);
         var listtype2 = interpretGwtArg(tracker);
         var counttype2 = interpretGwtArg(tracker);
-        var unknownboolean1 = interpretGwtArg(tracker);
+        var compress = interpretGwtArg(tracker);
         var defaultttl = interpretGwtArg(tracker);
         var unknownstring1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
@@ -1247,7 +1250,7 @@ function interpretGwtArg(tracker, expected_type) {
         var lambdafunctionassociations = interpretGwtArg(tracker);
         var maxttl = interpretGwtArg(tracker);
         var minttl = interpretGwtArg(tracker);
-        var unknown1 = interpretGwtArg(tracker);
+        var smooth = interpretGwtArg(tracker);
         var targetoriginid = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
         var trustedsigners = interpretGwtArg(tracker);
@@ -1258,14 +1261,14 @@ function interpretGwtArg(tracker, expected_type) {
         ret['counttype1'] = counttype1;
         ret['listtype2'] = listtype2;
         ret['counttype2'] = counttype2;
-        ret['unknownboolean1'] = unknownboolean1;
+        ret['compress'] = compress;
         ret['defaultttl'] = defaultttl;
         ret['unknownstring1'] = unknownstring1;
         ret['forwardvalues'] = forwardvalues;
         ret['lambdafunctionassociations'] = lambdafunctionassociations;
         ret['maxttl'] = maxttl;
         ret['minttl'] = minttl;
-        ret['unknown1'] = unknown1;
+        ret['smooth'] = smooth;
         ret['targetoriginid'] = targetoriginid;
         ret['trustedsigners'] = trustedsigners;
 
@@ -1290,10 +1293,10 @@ function interpretGwtArg(tracker, expected_type) {
         tracker.cursor += 1;
         var rootobject = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
-        var unknown2 = interpretGwtArg(tracker);
+        var enabled = interpretGwtArg(tracker);
         var supportedhttpversion = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
         tracker.cursor += 1;
-        var unknown3 = interpretGwtArg(tracker);
+        var ipv6support = interpretGwtArg(tracker);
         var loggingconfig = interpretGwtArg(tracker);
         var unknown4 = interpretGwtArg(tracker);
         var origins = interpretGwtArg(tracker);
@@ -1325,9 +1328,9 @@ function interpretGwtArg(tracker, expected_type) {
         ret['defaultcachebehaviour'] = defaultcachebehaviour;
         ret['viewerprotocolpolicy'] = viewerprotocolpolicy;
         ret['rootobject'] = rootobject;
-        ret['unknown2'] = unknown2;
+        ret['enabled'] = enabled;
         ret['supportedhttpversion'] = supportedhttpversion;
-        ret['unknown3'] = unknown3;
+        ret['ipv6support'] = ipv6support;
         ret['loggingconfig'] = loggingconfig;
         ret['unknown4'] = unknown4;
         ret['origins'] = origins;
@@ -1343,6 +1346,8 @@ function interpretGwtArg(tracker, expected_type) {
         ret['tlsversion'] = tlsversion;
         ret['unknownstring2'] = unknownstring2;
         ret['unknownstring3'] = unknownstring3;
+
+        console.dir(tracker);
 
         return ret;
     } else {
@@ -2652,8 +2657,6 @@ function processJsParameter(param, spacing) {
 }
 
 function processBoto3Parameter(param, spacing) {
-    console.dir(param);
-
     var paramitems = [];
 
     if (param === undefined || param === null)
@@ -46535,21 +46538,26 @@ function analyseRequest(details) {
 
     // autogen:cloudfront:cloudfront.CreateDistribution
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/service\/distribution$/g) && gwtRequest['method'] == "createDistribution" && gwtRequest['service'] == "com.amazonaws.cloudfront.console.shared.service.DistributionService") {
-        console.dir(gwtRequest);
-
-        aliases = null;
+        var aliases = null;
         if (gwtRequest.args[0].value.aliases.items.value.length) {
             aliases = [];
             for (var i=0; i<gwtRequest.args[0].value.aliases.items.value.length; i++) {
                 aliases.push(gwtRequest.args[0].value.aliases.items.value[i].value);
             }
+            reqParams.cfn['Aliases'] = aliases;
         }
 
-        origins = [];
+        var origins = [];
+        var origins_cfn = [];
         for (var i=0; i<gwtRequest.args[0].value.origins.origins.value.length; i++) {
             var customheaders = null;
 
             var origin = {
+                'Id': gwtRequest.args[0].value.origins.origins.value[i].originid,
+                'DomainName': gwtRequest.args[0].value.origins.origins.value[i].domainname,
+                'OriginPath': gwtRequest.args[0].value.origins.origins.value[i].path
+            };
+            var origin_cfn = {
                 'Id': gwtRequest.args[0].value.origins.origins.value[i].originid,
                 'DomainName': gwtRequest.args[0].value.origins.origins.value[i].domainname,
                 'OriginPath': gwtRequest.args[0].value.origins.origins.value[i].path
@@ -46569,9 +46577,13 @@ function analyseRequest(details) {
                     'Quantity': customheaders.length,
                     'Items': customheaders
                 };
+                origin_cfn['OriginCustomHeaders'] = customheaders;
 
                 if (gwtRequest.args[0].value.origins.origins.value[i].s3originconfig && gwtRequest.args[0].value.origins.origins.value[i].s3originconfig.originaccessid) {
                     origin['S3OriginConfig'] = {
+                        'OriginAccessIdentity': gwtRequest.args[0].value.origins.origins.value[i].s3originconfig.originaccessid
+                    };
+                    origin_cfn['S3OriginConfig'] = {
                         'OriginAccessIdentity': gwtRequest.args[0].value.origins.origins.value[i].s3originconfig.originaccessid
                     };
                 }
@@ -46580,14 +46592,26 @@ function analyseRequest(details) {
             }
 
             origins.push(origin);
+            origins_cfn.push(origin_cfn);
         }
 
         // TODO: OriginGroups
 
-        var trustedsigners = [];
+        var trustedsigners = {
+            'Enabled': gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.enabled.value
+        };
+        var trustedsigners_items = [];
         for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.items.length; i++) {
-            trustedsigners.push(gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.items[i].value);
+            trustedsigners_items.push(gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.items[i].value);
         }
+        if (trustedsigners_items.length) {
+            trustedsigners = {
+                'Enabled': gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.enabled.value,
+                'Quantity': trustedsigners.length,
+                'Items': trustedsigners
+            };
+        }
+
         var allowedmethods = [];
         for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.listtype1.value.length; i++) {
             allowedmethods.push(gwtRequest.args[0].value.defaultcachebehaviour.listtype1.value[i].value);
@@ -46596,17 +46620,49 @@ function analyseRequest(details) {
         for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.listtype2.value.length; i++) {
             cachedmethods.push(gwtRequest.args[0].value.defaultcachebehaviour.listtype2.value[i].value);
         }
+        var cookies = null;
+        var cookies_cfn = null;
         var cookienames = [];
         for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookienames.cookienames.value.length; i++) {
             cookienames.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookienames.cookienames.value[i].value);
         }
-        var headers = [];
-        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value.length; i++) {
-            headers.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value[i].value);
+        if (cookienames.length) {
+            cookies = {
+                'Forward': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookiepreference.preference,
+                'WhitelistedNames': {
+                    'Quantity': cookienames.length,
+                    'Items': cookienames
+                }
+            };
+            cookies_cfn = {
+                'Forward': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookiepreference.preference,
+                'WhitelistedNames': cookienames
+            };
         }
-        var querystringcachekeys = [];
-        for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value.length; i++) {
-            querystringcachekeys.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value[i].value);
+        var headers = null;
+        var header_items = null;
+        if (gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value) {
+            header_items = [];
+            for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value.length; i++) {
+                header_items.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.headers.headers.value[i].value);
+            }
+            headers = {
+                'Quantity': header_items.length,
+                'Items': header_items
+            }
+        }
+
+        var querystringcachekeys = null;
+        var querystringcachekeys_items = null;
+        if (gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value) {
+            querystringcachekeys_items = [];
+            for (var i=0; i<gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value.length; i++) {
+                querystringcachekeys_items.push(gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystringcachekeys.keys.value[i].value);
+            }
+            querystringcachekeys = {
+                'Quantity': querystringcachekeys_items.length,
+                'Items': querystringcachekeys_items
+            }
         }
 
         var lambdafunctionassociations = null; // TODO
@@ -46621,11 +46677,9 @@ function analyseRequest(details) {
 
         var viewercertificate = null; // TODO
 
-        var ipv6enabled = false; // TODO
-
         var webaclid = null; // TODO
 
-        var enabled = true; // TODO
+        var fieldlevelencryptionid = null; // TODO
 
         reqParams.boto3['DistributionConfig'] = {
             'CallerReference': gwtRequest.args[0].value.timestamp,
@@ -46641,30 +46695,14 @@ function analyseRequest(details) {
             'DefaultCacheBehavior': {
                 'TargetOriginId': gwtRequest.args[0].value.defaultcachebehaviour.targetoriginid,
                 'ForwardedValues': {
-                    'QueryString': true, // TODO
-                    'Cookies': {
-                        'Forward': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.cookiepreference.preference,
-                        'WhitelistedNames': {
-                            'Quantity': cookienames.length,
-                            'Items': cookienames
-                        }
-                    },
-                    'Headers': {
-                        'Quantity': headers.length,
-                        'Items': headers
-                    },
-                    'QueryStringCacheKeys': {
-                        'Quantity': querystringcachekeys.length,
-                        'Items': querystringcachekeys
-                    }
+                    'QueryString': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystring.value,
+                    'Cookies': cookies,
+                    'Headers': headers,
+                    'QueryStringCacheKeys': querystringcachekeys
                 },
-                'TrustedSigners': {
-                    'Enabled': gwtRequest.args[0].value.defaultcachebehaviour.trustedsigners.enabled.value,
-                    'Quantity': trustedsigners.length,
-                    'Items': trustedsigners
-                },
+                'TrustedSigners': trustedsigners,
                 'ViewerProtocolPolicy': gwtRequest.args[0].value.defaultcachebehaviour.viewerprotocolpolicy,
-                'MinTTL': gwtRequest.args[0].value.defaultcachebehaviour.minttl,
+                'MinTTL': gwtRequest.args[0].value.defaultcachebehaviour.minttl.value,
                 'AllowedMethods': {
                     'Quantity': allowedmethods.length,
                     'Items': allowedmethods,
@@ -46673,12 +46711,12 @@ function analyseRequest(details) {
                         'Items': cachedmethods
                     }
                 },
-                'SmoothStreaming': true, // TODO
-                'DefaultTTL': gwtRequest.args[0].value.defaultcachebehaviour.defaultttl,
-                'MaxTTL': gwtRequest.args[0].value.defaultcachebehaviour.maxttl,
-                'Compress': true, // TODO
+                'SmoothStreaming': gwtRequest.args[0].value.defaultcachebehaviour.smooth.value,
+                'DefaultTTL': gwtRequest.args[0].value.defaultcachebehaviour.defaultttl.value,
+                'MaxTTL': gwtRequest.args[0].value.defaultcachebehaviour.maxttl.value,
+                'Compress': gwtRequest.args[0].value.defaultcachebehaviour.compress.value,
                 'LambdaFunctionAssociations': lambdafunctionassociations,
-                'FieldLevelEncryptionId': 'string' // TODO
+                'FieldLevelEncryptionId': fieldlevelencryptionid
             },
             'CacheBehaviors': cachebehaviours,
             'CustomErrorResponses': customerrorresponses,
@@ -46690,17 +46728,49 @@ function analyseRequest(details) {
                 'Prefix': gwtRequest.args[0].value.loggingconfig.prefix
             },
             'PriceClass': gwtRequest.args[0].value.priceclass,
-            'Enabled': enabled,
+            'Enabled': gwtRequest.args[0].value.enabled.value,
             'ViewerCertificate': viewercertificate,
             'Restrictions': {
                 'GeoRestriction': georestriction
             },
             'WebACLId': webaclid,
             'HttpVersion': gwtRequest.args[0].value.supportedhttpversion,
-            'IsIPV6Enabled': ipv6enabled
+            'IsIPV6Enabled': gwtRequest.args[0].value.ipv6support.value
         };
-
         reqParams.cli['--distribution-config'] = reqParams.boto3['DistributionConfig'];
+
+        reqParams.cfn['Comment'] = gwtRequest.args[0].value.comment;
+        reqParams.cfn['DefaultCacheBehavior'] = {
+            'TargetOriginId': gwtRequest.args[0].value.defaultcachebehaviour.targetoriginid,
+            'ForwardedValues': {
+                'QueryString': gwtRequest.args[0].value.defaultcachebehaviour.forwardvalues.querystring.value,
+                'Cookies': cookies_cfn,
+                'Headers': header_items,
+                'QueryStringCacheKeys': querystringcachekeys_items
+            },
+            'TrustedSigners': (trustedsigners_items.length ? trustedsigners_items : null),
+            'ViewerProtocolPolicy': gwtRequest.args[0].value.defaultcachebehaviour.viewerprotocolpolicy,
+            'MinTTL': gwtRequest.args[0].value.defaultcachebehaviour.minttl.value,
+            'AllowedMethods': allowedmethods,
+            'CachedMethods': cachedmethods,
+            'SmoothStreaming': gwtRequest.args[0].value.defaultcachebehaviour.smooth.value,
+            'DefaultTTL': gwtRequest.args[0].value.defaultcachebehaviour.defaultttl.value,
+            'MaxTTL': gwtRequest.args[0].value.defaultcachebehaviour.maxttl.value,
+            'Compress': gwtRequest.args[0].value.defaultcachebehaviour.compress.value
+        };
+        reqParams.cfn['DefaultRootObject'] = gwtRequest.args[0].value.rootobject;
+        reqParams.cfn['Enabled'] = gwtRequest.args[0].value.enabled.value;
+        reqParams.cfn['HttpVersion'] = gwtRequest.args[0].value.supportedhttpversion;
+        reqParams.cfn['IPV6Enabled'] = gwtRequest.args[0].value.ipv6support.value;
+        if (gwtRequest.args[0].value.loggingconfig.enabled.value) {
+            reqParams.cfn['Logging'] = {
+                'IncludeCookies': gwtRequest.args[0].value.loggingconfig.includecookies.value,
+                'Bucket': gwtRequest.args[0].value.loggingconfig.bucket,
+                'Prefix': gwtRequest.args[0].value.loggingconfig.prefix
+            };
+        }
+        reqParams.cfn['Origins'] = origins_cfn;
+        reqParams.cfn['PriceClass'] = gwtRequest.args[0].value.priceclass;
 
         outputs.push({
             'region': region,
@@ -46712,6 +46782,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cloudfront', details.requestId),
+            'region': region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::Distribution',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
