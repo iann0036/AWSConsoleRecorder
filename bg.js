@@ -4066,12 +4066,20 @@ chrome.runtime.onMessage.addListener(
             recording = true;
 
             chrome.webRequest.onBeforeRequest.addListener(
-                analyseRequest,
+                analyseOnBeforeRequest,
                 {urls: [
                     "*://*.aws.amazon.com/*",
                     "*://*.amazonaws.com/*"
                 ]},
                 ["requestBody","blocking"]
+            );
+            chrome.webRequest.onBeforeSendHeaders.addListener(
+                analyseOnBeforeSendHeaders,
+                {urls: [
+                    "*://*.aws.amazon.com/*",
+                    "*://*.amazonaws.com/*"
+                ]},
+                ["blocking", "requestHeaders"]
             );
 
             if (intercept && navigator.userAgent.search("Firefox") == -1) {
@@ -4100,7 +4108,8 @@ chrome.runtime.onMessage.addListener(
         } else if (message.action == "setRecordingOff") {
             recording = false;
 
-            chrome.webRequest.onBeforeRequest.removeListener(analyseRequest);
+            chrome.webRequest.onBeforeRequest.removeListener(analyseOnBeforeRequest);
+            chrome.webRequest.onBeforeRequest.removeListener(analyseOnBeforeSendHeaders);
 
             if (intercept && navigator.userAgent.search("Firefox") == -1) {
                 chrome.debugger.onEvent.removeListener(allEventHandler);
@@ -4110,6 +4119,8 @@ chrome.runtime.onMessage.addListener(
                             'tabId': targets[i].tabId,
                             'extensionId': targets[i].extensionId,
                             'targetId': targets[i].id
+                        }, function(){
+                            void chrome.runtime.lastError; // don't care
                         });
                     }
                 });
@@ -5198,20 +5209,29 @@ function setOutputsForTrackedResource(index) {
 var outputs = [];
 var tracked_resources = [];
 var blocking = false;
+var activeRequests = {};
 
-function analyseRequest(details) {
-    var reqParams = {
-        'boto3': {},
-        'go': {},
-        'cfn': {},
-        'cli': {},
-        'tf': {},
-        'iam': {}
-    };
+function analyseOnBeforeRequest(details) {
+    activeRequests[details.requestId] = details;
+    setTimeout(function(requestId){
+        delete activeRequests[requestId];
+    }, 2000, details.requestId);
+
+    return {};
+}
+
+function analyseOnBeforeSendHeaders(headerdetails) {
     var requestBody = "";
     var jsonRequestBody = {};
     var region = 'us-east-1';
     var gwtRequest = {};
+
+    if (!activeRequests[headerdetails.requestId]) {
+        return {};
+    }
+    var details = activeRequests[headerdetails.requestId];
+    details.requestHeaders = headerdetails.requestHeaders;
+    delete activeRequests[headerdetails.requestId];
 
     // Firefox
     if (intercept && navigator.userAgent.search("Firefox") > -1) {
@@ -5284,8 +5304,25 @@ function analyseRequest(details) {
             }
         }
     } catch(e) {;}
+
+    activeRequests[details.requestId] = details;
+    setTimeout(function(requestId){
+        delete activeRequests[requestId];
+    }, 2000, details.requestId);
+
+    return checkAWSMethods(details, requestBody, jsonRequestBody, region, gwtRequest);
+}
     
-    
+function checkAWSMethods(details, requestBody, jsonRequestBody, region, gwtRequest) {
+    var reqParams = {
+        'boto3': {},
+        'go': {},
+        'cfn': {},
+        'cli': {},
+        'tf': {},
+        'iam': {}
+    };
+
     // manual:ec2:ec2.DescribeInstances
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getMergedInstanceList\?/g)) {
         if ('filters' in jsonRequestBody) {
@@ -47604,6 +47641,31 @@ function analyseRequest(details) {
                 'api': 'GetAccountSettings',
                 'boto3': 'get_account_settings',
                 'cli': 'get-account-settings'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:macie:macie.ListMemberAccounts
+    if (details.method == "POST" && details.url.match(/.+macie\.[a-z0-9-]+\.amazonaws\.com\/\?/g)) {
+        reqParams.boto3['NextToken'] = jsonRequestBody.nextToken;
+        reqParams.cli['--next-token'] = jsonRequestBody.nextToken;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
+
+        //X-Amz-Target: com.amazonaws.macie.service.MacieService.ListMemberAccounts
+        console.dir(details);
+
+        outputs.push({
+            'region': region,
+            'service': 'macie',
+            'method': {
+                'api': 'ListMemberAccounts',
+                'boto3': 'list_member_accounts',
+                'cli': 'list-member-accounts'
             },
             'options': reqParams,
             'requestDetails': details
