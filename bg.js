@@ -4110,6 +4110,8 @@ chrome.runtime.onMessage.addListener(
                             'tabId': targets[i].tabId,
                             'extensionId': targets[i].extensionId,
                             'targetId': targets[i].id
+                        }, function(){
+                            void chrome.runtime.lastError; // don't care
                         });
                     }
                 });
