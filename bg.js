@@ -1347,7 +1347,349 @@ function interpretGwtArg(tracker, expected_type) {
         ret['unknownstring2'] = unknownstring2;
         ret['unknownstring3'] = unknownstring3;
 
-        console.dir(tracker);
+        return ret;
+    } else if (arg_type == "edp.console.client.model.Role/1394926005") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var arn = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknownarray1 = interpretGwtArg(tracker);
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var unknownstring1 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var name2 = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['arn'] = arn;
+        ret['unknownarray1'] = unknownarray1;
+        ret['name'] = name;
+        ret['unknownstring1'] = unknownstring1;
+        ret['name2'] = name2;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.DefaultObjectProperties/1857086444") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var pipelinerole = interpretGwtArg(tracker);
+        
+        ret['pipelinerole'] = pipelinerole;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.Ending/1349908719") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var endingtype = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var unknownbool1 = interpretGwtArg(tracker);
+        var occurancecount = interpretGwtArg(tracker);
+        
+        ret['endingtype'] = endingtype;
+        ret['unknownbool1'] = unknownbool1;
+        ret['occurancecount'] = occurancecount;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.typeDef.StandardScheduleType/3790816381") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var scheduletype = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        
+        ret['scheduletype'] = scheduletype;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.Starting/360569834") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var timestamp = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var startingtype = interpretGwtArg(tracker);
+        
+        ret['timestamp'] = timestamp;
+        ret['startingtype'] = startingtype;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.Starting$Type/1371883812") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var startingtype = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        
+        ret['startingtype'] = startingtype;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.ScheduleInfo/2346623989") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var ending = interpretGwtArg(tracker);
+        var runeverynumber = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+        var runeverymetric = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var scheduletype = interpretGwtArg(tracker);
+        var starting = interpretGwtArg(tracker);
+        
+        ret['ending'] = ending;
+        ret['runeverynumber'] = runeverynumber;
+        ret['runeverymetric'] = runeverymetric;
+        ret['scheduletype'] = scheduletype;
+        ret['starting'] = starting;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineDefinition/1154738008") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var objects = interpretGwtArg(tracker);
+        
+        ret['objects'] = objects;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.ObjectId/1185543638") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var id = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['id'] = id;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineId/2380834385") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var id = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['id'] = id;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.EdpValues/3097304520") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var values = interpretGwtArg(tracker);
+        
+        ret['values'] = values;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.EdpValue/3514483194") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+        var value = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['unknown1'] = unknown1;
+        ret['value'] = value;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.EdpObject/4062271627") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var unknown1 = interpretGwtArg(tracker);
+        var unknown2 = interpretGwtArg(tracker);
+        var unknown3 = interpretGwtArg(tracker);
+        var pipelineid = interpretGwtArg(tracker);
+        var values = interpretGwtArg(tracker);
+        
+        ret['unknown1'] = unknown1;
+        ret['unknown2'] = unknown2;
+        ret['unknown3'] = unknown3;
+        ret['pipelineid'] = pipelineid;
+        ret['values'] = values;
+
+        return ret;
+    } else if (arg_type == "java.util.HashMap/1797211028") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var items = [];
+
+        var itemcount = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        for (var i=0; i<itemcount; i++) {
+            items.push({
+                'key': interpretGwtArg(tracker),
+                'value': interpretGwtArg(tracker)
+            });
+        }
+        
+        ret['items'] = items;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineParameterValues/461930119") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var values = interpretGwtArg(tracker);
+        
+        ret['values'] = values;
+
+        return ret;
+    } else if (arg_type == "com.google.common.collect.LinkedListMultimap/1729837690") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var items = [];
+
+        var itemcount = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        for (var i=0; i<itemcount; i++) {
+            items.push({
+                'key': interpretGwtArg(tracker),
+                'value': interpretGwtArg(tracker)
+            });
+        }
+        
+        ret['items'] = items;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineParametersObjects/3330658573") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var objects = interpretGwtArg(tracker);
+        
+        ret['objects'] = objects;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineParameterObject/4140314217") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var values = interpretGwtArg(tracker);
+        
+        ret['values'] = values;
+
+        return ret;
+    } else if (arg_type == "com.google.common.collect.ArrayListMultimap/3900168773") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var items = [];
+
+        var itemcount = parseInt(tracker.pipesplit[tracker.cursor]);
+        tracker.cursor += 1;
+
+        for (var i=0; i<itemcount; i++) {
+            var key = interpretGwtArg(tracker);
+            var valuecount = parseInt(tracker.pipesplit[tracker.cursor]);
+            tracker.cursor += 1;
+            var values = [];
+            for (var j=0; j<valuecount; j++) {
+                values.push(interpretGwtArg(tracker));
+            }
+            items.push({
+                'key': key,
+                'value': values
+            });
+        }
+        
+        ret['items'] = items;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.model.PipelineTag/4209464192") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push(ret);
+
+        var tagkey = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var tagvalue = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['tagkey'] = tagkey;
+        ret['tagvalue'] = tagvalue;
+
+        return ret;
+    } else if (arg_type == "edp.console.client.commands.CreatePipelineAction/2605870699") {
+        var ret = {
+            'type': arg_type
+        }
+        tracker.resolvedObjects.push("###TEMP");
+        tracker.resolvedObjects.push(ret);
+
+        var defaultobjectproperties = interpretGwtArg(tracker);
+        var logginglocation = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var ec2instancerole = interpretGwtArg(tracker);
+        var scheduleinfo = interpretGwtArg(tracker);
+        var pipelinedefinition = interpretGwtArg(tracker);
+        var pipelineid = interpretGwtArg(tracker);
+        var description = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var name = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        var pipelineparametervalues = interpretGwtArg(tracker);
+        var pipelineparameterobjects = interpretGwtArg(tracker);
+        var tags = interpretGwtArg(tracker);
+        var pipelinedefinitionjson = tracker.params[parseInt(tracker.pipesplit[tracker.cursor])];
+        tracker.cursor += 1;
+        
+        ret['defaultobjectproperties'] = defaultobjectproperties;
+        ret['logginglocation'] = logginglocation;
+        ret['ec2instancerole'] = ec2instancerole;
+        ret['scheduleinfo'] = scheduleinfo;
+        ret['pipelinedefinition'] = pipelinedefinition;
+        ret['pipelineid'] = pipelineid;
+        ret['description'] = description;
+        ret['name'] = name;
+        ret['pipelineparametervalues'] = pipelineparametervalues;
+        ret['pipelineparameterobjects'] = pipelineparameterobjects;
+        ret['tags'] = tags;
+        ret['pipelinedefinitionjson'] = pipelinedefinitionjson;
 
         return ret;
     } else {
@@ -1575,6 +1917,15 @@ function interpretGwtWireRequest(str) {
         args.push({
             'value': interpretGwtArg(tracker, arg_types[0]),
             'name': 'distributionconfigs'
+        });
+    } else if (service == "edp.console.client.dispatch.DispatchService" && method == "dispatch") {
+        args.push({
+            'value': interpretGwtArg(tracker, arg_types[0]),
+            'name': 'dispatchaction'
+        });
+        args.push({
+            'value': tracker.params[parseInt(tracker.pipesplit[tracker.cursor])],
+            'name': 'uniqueid'
         });
     }
 
@@ -46789,6 +47140,110 @@ function analyseRequest(details) {
             'region': region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::Distribution',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // manual:datapipeline:datapipeline.CreatePipeline
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datapipeline\/datapipeline\/dispatch$/g) && gwtRequest['method'] == "dispatch" && gwtRequest['service'] == "edp.console.client.dispatch.DispatchService") {
+        console.dir(gwtRequest);
+
+        reqParams.boto3['name'] = gwtRequest.args[0].value.name;
+        reqParams.cli['--name'] = gwtRequest.args[0].value.name;
+        reqParams.boto3['uniqueId'] = gwtRequest.args[1].value;
+        reqParams.cli['--unique-id'] = gwtRequest.args[1].value;
+        reqParams.boto3['description'] = gwtRequest.args[0].value.description;
+        reqParams.cli['--description'] = gwtRequest.args[0].value.description;
+        if (gwtRequest.args[0].value.tags.value) {
+            reqParams.boto3['tags'] = [];
+            reqParams.cfn['PipelineTags'] = [];
+            for (var i=0; i<gwtRequest.args[0].value.tags.value.length; i++) {
+                reqParams.boto3['tags'].push({
+                    'key': gwtRequest.args[0].value.tags.value[i].tagkey,
+                    'value': gwtRequest.args[0].value.tags.value[i].tagvalue
+                });
+                reqParams.cfn['PipelineTags'].push({
+                    'Key': gwtRequest.args[0].value.tags.value[i].tagkey,
+                    'Value': gwtRequest.args[0].value.tags.value[i].tagvalue
+                });
+            }
+        }
+        reqParams.cli['--tags'] = reqParams.boto3['tags'];
+
+        reqParams.cfn['Name'] = gwtRequest.args[0].value.name;
+        reqParams.cfn['Description'] = gwtRequest.args[0].value.description;
+        if (gwtRequest.args[0].value.pipelineparameterobjects.objects) {
+            reqParams.cfn['ParameterObjects'] = [];
+            reqParams.cfn['ParameterValues'] = [];
+
+            for (var i=0; i<gwtRequest.args[0].value.pipelineparameterobjects.objects.value.length; i++) {
+                var attributes = [];
+
+                for (var j=0; j<gwtRequest.args[0].value.pipelineparameterobjects.objects.value[i].values.items.length; j++) {
+                    var attrkey = gwtRequest.args[0].value.pipelineparameterobjects.objects.value[i].values.items[j].key.value;
+                    for (var k=0; k<gwtRequest.args[0].value.pipelineparameterobjects.objects.value[i].values.items[j].value.length; k++) {
+                        attributes.push({
+                            'Key': attrkey,
+                            'StringValue': gwtRequest.args[0].value.pipelineparameterobjects.objects.value[i].values.items[j].value[k].value
+                        });
+                    }
+                }
+
+                reqParams.cfn['ParameterObjects'].push({
+                    'Id': "parameter" + (i+1),
+                    'Attributes': attributes
+                });
+            }
+
+            for (var i=0; i<gwtRequest.args[0].value.pipelineparametervalues.values.items.length; i++) {
+                reqParams.cfn['ParameterValues'].push({
+                    'Id': gwtRequest.args[0].value.pipelineparametervalues.values.items[i].key.value,
+                    'StringValue': gwtRequest.args[0].value.pipelineparametervalues.values.items[i].value.value
+                });
+            }
+        }
+        reqParams.cfn['PipelineObjects'] = [];
+        for (var i=0; i<gwtRequest.args[0].value.pipelinedefinition.objects.items.length; i++) {
+            var fields = [];
+
+            for (var j=0; j<gwtRequest.args[0].value.pipelinedefinition.objects.items[i].value.values.items.length; j++) {
+                for (var k=0; k<gwtRequest.args[0].value.pipelinedefinition.objects.items[i].value.values.items[j].value.values.value.length; k++) {
+                    fields.push({
+                        'Key': gwtRequest.args[0].value.pipelinedefinition.objects.items[i].value.values.items[j].key.value,
+                        //'RefValue" : String,
+                        'StringValue': gwtRequest.args[0].value.pipelinedefinition.objects.items[i].value.values.items[j].value.values.value[k].value
+                    });
+                }
+            }
+
+            reqParams.cfn['PipelineObjects'].push({
+                'Fields': fields,
+                'Id': "object" + (i+1),
+                'Name': gwtRequest.args[0].value.pipelinedefinition.objects.items[i].key.id
+            });
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'datapipeline',
+            'method': {
+                'api': 'CreatePipeline',
+                'boto3': 'create_pipeline',
+                'cli': 'create-pipeline'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('datapipeline', details.requestId),
+            'region': region,
+            'service': 'datapipeline',
+            'type': 'AWS::DataPipeline::Pipeline',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
