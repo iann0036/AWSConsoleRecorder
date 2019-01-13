@@ -47417,4 +47417,199 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.ModifyImageAttribute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=modifyImageAndSnapshotPermissions\?/g)) {
+        if (jsonRequestBody.launchPermission.add) {
+            var add = [];
+            var userids = [];
+
+            for (var i=0; i<jsonRequestBody.launchPermission.add.length; i++) {
+                add.push({
+                    'UserId': jsonRequestBody.launchPermission.add[i].userId
+                });
+                userids.push(jsonRequestBody.launchPermission.add[i].userId);
+            }
+
+            reqParams.boto3['ImageId'] = jsonRequestBody.imageId;
+            reqParams.cli['--image-id'] = jsonRequestBody.imageId;
+            reqParams.boto3['Attribute'] = "launchPermission";
+            reqParams.cli['--attribute'] = "launchPermission";
+            reqParams.boto3['UserIds'] = userids;
+            reqParams.cli['--user-ids'] = userids;
+            reqParams.boto3['OperationType'] = "add";
+            reqParams.cli['--operation-type'] = "add";
+            reqParams.boto3['LaunchPermission'] = {
+                'Add': add
+            };
+            reqParams.cli['--launch-permission'] = {
+                'Add': add
+            };
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'ModifyImageAttribute',
+                    'boto3': 'modify_image_attribute',
+                    'cli': 'modify-image-attribute'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            for (var i=0; i<jsonRequestBody.launchPermission.add.length; i++) {
+                var reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.tf['image_id'] = jsonRequestBody.imageId;
+                reqParams.tf['account_id'] = jsonRequestBody.launchPermission.add[i].userId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', details.requestId),
+                    'region': region,
+                    'service': 'ec2',
+                    'terraformType': 'aws_ami_launch_permission',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+        }
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.CreateProject
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.CreateProject") {
+        reqParams.boto3['name'] = jsonRequestBody.content.name;
+        reqParams.cli['--name'] = jsonRequestBody.content.name;
+        reqParams.tf['name'] = jsonRequestBody.content.name;
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'CreateProject',
+                'boto3': 'create_project',
+                'cli': 'create-project'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('devicefarm', details.requestId),
+            'region': region,
+            'service': 'devicefarm',
+            'terraformType': 'aws_ami_launch_permission',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.ListProjects
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListProjects") {
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'ListProjects',
+                'boto3': 'list_projects',
+                'cli': 'list-projects'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.GetProject
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetProject") {
+        reqParams.boto3['arn'] = jsonRequestBody.content.arn;
+        reqParams.cli['--arn'] = jsonRequestBody.content.arn;
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'GetProject',
+                'boto3': 'get_project',
+                'cli': 'get-project'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.ListRuns
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRuns") {
+        reqParams.boto3['arn'] = jsonRequestBody.content.arn;
+        reqParams.cli['--arn'] = jsonRequestBody.content.arn;
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'ListRuns',
+                'boto3': 'list_runs',
+                'cli': 'list-runs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.ListRemoteAccessSessions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRemoteAccessSessions") {
+        reqParams.boto3['arn'] = jsonRequestBody.content.arn;
+        reqParams.cli['--arn'] = jsonRequestBody.content.arn;
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'ListRemoteAccessSessions',
+                'boto3': 'list_remote_access_sessions',
+                'cli': 'list-remote-access-sessions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:devicefarm:devicefarm.GetAccountSettings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetAccountSettings") {
+
+        outputs.push({
+            'region': region,
+            'service': 'devicefarm',
+            'method': {
+                'api': 'GetAccountSettings',
+                'boto3': 'get_account_settings',
+                'cli': 'get-account-settings'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
