@@ -13378,8 +13378,22 @@ function analyseRequest(details) {
         reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
         reqParams.cfn['Type'] = jsonRequestBody.contentString.type;
         reqParams.cfn['ServiceRoleArn'] = jsonRequestBody.contentString.serviceRoleArn;
-        reqParams.cfn['DynamoDBConfig'] = jsonRequestBody.contentString.dynamodbConfig;
+        reqParams.cfn['DynamoDBConfig'] = {
+            'TableName': jsonRequestBody.contentString.dynamodbConfig.tableName,
+            'AwsRegion': jsonRequestBody.contentString.dynamodbConfig.awsRegion,
+            'UseCallerCredentials': jsonRequestBody.contentString.dynamodbConfig.useCallerCredentials
+        };
         reqParams.cfn['ApiId'] = jsonRequestBody.path.split("/")[3];
+
+        reqParams.tf['name'] = jsonRequestBody.contentString.name;
+        reqParams.tf['type'] = jsonRequestBody.contentString.type;
+        reqParams.tf['service_role_arn'] = jsonRequestBody.contentString.serviceRoleArn;
+        reqParams.tf['dynamodb_config'] = {
+            'table_name': jsonRequestBody.contentString.dynamodbConfig.tableName,
+            'region': jsonRequestBody.contentString.dynamodbConfig.awsRegion,
+            'use_caller_credentials': jsonRequestBody.contentString.dynamodbConfig.useCallerCredentials
+        };
+        reqParams.tf['api_id'] = jsonRequestBody.path.split("/")[3];
 
         outputs.push({
             'region': region,
@@ -13398,6 +13412,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'appsync',
             'type': 'AWS::AppSync::DataSource',
+            'terraformType': 'aws_appsync_datasource',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -13651,6 +13666,40 @@ function analyseRequest(details) {
         reqParams.cfn['SecurityGroups'] = jsonRequestBody.SecurityGroups;
         reqParams.cfn['AssociatePublicIpAddress'] = jsonRequestBody.AssociatePublicIpAddress;
 
+        reqParams.tf['user_data_base64'] = jsonRequestBody.UserData;
+        reqParams.tf['image_id'] = jsonRequestBody.ImageId;
+        for (var i=0; i<jsonRequestBody.AutoScalingBlockDeviceMappings.length; i++) {
+            if (jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingDeviceName == "/dev/sda1" || jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingDeviceName == "/dev/xvda") {
+                if (jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs) {
+                    reqParams.tf['root_block_device'] = {
+                        'volume_type': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeType,
+                        'volume_size': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeSize
+                    };
+                }
+            } else if (jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs) {
+                reqParams.tf['ebs_block_device'] = {
+                    'device_name': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingDeviceName,
+                    'volume_type': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeType,
+                    'volume_size': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingVolumeSize,
+                    'delete_on_termination': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingDeleteOnTermination,
+                    'iops': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingIops,
+                    'snapshot_id': jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingSnapshotId
+                };
+
+                if (jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingSnapshotId) {
+                    reqParams.iam['Resource'].push("arn:aws:ec2:*::snapshot/" + jsonRequestBody.AutoScalingBlockDeviceMappings[i].AutoScalingEbs.AutoScalingSnapshotId);
+                }
+            }
+        }
+        reqParams.tf['ebs_optimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.tf['iam_instance_profile'] = jsonRequestBody.IamInstanceProfile;
+        reqParams.tf['enable_monitoring'] = jsonRequestBody.InstanceMonitoring.Enabled;
+        reqParams.tf['instance_type'] = jsonRequestBody.InstanceType;
+        reqParams.tf['key_name'] = jsonRequestBody.KeyName;
+        reqParams.tf['name'] = jsonRequestBody.LaunchConfigurationName;
+        reqParams.tf['security_groups'] = jsonRequestBody.SecurityGroups;
+        reqParams.tf['associate_public_ip_address'] = jsonRequestBody.AssociatePublicIpAddress;
+
         outputs.push({
             'region': region,
             'service': 'autoscaling',
@@ -13668,6 +13717,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::LaunchConfiguration',
+            'terraformType': 'aws_launch_configuration',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -14185,6 +14235,13 @@ function analyseRequest(details) {
         reqParams.cfn['DefaultResult'] = jsonRequestBody.DefaultResult;
         reqParams.cfn['LifecycleTransition'] = jsonRequestBody.LifecycleTransition;
 
+        reqParams.tf['name'] = jsonRequestBody.LifecycleHookName;
+        reqParams.tf['autoscaling_group_name'] = jsonRequestBody.AutoScalingGroupName;
+        reqParams.tf['heartbeat_timeout'] = jsonRequestBody.HeartbeatTimeout;
+        reqParams.tf['notification_metadata'] = jsonRequestBody.NotificationMetadata;
+        reqParams.tf['default_result'] = jsonRequestBody.DefaultResult;
+        reqParams.tf['lifecycle_transition'] = jsonRequestBody.LifecycleTransition;
+
         outputs.push({
             'region': region,
             'service': 'autoscaling',
@@ -14202,6 +14259,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::LifecycleHook',
+            'terraformType': 'aws_autoscaling_lifecycle_hook',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -16501,6 +16559,19 @@ function analyseRequest(details) {
                 reqParams.cfn['PreferredAvailabilityZones'] = action['parameters'][0]['preferredAvailabilityZones'];
                 reqParams.cfn['VpcSecurityGroupIds'] = action['parameters'][0]['securityGroupIds'];
 
+                reqParams.tf['num_cache_nodes'] = action['parameters'][0]['numCacheNodes'];
+                reqParams.tf['port'] = action['parameters'][0]['port'];
+                reqParams.tf['cluster_id'] = action['parameters'][0]['cacheClusterId'];
+                reqParams.tf['node_type'] = action['parameters'][0]['cacheNodeType'];
+                reqParams.tf['parameter_group_name'] = action['parameters'][0]['cacheParameterGroupName'];
+                reqParams.tf['subnet_group_name'] = action['parameters'][0]['cacheSubnetGroupName'];
+                reqParams.tf['engine'] = action['parameters'][0]['engine'];
+                reqParams.tf['engine_version'] = action['parameters'][0]['engineVersion'];
+                reqParams.tf['notification_topic_arn'] = action['parameters'][0]['notificationTopicArn'];
+                reqParams.tf['maintenance_window'] = action['parameters'][0]['preferredMaintenanceWindow'];
+                reqParams.tf['preferred_availability_zones'] = action['parameters'][0]['preferredAvailabilityZones'];
+                reqParams.tf['security_group_ids'] = action['parameters'][0]['securityGroupIds'];
+
                 outputs.push({
                     'region': region,
                     'service': 'elasticache',
@@ -16518,6 +16589,7 @@ function analyseRequest(details) {
                     'region': region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::CacheCluster',
+                    'terraformType': 'aws_elasticache_cluster',
                     'options': reqParams,
                     'requestDetails': details,
                     'was_blocked': blocking
@@ -16660,6 +16732,9 @@ function analyseRequest(details) {
                 reqParams.cfn['ReplicationGroupDescription'] = action['parameters'][0]['replicationGroupDescription'];
                 reqParams.cfn['ReplicationGroupId'] = action['parameters'][0]['replicationGroupId'];
 
+                reqParams.tf['replication_group_description'] = action['parameters'][0]['replicationGroupDescription'];
+                reqParams.tf['replication_group_id'] = action['parameters'][0]['replicationGroupId'];
+
                 outputs.push({
                     'region': region,
                     'service': 'elasticache',
@@ -16677,6 +16752,7 @@ function analyseRequest(details) {
                     'region': region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::ReplicationGroup',
+                    'terraformType': 'aws_elasticache_replication_group',
                     'options': reqParams,
                     'requestDetails': details,
                     'was_blocked': blocking
@@ -19033,6 +19109,22 @@ function analyseRequest(details) {
         reqParams.cfn['KmsKeyArn'] = jsonRequestBody.KMSKeyArn;
         reqParams.cfn['TracingConfig'] = jsonRequestBody.TracingConfig;
 
+        reqParams.tf['filename'] = 'CHANGEME.zip';
+        reqParams.tf['description'] = jsonRequestBody.Description;
+        reqParams.tf['function_name'] = jsonRequestBody.FunctionName;
+        reqParams.tf['handler'] = jsonRequestBody.Handler;
+        reqParams.tf['memory_size'] = jsonRequestBody.MemorySize;
+        reqParams.tf['role'] = jsonRequestBody.Role;
+        reqParams.tf['runtime'] = jsonRequestBody.Runtime;
+        reqParams.tf['timeout'] = jsonRequestBody.Timeout;
+        reqParams.tf['dead_letter_config'] = {
+            'target_arn': jsonRequestBody.DeadLetterConfig.TargetArn
+        };
+        reqParams.tf['kms_key_arn'] = jsonRequestBody.KMSKeyArn;
+        reqParams.tf['tracing_config'] = {
+            'mode': jsonRequestBody.TracingConfig.Mode
+        };
+
         outputs.push({
             'region': region,
             'service': 'lambda',
@@ -19050,6 +19142,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'lambda',
             'type': 'AWS::Lambda::Function',
+            'terraformType': 'aws_lambda_function',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -19568,12 +19661,15 @@ function analyseRequest(details) {
         if (jsonRequestBody.attributeName == "Policy") {
             reqParams.cfn['PolicyDocument'] = jsonRequestBody.attributeValue;
             reqParams.cfn['Topics'] = [jsonRequestBody.topicArn];
+            reqParams.tf['policy'] = jsonRequestBody.attributeValue;
+            reqParams.tf['arn'] = jsonRequestBody.topicArn;
 
             tracked_resources.push({
                 'logicalId': getResourceName('sns', details.requestId),
                 'region': region,
                 'service': 'sns',
                 'type': 'AWS::SNS::TopicPolicy',
+                'terraformType': 'aws_sns_topic_policy',
                 'options': reqParams,
                 'requestDetails': details,
                 'was_blocked': blocking
@@ -21019,6 +21115,21 @@ function analyseRequest(details) {
         reqParams.cfn['UnhealthyThresholdCount'] = jsonRequestBody.UnhealthyThresholdCount;
         reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
 
+        reqParams.tf['health_check'] = {
+            'interval': jsonRequestBody.HealthCheckIntervalSeconds,
+            'path': jsonRequestBody.HealthCheckPath,
+            'protocol': jsonRequestBody.HealthCheckProtocol,
+            'timeout': jsonRequestBody.HealthCheckTimeoutSeconds,
+            'healthy_threshold': jsonRequestBody.HealthyThresholdCount,
+            'unhealthy_threshold': jsonRequestBody.UnhealthyThresholdCount,
+            'matcher': jsonRequestBody.Matcher
+        };
+        reqParams.tf['name'] = jsonRequestBody.Name;
+        reqParams.tf['port'] = jsonRequestBody.Port;
+        reqParams.tf['protocol'] = jsonRequestBody.Protocol;
+        reqParams.tf['target_type'] = jsonRequestBody.targetType;
+        reqParams.tf['vpc_id'] = jsonRequestBody.VpcId;
+
         outputs.push({
             'region': region,
             'service': 'elbv2',
@@ -21036,6 +21147,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ec2',
             'type': 'AWS::ElasticLoadBalancingV2::TargetGroup',
+            'terraformType': 'aws_lb_target_group',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -21067,7 +21179,21 @@ function analyseRequest(details) {
         reqParams.cfn['Port'] = jsonRequestBody.port;
         reqParams.cfn['Protocol'] = jsonRequestBody.protocol;
         reqParams.cfn['LoadBalancerArn'] = jsonRequestBody.loadBalancerArn;
-        reqParams.cfn['DefaultActions'] = jsonRequestBody.defaultActions;
+
+        reqParams.tf['port'] = jsonRequestBody.port;
+        reqParams.tf['protocol'] = jsonRequestBody.protocol;
+        reqParams.tf['load_balancer_arn'] = jsonRequestBody.loadBalancerArn;
+        reqParams.tf['DefaultActions'] = [];
+        for (var i=0; i<jsonRequestBody.defaultActions.length; i++) {
+            reqParams.cfn['DefaultActions'].push({
+                'TargetGroupArn': jsonRequestBody.defaultActions[i].targetGroupArn,
+                'Type': jsonRequestBody.defaultActions[i].type
+            });
+            reqParams.tf['default_action'].push({
+                'target_group_arn': jsonRequestBody.defaultActions[i].targetGroupArn,
+                'type': jsonRequestBody.defaultActions[i].type
+            });
+        }
 
         outputs.push({
             'region': region,
@@ -21086,6 +21212,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ec2',
             'type': 'AWS::ElasticLoadBalancingV2::Listener',
+            'terraformType': 'aws_lb_listener',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -21701,59 +21828,108 @@ function analyseRequest(details) {
                 "*"
             ];
 
-            reqParams.boto3['OKActions'] = jsonRequestBody['O'][0]['P']['OKActions'];
-            reqParams.cli['--ok-actions'] = jsonRequestBody['O'][0]['P']['OKActions'];
-            reqParams.boto3['ActionsEnabled'] = jsonRequestBody['O'][0]['P']['actionsEnabled'];
-            reqParams.cli['--actions-enabled'] = jsonRequestBody['O'][0]['P']['actionsEnabled'];
-            reqParams.boto3['AlarmActions'] = jsonRequestBody['O'][0]['P']['alarmActions'];
-            reqParams.cli['--alarm-actions'] = jsonRequestBody['O'][0]['P']['alarmActions'];
-            reqParams.boto3['AlarmDescription'] = jsonRequestBody['O'][0]['P']['alarmDescription'];
-            reqParams.cli['--alarm-description'] = jsonRequestBody['O'][0]['P']['alarmDescription'];
-            reqParams.boto3['AlarmName'] = jsonRequestBody['O'][0]['P']['alarmName'];
-            reqParams.cli['--alarm-name'] = jsonRequestBody['O'][0]['P']['alarmName'];
-            reqParams.boto3['ComparisonOperator'] = jsonRequestBody['O'][0]['P']['comparisonOperator'];
-            reqParams.cli['--comparison-operator'] = jsonRequestBody['O'][0]['P']['comparisonOperator'];
-            reqParams.boto3['DatapointsToAlarm'] = jsonRequestBody['O'][0]['P']['datapointsToAlarm'];
-            reqParams.cli['--datapoints-to-alarm'] = jsonRequestBody['O'][0]['P']['datapointsToAlarm'];
-            reqParams.boto3['EvaluateLowSampleCountPercentile'] = jsonRequestBody['O'][0]['P']['evaluateLowSampleCountPercentile'];
-            reqParams.cli['--evaluate-low-sample-count-percentile'] = jsonRequestBody['O'][0]['P']['evaluateLowSampleCountPercentile'];
-            reqParams.boto3['EvaluationPeriods'] = jsonRequestBody['O'][0]['P']['evaluationPeriods'];
-            reqParams.cli['--evaluation-periods'] = jsonRequestBody['O'][0]['P']['evaluationPeriods'];
-            reqParams.boto3['InsufficientDataActions'] = jsonRequestBody['O'][0]['P']['insufficientDataActions'];
-            reqParams.cli['--insufficient-data-actions'] = jsonRequestBody['O'][0]['P']['insufficientDataActions'];
-            reqParams.boto3['MetricName'] = jsonRequestBody['O'][0]['P']['metricName'];
-            reqParams.cli['--metric-name'] = jsonRequestBody['O'][0]['P']['metricName'];
-            reqParams.boto3['Namespace'] = jsonRequestBody['O'][0]['P']['namespace'];
-            reqParams.cli['--namespace'] = jsonRequestBody['O'][0]['P']['namespace'];
-            reqParams.boto3['Period'] = jsonRequestBody['O'][0]['P']['period'];
-            reqParams.cli['--period'] = jsonRequestBody['O'][0]['P']['period'];
-            reqParams.boto3['Statistic'] = jsonRequestBody['O'][0]['P']['statistic'];
-            reqParams.cli['--statistic'] = jsonRequestBody['O'][0]['P']['statistic'];
-            reqParams.boto3['Threshold'] = jsonRequestBody['O'][0]['P']['threshold'];
-            reqParams.cli['--threshold'] = jsonRequestBody['O'][0]['P']['threshold'];
-            reqParams.boto3['TreatMissingData'] = jsonRequestBody['O'][0]['P']['treatMissingData'];
-            reqParams.cli['--treat-missing-data'] = jsonRequestBody['O'][0]['P']['treatMissingData'];
-            reqParams.boto3['Unit'] = jsonRequestBody['O'][0]['P']['unit'];
-            reqParams.cli['--unit'] = jsonRequestBody['O'][0]['P']['unit'];
-            //reqParams.boto3['AlarmName'] = jsonRequestBody['O'][0]['P']['metrics']; TODO: Metric Math
+            var valmap = {};
+            for (var i=0; i<jsonRequestBody['O'].length; i++) {
+                valmap[jsonRequestBody['O'][i]['C']] = jsonRequestBody['O'][i]['P'];
+            }
+            var rootindex = jsonRequestBody['I'][0]['P'][0]['C'];
 
-            if (jsonRequestBody['O'][0]['P']['dimensions']) {
+            reqParams.boto3['OKActions'] = valmap[rootindex]['OKActions'];
+            reqParams.cli['--ok-actions'] = valmap[rootindex]['OKActions'];
+            reqParams.boto3['ActionsEnabled'] = valmap[rootindex]['actionsEnabled'];
+            reqParams.cli['--actions-enabled'] = valmap[rootindex]['actionsEnabled'];
+            reqParams.boto3['AlarmActions'] = valmap[rootindex]['alarmActions'];
+            reqParams.cli['--alarm-actions'] = valmap[rootindex]['alarmActions'];
+            reqParams.boto3['AlarmDescription'] = valmap[rootindex]['alarmDescription'];
+            reqParams.cli['--alarm-description'] = valmap[rootindex]['alarmDescription'];
+            reqParams.boto3['AlarmName'] = valmap[rootindex]['alarmName'];
+            reqParams.cli['--alarm-name'] = valmap[rootindex]['alarmName'];
+            reqParams.boto3['ComparisonOperator'] = valmap[rootindex]['comparisonOperator'];
+            reqParams.cli['--comparison-operator'] = valmap[rootindex]['comparisonOperator'];
+            reqParams.boto3['DatapointsToAlarm'] = valmap[rootindex]['datapointsToAlarm'];
+            reqParams.cli['--datapoints-to-alarm'] = valmap[rootindex]['datapointsToAlarm'];
+            reqParams.boto3['EvaluateLowSampleCountPercentile'] = valmap[rootindex]['evaluateLowSampleCountPercentile'];
+            reqParams.cli['--evaluate-low-sample-count-percentile'] = valmap[rootindex]['evaluateLowSampleCountPercentile'];
+            reqParams.boto3['EvaluationPeriods'] = valmap[rootindex]['evaluationPeriods'];
+            reqParams.cli['--evaluation-periods'] = valmap[rootindex]['evaluationPeriods'];
+            reqParams.boto3['InsufficientDataActions'] = valmap[rootindex]['insufficientDataActions'];
+            reqParams.cli['--insufficient-data-actions'] = valmap[rootindex]['insufficientDataActions'];
+            reqParams.boto3['MetricName'] = valmap[rootindex]['metricName'];
+            reqParams.cli['--metric-name'] = valmap[rootindex]['metricName'];
+            reqParams.boto3['Namespace'] = valmap[rootindex]['namespace'];
+            reqParams.cli['--namespace'] = valmap[rootindex]['namespace'];
+            reqParams.boto3['Period'] = valmap[rootindex]['period'];
+            reqParams.cli['--period'] = valmap[rootindex]['period'];
+            reqParams.boto3['Statistic'] = valmap[rootindex]['statistic'];
+            reqParams.cli['--statistic'] = valmap[rootindex]['statistic'];
+            reqParams.boto3['Threshold'] = valmap[rootindex]['threshold'];
+            reqParams.cli['--threshold'] = valmap[rootindex]['threshold'];
+            reqParams.boto3['TreatMissingData'] = valmap[rootindex]['treatMissingData'];
+            reqParams.cli['--treat-missing-data'] = valmap[rootindex]['treatMissingData'];
+            reqParams.boto3['Unit'] = valmap[rootindex]['unit'];
+            reqParams.cli['--unit'] = valmap[rootindex]['unit'];
+
+            if (valmap[rootindex]['metrics'] && valmap[rootindex]['metrics'].length) {
+                var metrics = [];
+
+                for (var i=0; i<valmap[rootindex]['metrics'].length; i++) {
+                    var metricindex = valmap[rootindex]['metrics'][i]['C'];
+
+                    var metricstat = null;
+                    if (valmap[metricindex]['stat']) {
+                        var dimensions = null;
+                        if (valmap[metricindex]['dimensions'] && valmap[metricindex]['dimensions'].length) {
+                            dimensions = [];
+
+                            for (var j=0; j<valmap[metricindex]['dimensions'].length; j++) {
+                                var dimensionindex = valmap[metricindex]['dimensions'][j]['C'];
+                                
+                                dimensions.push({
+                                    'Name': valmap[dimensionindex]['name'],
+                                    'Value': valmap[dimensionindex]['value']
+                                });
+                            }
+                        }
+
+                        metricstat = {
+                            'Metric': {
+                                'Namespace': valmap[metricindex]['namespace'],
+                                'MetricName': valmap[metricindex]['metricName'],
+                                'Dimensions': dimensions
+                            },
+                            'Period': valmap[metricindex]['period'],
+                            'Stat': valmap[metricindex]['stat'],
+                            'Unit': valmap[metricindex]['unit']
+                        };
+                    }
+                    
+                    metrics.push({
+                        'Id': valmap[rootindex]['alias'],
+                        'MetricStat': metricstat,
+                        'Expression': valmap[metricindex]['expression'],
+                        'Label': valmap[metricindex]['label'],
+                        'ReturnData': valmap[metricindex]['returnData']
+                    });
+                }
+
+                reqParams.boto3['Metrics'] = metrics;
+                reqParams.cli['--metrics'] = metrics;
+                reqParams.cfn['Metrics'] = metrics;
+            }
+
+            if (valmap[rootindex]['dimensions'] && valmap[rootindex]['dimensions'].length) {
                 var dimensions = [];
                 var tf_dimensions = {};
 
-                for (var i=0; i<jsonRequestBody['O'][0]['P']['dimensions'].length; i++) {
-                    for (var j=1; j<jsonRequestBody['O'].length; j++) {
-                        if (jsonRequestBody['O'][j]['T'] == jsonRequestBody['O'][0]['P']['dimensions'][i]['T']) {
-                            dimensions.push({
-                                'Name': jsonRequestBody['O'][1]['P']['name'],
-                                'Value': jsonRequestBody['O'][1]['P']['value']
-                            });
+                for (var i=0; i<valmap[rootindex]['dimensions'].length; i++) {
+                    var dimensionindex = valmap[rootindex]['dimensions'][i]['C'];
+                    
+                    dimensions.push({
+                        'Name': valmap[dimensionindex]['name'],
+                        'Value': valmap[dimensionindex]['value']
+                    });
 
-                            tf_dimensions[jsonRequestBody['O'][1]['P']['name']] = jsonRequestBody['O'][1]['P']['value'];
-
-                            break;
-                        }
-                    }
+                    tf_dimensions[valmap[dimensionindex]['name']] = valmap[dimensionindex]['value'];
                 }
 
                 reqParams.boto3['Dimensions'] = dimensions;
@@ -21762,41 +21938,41 @@ function analyseRequest(details) {
                 reqParams.tf['dimensions'] = tf_dimensions;
             }
 
-            reqParams.cfn['OKActions'] = jsonRequestBody['O'][0]['P']['OKActions'];
-            reqParams.cfn['ActionsEnabled'] = jsonRequestBody['O'][0]['P']['actionsEnabled'];
-            reqParams.cfn['AlarmActions'] = jsonRequestBody['O'][0]['P']['alarmActions'];
-            reqParams.cfn['AlarmDescription'] = jsonRequestBody['O'][0]['P']['alarmDescription'];
-            reqParams.cfn['AlarmName'] = jsonRequestBody['O'][0]['P']['alarmName'];
-            reqParams.cfn['ComparisonOperator'] = jsonRequestBody['O'][0]['P']['comparisonOperator'];
-            reqParams.cfn['DatapointsToAlarm'] = jsonRequestBody['O'][0]['P']['datapointsToAlarm'];
-            reqParams.cfn['EvaluateLowSampleCountPercentile'] = jsonRequestBody['O'][0]['P']['evaluateLowSampleCountPercentile'];
-            reqParams.cfn['EvaluationPeriods'] = jsonRequestBody['O'][0]['P']['evaluationPeriods'];
-            reqParams.cfn['InsufficientDataActions'] = jsonRequestBody['O'][0]['P']['insufficientDataActions'];
-            reqParams.cfn['MetricName'] = jsonRequestBody['O'][0]['P']['metricName'];
-            reqParams.cfn['Namespace'] = jsonRequestBody['O'][0]['P']['namespace'];
-            reqParams.cfn['Period'] = jsonRequestBody['O'][0]['P']['period'];
-            reqParams.cfn['Statistic'] = jsonRequestBody['O'][0]['P']['statistic'];
-            reqParams.cfn['Threshold'] = jsonRequestBody['O'][0]['P']['threshold'];
-            reqParams.cfn['TreatMissingData'] = jsonRequestBody['O'][0]['P']['treatMissingData'];
-            reqParams.cfn['Unit'] = jsonRequestBody['O'][0]['P']['unit'];
+            reqParams.cfn['OKActions'] = valmap[rootindex]['OKActions'];
+            reqParams.cfn['ActionsEnabled'] = valmap[rootindex]['actionsEnabled'];
+            reqParams.cfn['AlarmActions'] = valmap[rootindex]['alarmActions'];
+            reqParams.cfn['AlarmDescription'] = valmap[rootindex]['alarmDescription'];
+            reqParams.cfn['AlarmName'] = valmap[rootindex]['alarmName'];
+            reqParams.cfn['ComparisonOperator'] = valmap[rootindex]['comparisonOperator'];
+            reqParams.cfn['DatapointsToAlarm'] = valmap[rootindex]['datapointsToAlarm'];
+            reqParams.cfn['EvaluateLowSampleCountPercentile'] = valmap[rootindex]['evaluateLowSampleCountPercentile'];
+            reqParams.cfn['EvaluationPeriods'] = valmap[rootindex]['evaluationPeriods'];
+            reqParams.cfn['InsufficientDataActions'] = valmap[rootindex]['insufficientDataActions'];
+            reqParams.cfn['MetricName'] = valmap[rootindex]['metricName'];
+            reqParams.cfn['Namespace'] = valmap[rootindex]['namespace'];
+            reqParams.cfn['Period'] = valmap[rootindex]['period'];
+            reqParams.cfn['Statistic'] = valmap[rootindex]['statistic'];
+            reqParams.cfn['Threshold'] = valmap[rootindex]['threshold'];
+            reqParams.cfn['TreatMissingData'] = valmap[rootindex]['treatMissingData'];
+            reqParams.cfn['Unit'] = valmap[rootindex]['unit'];
 
-            reqParams.tf['ok_actions'] = jsonRequestBody['O'][0]['P']['OKActions'];
-            reqParams.tf['actions_enabled'] = jsonRequestBody['O'][0]['P']['actionsEnabled'];
-            reqParams.tf['alarm_actions'] = jsonRequestBody['O'][0]['P']['alarmActions'];
-            reqParams.tf['alarm_description'] = jsonRequestBody['O'][0]['P']['alarmDescription'];
-            reqParams.tf['alarm_name'] = jsonRequestBody['O'][0]['P']['alarmName'];
-            reqParams.tf['comparison_operator'] = jsonRequestBody['O'][0]['P']['comparisonOperator'];
-            reqParams.tf['datapoints_to_alarm'] = jsonRequestBody['O'][0]['P']['datapointsToAlarm'];
-            reqParams.tf['evaluate_low_sample_count_percentiles'] = jsonRequestBody['O'][0]['P']['evaluateLowSampleCountPercentile'];
-            reqParams.tf['evaluation_periods'] = jsonRequestBody['O'][0]['P']['evaluationPeriods'];
-            reqParams.tf['insufficient_data_actions'] = jsonRequestBody['O'][0]['P']['insufficientDataActions'];
-            reqParams.tf['metric_name'] = jsonRequestBody['O'][0]['P']['metricName'];
-            reqParams.tf['namespace'] = jsonRequestBody['O'][0]['P']['namespace'];
-            reqParams.tf['period'] = jsonRequestBody['O'][0]['P']['period'];
-            reqParams.tf['statistic'] = jsonRequestBody['O'][0]['P']['statistic'];
-            reqParams.tf['threshold'] = jsonRequestBody['O'][0]['P']['threshold'];
-            reqParams.tf['treat_missing_data'] = jsonRequestBody['O'][0]['P']['treatMissingData'];
-            reqParams.tf['unit'] = jsonRequestBody['O'][0]['P']['unit'];
+            reqParams.tf['ok_actions'] = valmap[rootindex]['OKActions'];
+            reqParams.tf['actions_enabled'] = valmap[rootindex]['actionsEnabled'];
+            reqParams.tf['alarm_actions'] = valmap[rootindex]['alarmActions'];
+            reqParams.tf['alarm_description'] = valmap[rootindex]['alarmDescription'];
+            reqParams.tf['alarm_name'] = valmap[rootindex]['alarmName'];
+            reqParams.tf['comparison_operator'] = valmap[rootindex]['comparisonOperator'];
+            reqParams.tf['datapoints_to_alarm'] = valmap[rootindex]['datapointsToAlarm'];
+            reqParams.tf['evaluate_low_sample_count_percentiles'] = valmap[rootindex]['evaluateLowSampleCountPercentile'];
+            reqParams.tf['evaluation_periods'] = valmap[rootindex]['evaluationPeriods'];
+            reqParams.tf['insufficient_data_actions'] = valmap[rootindex]['insufficientDataActions'];
+            reqParams.tf['metric_name'] = valmap[rootindex]['metricName'];
+            reqParams.tf['namespace'] = valmap[rootindex]['namespace'];
+            reqParams.tf['period'] = valmap[rootindex]['period'];
+            reqParams.tf['statistic'] = valmap[rootindex]['statistic'];
+            reqParams.tf['threshold'] = valmap[rootindex]['threshold'];
+            reqParams.tf['treat_missing_data'] = valmap[rootindex]['treatMissingData'];
+            reqParams.tf['unit'] = valmap[rootindex]['unit'];
 
             outputs.push({
                 'region': region,
@@ -23302,6 +23478,24 @@ function analyseRequest(details) {
                 reqParams.cfn['NodeType'] = action['parameters'][0]['nodeType'];
                 reqParams.cfn['IamRoles'] = action['parameters'][0]['iamRoles'];
                 reqParams.cfn['VpcSecurityGroupIds'] = action['parameters'][0]['vpcSecurityGroupIds'];
+
+                reqParams.tf['allow_version_upgrade'] = action['parameters'][0]['allowVersionUpgrade'];
+                reqParams.tf['encrypted'] = action['parameters'][0]['encrypted'];
+                reqParams.tf['publicly_accessible'] = action['parameters'][0]['publiclyAccessible'];
+                reqParams.tf['automated_snapshot_retention_period'] = action['parameters'][0]['automatedSnapshotRetentionPeriod'];
+                reqParams.tf['number_of_nodes'] = action['parameters'][0]['numberOfNodes'];
+                reqParams.tf['port'] = action['parameters'][0]['port'];
+                reqParams.tf['availability_zone'] = action['parameters'][0]['availabilityZone'];
+                reqParams.tf['cluster_identifier'] = action['parameters'][0]['clusterIdentifier'];
+                reqParams.tf['cluster_type'] = action['parameters'][0]['clusterType'];
+                reqParams.tf['cluster_version'] = action['parameters'][0]['clusterVersion'];
+                reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                reqParams.tf['kms_key_id'] = action['parameters'][0]['kmsKeyId'];
+                reqParams.tf['master_password'] = action['parameters'][0]['masterUserPassword'];
+                reqParams.tf['master_username'] = action['parameters'][0]['masterUsername'];
+                reqParams.tf['node_type'] = action['parameters'][0]['nodeType'];
+                reqParams.tf['iam_roles'] = action['parameters'][0]['iamRoles'];
+                reqParams.tf['vpc_security_group_ids'] = action['parameters'][0]['vpcSecurityGroupIds'];
         
                 outputs.push({
                     'region': region,
@@ -23320,6 +23514,7 @@ function analyseRequest(details) {
                     'region': region,
                     'service': 'redshift',
                     'type': 'AWS::Redshift::Cluster',
+                    'terraformType': 'aws_redshift_cluster',
                     'options': reqParams,
                     'requestDetails': details,
                     'was_blocked': blocking
@@ -42235,6 +42430,16 @@ function analyseRequest(details) {
         reqParams.cfn['NatGatewayId'] = jsonRequestBody.natGatewayId;
         reqParams.cfn['VpcPeeringConnectionId'] = jsonRequestBody.vpcPeeringConnectionId;
 
+        reqParams.tf['route_table_id'] = jsonRequestBody.routeTableId;
+        reqParams.tf['destination_cidr_block'] = jsonRequestBody.destinationCidrBlock;
+        reqParams.tf['gateway_id'] = jsonRequestBody.gatewayId;
+        reqParams.tf['destination_ipv6_cidr_block'] = jsonRequestBody.destinationIpv6CidrBlock;
+        reqParams.tf['network_interface_id'] = jsonRequestBody.networkInterfaceId;
+        reqParams.tf['egress_only_gateway_id'] = jsonRequestBody.egressOnlyInternetGatewayId;
+        reqParams.tf['instance_id'] = jsonRequestBody.interfaceId;
+        reqParams.tf['nat_gateway_id'] = jsonRequestBody.natGatewayId;
+        reqParams.tf['vpc_peering_connection_id'] = jsonRequestBody.vpcPeeringConnectionId;
+
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -42252,6 +42457,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'ec2',
             'type': 'AWS::EC2::Route',
+            'terraformType': 'aws_route',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -46242,6 +46448,10 @@ function analyseRequest(details) {
                 reqParams.cfn['DestinationCidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['cidr'];
                 reqParams.cfn['DestinationIpv6CidrBlock'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['ipv6cidr'];
         
+                reqParams.tf['route_table_id'] = gwtRequest['args'][1]['value']['routetable']['routetableid'];
+                reqParams.tf['destination_cidr_block'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['cidr'];
+                reqParams.tf['destination_ipv6_cidr_block'] = gwtRequest['args'][1]['value']['routetable']['routes']['value'][i]['ipv6cidr'];
+        
                 outputs.push({
                     'region': region,
                     'service': 'ec2',
@@ -46259,6 +46469,7 @@ function analyseRequest(details) {
                     'region': region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::Route',
+                    'terraformType': 'aws_route',
                     'options': reqParams,
                     'requestDetails': details,
                     'was_blocked': blocking
