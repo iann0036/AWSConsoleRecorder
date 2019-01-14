@@ -21904,7 +21904,7 @@ function analyseRequest(details) {
                     }
                     
                     metrics.push({
-                        'Id': valmap[rootindex]['alias'],
+                        'Id': valmap[metricindex]['alias'],
                         'MetricStat': metricstat,
                         'Expression': valmap[metricindex]['expression'],
                         'Label': valmap[metricindex]['label'],
