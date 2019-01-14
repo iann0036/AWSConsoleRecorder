@@ -13756,6 +13756,25 @@ function analyseRequest(details) {
         reqParams.cfn['ServiceLinkedRoleARN'] = jsonRequestBody.ServiceLinkedRoleARN;
         reqParams.cfn['VPCZoneIdentifier'] = jsonRequestBody.VPCZoneIdentifier.split(",");
 
+        reqParams.tf['name'] = jsonRequestBody.AutoScalingGroupName;
+        reqParams.tf['launch_configuration'] = jsonRequestBody.LaunchConfigurationName;
+        reqParams.tf['desired_capacity'] = jsonRequestBody.DesiredCapacity;
+        reqParams.tf['min_size'] = jsonRequestBody.MinSize;
+        reqParams.tf['max_size'] = jsonRequestBody.MaxSize;
+        reqParams.tf['health_check_grace_period'] = jsonRequestBody.HealthCheckGracePeriod;
+        if (jsonRequestBody.Tags && jsonRequestBody.Tags.length) {
+            reqParams.tf['tag'] = [];
+            for (var i=0; i<jsonRequestBody.Tags.length; i++) {
+                reqParams.tf['tag'].push({
+                    'key': jsonRequestBody.Tags[i].Key,
+                    'value': jsonRequestBody.Tags[i].Value,
+                    'propagate_at_launch': jsonRequestBody.Tags[i].PropagateAtLaunch
+                });
+            }
+        }
+        reqParams.tf['service_linked_role_arn'] = jsonRequestBody.ServiceLinkedRoleARN;
+        reqParams.tf['vpc_zone_identifier'] = jsonRequestBody.VPCZoneIdentifier.split(",");
+
         outputs.push({
             'region': region,
             'service': 'autoscaling',
@@ -13773,6 +13792,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::AutoScalingGroup',
+            'terraformType': 'aws_autoscaling_group',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
