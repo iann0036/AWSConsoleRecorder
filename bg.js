@@ -2144,8 +2144,8 @@ function processCfnParameter(param, spacing, index) {
         return undefined;
     if (typeof param == "boolean") {
         if (param)
-            return '"true"';
-        return '"false"';
+            return 'true';
+        return 'false';
     }
     if (typeof param == "number") {
         for (var i=0; i<index; i++) { // correlate
@@ -5675,7 +5675,6 @@ function analyseRequest(details) {
         reqParams.boto3['CreditSpecification'] = jsonRequestBody.CreditSpecification;
         reqParams.boto3['TagSpecification'] = jsonRequestBody.TagSpecifications;
         reqParams.boto3['EbsOptimized'] = jsonRequestBody.EbsOptimized;
-        reqParams.boto3['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
         reqParams.boto3['CapacityReservationSpecification'] = jsonRequestBody.CapacityReservationSpecification;
         reqParams.boto3['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         if (jsonRequestBody.UserData) {
@@ -5704,7 +5703,6 @@ function analyseRequest(details) {
         }
         reqParams.cfn['Tags'] = jsonRequestBody.TagSpecifications;
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
-        reqParams.cfn['BlockDeviceMappings'] = jsonRequestBody.BlockDeviceMappings;
         reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         reqParams.cfn['UserData'] = jsonRequestBody.UserData;
         reqParams.cfn['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
@@ -5739,7 +5737,6 @@ function analyseRequest(details) {
         reqParams.cli['--credit-specification'] = jsonRequestBody.CreditSpecification;
         reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
         reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
-        reqParams.cli['--block-device-mappings'] = jsonRequestBody.BlockDeviceMappings;
         reqParams.cli['--elastic-inference-accelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         if (jsonRequestBody.UserData) {
             reqParams.cli['--user-data'] = atob(jsonRequestBody.UserData);
@@ -5784,7 +5781,88 @@ function analyseRequest(details) {
             reqParams.tf['iam_instance_profile'] = jsonRequestBody.IamInstanceProfile.Arn;
         }
 
+        reqParams.boto3['BlockDeviceMappings'] = [];
+        reqParams.cli['--block-device-mappings'] = [];
+        reqParams.cfn['BlockDeviceMappings'] = [];
+
+        var used_device_names = [];
+        var instance_type_instance_store_count = {
+            'm5d.large': 1,
+            'm5d.xlarge': 1,
+            'm5d.2xlarge': 1,
+            'm5d.4xlarge': 2,
+            'm5d.12xlarge': 2,
+            'm5d.24xlarge': 4,
+            'c5d.large': 1,
+            'c5d.xlarge': 1,
+            'c5d.2xlarge': 1,
+            'c5d.4xlarge': 1,
+            'c5d.9xlarge': 1,
+            'c5d.18xlarge': 2,
+            'p3dn.24xlarge': 2,
+            'x1.16xlarge': 1,
+            'x1.32xlarge': 2,
+            'x1e.xlarge': 1,
+            'x1e.2xlarge': 1,
+            'x1e.4xlarge': 1,
+            'x1e.8xlarge': 1,
+            'x1e.16xlarge': 1,
+            'x1e.32xlarge': 2,
+            'r5d.large': 1,
+            'r5d.xlarge': 1,
+            'r5d.2xlarge': 1,
+            'r5d.4xlarge': 2,
+            'r5d.12xlarge': 2,
+            'r5d.24xlarge': 4,
+            'z1d.large': 1,
+            'z1d.xlarge': 1,
+            'z1d.2xlarge': 1,
+            'z1d.3xlarge': 1,
+            'z1d.6xlarge': 1,
+            'z1d.12xlarge': 2,
+            'i3.large': 1,
+            'i3.xlarge': 1,
+            'i3.2xlarge': 1,
+            'i3.4xlarge': 2,
+            'i3.8xlarge': 4,
+            'i3.16xlarge': 8,
+            'i3.metal': 8,
+            'h1.2xlarge': 1,
+            'h1.4xlarge': 2,
+            'h1.8xlarge': 4,
+            'h1.16xlarge': 8,
+            'd2.xlarge': 3,
+            'd2.2xlarge': 6,
+            'd2.4xlarge': 12,
+            'd2.8xlarge': 24,
+            'f1.4xlarge': 1
+        };
+
         for (var i=0; i<jsonRequestBody.BlockDeviceMappings.length; i++) {
+            if (
+                !jsonRequestBody.BlockDeviceMappings[i].DeviceName.startsWith("xvdc") ||
+                jsonRequestBody.BlockDeviceMappings[i].DeviceName.length != 5 ||
+                jsonRequestBody.BlockDeviceMappings[i].VirtualName ||
+                jsonRequestBody.BlockDeviceMappings[i].Ebs
+            ) {
+                reqParams.boto3['BlockDeviceMappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                reqParams.cli['--block-device-mappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                used_device_names.push(jsonRequestBody.BlockDeviceMappings[i].DeviceName);
+            }
+
             if (jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/sda1" || jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/xvda") {
                 if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
                     reqParams.tf['root_block_device'] = {
@@ -5793,18 +5871,42 @@ function analyseRequest(details) {
                     };
                 }
             } else if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
-                reqParams.tf['ebs_block_device'] = {
+                if (!reqParams.tf['ebs_block_device']) {
+                    reqParams.tf['ebs_block_device'] = [];
+                }
+                reqParams.tf['ebs_block_device'].push({
                     'device_name': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
                     'volume_type': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeType,
                     'volume_size': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeSize,
                     'delete_on_termination': jsonRequestBody.BlockDeviceMappings[i].Ebs.DeleteOnTermination,
                     'iops': jsonRequestBody.BlockDeviceMappings[i].Ebs.Iops,
                     'snapshot_id': jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId
-                };
+                });
 
                 if (jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId) {
                     reqParams.iam['Resource'].push("arn:aws:ec2:*::snapshot/" + jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId);
                 }
+            }
+        }
+        instance_store_count = 0;
+        if (instance_type_instance_store_count[jsonRequestBody.InstanceType]) {
+            instance_store_count = instance_type_instance_store_count[jsonRequestBody.InstanceType];
+        }
+        for (var i=0; i<instance_store_count; i++) { // unused instance store volumes
+            var device_name = "xvdc" + String.fromCharCode(97 + i);
+            if (!used_device_names.includes(device_name)) {
+                reqParams.boto3['BlockDeviceMappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
+                reqParams.cli['--block-device-mappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
             }
         }
 
