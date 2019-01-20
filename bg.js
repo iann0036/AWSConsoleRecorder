@@ -5701,7 +5701,6 @@ function analyseRequest(details) {
                 'CPUCredits': jsonRequestBody.CreditSpecification.CpuCredits
             }
         }
-        reqParams.cfn['Tags'] = jsonRequestBody.TagSpecifications;
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         reqParams.cfn['UserData'] = jsonRequestBody.UserData;
@@ -5770,8 +5769,13 @@ function analyseRequest(details) {
             reqParams.tf['tags'] = {};
             for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
                 if (jsonRequestBody.TagSpecifications[i].ResourceType == "instance") {
+                    reqParams.cfn['Tags'] = [];
                     for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
                         reqParams.tf['tags'][jsonRequestBody.TagSpecifications[i].Tag[j].Key] = jsonRequestBody.TagSpecifications[i].Tag[j].Value;
+                        reqParams.cfn['Tags'].push({
+                            'Key': jsonRequestBody.TagSpecifications[i].Tag[j].Key,
+                            'Value': jsonRequestBody.TagSpecifications[i].Tag[j].Value
+                        });
                     }
                 }
             }
@@ -47942,6 +47946,202 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:cloudtrail.LookupEvents
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/cloudtrail$/g) && jsonRequestBody.operation == "lookupEvents") {
+        reqParams.boto3['LookupAttributes'] = jsonRequestBody.contentString.LookupAttributes;
+        reqParams.cli['--lookup-attributes'] = jsonRequestBody.contentString.LookupAttributes;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'cloudtrail',
+            'method': {
+                'api': 'LookupEvents',
+                'boto3': 'lookup_events',
+                'cli': 'lookup-events'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.GetLifecyclePolicyPreview
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicyPreview") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'GetLifecyclePolicyPreview',
+                'boto3': 'get_lifecycle_policy_preview',
+                'cli': 'get-lifecycle-policy-preview'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.GetLifecyclePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicy") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'GetLifecyclePolicy',
+                'boto3': 'get_lifecycle_policy',
+                'cli': 'get-lifecycle-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.DescribeImages
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "describeImages") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'DescribeImages',
+                'boto3': 'describe_images',
+                'cli': 'describe-images'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.GetRepositoryPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getRepositoryPolicy") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'GetRepositoryPolicy',
+                'boto3': 'get_repository_policy',
+                'cli': 'get-repository-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.DeleteRepositoryPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "deleteRepositoryPolicy") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'DeleteRepositoryPolicy',
+                'boto3': 'delete_repository_policy',
+                'cli': 'delete-repository-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.SetRepositoryPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "setRepositoryPolicy") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.boto3['PolicyText'] = jsonRequestBody.contentString.policyText;
+        reqParams.cli['--policy-text'] = jsonRequestBody.contentString.policyText;
+
+        reqParams.tf['repository'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.tf['policy'] = jsonRequestBody.contentString.policyText;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'SetRepositoryPolicy',
+                'boto3': 'set_repository_policy',
+                'cli': 'set-repository-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ecr', details.requestId),
+            'region': region,
+            'service': 'ecr',
+            'terraformType': 'aws_ecr_repository_policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ecr:ecr.PutLifecyclePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "putLifecyclePolicy") {
+        reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.boto3['LifecyclePolicyText'] = jsonRequestBody.contentString.lifecyclePolicyText;
+        reqParams.cli['--lifecycle-policy-text'] = jsonRequestBody.contentString.lifecyclePolicyText;
+        
+        reqParams.tf['repository'] = jsonRequestBody.contentString.repositoryName;
+        reqParams.tf['policy'] = jsonRequestBody.contentString.lifecyclePolicyText;
+
+        outputs.push({
+            'region': region,
+            'service': 'ecr',
+            'method': {
+                'api': 'PutLifecyclePolicy',
+                'boto3': 'put_lifecycle_policy',
+                'cli': 'put-lifecycle-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ecr', details.requestId),
+            'region': region,
+            'service': 'ecr',
+            'terraformType': 'aws_ecr_lifecycle_policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
