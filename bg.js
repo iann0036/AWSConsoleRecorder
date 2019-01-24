@@ -48147,4 +48147,412 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:worklink:worklink.ListFleets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listFleets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'ListFleets',
+                'boto3': 'list_fleets',
+                'cli': 'list-fleets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.CreateFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "createFleet") {
+        reqParams.boto3['FleetName'] = jsonRequestBody.contentString.FleetName;
+        reqParams.cli['--fleet-name'] = jsonRequestBody.contentString.FleetName;
+        reqParams.boto3['DisplayName'] = jsonRequestBody.contentString.DisplayName;
+        reqParams.cli['--display-name'] = jsonRequestBody.contentString.DisplayName;
+        reqParams.boto3['OptimizeForEndUserLocation'] = jsonRequestBody.contentString.OptimizeForEndUserLocation;
+        reqParams.cli['--optimize-for-end-user-location'] = jsonRequestBody.contentString.OptimizeForEndUserLocation;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'CreateFleet',
+                'boto3': 'create_fleet',
+                'cli': 'create-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DescribeFleetMetadata
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeFleetMetadata") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DescribeFleetMetadata',
+                'boto3': 'describe_fleet_metadata',
+                'cli': 'describe-fleet-metadata'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DescribeIdentityProviderConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeIdentityProviderConfiguration") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DescribeIdentityProviderConfiguration',
+                'boto3': 'describe_identity_provider_configuration',
+                'cli': 'describe-identity-provider-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DescribeAuditStreamConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeAuditStreamConfiguration") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DescribeAuditStreamConfiguration',
+                'boto3': 'describe_audit_stream_configuration',
+                'cli': 'describe-audit-stream-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DescribeDevicePolicyConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeDevicePolicyConfiguration") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DescribeDevicePolicyConfiguration',
+                'boto3': 'describe_device_policy_configuration',
+                'cli': 'describe-device-policy-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DescribeCompanyNetworkConfiguration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeCompanyNetworkConfiguration") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DescribeCompanyNetworkConfiguration',
+                'boto3': 'describe_company_network_configuration',
+                'cli': 'describe-company-network-configuration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.ListWebsiteCertificateAuthorities
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listWebsiteCertificateAuthorities") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'ListWebsiteCertificateAuthorities',
+                'boto3': 'list_website_certificate_authorities',
+                'cli': 'list-website-certificate-authorities'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:worklink:worklink.DeleteFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "deleteFleet") {
+        reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
+        reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'worklink',
+            'method': {
+                'api': 'DeleteFleet',
+                'boto3': 'delete_fleet',
+                'cli': 'delete-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListBackupJobs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupJobs") {
+        reqParams.boto3['ByCreatedAfter'] = jsonRequestBody.params.createdAfter;
+        reqParams.cli['--by-created-after'] = jsonRequestBody.params.createdAfter;
+        reqParams.boto3['ByState'] = jsonRequestBody.params.state;
+        reqParams.cli['--by-state'] = jsonRequestBody.params.state;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListBackupJobs',
+                'boto3': 'list_backup_jobs',
+                'cli': 'list-backup-jobs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListRestoreJobs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listRestoreJobs") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListRestoreJobs',
+                'boto3': 'list_restore_jobs',
+                'cli': 'list-restore-jobs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListBackupPlans
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlans") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListBackupPlans',
+                'boto3': 'list_backup_plans',
+                'cli': 'list-backup-plans'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListBackupPlanTemplates
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlanTemplates") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListBackupPlanTemplates',
+                'boto3': 'list_backup_plan_templates',
+                'cli': 'list-backup-plan-templates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.GetBackupPlanFromTemplate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlanFromTemplate") {
+        reqParams.boto3['BackupPlanTemplateId'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--backup-plan-template-id'] = jsonRequestBody.path.split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'GetBackupPlanFromTemplate',
+                'boto3': 'get_backup_plan_from_template',
+                'cli': 'get-backup-plan-from-template'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.CreateBackupVault
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupVault") {
+        reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'CreateBackupVault',
+                'boto3': 'create_backup_vault',
+                'cli': 'create-backup-vault'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.CreateBackupPlan
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupPlan") {
+        reqParams.boto3['BackupPlan'] = jsonRequestBody.contentString.BackupPlan;
+        reqParams.cli['--backup-plan'] = jsonRequestBody.contentString.BackupPlan;
+        reqParams.boto3['BackupPlanTags'] = jsonRequestBody.contentString.BackupPlanTags;
+        reqParams.cli['--backup-plan-tags'] = jsonRequestBody.contentString.BackupPlanTags;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'CreateBackupPlan',
+                'boto3': 'create_backup_plan',
+                'cli': 'create-backup-plan'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.GetBackupPlan
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlan") {
+        reqParams.boto3['BackupPlanId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--backup-plan-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'GetBackupPlan',
+                'boto3': 'get_backup_plan',
+                'cli': 'get-backup-plan'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListBackupSelections
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupSelections") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['BackupPlanId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--backup-plan-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListBackupSelections',
+                'boto3': 'list_backup_selections',
+                'cli': 'list-backup-selections'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListTags
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listTags") {
+        reqParams.boto3['ResourceArn'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--resource-arn'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListTags',
+                'boto3': 'list_tags',
+                'cli': 'list-tags'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.DeleteBackupPlan
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "deleteBackupPlan") {
+        reqParams.boto3['BackupPlanId'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--backup-plan-id'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'DeleteBackupPlan',
+                'boto3': 'delete_backup_plan',
+                'cli': 'delete-backup-plan'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
