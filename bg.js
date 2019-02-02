@@ -47056,11 +47056,16 @@ function analyseRequest(details) {
         reqParams.cfn['DBSubnetGroupDescription'] = splitContentString.DBSubnetGroupDescription;
         reqParams.cfn['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
 
+        reqParams.tf['subnet_ids'] = [];
+        reqParams.tf['description'] = splitContentString.DBSubnetGroupDescription;
+        reqParams.tf['name'] = splitContentString.DBSubnetGroupName;
+
         var i=1;
         while (splitContentString['SubnetIds.SubnetIdentifier.' + i]) {
             reqParams.boto3['SubnetIds'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
             reqParams.cli['--subnet-ids'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
             reqParams.cfn['SubnetIds'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
+            reqParams.tf['subnet_ids'].push(splitContentString['SubnetIds.SubnetIdentifier.' + i]);
             i++;
         }
 
@@ -47081,6 +47086,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBSubnetGroup',
+            'terraformType': 'aws_docdb_subnet_group',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -47104,6 +47110,10 @@ function analyseRequest(details) {
         reqParams.cfn['Family'] = splitContentString.DBParameterGroupFamily;
         reqParams.cfn['Name'] = splitContentString.DBClusterParameterGroupName;
 
+        reqParams.tf['description'] = splitContentString.Description;
+        reqParams.tf['family'] = splitContentString.DBParameterGroupFamily;
+        reqParams.tf['name'] = splitContentString.DBClusterParameterGroupName;
+
         outputs.push({
             'region': region,
             'service': 'docdb',
@@ -47121,6 +47131,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBClusterParameterGroup',
+            'terraformType': 'aws_docdb_cluster_parameter_group',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -49567,6 +49578,153 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ram.CreateResourceShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.CreateResourceShare$/g)) {
+        reqParams.boto3['AllowExternalPrincipals'] = jsonRequestBody.allowExternalPrincipals;
+        reqParams.cli['--allow-external-principals'] = jsonRequestBody.allowExternalPrincipals;
+        reqParams.boto3['Name'] = jsonRequestBody.name;
+        reqParams.cli['--name'] = jsonRequestBody.name;
+        reqParams.boto3['Principals'] = jsonRequestBody.principals;
+        reqParams.cli['--principals'] = jsonRequestBody.principals;
+        reqParams.boto3['ResourceArns'] = jsonRequestBody.resourceArns;
+        reqParams.cli['--resource-arns'] = jsonRequestBody.resourceArns;
+        reqParams.boto3['Tags'] = jsonRequestBody.tags;
+        reqParams.cli['--tags'] = jsonRequestBody.tags;
+
+        reqParams.tf['allow_external_principals'] = jsonRequestBody.allowExternalPrincipals;
+        reqParams.tf['name'] = jsonRequestBody.name;
+        if (jsonRequestBody.tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.tags[i].Key] = jsonRequestBody.tags[i].Value;
+            }
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ram',
+            'method': {
+                'api': 'CreateResourceShare',
+                'boto3': 'create_resource_share',
+                'cli': 'create-resource-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ram', details.requestId),
+            'region': region,
+            'service': 'ram',
+            'terraformType': 'aws_ram_resource_share',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ram.GetResourceShares
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShares$/g)) {
+        reqParams.boto3['ResourceOwner'] = jsonRequestBody.resourceOwner;
+        reqParams.cli['--resource-owner'] = jsonRequestBody.resourceOwner;
+
+        outputs.push({
+            'region': region,
+            'service': 'ram',
+            'method': {
+                'api': 'GetResourceShares',
+                'boto3': 'get_resource_shares',
+                'cli': 'get-resource-shares'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ram.DeleteResourceShare
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.DeleteResourceShare$/g)) {
+        reqParams.boto3['ResourceShareArn'] = jsonRequestBody.resourceShareArn;
+        reqParams.cli['--resource-share-arn'] = jsonRequestBody.resourceShareArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'ram',
+            'method': {
+                'api': 'DeleteResourceShare',
+                'boto3': 'delete_resource_share',
+                'cli': 'delete-resource-share'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:globalaccelerator.CreateAccelerator
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.CreateAccelerator\?/g)) {
+        reqParams.boto3['Name'] = jsonRequestBody.Name;
+        reqParams.cli['--name'] = jsonRequestBody.Name;
+        reqParams.boto3['IpAddressType'] = jsonRequestBody.IpAddressType;
+        reqParams.cli['--ip-address-type'] = jsonRequestBody.IpAddressType;
+        reqParams.boto3['IdempotencyToken'] = jsonRequestBody.IdempotencyToken;
+        reqParams.cli['--idempotency-token'] = jsonRequestBody.IdempotencyToken;
+        reqParams.boto3['Enabled'] = jsonRequestBody.Enabled;
+        reqParams.cli['--enabled'] = jsonRequestBody.Enabled;
+
+        reqParams.tf['name'] = jsonRequestBody.Name;
+        reqParams.tf['ip_address_type'] = jsonRequestBody.IpAddressType;
+        reqParams.tf['enabled'] = jsonRequestBody.Enabled;
+
+        outputs.push({
+            'region': region,
+            'service': 'globalaccelerator',
+            'method': {
+                'api': 'CreateAccelerator',
+                'boto3': 'create_accelerator',
+                'cli': 'create-accelerator'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('globalaccelerator', details.requestId),
+            'region': region,
+            'service': 'globalaccelerator',
+            'terraformType': 'aws_globalaccelerator_accelerator',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:globalaccelerator.DeleteAccelerator
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.DeleteAccelerator\?/g)) {
+        reqParams.boto3['AcceleratorArn'] = jsonRequestBody.AcceleratorArn;
+        reqParams.cli['--accelerator-arn'] = jsonRequestBody.AcceleratorArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'globalaccelerator',
+            'method': {
+                'api': 'DeleteAccelerator',
+                'boto3': 'delete_accelerator',
+                'cli': 'delete-accelerator'
+            },
+            'options': reqParams,
+            'requestDetails': details
         });
         
         return {};
