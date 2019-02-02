@@ -48555,4 +48555,198 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:opsworks:opsworkscm.DescribeServers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeServers\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworkscm',
+            'method': {
+                'api': 'DescribeServers',
+                'boto3': 'describe_servers',
+                'cli': 'describe-servers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworkscm.CreateServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/CreateServer\?/g)) {
+        reqParams.boto3['Engine'] = jsonRequestBody.Engine;
+        reqParams.cli['--engine'] = jsonRequestBody.Engine;
+        reqParams.boto3['EngineModel'] = jsonRequestBody.EngineModel;
+        reqParams.cli['--engine-model'] = jsonRequestBody.EngineModel;
+        reqParams.boto3['EngineVersion'] = jsonRequestBody.EngineVersion;
+        reqParams.cli['--engine-version'] = jsonRequestBody.EngineVersion;
+        reqParams.boto3['InstanceType'] = jsonRequestBody.InstanceType;
+        reqParams.cli['--instance-type'] = jsonRequestBody.InstanceType;
+        reqParams.boto3['InstanceProfileArn'] = jsonRequestBody.InstanceProfileArn;
+        reqParams.cli['--instance-profile-arn'] = jsonRequestBody.InstanceProfileArn;
+        reqParams.boto3['ServerName'] = jsonRequestBody.ServerName;
+        reqParams.cli['--server-name'] = jsonRequestBody.ServerName;
+        reqParams.boto3['ServiceRoleArn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.cli['--service-role-arn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.SubnetIds;
+        reqParams.boto3['PreferredMaintenanceWindow'] = jsonRequestBody.PreferredMaintenanceWindow;
+        reqParams.cli['--preferred-maintenance-window'] = jsonRequestBody.PreferredMaintenanceWindow;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.boto3['KeyPair'] = jsonRequestBody.KeyPair;
+        reqParams.cli['--key-pair'] = jsonRequestBody.KeyPair;
+        reqParams.boto3['PreferredBackupWindow'] = jsonRequestBody.PreferredBackupWindow;
+        reqParams.cli['--preferred-backup-window'] = jsonRequestBody.PreferredBackupWindow;
+        reqParams.boto3['BackupRetentionCount'] = jsonRequestBody.BackupRetentionCount;
+        reqParams.cli['--backup-retention-count'] = jsonRequestBody.BackupRetentionCount;
+        reqParams.boto3['AssociatePublicIpAddress'] = jsonRequestBody.AssociatePublicIpAddress;
+        reqParams.cli['--associate-public-ip-address'] = jsonRequestBody.AssociatePublicIpAddress;
+
+        reqParams.cfn['Engine'] = jsonRequestBody.Engine;
+        reqParams.cfn['EngineModel'] = jsonRequestBody.EngineModel;
+        reqParams.cfn['EngineVersion'] = jsonRequestBody.EngineVersion;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
+        reqParams.cfn['InstanceProfileArn'] = jsonRequestBody.InstanceProfileArn;
+        reqParams.cfn['ServerName'] = jsonRequestBody.ServerName;
+        reqParams.cfn['ServiceRoleArn'] = jsonRequestBody.ServiceRoleArn;
+        reqParams.cfn['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cfn['PreferredMaintenanceWindow'] = jsonRequestBody.PreferredMaintenanceWindow;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cfn['KeyPair'] = jsonRequestBody.KeyPair;
+        reqParams.cfn['PreferredBackupWindow'] = jsonRequestBody.PreferredBackupWindow;
+        reqParams.cfn['BackupRetentionCount'] = jsonRequestBody.BackupRetentionCount;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworkscm',
+            'method': {
+                'api': 'CreateServer',
+                'boto3': 'create_server',
+                'cli': 'create-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('opsworkscm', details.requestId),
+            'region': region,
+            'service': 'opsworkscm',
+            'type': 'AWS::OpsWorksCM::Server',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworkscm.DescribeBackups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeBackups\?/g)) {
+        reqParams.boto3['ServerName'] = jsonRequestBody.ServerName;
+        reqParams.cli['--server-name'] = jsonRequestBody.ServerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworkscm',
+            'method': {
+                'api': 'DescribeBackups',
+                'boto3': 'describe_backups',
+                'cli': 'describe-backups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:opsworks:opsworkscm.DeleteServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DeleteServer\?/g)) {
+        reqParams.boto3['ServerName'] = jsonRequestBody.ServerName;
+        reqParams.cli['--server-name'] = jsonRequestBody.ServerName;
+
+        outputs.push({
+            'region': region,
+            'service': 'opsworkscm',
+            'method': {
+                'api': 'DeleteServer',
+                'boto3': 'delete_server',
+                'cli': 'delete-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.CreateUserPoolDomain
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/domain$/g)) {
+        if (jsonRequestBody.arn[0].length) {
+            reqParams.boto3['CustomDomainConfig'] = {
+                'CertificateArn': jsonRequestBody.arn[0]
+            };
+            reqParams.cli['--custom-domain-config'] = {
+                'CertificateArn': jsonRequestBody.arn[0]
+            };
+            reqParams.tf['certificate_arn'] = jsonRequestBody.arn[0];
+        }
+        reqParams.boto3['Domain'] = jsonRequestBody.domainName[0];
+        reqParams.cli['--domain'] = jsonRequestBody.domainName[0];
+        reqParams.boto3['UserPoolId'] = jsonRequestBody.id[0];
+        reqParams.cli['--user-pool-id'] = jsonRequestBody.id[0];
+
+        reqParams.tf['domain'] = jsonRequestBody.domainName[0];
+        reqParams.tf['user_pool_id'] = jsonRequestBody.id[0];
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'CreateUserPoolDomain',
+                'boto3': 'create_user_pool_domain',
+                'cli': 'create-user-pool-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('cognito-idp', details.requestId),
+            'region': region,
+            'service': 'cognito-idp',
+            'terraformType': 'aws_cognito_user_pool_domain',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:cognito-idp:cognito-idp.DeleteUserPoolDomain
+    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/domain\?/g)) {
+        reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
+        reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
+        reqParams.boto3['Domain'] = getUrlValue(details.url, 'domainName');
+        reqParams.cli['--domain'] = getUrlValue(details.url, 'domainName');
+
+        outputs.push({
+            'region': region,
+            'service': 'cognito-idp',
+            'method': {
+                'api': 'DeleteUserPoolDomain',
+                'boto3': 'delete_user_pool_domain',
+                'cli': 'delete-user-pool-domain'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
