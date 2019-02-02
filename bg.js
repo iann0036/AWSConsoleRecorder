@@ -9359,6 +9359,9 @@ function analyseRequest(details) {
         reqParams.boto3['PublicKeyMaterial'] = jsonRequestBody.publicKeyMaterial;
         reqParams.cli['--public-key-material'] = jsonRequestBody.publicKeyMaterial;
 
+        reqParams.tf['key_name'] = jsonRequestBody.keyName;
+        reqParams.tf['public_key'] = jsonRequestBody.publicKeyMaterial;
+
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -9369,6 +9372,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'terraformType': 'aws_key_pair',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
 
         if (blocking) {
@@ -28219,7 +28232,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'iam',
             'type': 'AWS::IAM::ManagedPolicy',
-            'terraformType': 'aws_iam_instance_profile',
+            'terraformType': 'aws_iam_policy',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -48744,6 +48757,816 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.DeleteAccountAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/aliases\/.+$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'DeleteAccountAlias',
+                'boto3': 'delete_account_alias',
+                'cli': 'delete-account-alias'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.CreateAccountAlias
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/aliases$/g)) {
+        reqParams.boto3['AccountAlias'] = jsonRequestBody.accountAlias;
+        reqParams.cli['--account-alias'] = jsonRequestBody.accountAlias;
+
+        reqParams.tf['account_alias'] = jsonRequestBody.accountAlias;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'CreateAccountAlias',
+                'boto3': 'create_account_alias',
+                'cli': 'create-account-alias'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'terraformType': 'aws_iam_account_alias',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.UpdateAccountPasswordPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/UpdateAccountPasswordPolicy$/g)) {
+        reqParams.boto3['MinimumPasswordLength'] = jsonRequestBody.minimumPasswordLength;
+        reqParams.cli['--minimum-password-length'] = jsonRequestBody.minimumPasswordLength;
+        reqParams.boto3['AllowUsersToChangePassword'] = jsonRequestBody.allowUsersToChangePassword;
+        reqParams.cli['--allow-users-to-change-password'] = jsonRequestBody.allowUsersToChangePassword;
+        reqParams.boto3['RequireUppercaseCharacters'] = jsonRequestBody.requireUppercaseCharacters;
+        reqParams.cli['--require-uppercase-characters'] = jsonRequestBody.requireUppercaseCharacters;
+        reqParams.boto3['RequireLowercaseCharacters'] = jsonRequestBody.requireLowercaseCharacters;
+        reqParams.cli['--require-lowercase-characters'] = jsonRequestBody.requireLowercaseCharacters;
+        reqParams.boto3['RequireNumbers'] = jsonRequestBody.requireNumbers;
+        reqParams.cli['--require-numbers'] = jsonRequestBody.requireNumbers;
+        reqParams.boto3['RequireSymbols'] = jsonRequestBody.requireSymbols;
+        reqParams.cli['--require-symbols'] = jsonRequestBody.requireSymbols;
+        reqParams.boto3['HardExpiry'] = jsonRequestBody.hardExpiry;
+        reqParams.cli['--hard-expiry'] = jsonRequestBody.hardExpiry;
+        reqParams.boto3['MaxPasswordAge'] = jsonRequestBody.maxPasswordAge;
+        reqParams.cli['--max-password-age'] = jsonRequestBody.maxPasswordAge;
+        reqParams.boto3['PasswordReusePrevention'] = jsonRequestBody.passwordReusePrevention;
+        reqParams.cli['--password-reuse-prevention'] = jsonRequestBody.passwordReusePrevention;
+
+        reqParams.tf['minimum_password_length'] = jsonRequestBody.minimumPasswordLength;
+        reqParams.tf['allow_users_to_change_password'] = jsonRequestBody.allowUsersToChangePassword;
+        reqParams.tf['require_uppercase_characters'] = jsonRequestBody.requireUppercaseCharacters;
+        reqParams.tf['require_lowercase_characters'] = jsonRequestBody.requireLowercaseCharacters;
+        reqParams.tf['require_numbers'] = jsonRequestBody.requireNumbers;
+        reqParams.tf['require_symbols'] = jsonRequestBody.requireSymbols;
+        reqParams.tf['hard_expiry'] = jsonRequestBody.hardExpiry;
+        reqParams.tf['max_password_age'] = jsonRequestBody.maxPasswordAge;
+        reqParams.tf['password_reuse_prevention'] = jsonRequestBody.passwordReusePrevention;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'UpdateAccountPasswordPolicy',
+                'boto3': 'update_account_password_policy',
+                'cli': 'update-account-password-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'terraformType': 'aws_iam_account_password_policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.DeleteAccountPasswordPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/DeleteAccountPasswordPolicy$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'DeleteAccountPasswordPolicy',
+                'boto3': 'delete_account_password_policy',
+                'cli': 'delete-account-password-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:elbv2.RegisterTargets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2RegisterTargets\?/g)) {
+        reqParams.boto3['TargetGroupArn'] = jsonRequestBody.targetGroupArn;
+        reqParams.cli['--target-group-arn'] = jsonRequestBody.targetGroupArn;
+        reqParams.boto3['Targets'] = jsonRequestBody.targets;
+        reqParams.cli['--targets'] = jsonRequestBody.targets;
+
+        outputs.push({
+            'region': region,
+            'service': 'elbv2',
+            'method': {
+                'api': 'RegisterTargets',
+                'boto3': 'register_targets',
+                'cli': 'register-targets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        for (var i=0; i<jsonRequestBody.targets.length; i++) {
+            reqParams.tf['target_group_arn'] = jsonRequestBody.targetGroupArn;
+            reqParams.tf['target_id'] = jsonRequestBody.targets[i]['id'];
+            reqParams.tf['port'] = jsonRequestBody.targets[i]['port'];
+            reqParams.tf['availability_zone'] = jsonRequestBody.targets[i]['availabilityZone'];
+
+            tracked_resources.push({
+                'logicalId': getResourceName('elbv2', details.requestId),
+                'region': region,
+                'service': 'elbv2',
+                'terraformType': 'aws_lb_target_group_attachment',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:ec2:elbv2.DescribeTargetHealth
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeTargetHealth\?/g)) {
+        reqParams.boto3['TargetGroupArn'] = jsonRequestBody.TargetGroupArn;
+        reqParams.cli['--target-group-arn'] = jsonRequestBody.TargetGroupArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'elbv2',
+            'method': {
+                'api': 'DescribeTargetHealth',
+                'boto3': 'describe_target_health',
+                'cli': 'describe-target-health'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.ModifyNetworkInterfaceAttribute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=modifyNetworkInterfaceAttribute\?/g)) {
+        reqParams.boto3['NetworkInterfaceId'] = jsonRequestBody.networkInterfaceId;
+        reqParams.cli['--network-interface-id'] = jsonRequestBody.networkInterfaceId;
+        if (jsonRequestBody.groupSet) {
+            reqParams.boto3['Groups'] = jsonRequestBody.groupSet;
+            reqParams.cli['--groups'] = jsonRequestBody.groupSet;
+
+            outputs.push({
+                'region': region,
+                'service': 'ec2',
+                'method': {
+                    'api': 'ModifyNetworkInterfaceAttribute',
+                    'boto3': 'modify_network_interface_attribute',
+                    'cli': 'modify-network-interface-attribute'
+                },
+                'options': reqParams,
+                'requestDetails': details
+            });
+
+            for (var i=0; i<jsonRequestBody.groupSet.length; i++) {
+                reqParams.tf['network_interface_id'] = jsonRequestBody.networkInterfaceId;
+                reqParams.tf['security_group_id'] = jsonRequestBody.groupSet[i];
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', details.requestId),
+                    'region': region,
+                    'service': 'ec2',
+                    'terraformType': 'aws_lb_target_group_attachment',
+                    'options': reqParams,
+                    'requestDetails': details,
+                    'was_blocked': blocking
+                });
+            }
+        }
+        
+        return {};
+    }
+
+    // autogen:s3:s3control.PutPublicAccessBlock
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/command$/g)) {
+        reqParams.boto3['PublicAccessBlockConfiguration'] = {
+            'BlockPublicAcls': jsonRequestBody.publicAccessSettings.blockPublicAcls,
+            'IgnorePublicAcls': jsonRequestBody.publicAccessSettings.ignorePublicAcls,
+            'BlockPublicPolicy': jsonRequestBody.publicAccessSettings.blockPublicPolicy,
+            'RestrictPublicBuckets': jsonRequestBody.publicAccessSettings.restrictPublicBuckets
+        };
+        reqParams.cli['--public-access-block-configuration'] = {
+            'BlockPublicAcls': jsonRequestBody.publicAccessSettings.blockPublicAcls,
+            'IgnorePublicAcls': jsonRequestBody.publicAccessSettings.ignorePublicAcls,
+            'BlockPublicPolicy': jsonRequestBody.publicAccessSettings.blockPublicPolicy,
+            'RestrictPublicBuckets': jsonRequestBody.publicAccessSettings.restrictPublicBuckets
+        };
+        reqParams.boto3['AccountId'] = jsonRequestBody.accountId;
+        reqParams.cli['--account-id'] = jsonRequestBody.accountId;
+
+        reqParams.tf['account_id'] = jsonRequestBody.accountId;
+        reqParams.tf['block_public_acls'] = jsonRequestBody.publicAccessSettings.blockPublicAcls;
+        reqParams.tf['block_public_policy'] = jsonRequestBody.publicAccessSettings.blockPublicPolicy;
+        reqParams.tf['ignore_public_acls'] = jsonRequestBody.publicAccessSettings.ignorePublicAcls;
+        reqParams.tf['restrict_public_buckets'] = jsonRequestBody.publicAccessSettings.restrictPublicBuckets;
+
+        outputs.push({
+            'region': region,
+            'service': 's3control',
+            'method': {
+                'api': 'PutPublicAccessBlock',
+                'boto3': 'put_public_access_block',
+                'cli': 'put-public-access-block'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('s3control', details.requestId),
+            'region': region,
+            'service': 's3control',
+            'terraformType': 'aws_lb_target_group_attachment',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.CreateServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createServer") {
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.boto3['LoggingRole'] = jsonRequestBody.contentString.LoggingRole;
+        reqParams.cli['--logging-role'] = jsonRequestBody.contentString.LoggingRole;
+        reqParams.boto3['IdentityProviderType'] = jsonRequestBody.contentString.IdentityProviderType;
+        reqParams.cli['--identity-provider-type'] = jsonRequestBody.contentString.IdentityProviderType;
+        reqParams.boto3['IdentityProviderDetails'] = jsonRequestBody.contentString.IdentityProviderDetails;
+        reqParams.cli['--identity-provider-details'] = jsonRequestBody.contentString.IdentityProviderDetails;
+
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+        reqParams.tf['logging_role'] = jsonRequestBody.contentString.LoggingRole;
+        reqParams.tf['identity_provider_type'] = jsonRequestBody.contentString.IdentityProviderType;
+        reqParams.tf['url'] = jsonRequestBody.contentString.IdentityProviderDetails.Url;
+        reqParams.tf['invocation_role'] = jsonRequestBody.contentString.IdentityProviderDetails.InvocationRole;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'CreateServer',
+                'boto3': 'create_server',
+                'cli': 'create-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('transfer', details.requestId),
+            'region': region,
+            'service': 'transfer',
+            'terraformType': 'aws_transfer_server',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.ListServers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listServers") {
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'ListServers',
+                'boto3': 'list_servers',
+                'cli': 'list-servers'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:s3.ListBuckets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.CreateUser
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createUser") {
+        reqParams.boto3['HomeDirectory'] = jsonRequestBody.contentString.HomeDirectory;
+        reqParams.cli['--home-directory'] = jsonRequestBody.contentString.HomeDirectory;
+        reqParams.boto3['Policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.cli['--policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.boto3['SshPublicKeyBody'] = jsonRequestBody.contentString.SshPublicKeyBody;
+        reqParams.cli['--ssh-public-key-body'] = jsonRequestBody.contentString.SshPublicKeyBody;
+        reqParams.boto3['Role'] = jsonRequestBody.contentString.Role;
+        reqParams.cli['--role'] = jsonRequestBody.contentString.Role;
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.boto3['UserName'] = jsonRequestBody.contentString.UserName;
+        reqParams.cli['--user-name'] = jsonRequestBody.contentString.UserName;
+
+        reqParams.tf['home_directory'] = jsonRequestBody.contentString.HomeDirectory;
+        reqParams.tf['policy'] = jsonRequestBody.contentString.Policy;
+        reqParams.tf['role'] = jsonRequestBody.contentString.Role;
+        reqParams.tf['server_id'] = jsonRequestBody.contentString.ServerId;
+        if (jsonRequestBody.contentString.Tags) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.contentString.Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.contentString.Tags[i].Key] = jsonRequestBody.contentString.Tags[i].Value;
+            }
+        }
+        reqParams.tf['user_name'] = jsonRequestBody.contentString.UserName;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'CreateUser',
+                'boto3': 'create_user',
+                'cli': 'create-user'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('transfer', details.requestId),
+            'region': region,
+            'service': 'transfer',
+            'terraformType': 'aws_transfer_server',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (jsonRequestBody.contentString.SshPublicKeyBody && jsonRequestBody.contentString.SshPublicKeyBody.length) {
+            var reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+            
+            reqParams.tf['user_name'] = jsonRequestBody.contentString.UserName;
+            reqParams.tf['server_id'] = jsonRequestBody.contentString.ServerId;
+            reqParams.tf['body'] = jsonRequestBody.contentString.SshPublicKeyBody;
+
+            tracked_resources.push({
+                'logicalId': getResourceName('transfer', details.requestId),
+                'region': region,
+                'service': 'transfer',
+                'terraformType': 'aws_transfer_ssh_key',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.ListUsers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listUsers") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'ListUsers',
+                'boto3': 'list_users',
+                'cli': 'list-users'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.DescribeServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "describeServer") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'DescribeServer',
+                'boto3': 'describe_server',
+                'cli': 'describe-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.StopServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "stopServer") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'StopServer',
+                'boto3': 'stop_server',
+                'cli': 'stop-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.StartServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "startServer") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'StartServer',
+                'boto3': 'start_server',
+                'cli': 'start-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.DeleteUser
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteUser") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+        reqParams.boto3['UserName'] = jsonRequestBody.contentString.UserName;
+        reqParams.cli['--user-name'] = jsonRequestBody.contentString.UserName;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'DeleteUser',
+                'boto3': 'delete_user',
+                'cli': 'delete-user'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:transfer:transfer.DeleteServer
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteServer") {
+        reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
+        reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
+
+        outputs.push({
+            'region': region,
+            'service': 'transfer',
+            'method': {
+                'api': 'DeleteServer',
+                'boto3': 'delete_server',
+                'cli': 'delete-server'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.DisableSecurityHub
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "disableSecurityHub") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'DisableSecurityHub',
+                'boto3': 'disable_security_hub',
+                'cli': 'disable-security-hub'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.EnableSecurityHub
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableSecurityHub") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'EnableSecurityHub',
+                'boto3': 'enable_security_hub',
+                'cli': 'enable-security-hub'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('securityhub', details.requestId),
+            'region': region,
+            'service': 'securityhub',
+            'terraformType': 'aws_securityhub_account',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.GetFindings
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getFindings") {
+        reqParams.boto3['SortCriteria'] = jsonRequestBody.contentString.SortCriteria;
+        reqParams.cli['--sort-criteria'] = jsonRequestBody.contentString.SortCriteria;
+        reqParams.boto3['Filters'] = jsonRequestBody.contentString.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.contentString.Filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'GetFindings',
+                'boto3': 'get_findings',
+                'cli': 'get-findings'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.GetInsights
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getInsights") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'GetInsights',
+                'boto3': 'get_insights',
+                'cli': 'get-insights'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.BatchEnableStandards
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "batchEnableStandards") {
+        reqParams.boto3['StandardsSubscriptionRequests'] = jsonRequestBody.contentString.StandardsSubscriptionRequests;
+        reqParams.cli['--standards-subscription-requests'] = jsonRequestBody.contentString.StandardsSubscriptionRequests;
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'BatchEnableStandards',
+                'boto3': 'batch_enable_standards',
+                'cli': 'batch-enable-standards'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        for (var i=0; i<jsonRequestBody.contentString.StandardsSubscriptionRequests.length; i++) {
+            reqParams.tf['standards_arn'] = jsonRequestBody.contentString.StandardsSubscriptionRequests[i]['StandardsArn'];
+
+            tracked_resources.push({
+                'logicalId': getResourceName('securityhub', details.requestId),
+                'region': region,
+                'service': 'securityhub',
+                'terraformType': 'aws_securityhub_standards_subscription',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
+        }
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.GetMasterAccount
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getMasterAccount") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'GetMasterAccount',
+                'boto3': 'get_master_account',
+                'cli': 'get-master-account'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.ListInvitations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listInvitations") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'ListInvitations',
+                'boto3': 'list_invitations',
+                'cli': 'list-invitations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.ListMembers
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listMembers") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'ListMembers',
+                'boto3': 'list_members',
+                'cli': 'list-members'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.ListEnabledProductsForImport
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listEnabledProductsForImport") {
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'ListEnabledProductsForImport',
+                'boto3': 'list_enabled_products_for_import',
+                'cli': 'list-enabled-products-for-import'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:securityhub:securityhub.EnableImportFindingsForProduct
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableImportFindingsForProduct") {
+        reqParams.boto3['ProductArn'] = jsonRequestBody.contentString.ProductArn;
+        reqParams.cli['--product-arn'] = jsonRequestBody.contentString.ProductArn;
+
+        reqParams.tf['product_arn'] = jsonRequestBody.contentString.ProductArn;
+
+        outputs.push({
+            'region': region,
+            'service': 'securityhub',
+            'method': {
+                'api': 'EnableImportFindingsForProduct',
+                'boto3': 'enable_import_findings_for_product',
+                'cli': 'enable-import-findings-for-product'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('securityhub', details.requestId),
+            'region': region,
+            'service': 'securityhub',
+            'terraformType': 'aws_securityhub_product_subscription',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateDefaultVpc
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDefaultVpc\?/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateDefaultVpc',
+                'boto3': 'create_default_vpc',
+                'cli': 'create-default-vpc'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'terraformType': 'aws_default_vpc',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
