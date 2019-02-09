@@ -4,6 +4,7 @@ var go_first_output;
 var recording = false;
 var intercept = false;
 var theme = "material";
+var global_used_refs = [];
 
 setTimeout(function(){
     chrome.storage.local.get('blocking', function (isBlocking) {
@@ -3247,7 +3248,17 @@ ${service}.${method}(${params});${was_blocked ? ' // blocked' : ''}`;
 }
 
 function getResourceName(service, requestId) {
-    return service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
+    var i = 1; // on purpose, 2 means second usage
+    var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
+
+    while (global_used_refs.includes(proposed)) {
+        proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0,7);
+        i += 1;
+    }
+
+    global_used_refs.push(proposed);
+
+    return proposed;
 }
 
 function lcfirststr(str) {
@@ -46509,8 +46520,6 @@ function analyseRequest(details) {
                 "*"
             ];
     
-            reqParams.cfn['VpcId'] = jsonRequestBody.VpcId;
-    
             reqParams.tf['vpc_id'] = jsonRequestBody.VpcId;
     
             outputs.push({
@@ -46561,6 +46570,9 @@ function analyseRequest(details) {
             reqParams.boto3['InternetGatewayId'] = gwtRequest['args'][1]['value']['igw']['igwid'];
             reqParams.cli['--internet-gateway-id'] = gwtRequest['args'][1]['value']['igw']['igwid'];
     
+            reqParams.cfn['VpcId'] = gwtRequest['args'][1]['value']['vpcobject']['vpcid'];
+            reqParams.cfn['InternetGatewayId'] = gwtRequest['args'][1]['value']['igw']['igwid'];
+    
             outputs.push({
                 'region': region,
                 'service': 'ec2',
@@ -46572,8 +46584,19 @@ function analyseRequest(details) {
                 'options': reqParams,
                 'requestDetails': details
             });
+                
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', details.requestId),
+                'region': region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::VPCGatewayAttachment',
+                'options': reqParams,
+                'requestDetails': details,
+                'was_blocked': blocking
+            });
 
-            // Set up routes
+            // Set up routes (TODO)
+            /*
             for (var i=0; i<gwtRequest['args'][1]['value']['routetable']['routes']['value'].length; i++) {
                 reqParams = {
                     'boto3': {},
@@ -46626,6 +46649,7 @@ function analyseRequest(details) {
                     'was_blocked': blocking
                 });
             }
+            */
 
             // Enable DNS
             if (gwtRequest['args'][1]['value']['enablednshostnames']) {
