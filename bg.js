@@ -3470,10 +3470,19 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
 `;
     }
 
-    output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
+    if (params.trim() == "") {
+        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
+        Type: "${type}"
+
+`;
+    } else {
+        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
         Type: "${type}"
         Properties:${params}
 `;
+    }
+
+
 
     return output;
 }
