@@ -3532,9 +3532,9 @@ function outputMapCli(service, method, options, region, was_blocked) {
             });
             delete options['_'];
         }
-        if ('_service' in options) {
-            service = options['_service'];
-            delete options['_service'];
+        if ('_cli_service' in options) {
+            service = options['_cli_service'];
+            delete options['_cli_service'];
         }
         for (option in options) {
             if (options[option] !== undefined) {
@@ -6180,7 +6180,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         reqParams.cfn['BucketName'] = jsonRequestBody.path;
 
@@ -6225,7 +6225,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
         reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
 
         outputs.push({
@@ -6259,7 +6259,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
         reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
 
         outputs.push({
@@ -6290,7 +6290,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
         reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
 
         outputs.push({
@@ -6321,7 +6321,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
         reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
 
         outputs.push({
@@ -6352,7 +6352,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
         reqParams = addToParamsFromXml(reqParams, jsonRequestBody.contentString);
 
         outputs.push({
@@ -6383,7 +6383,7 @@ function analyseRequest(details) {
 
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6432,7 +6432,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketVersioning") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6453,7 +6453,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketLogging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6474,7 +6474,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketTagging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6495,7 +6495,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketNotification") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6516,7 +6516,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketWebsite") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6537,7 +6537,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketRequestPayment") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6558,7 +6558,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAccelerate") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6579,7 +6579,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketDefaultEncryption") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6600,7 +6600,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketReplication") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6621,7 +6621,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketMetrics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6642,7 +6642,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAnalytics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6663,7 +6663,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetLifecycleConfiguration") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6684,7 +6684,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketCORS") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6705,7 +6705,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketPolicy") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -6726,7 +6726,7 @@ function analyseRequest(details) {
     if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAcl") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
-        reqParams.cli['_service'] = "s3api";
+        reqParams.cli['_cli_service'] = "s3api";
 
         outputs.push({
             'region': region,
@@ -15029,6 +15029,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:application:" + jsonRequestBody.contentString.applicationName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
@@ -15074,6 +15075,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.GetApplication
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getApplication") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
 
@@ -15094,6 +15097,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.ListApplicationRevisions
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listApplicationRevisions") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['ApplicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
         reqParams.boto3['SortBy'] = jsonRequestBody.contentString.sortBy;
@@ -15118,6 +15123,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.ListDeploymentGroups
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentGroups") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
 
@@ -15138,6 +15145,7 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.ListDeploymentConfigs
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
+        reqParams.cli['_cli_service'] = "deploy";
 
         outputs.push({
             'region': region,
@@ -15159,6 +15167,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentgroup:" + jsonRequestBody.contentString.applicationName + "/" + jsonRequestBody.contentString.deploymentGroupName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['deploymentConfigName'] = jsonRequestBody.contentString.deploymentConfigName;
         reqParams.cli['--deployment-config-name'] = jsonRequestBody.contentString.deploymentConfigName;
@@ -15224,6 +15233,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.GetDeploymentGroup
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getDeploymentGroup") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
         reqParams.boto3['deploymentGroupName'] = jsonRequestBody.contentString.deploymentGroupName;
@@ -15246,6 +15257,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.ListDeployments
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeployments") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
         reqParams.boto3['deploymentGroupName'] = jsonRequestBody.contentString.deploymentGroupName;
@@ -15268,6 +15281,7 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.ListDeploymentConfigs
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
+        reqParams.cli['_cli_service'] = "deploy";
 
         outputs.push({
             'region': region,
@@ -15286,6 +15300,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.BatchGetDeploymentGroups
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeploymentGroups") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
         reqParams.boto3['deploymentGroupNames'] = jsonRequestBody.contentString.deploymentGroupNames;
@@ -15311,6 +15327,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentgroup:" + jsonRequestBody.contentString.applicationName + "/" + jsonRequestBody.contentString.deploymentGroupName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
@@ -15348,6 +15365,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "*"
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['autoRollbackEnabled'] = jsonRequestBody.contentString.autoRollbackEnabled;
         reqParams.cli['--auto-rollback-enabled'] = jsonRequestBody.contentString.autoRollbackEnabled;
@@ -15379,6 +15397,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentconfig:" + jsonRequestBody.contentString.deploymentConfigName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['computePlatform'] = jsonRequestBody.contentString.computePlatform;
         reqParams.cli['--compute-platform'] = jsonRequestBody.contentString.computePlatform;
@@ -15424,6 +15443,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentconfig:" + jsonRequestBody.contentString.deploymentConfigName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['deploymentConfigName'] = jsonRequestBody.contentString.deploymentConfigName;
         reqParams.cli['--deployment-config-name'] = jsonRequestBody.contentString.deploymentConfigName;
@@ -15450,6 +15470,8 @@ function analyseRequest(details) {
 
     // autogen:codedeploy:codedeploy.BatchGetDeployments
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeployments") {
+        reqParams.cli['_cli_service'] = "deploy";
+
         reqParams.boto3['deploymentIds'] = jsonRequestBody.contentString.deploymentIds;
         reqParams.cli['--deployment-ids'] = jsonRequestBody.contentString.deploymentIds;
 
@@ -15473,6 +15495,7 @@ function analyseRequest(details) {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:application:" + jsonRequestBody.contentString.applicationName
         ];
+        reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['ApplicationName'] = jsonRequestBody.contentString.applicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.contentString.applicationName;
