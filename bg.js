@@ -2156,7 +2156,7 @@ function processCfnParameter(param, spacing, index) {
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
                         }
                     }
@@ -2178,7 +2178,7 @@ function processCfnParameter(param, spacing, index) {
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
                         }
                     }
@@ -2251,7 +2251,7 @@ function processCdktsParameter(param, spacing, index) {
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             return tracked_resources[i].logicalId + ".getAtt('" + attr_name + "')"
                         }
                     }
@@ -2313,7 +2313,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
                         }
                     }
@@ -2338,7 +2338,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] == param) {
+                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
                         }
                     }
@@ -5724,7 +5724,6 @@ function analyseRequest(details) {
         reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
         reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
         reqParams.cfn['UserData'] = jsonRequestBody.UserData;
-        reqParams.cfn['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
         if (jsonRequestBody.IamInstanceProfile) {
             reqParams.cfn['IamInstanceProfile'] = jsonRequestBody.IamInstanceProfile.Arn;
         }
@@ -5810,7 +5809,7 @@ function analyseRequest(details) {
         reqParams.cfn['BlockDeviceMappings'] = [];
 
         var used_device_names = [];
-        var instance_type_instance_store_count = {
+        var instance_type_instance_store_count = { // i cried a little
             'm5d.large': 1,
             'm5d.xlarge': 1,
             'm5d.2xlarge': 1,
@@ -5940,6 +5939,7 @@ function analyseRequest(details) {
 
         if (jsonRequestBody.NetworkInterface) {
             reqParams.tf['network_interface'] = [];
+            reqParams.cfn['NetworkInterfaces'] = [];
             for (var i=0; i<jsonRequestBody.NetworkInterface.length; i++) {
                 if (jsonRequestBody.NetworkInterface[i].NetworkInterfaceId) {
                     reqParams.iam['Resource'].push("arn:aws:ec2:*:*:network-interface/" + jsonRequestBody.NetworkInterface[i].NetworkInterfaceId);
@@ -5983,6 +5983,11 @@ function analyseRequest(details) {
                         'delete_on_termination': jsonRequestBody.NetworkInterface[i].DeleteOnTermination
                     });
                 }
+            
+                cfn_network_interface = jsonRequestBody.NetworkInterface[i];
+                cfn_network_interface['GroupSet'] = cfn_network_interface['Groups'];
+                delete cfn_network_interface['Groups'];
+                reqParams.cfn['NetworkInterfaces'].push(cfn_network_interface);
             }
         } else {
             reqParams.iam['Resource'].push("arn:aws:ec2:*:*:network-interface/*");
