@@ -4214,6 +4214,13 @@ function setOutputsForTrackedResource(index) {
                     'id': jsonResponseBody.id
                 }
             };
+        } else if (tracked_resources[index].type == "AWS::ApiGatewayV2::Authorizer") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonResponseBody.id,
+                'Terraform': {
+                    'id': jsonResponseBody.id
+                }
+            };
         } else if (tracked_resources[index].type == "AWS::ApiGateway::DocumentationPart") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonResponseBody.id,
@@ -4228,6 +4235,13 @@ function setOutputsForTrackedResource(index) {
         } else if (tracked_resources[index].type == "AWS::ApiGateway::Method") {
             tracked_resources[index].returnValues = null;
         } else if (tracked_resources[index].type == "AWS::ApiGateway::Model") {
+            tracked_resources[index].returnValues = {
+                'Ref': jsonResponseBody.id,
+                'Terraform': {
+                    'id': jsonResponseBody.id
+                }
+            };
+        } else if (tracked_resources[index].type == "AWS::ApiGatewayV2::Model") {
             tracked_resources[index].returnValues = {
                 'Ref': jsonResponseBody.id,
                 'Terraform': {
@@ -12015,14 +12029,14 @@ function analyseRequest(details) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
 
-        reqParams.cfn['Type'] = jsonRequestBody.contentString.type;
-        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
-        reqParams.cfn['AuthorizerUri'] = jsonRequestBody.contentString.authorizerUri;
-        reqParams.cfn['AuthorizerCredentials'] = jsonRequestBody.contentString.authorizerCredentials;
-        reqParams.cfn['IdentityValidationExpression'] = jsonRequestBody.contentString.identityValidationExpression;
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['AuthorizerCredentialsArn'] = jsonRequestBody.contentString.authorizerCredentials;
         reqParams.cfn['AuthorizerResultTtlInSeconds'] = jsonRequestBody.contentString.authorizerResultTtlInSeconds;
+        reqParams.cfn['AuthorizerType'] = jsonRequestBody.contentString.type;
+        reqParams.cfn['AuthorizerUri'] = jsonRequestBody.contentString.authorizerUri;
         reqParams.cfn['IdentitySource'] = jsonRequestBody.contentString.identitySource;
-        reqParams.cfn['RestApiId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['IdentityValidationExpression'] = jsonRequestBody.contentString.identityValidationExpression;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
 
         outputs.push({
             'region': region,
@@ -12040,7 +12054,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('apigateway', details.requestId),
             'region': region,
             'service': 'apigateway',
-            'type': 'AWS::ApiGateway::Authorizer',
+            //'type': 'AWS::ApiGateway::Authorizer',
+            'type': 'AWS::ApiGatewayV2::Authorizer',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -12117,7 +12132,7 @@ function analyseRequest(details) {
         reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
         reqParams.cfn['ContentType'] = jsonRequestBody.contentString.contentType;
         reqParams.cfn['Schema'] = jsonRequestBody.contentString.schema;
-        reqParams.cfn['RestApiId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split("/")[2];
 
         reqParams.tf['name'] = jsonRequestBody.contentString.name;
         reqParams.tf['content_type'] = jsonRequestBody.contentString.contentType;
@@ -12140,7 +12155,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('apigateway', details.requestId),
             'region': region,
             'service': 'apigateway',
-            'type': 'AWS::ApiGateway::Model',
+            //'type': 'AWS::ApiGateway::Model',
+            'type': 'AWS::ApiGatewayV2::Model',
             'terraformType': 'aws_api_gateway_model',
             'options': reqParams,
             'requestDetails': details,
@@ -30189,15 +30205,18 @@ function analyseRequest(details) {
         reqParams.cli['--name'] = jsonRequestBody.contentString.info.title;
         reqParams.boto3['description'] = jsonRequestBody.contentString.info.description;
         reqParams.cli['--description'] = jsonRequestBody.contentString.info.description;
-        reqParams.boto3['version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
-        reqParams.cli['--api-version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
         reqParams.boto3['endpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
         reqParams.cli['--endpoint-configuration'] = jsonRequestBody.params.endpointConfigurationTypes;
 
         reqParams.cfn['Name'] = jsonRequestBody.contentString.info.title;
         reqParams.cfn['Description'] = jsonRequestBody.contentString.info.description;
-        reqParams.cfn['Version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
         reqParams.cfn['EndpointConfiguration'] = jsonRequestBody.params.endpointConfigurationTypes;
+
+        if (jsonRequestBody.contentString['x-amazon-apigateway-documentation']) {
+            reqParams.boto3['version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+            reqParams.cli['--api-version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+            reqParams.cfn['Version'] = jsonRequestBody.contentString['x-amazon-apigateway-documentation'].version;
+        }
         
         // TODO: More here
 
@@ -30225,6 +30244,44 @@ function analyseRequest(details) {
         
         return {};
     }
+
+
+    // autogen:apigateway:apigatewayv2.CreateApi
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path == "/apis") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
+        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
+        reqParams.boto3['ProtocolType'] = jsonRequestBody.contentString.protocolType;
+        reqParams.cli['--protocol-type'] = jsonRequestBody.contentString.protocolType;
+        reqParams.boto3['RouteSelectionExpression'] = jsonRequestBody.contentString.routeSelectionExpression;
+        reqParams.cli['--route-selection-expression'] = jsonRequestBody.contentString.routeSelectionExpression;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigatewayv2',
+            'method': {
+                'api': 'CreateApi',
+                'boto3': 'create_api',
+                'cli': 'create-api'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+            
+        tracked_resources.push({
+            'logicalId': getResourceName('apigateway', details.requestId),
+            'region': region,
+            'service': 'apigateway',
+            'type': 'AWS::ApiGatewayV2::Api',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 
     // autogen:apigateway:apigateway.CreateResource
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/resources\/.+$/g)) {
@@ -30280,7 +30337,7 @@ function analyseRequest(details) {
         reqParams.boto3['deploymentId'] = jsonRequestBody.contentString.deploymentId;
         reqParams.cli['--deployment-id'] = jsonRequestBody.contentString.deploymentId;
 
-        reqParams.cfn['RestApiId'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['ApiId'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
         reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
         reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
         reqParams.cfn['DeploymentId'] = jsonRequestBody.contentString.deploymentId;
@@ -30306,7 +30363,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('apigateway', details.requestId),
             'region': region,
             'service': 'apigateway',
-            'type': 'AWS::ApiGateway::Stage',
+            //'type': 'AWS::ApiGateway::Stage',
+            'type': 'AWS::ApiGatewayV2::Stage',
             'terraformType': 'aws_api_gateway_stage',
             'options': reqParams,
             'requestDetails': details,
@@ -33595,53 +33653,6 @@ function analyseRequest(details) {
         return {};
     }
 
-    // manual:apigateway:apigateway.CreateStage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/stages^/g) && jsonRequestBody.method == "POST") {
-        reqParams.boto3['stageName'] = jsonRequestBody.contentString.stageName;
-        reqParams.cli['--stage-name'] = jsonRequestBody.contentString.stageName;
-        reqParams.boto3['description'] = jsonRequestBody.contentString.description;
-        reqParams.cli['--description'] = jsonRequestBody.contentString.description;
-        reqParams.boto3['deploymentId'] = jsonRequestBody.contentString.deploymentId;
-        reqParams.cli['--deployment-id'] = jsonRequestBody.contentString.deploymentId;
-        reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
-        reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
-
-        reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
-        reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
-        reqParams.cfn['DeploymentId'] = jsonRequestBody.contentString.deploymentId;
-        reqParams.cfn['RestApiId'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
-
-        reqParams.tf['stage_name'] = jsonRequestBody.contentString.stageName;
-        reqParams.tf['description'] = jsonRequestBody.contentString.description;
-        reqParams.tf['deployment_id'] = jsonRequestBody.contentString.deploymentId;
-        reqParams.tf['rest_api_id'] = /$\/restapis\/(.+)\/stages^/g.exec(jsonRequestBody.path)[1];
-
-        outputs.push({
-            'region': region,
-            'service': 'apigateway',
-            'method': {
-                'api': 'CreateStage',
-                'boto3': 'create_stage',
-                'cli': 'create-stage'
-            },
-            'options': reqParams,
-            'requestDetails': details
-        });
-
-        tracked_resources.push({
-            'logicalId': getResourceName('apigateway', details.requestId),
-            'region': region,
-            'service': 'apigateway',
-            'type': 'AWS::ApiGateway::Stage',
-            'terraformType': 'aws_api_gateway_stage',
-            'options': reqParams,
-            'requestDetails': details,
-            'was_blocked': blocking
-        });
-        
-        return {};
-    }
-
     // autogen:apigateway:apigateway.CreateDeployment
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/deployments^/g) && jsonRequestBody.method == "POST") {
         reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
@@ -33651,7 +33662,7 @@ function analyseRequest(details) {
         reqParams.boto3['description'] = jsonRequestBody.contentString.description;
         reqParams.cli['--description'] = jsonRequestBody.contentString.description;
 
-        reqParams.cfn['RestApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
+        reqParams.cfn['ApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
         reqParams.cfn['StageName'] = jsonRequestBody.contentString.stageName;
         reqParams.cfn['Description'] = jsonRequestBody.contentString.description;
 
@@ -33675,7 +33686,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('apigateway', details.requestId),
             'region': region,
             'service': 'apigateway',
-            'type': 'AWS::ApiGateway::Deployment',
+            //'type': 'AWS::ApiGateway::Deployment',
+            'type': 'AWS::ApiGatewayV2::Deployment',
             'terraformType': 'aws_api_gateway_deployment',
             'options': reqParams,
             'requestDetails': details,
@@ -49786,6 +49798,170 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigatewayv2.CreateIntegration
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path.match(/^\/apis\/.+\/integrations$/g)) {
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split('/')[2];
+        reqParams.boto3['IntegrationType'] = jsonRequestBody.contentString.integrationType;
+        reqParams.cli['--integration-type'] = jsonRequestBody.contentString.integrationType;
+        reqParams.boto3['IntegrationMethod'] = jsonRequestBody.contentString.integrationMethod;
+        reqParams.cli['--integration-method'] = jsonRequestBody.contentString.integrationMethod;
+        reqParams.boto3['IntegrationUri'] = jsonRequestBody.contentString.integrationUri;
+        reqParams.cli['--integration-uri'] = jsonRequestBody.contentString.integrationUri;
+        reqParams.boto3['CredentialsArn'] = jsonRequestBody.contentString.credentialsArn;
+        reqParams.cli['--credentials-arn'] = jsonRequestBody.contentString.credentialsArn;
+        reqParams.boto3['ContentHandlingStrategy'] = jsonRequestBody.contentString.contentHandlingStrategy;
+        reqParams.cli['--content-handling-strategy'] = jsonRequestBody.contentString.contentHandlingStrategy;
+        reqParams.boto3['ConnectionType'] = jsonRequestBody.contentString.connectionType;
+        reqParams.cli['--connection-type'] = jsonRequestBody.contentString.connectionType;
+        reqParams.boto3['TimeoutInMillis'] = jsonRequestBody.contentString.timeoutInMillis;
+        reqParams.cli['--timeout-in-millis'] = jsonRequestBody.contentString.timeoutInMillis;
+
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cfn['IntegrationType'] = jsonRequestBody.contentString.integrationType;
+        reqParams.cfn['IntegrationMethod'] = jsonRequestBody.contentString.integrationMethod;
+        reqParams.cfn['IntegrationUri'] = jsonRequestBody.contentString.integrationUri;
+        reqParams.cfn['CredentialsArn'] = jsonRequestBody.contentString.credentialsArn;
+        reqParams.cfn['ContentHandlingStrategy'] = jsonRequestBody.contentString.contentHandlingStrategy;
+        reqParams.cfn['ConnectionType'] = jsonRequestBody.contentString.connectionType;
+        reqParams.cfn['TimeoutInMillis'] = jsonRequestBody.contentString.timeoutInMillis;
+
+        outputs.push({
+            'region': region,
+            'service': 'apigatewayv2',
+            'method': {
+                'api': 'CreateIntegration',
+                'boto3': 'create_integration',
+                'cli': 'create-integration'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigatewayv2', details.requestId),
+            'region': region,
+            'service': 'apigatewayv2',
+            'type': 'AWS::ApiGatewayV2::Integration',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigatewayv2.CreateRoute
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRoute") {
+        reqParams.boto3['RouteKey'] = jsonRequestBody.contentString.routeKey;
+        reqParams.cli['--route-key'] = jsonRequestBody.contentString.routeKey;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split('/')[2];
+
+        reqParams.cfn['RouteKey'] = jsonRequestBody.contentString.routeKey;
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split('/')[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'apigatewayv2',
+            'method': {
+                'api': 'CreateRoute',
+                'boto3': 'create_route',
+                'cli': 'create-route'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigatewayv2', details.requestId),
+            'region': region,
+            'service': 'apigatewayv2',
+            'type': 'AWS::ApiGatewayV2::Route',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigatewayv2.CreateRouteResponse
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRouteResponse") {
+        reqParams.boto3['RouteResponseKey'] = jsonRequestBody.contentString.routeResponseKey;
+        reqParams.cli['--route-response-key'] = jsonRequestBody.contentString.routeResponseKey;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split('/')[2];
+        reqParams.boto3['RouteId'] = jsonRequestBody.path.split('/')[4];
+        reqParams.cli['--route-id'] = jsonRequestBody.path.split('/')[4];
+
+        reqParams.cfn['RouteResponseKey'] = jsonRequestBody.contentString.routeResponseKey;
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cfn['RouteId'] = jsonRequestBody.path.split('/')[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'apigatewayv2',
+            'method': {
+                'api': 'CreateRouteResponse',
+                'boto3': 'create_route_response',
+                'cli': 'create-route-response'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigatewayv2', details.requestId),
+            'region': region,
+            'service': 'apigatewayv2',
+            'type': 'AWS::ApiGatewayV2::RouteResponse',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:apigateway:apigatewayv2.CreateIntegrationResponse
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createIntegrationResponse") {
+        reqParams.boto3['IntegrationResponseKey'] = jsonRequestBody.contentString.integrationResponseKey;
+        reqParams.cli['--integration-response-key'] = jsonRequestBody.contentString.integrationResponseKey;
+        reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cli['--api-id'] = jsonRequestBody.path.split('/')[2];
+        reqParams.boto3['IntegrationId'] = jsonRequestBody.path.split('/')[4];
+        reqParams.cli['--integration-id'] = jsonRequestBody.path.split('/')[4];
+
+        reqParams.cfn['IntegrationResponseKey'] = jsonRequestBody.contentString.integrationResponseKey;
+        reqParams.cfn['ApiId'] = jsonRequestBody.path.split('/')[2];
+        reqParams.cfn['IntegrationId'] = jsonRequestBody.path.split('/')[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'apigatewayv2',
+            'method': {
+                'api': 'CreateIntegrationResponse',
+                'boto3': 'create_integration_response',
+                'cli': 'create-integration-response'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('apigatewayv2', details.requestId),
+            'region': region,
+            'service': 'apigatewayv2',
+            'type': 'AWS::ApiGatewayV2::IntegrationResponse',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
