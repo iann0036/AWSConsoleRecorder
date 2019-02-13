@@ -31759,8 +31759,8 @@ function analyseRequest(details) {
 
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
-        reqParams.boto3['cersion'] = jsonRequestBody.contentString.version;
-        reqParams.cli['--version'] = jsonRequestBody.contentString.version;
+        reqParams.boto3['version'] = jsonRequestBody.contentString.version;
+        reqParams.cli['--kubernetes-version'] = jsonRequestBody.contentString.version;
         reqParams.boto3['roleArn'] = jsonRequestBody.contentString.roleArn;
         reqParams.cli['--role-arn'] = jsonRequestBody.contentString.roleArn;
         reqParams.boto3['resourcesVpcConfig'] = jsonRequestBody.contentString.resourcesVpcConfig;
@@ -31777,7 +31777,7 @@ function analyseRequest(details) {
         };
 
         reqParams.tf['name'] = jsonRequestBody.contentString.name;
-        reqParams.tf['version'] = jsonRequestBody.contentString.version;
+        reqParams.tf['cluster_version'] = jsonRequestBody.contentString.version;
         reqParams.tf['role_arn'] = jsonRequestBody.contentString.roleArn;
         reqParams.tf['vpc_config'] = {
             'security_group_ids': jsonRequestBody.contentString.resourcesVpcConfig.securityGroupIds,
