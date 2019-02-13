@@ -49967,4 +49967,64 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.CreateVpcEndpointConnectionNotification
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpointConnectionNotification\?/g)) {
+        reqParams.boto3['ServiceId'] = jsonRequestBody.ServiceId;
+        reqParams.cli['--service-id'] = jsonRequestBody.ServiceId;
+        reqParams.boto3['ConnectionNotificationArn'] = jsonRequestBody.ConnectionNotificationArn;
+        reqParams.cli['--connection-notification-arn'] = jsonRequestBody.ConnectionNotificationArn;
+        reqParams.boto3['ConnectionEvents'] = jsonRequestBody.ConnectionEvents;
+        reqParams.cli['--connection-events'] = jsonRequestBody.ConnectionEvents;
+
+        reqParams.cfn['ServiceId'] = jsonRequestBody.ServiceId;
+        reqParams.cfn['ConnectionNotificationArn'] = jsonRequestBody.ConnectionNotificationArn;
+        reqParams.cfn['ConnectionEvents'] = jsonRequestBody.ConnectionEvents;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateVpcEndpointConnectionNotification',
+                'boto3': 'create_vpc_endpoint_connection_notification',
+                'cli': 'create-vpc-endpoint-connection-notification'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCEndpointConnectionNotification',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcEndpointConnectionNotifications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointConnectionNotifications\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.Filters;
+        reqParams.cli['--filters'] = jsonRequestBody.Filters;
+        reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcEndpointConnectionNotifications',
+                'boto3': 'describe_vpc_endpoint_connection_notifications',
+                'cli': 'describe-vpc-endpoint-connection-notifications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
