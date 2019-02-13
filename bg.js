@@ -31984,8 +31984,8 @@ function analyseRequest(details) {
 
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
-        reqParams.boto3['cersion'] = jsonRequestBody.contentString.version;
-        reqParams.cli['--version'] = jsonRequestBody.contentString.version;
+        reqParams.boto3['version'] = jsonRequestBody.contentString.version;
+        reqParams.cli['--kubernetes-version'] = jsonRequestBody.contentString.version;
         reqParams.boto3['roleArn'] = jsonRequestBody.contentString.roleArn;
         reqParams.cli['--role-arn'] = jsonRequestBody.contentString.roleArn;
         reqParams.boto3['resourcesVpcConfig'] = jsonRequestBody.contentString.resourcesVpcConfig;
