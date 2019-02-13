@@ -31777,7 +31777,7 @@ function analyseRequest(details) {
         };
 
         reqParams.tf['name'] = jsonRequestBody.contentString.name;
-        reqParams.tf['cluster_version'] = jsonRequestBody.contentString.version;
+        reqParams.tf['version'] = jsonRequestBody.contentString.version;
         reqParams.tf['role_arn'] = jsonRequestBody.contentString.roleArn;
         reqParams.tf['vpc_config'] = {
             'security_group_ids': jsonRequestBody.contentString.resourcesVpcConfig.securityGroupIds,
