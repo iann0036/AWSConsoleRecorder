@@ -26202,8 +26202,51 @@ function analyseRequest(details) {
         reqParams.cfn['Description'] = jsonRequestBody.description;
         reqParams.cfn['InputParameters'] = jsonRequestBody.inputParameters;
         reqParams.cfn['MaximumExecutionFrequency'] = jsonRequestBody.maximumExecutionFrequency;
-        reqParams.cfn['Scope'] = jsonRequestBody.scope;
-        reqParams.cfn['Source'] = jsonRequestBody.source;
+        if (JSON.stringify(jsonRequestBody.scope) != JSON.stringify({})) {
+            reqParams.cfn['Scope'] = {
+                'ComplianceResourceId': jsonRequestBody.scope.complianceResourceId,
+                'ComplianceResourceTypes': jsonRequestBody.scope.complianceResourceTypes,
+            };
+        }
+
+        reqParams.tf['name'] = jsonRequestBody.configRuleName;
+        reqParams.tf['description'] = jsonRequestBody.description;
+        reqParams.tf['input_parameters'] = jsonRequestBody.inputParameters;
+        reqParams.tf['maximum_execution_frequency'] = jsonRequestBody.maximumExecutionFrequency;
+        if (JSON.stringify(jsonRequestBody.scope) != JSON.stringify({})) {
+            reqParams.tf['scope'] = {
+                'compliance_resource_id': jsonRequestBody.scope.complianceResourceId,
+                'compliance_resource_types': jsonRequestBody.scope.complianceResourceTypes,
+            };
+        }
+        var source_detail = null;
+        var source_detail_cfn = null;
+        if (jsonRequestBody.source.sourceDetails) {
+            source_detail = [];
+            source_detail_cfn = [];
+            for (var i=0; i<jsonRequestBody.source.sourceDetails.length; i++) {
+                source_detail.push({
+                    'event_source': jsonRequestBody.source.sourceDetails[i].eventSource,
+                    'maximum_execution_frequency': jsonRequestBody.source.sourceDetails[i].maximumExecutionFrequency,
+                    'message_type': jsonRequestBody.source.sourceDetails[i].messageType
+                });
+                source_detail_cfn.push({
+                    'EventSource': jsonRequestBody.source.sourceDetails[i].eventSource,
+                    'MaximumExecutionFrequency': jsonRequestBody.source.sourceDetails[i].maximumExecutionFrequency,
+                    'MessageType': jsonRequestBody.source.sourceDetails[i].messageType
+                });
+            }
+        }
+        reqParams.tf['source'] = {
+            'owner': jsonRequestBody.source.owner,
+            'source_detail': source_detail,
+            'source_identifier': jsonRequestBody.source.sourceIdentifier
+        };
+        reqParams.cfn['Source'] = {
+            'Owner': jsonRequestBody.source.owner,
+            'SourceDetails': source_detail_cfn,
+            'SourceIdentifier': jsonRequestBody.source.sourceIdentifier
+        };
 
         outputs.push({
             'region': region,
@@ -26222,6 +26265,7 @@ function analyseRequest(details) {
             'region': region,
             'service': 'config',
             'type': 'AWS::Config::ConfigRule',
+            'terraformType': 'aws_config_config_rule',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking

@@ -1,6 +1,6 @@
 {
   "name": "Console Recorder for AWS",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "manifest_version": 2,
   "description": "Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation/TF templates.",
   "content_security_policy": "script-src 'self'; object-src 'self'",
