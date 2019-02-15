@@ -198,6 +198,8 @@ window.onload = function(){
             document.getElementById('cleardata_btn').setAttribute("disabled", "disabled");
         });
     };
+
+    document.getElementById('extversion').innerHTML = chrome.runtime.getManifest().version;
 };
 
 function resetMenu() {
