@@ -4231,6 +4231,7 @@ function getUrlValue(url, key) {
 
 function getPipeSplitField(str, index) { // DEPRECATED, use interpretGwtWireRequest instead
     if (!str) return null;
+    if (str == "") return null;
     
     var pipesplit = str.split("|");
 
