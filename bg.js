@@ -4231,13 +4231,14 @@ function getUrlValue(url, key) {
 
 function getPipeSplitField(str, index) { // DEPRECATED, use interpretGwtWireRequest instead
     if (!str) return null;
-    if (str == "") return null;
     
     var pipesplit = str.split("|");
 
     var result = pipesplit[parseInt(index)];
 
-    if (isNaN(result)) {
+    if (result == "") return null;
+
+    if (isNaN(parseInt(result))) {
         return result;
     }
 
@@ -22481,8 +22482,10 @@ function analyseRequest(details) {
         reqParams.cli['--hosted-zone-config'] = {
             'Comment': getPipeSplitField(requestBody, 12)
         };
-        reqParams.boto3['VPC'] = getPipeSplitField(requestBody, 15);
-        reqParams.cli['--vpc'] = getPipeSplitField(requestBody, 15);
+        if (getPipeSplitField(requestBody, 15)) {
+            reqParams.boto3['VPC'] = getPipeSplitField(requestBody, 15);
+            reqParams.cli['--vpc'] = getPipeSplitField(requestBody, 15);
+        }
         reqParams.boto3['CallerReference'] = getPipeSplitField(requestBody, 16);
         reqParams.cli['--caller-reference'] = getPipeSplitField(requestBody, 16);
 
@@ -22490,17 +22493,21 @@ function analyseRequest(details) {
         reqParams.cfn['HostedZoneConfig'] = {
             'Comment': getPipeSplitField(requestBody, 12)
         };
-        reqParams.cfn['VPCs'] = [{
-            'VPCId': getPipeSplitField(requestBody, 15),
-            'VPCRegion': getPipeSplitField(requestBody, 17)
-        }];
+        if (getPipeSplitField(requestBody, 15)) {
+            reqParams.cfn['VPCs'] = [{
+                'VPCId': getPipeSplitField(requestBody, 15),
+                'VPCRegion': getPipeSplitField(requestBody, 17)
+            }];
+        }
 
         reqParams.tf['name'] = getPipeSplitField(requestBody, 11);
         reqParams.tf['comment'] = getPipeSplitField(requestBody, 12);
-        reqParams.tf['vpc'] = {
-            'vpc_id': getPipeSplitField(requestBody, 15),
-            'vpc_region': getPipeSplitField(requestBody, 17)
-        };
+        if (getPipeSplitField(requestBody, 15)) {
+            reqParams.tf['vpc'] = {
+                'vpc_id': getPipeSplitField(requestBody, 15),
+                'vpc_region': getPipeSplitField(requestBody, 17)
+            };
+        }
 
         outputs.push({
             'region': region,
