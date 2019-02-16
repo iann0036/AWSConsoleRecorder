@@ -2195,6 +2195,14 @@ function processCfnParameter(param, spacing, index) {
                     pre_return_str = "!Sub ";
                     param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
                 }
+                if (tracked_resources[i].returnValues.GetAtt) {
+                    for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
+                        for (var j=0; j<10 && param.includes(tracked_resources[i].returnValues.GetAtt[attr_name]); j++) { // replace many
+                            pre_return_str = "!Sub ";
+                            param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
+                        }
+                    }
+                }
             }
         }
         
