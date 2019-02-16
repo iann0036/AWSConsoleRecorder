@@ -2178,6 +2178,7 @@ function processCfnParameter(param, spacing, index) {
             return `${param}`;
         }
 
+        var pre_return_str = "";
         for (var i=0; i<index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
@@ -2190,6 +2191,10 @@ function processCfnParameter(param, spacing, index) {
                         }
                     }
                 }
+                for (var j=0; j<10 && param.includes(tracked_resources[i].returnValues.Ref); j++) { // replace many
+                    pre_return_str = "!Sub ";
+                    param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
+                }
             }
         }
         
@@ -2197,12 +2202,12 @@ function processCfnParameter(param, spacing, index) {
 
         if (string_return.includes("\n")) {
             string_return = "|\n" + ' '.repeat(spacing + 4) + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4));
-            return string_return;
+            return pre_return_str + string_return;
         }
         
         string_return = param.replace(/\"/g,`\\"`);
 
-        return `"${string_return}"`;
+        return pre_return_str + `"${string_return}"`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -5105,7 +5110,7 @@ function setOutputsForTrackedResource(index) {
             ; // TODO
         } else if (tracked_resources[index].type == "AWS::S3::Bucket") {
             tracked_resources[index].returnValues = {
-                'Ref': null,
+                'Ref': tracked_resources[index].options.cfn.BucketName,
                 'GetAtt': {
                     'Arn': "arn:aws:s3:::" + tracked_resources[index].options.cfn.BucketName
                     //'DomainName': jsonResponseBody.,
