@@ -2095,9 +2095,16 @@ function processTfParameter(param, spacing, index) {
             }
         }
 
-        // TODO: Check for multiline |\n + indent
+        var string_return = param;
 
-        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
+        if (string_return.includes("\n")) {
+            string_return = "<<EOF\n" + string_return + "\nEOF";
+            return string_return;
+        }
+        
+        string_return = param.replace(/\"/g,`\\"`);
+
+        return `"${string_return}"`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -2185,10 +2192,17 @@ function processCfnParameter(param, spacing, index) {
                 }
             }
         }
+        
+        var string_return = param;
 
-        // TODO: Check for multiline |\n + indent
+        if (string_return.includes("\n")) {
+            string_return = "|\n" + ' '.repeat(spacing + 4) + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4));
+            return string_return;
+        }
+        
+        string_return = param.replace(/\"/g,`\\"`);
 
-        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
+        return `"${string_return}"`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -2259,7 +2273,16 @@ function processCdktsParameter(param, spacing, index) {
             }
         }
 
-        return `"${param.replace(/\"/g,`\"`)}"`; // TODO: Check this works
+        var string_return = param;
+
+        if (string_return.includes("\n")) {
+            string_return = "`" + string_return + "`";
+            return string_return;
+        }
+        
+        string_return = param.replace(/\"/g,`\\"`);
+
+        return `"${string_return}"`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -2346,9 +2369,16 @@ function processTroposphereParameter(param, spacing, keyname, index) {
             }
         }
 
-        // TODO: Check for multiline
+        var string_return = param;
 
-        return `'${param.replace(/\"/g,`\"`)}'`; // TODO: Check this works
+        if (string_return.includes("\n")) {
+            string_return = "\"\"\"" + ' '.repeat(spacing + 4) + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4)) + "\n\"\"\"";
+            return string_return;
+        }
+        
+        string_return = param.replace(/'/g,`\\'`);
+
+        return `'${string_return}'`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -3013,8 +3043,18 @@ function processJsParameter(param, spacing) {
     }
     if (typeof param == "number")
         return `${param}`;
-    if (typeof param == "string")
-        return `'${param}'`;
+    if (typeof param == "string") {
+        var string_return = param;
+
+        if (string_return.includes("\n")) {
+            string_return = "`" + string_return + "`";
+            return string_return;
+        }
+        
+        string_return = param.replace(/\"/g,`\\"`);
+
+        return `"${string_return}"`;
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
@@ -3061,8 +3101,18 @@ function processBoto3Parameter(param, spacing) {
     }
     if (typeof param == "number")
         return `${param}`;
-    if (typeof param == "string")
-        return `'${param}'`;
+    if (typeof param == "string") {
+        var string_return = param;
+
+        if (string_return.includes("\n")) {
+            string_return = "\"\"\"" + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4)) + "\n\"\"\"";
+            return string_return;
+        }
+        
+        string_return = param.replace(/'/g,`\\'`);
+
+        return `'${string_return}'`;
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
@@ -3127,8 +3177,18 @@ function processGoParameter(service, paramkey, param, spacing) {
     }
     if (typeof param == "number")
         return `aws.Int64(${param})`;
-    if (typeof param == "string")
-        return `aws.String("${param}")`;
+    if (typeof param == "string") {
+        var string_return = param;
+
+        if (string_return.includes("\n")) {
+            string_return = "aws.String(`" + string_return + "`)";
+            return string_return;
+        }
+        
+        string_return = param.replace(/\"/g,`\\"`);
+
+        return `aws.String("${string_return}")`;
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return `[]*${service}.${paramkey}{}`;
@@ -35020,17 +35080,17 @@ function analyseRequest(details) {
 
         reqParams.boto3['name'] = jsonRequestBody.name;
         reqParams.cli['--name'] = jsonRequestBody.name;
-        reqParams.boto3['definition'] = jsonRequestBody.definition;
-        reqParams.cli['--definition'] = jsonRequestBody.definition;
+        reqParams.boto3['definition'] = JSON.stringify(jsonRequestBody.definition, null, 4);
+        reqParams.cli['--definition'] = JSON.stringify(jsonRequestBody.definition, null, 4);
         reqParams.boto3['roleArn'] = jsonRequestBody.roleArn;
         reqParams.cli['--role-arn'] = jsonRequestBody.roleArn;
 
         reqParams.cfn['StateMachineName'] = jsonRequestBody.name;
-        reqParams.cfn['DefinitionString'] = jsonRequestBody.definition;
+        reqParams.cfn['DefinitionString'] = JSON.stringify(jsonRequestBody.definition, null, 4);
         reqParams.cfn['RoleArn'] = jsonRequestBody.roleArn;
 
         reqParams.tf['name'] = jsonRequestBody.name;
-        reqParams.tf['definition'] = jsonRequestBody.definition;
+        reqParams.tf['definition'] = JSON.stringify(jsonRequestBody.definition, null, 4);
         reqParams.tf['role_arn'] = jsonRequestBody.roleArn;
 
         outputs.push({
