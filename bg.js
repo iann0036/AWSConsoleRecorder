@@ -22489,12 +22489,16 @@ function analyseRequest(details) {
         reqParams.cfn['HostedZoneConfig'] = {
             'Comment': getPipeSplitField(requestBody, 12)
         };
-        reqParams.cfn['VPCs'] = [getPipeSplitField(requestBody, 15)];
+        reqParams.cfn['VPCs'] = [{
+            'VPCId': getPipeSplitField(requestBody, 15),
+            'VPCRegion': getPipeSplitField(requestBody, 17)
+        }];
 
         reqParams.tf['name'] = getPipeSplitField(requestBody, 11);
         reqParams.tf['comment'] = getPipeSplitField(requestBody, 12);
         reqParams.tf['vpc'] = {
-            'vpc_id': getPipeSplitField(requestBody, 15)
+            'vpc_id': getPipeSplitField(requestBody, 15),
+            'vpc_region': getPipeSplitField(requestBody, 17)
         };
 
         outputs.push({
