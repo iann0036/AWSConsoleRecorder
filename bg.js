@@ -50156,4 +50156,188 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:fsx:ds.DescribeDirectories
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/directoryservice$/g) && jsonRequestBody.operation == "describeDirectories") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DescribeDirectories',
+                'boto3': 'describe_directories',
+                'cli': 'describe-directories'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:kms.DescribeKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+        reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'DescribeKey',
+                'boto3': 'describe_key',
+                'cli': 'describe-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:fsx.DescribeFileSystems
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "describeFileSystems") {
+
+        outputs.push({
+            'region': region,
+            'service': 'fsx',
+            'method': {
+                'api': 'DescribeFileSystems',
+                'boto3': 'describe_file_systems',
+                'cli': 'describe-file-systems'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:fsx.CreateFileSystem
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "createFileSystem") {
+        reqParams.boto3['FileSystemType'] = jsonRequestBody.contentString.FileSystemType;
+        reqParams.cli['--file-system-type'] = jsonRequestBody.contentString.FileSystemType;
+        reqParams.boto3['StorageCapacity'] = jsonRequestBody.contentString.StorageCapacity;
+        reqParams.cli['--storage-capacity'] = jsonRequestBody.contentString.StorageCapacity;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.contentString.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.contentString.SubnetIds;
+        reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.boto3['LustreConfiguration'] = jsonRequestBody.contentString.LustreConfiguration;
+        reqParams.cli['--lustre-configuration'] = jsonRequestBody.contentString.LustreConfiguration;
+        reqParams.boto3['WindowsConfiguration'] = jsonRequestBody.contentString.WindowsConfiguration;
+        reqParams.cli['--windows-configuration'] = jsonRequestBody.contentString.WindowsConfiguration;
+        reqParams.boto3['Tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.cli['--tags'] = jsonRequestBody.contentString.Tags;
+        reqParams.boto3['ClientRequestToken'] = jsonRequestBody.contentString.ClientRequestToken;
+        reqParams.cli['--client-request-token'] = jsonRequestBody.contentString.ClientRequestToken;
+
+        reqParams.cfn['FileSystemType'] = jsonRequestBody.contentString.FileSystemType;
+        reqParams.cfn['StorageCapacity'] = jsonRequestBody.contentString.StorageCapacity;
+        reqParams.cfn['SubnetIds'] = jsonRequestBody.contentString.SubnetIds;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.contentString.SecurityGroupIds;
+        reqParams.cfn['LustreConfiguration'] = jsonRequestBody.contentString.LustreConfiguration;
+        reqParams.cfn['WindowsConfiguration'] = jsonRequestBody.contentString.WindowsConfiguration;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.Tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'fsx',
+            'method': {
+                'api': 'CreateFileSystem',
+                'boto3': 'create_file_system',
+                'cli': 'create-file-system'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('fsx', details.requestId),
+            'region': region,
+            'service': 'fsx',
+            'type': 'AWS::FSx::FileSystem',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:fsx:fsx.DeleteFileSystem
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "deleteFileSystem") {
+        reqParams.boto3['FileSystemId'] = jsonRequestBody.contentString.FileSystemId;
+        reqParams.cli['--file-system-id'] = jsonRequestBody.contentString.FileSystemId;
+        reqParams.boto3['ClientRequestToken'] = jsonRequestBody.contentString.ClientRequestToken;
+        reqParams.cli['--client-request-token'] = jsonRequestBody.contentString.ClientRequestToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'fsx',
+            'method': {
+                'api': 'DeleteFileSystem',
+                'boto3': 'delete_file_system',
+                'cli': 'delete-file-system'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
