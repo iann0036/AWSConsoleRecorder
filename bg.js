@@ -4178,9 +4178,13 @@ chrome.runtime.onMessage.addListener(
                     function(tabArray) {
                         for (var i=0; i<tabArray.length; i++) {
                             var tab = tabArray[i];
-                            chrome.debugger.attach({
-                                tabId: tab.id
-                            }, "1.2", onAttach.bind(null, tab.id));
+                            try {
+                                chrome.debugger.attach({
+                                    tabId: tab.id
+                                }, "1.2", onAttach.bind(null, tab.id));
+                            } catch(e) {
+                                ;
+                            }
                         }
                     }
                 );
@@ -4196,18 +4200,22 @@ chrome.runtime.onMessage.addListener(
             chrome.webRequest.onBeforeRequest.removeListener(analyseRequest);
 
             if (intercept && navigator.userAgent.search("Firefox") == -1) {
-                chrome.debugger.onEvent.removeListener(allEventHandler);
-                chrome.debugger.getTargets(function(targets) {
-                    for (var i=0; i<targets.length; i++) {
-                        chrome.debugger.detach({ // have to construct the object?!?
-                            'tabId': targets[i].tabId,
-                            'extensionId': targets[i].extensionId,
-                            'targetId': targets[i].id
-                        }, function(){
-                            void chrome.runtime.lastError; // don't care
-                        });
-                    }
-                });
+                try {
+                    chrome.debugger.onEvent.removeListener(allEventHandler);
+                    chrome.debugger.getTargets(function(targets) {
+                        for (var i=0; i<targets.length; i++) {
+                            chrome.debugger.detach({ // have to construct the object?!?
+                                'tabId': targets[i].tabId,
+                                'extensionId': targets[i].extensionId,
+                                'targetId': targets[i].id
+                            }, function(){
+                                void chrome.runtime.lastError; // don't care
+                            });
+                        }
+                    });
+                } catch(e) {
+                    ;
+                }
             }
 
             chrome.browserAction.setBadgeText({ text: "" });
@@ -32659,6 +32667,11 @@ function analyseRequest(details) {
 
         reqParams.cfn['ApplicationName'] = jsonRequestBody.content.ApplicationName;
         reqParams.cfn['ApplicationDescription'] = jsonRequestBody.content.ApplicationDescription;
+        reqParams.cfn['RuntimeEnvironment'] = "SQL-1.0";
+        if (jsonRequestBody.content.RuntimeEnvironment) {
+            reqParams.cfn['RuntimeEnvironment'] = jsonRequestBody.content.RuntimeEnvironment;
+        }
+        reqParams.cfn['ServiceExecutionRole'] = jsonRequestBody.content.ServiceExecutionRole;
 
         reqParams.tf['name'] = jsonRequestBody.content.ApplicationName;
         reqParams.tf['description'] = jsonRequestBody.content.ApplicationDescription;
@@ -32679,7 +32692,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('kinesisanalytics', details.requestId),
             'region': region,
             'service': 'kinesisanalytics',
-            'type': 'AWS::KinesisAnalytics::Application',
+            //'type': 'AWS::KinesisAnalytics::Application',
+            'type': 'AWS::KinesisAnalyticsV2::Application',
             'terraformType': 'aws_kinesis_analytics_application',
             'options': reqParams,
             'requestDetails': details,
@@ -32994,7 +33008,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('kinesisanalytics', details.requestId),
             'region': region,
             'service': 'kinesisanalytics',
-            'type': 'AWS::KinesisAnalytics::ApplicationOutput',
+            //'type': 'AWS::KinesisAnalytics::ApplicationOutput',
+            'type': 'AWS::KinesisAnalyticsV2::ApplicationOutput',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
@@ -41358,7 +41373,8 @@ function analyseRequest(details) {
             'logicalId': getResourceName('kinesisanalyticsv2', details.requestId),
             'region': region,
             'service': 'kinesisanalyticsv2',
-            'type': 'AWS::KinesisAnalytics::ApplicationReferenceDataSource',
+            //'type': 'AWS::KinesisAnalytics::ApplicationReferenceDataSource',
+            'type': 'AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource',
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
