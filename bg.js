@@ -49990,6 +49990,12 @@ function analyseRequest(details) {
             }
         }
 
+        reqParams.cfn['AllowExternalPrincipals'] = jsonRequestBody.allowExternalPrincipals;
+        reqParams.cfn['Name'] = jsonRequestBody.name;
+        reqParams.cfn['Principals'] = jsonRequestBody.principals;
+        reqParams.cfn['ResourceArns'] = jsonRequestBody.resourceArns;
+        reqParams.cfn['Tags'] = jsonRequestBody.tags;
+
         outputs.push({
             'region': region,
             'service': 'ram',
@@ -50006,6 +50012,7 @@ function analyseRequest(details) {
             'logicalId': getResourceName('ram', details.requestId),
             'region': region,
             'service': 'ram',
+            'type': 'AWS::RAM::ResourceShare',
             'terraformType': 'aws_ram_resource_share',
             'options': reqParams,
             'requestDetails': details,
@@ -50539,6 +50546,976 @@ function analyseRequest(details) {
                 'api': 'DeleteFileSystem',
                 'boto3': 'delete_file_system',
                 'cli': 'delete-file-system'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ram.GetResourceShareInvitations
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShareInvitations$/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ram',
+            'method': {
+                'api': 'GetResourceShareInvitations',
+                'boto3': 'get_resource_share_invitations',
+                'cli': 'get-resource-share-invitations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:organizations.DescribeOrganization
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazon\.awsorganizations\.v20161128\.AWSOrganizationsV20161128\.DescribeOrganization$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'organizations',
+            'method': {
+                'api': 'DescribeOrganization',
+                'boto3': 'describe_organization',
+                'cli': 'describe-organization'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ram:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs$/g)) {
+        reqParams.boto3['VpcIds'] = jsonRequestBody.VpcIds;
+        reqParams.cli['--vpc-ids'] = jsonRequestBody.VpcIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.ListFleets
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listFleets") {
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'ListFleets',
+                'boto3': 'list_fleets',
+                'cli': 'list-fleets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.ListRobots
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobots") {
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'ListRobots',
+                'boto3': 'list_robots',
+                'cli': 'list-robots'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.ListRobotApplications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobotApplications") {
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'ListRobotApplications',
+                'boto3': 'list_robot_applications',
+                'cli': 'list-robot-applications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.ListSimulationApplications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationApplications") {
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'ListSimulationApplications',
+                'boto3': 'list_simulation_applications',
+                'cli': 'list-simulation-applications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.ListSimulationJobs
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationJobs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'ListSimulationJobs',
+                'boto3': 'list_simulation_jobs',
+                'cli': 'list-simulation-jobs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createFleet") {
+        reqParams.boto3['name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateFleet',
+                'boto3': 'create_fleet',
+                'cli': 'create-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::Fleet',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeFleet") {
+        reqParams.boto3['fleet'] = jsonRequestBody.contentString.fleet;
+        reqParams.cli['--fleet'] = jsonRequestBody.contentString.fleet;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeFleet',
+                'boto3': 'describe_fleet',
+                'cli': 'describe-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iam.ListGroups
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "listGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListGroups',
+                'boto3': 'list_groups',
+                'cli': 'list-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iam.ListRoles
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'ListRoles',
+                'boto3': 'list_roles',
+                'cli': 'list-roles'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:iam:iam.UpdateAssumeRolePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/UpdateAssumeRolePolicy$/g)) {
+        reqParams.boto3['RoleName'] = jsonRequestBody.roleName;
+        reqParams.cli['--role-name'] = jsonRequestBody.roleName;
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.policyDocument;
+        reqParams.cli['--policy-document'] = jsonRequestBody.policyDocument;
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'UpdateAssumeRolePolicy',
+                'boto3': 'update_assume_role_policy',
+                'cli': 'update-assume-role-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.CreateKeysAndCertificate
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createKeysAndCertificate") {
+        reqParams.boto3['setAsActive'] = jsonRequestBody.params.setAsActive;
+        reqParams.cli['--set-as-active'] = jsonRequestBody.params.setAsActive;
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateKeysAndCertificate',
+                'boto3': 'create_keys_and_certificate',
+                'cli': 'create-keys-and-certificate'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.CreateThing
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createThing") {
+        reqParams.boto3['thingName'] = jsonRequestBody['path'].split("/")[2];
+        reqParams.cli['--thing-name'] = jsonRequestBody['path'].split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreateThing',
+                'boto3': 'create_thing',
+                'cli': 'create-thing'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.AttachThingPrincipal
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachThingPrincipal") {
+        reqParams.boto3['principal'] = jsonRequestBody.headers.x-amzn-principal;
+        reqParams.cli['--principal'] = jsonRequestBody.headers.x-amzn-principal;
+        reqParams.boto3['thingName'] = jsonRequestBody['path'].split("/")[2];
+        reqParams.cli['--thing-name'] = jsonRequestBody['path'].split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'AttachThingPrincipal',
+                'boto3': 'attach_thing_principal',
+                'cli': 'attach-thing-principal'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.CreatePolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createPolicy") {
+        reqParams.boto3['policyDocument'] = jsonRequestBody.contentString.policyDocument;
+        reqParams.cli['--policy-document'] = jsonRequestBody.contentString.policyDocument;
+        reqParams.boto3['policyName'] = jsonRequestBody['path'].split("/")[2];
+        reqParams.cli['--policy-name'] = jsonRequestBody['path'].split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'CreatePolicy',
+                'boto3': 'create_policy',
+                'cli': 'create-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.AttachPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachPolicy") {
+        reqParams.boto3['target'] = jsonRequestBody.contentString.target;
+        reqParams.cli['--target'] = jsonRequestBody.contentString.target;
+        reqParams.boto3['policyName'] = jsonRequestBody['path'].split("/")[2];
+        reqParams.cli['--policy-name'] = jsonRequestBody['path'].split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'AttachPolicy',
+                'boto3': 'attach_policy',
+                'cli': 'attach-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:greengrass.CreateGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroup") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'greengrass',
+            'method': {
+                'api': 'CreateGroup',
+                'boto3': 'create_group',
+                'cli': 'create-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:greengrass.AssociateRoleToGroup
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "associateRoleToGroup") {
+        reqParams.boto3['RoleArn'] = jsonRequestBody.contentString.RoleArn;
+        reqParams.cli['--role-arn'] = jsonRequestBody.contentString.RoleArn;
+        reqParams.boto3['GroupId'] = jsonRequestBody['path'].split("/")[3];
+        reqParams.cli['--group-id'] = jsonRequestBody['path'].split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'greengrass',
+            'method': {
+                'api': 'AssociateRoleToGroup',
+                'boto3': 'associate_role_to_group',
+                'cli': 'associate-role-to-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:greengrass.CreateCoreDefinition
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinition") {
+        reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
+
+        outputs.push({
+            'region': region,
+            'service': 'greengrass',
+            'method': {
+                'api': 'CreateCoreDefinition',
+                'boto3': 'create_core_definition',
+                'cli': 'create-core-definition'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:greengrass.CreateCoreDefinitionVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinitionVersion") {
+        reqParams.boto3['Cores'] = jsonRequestBody.contentString.Cores;
+        reqParams.cli['--cores'] = jsonRequestBody.contentString.Cores;
+        reqParams.boto3['CoreDefinitionId'] = jsonRequestBody['path'].split("/")[4];
+        reqParams.cli['--core-definition-id'] = jsonRequestBody['path'].split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'greengrass',
+            'method': {
+                'api': 'CreateCoreDefinitionVersion',
+                'boto3': 'create_core_definition_version',
+                'cli': 'create-core-definition-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:greengrass.CreateGroupVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroupVersion") {
+        reqParams.boto3['CoreDefinitionVersionArn'] = jsonRequestBody.contentString.CoreDefinitionVersionArn;
+        reqParams.cli['--core-definition-version-arn'] = jsonRequestBody.contentString.CoreDefinitionVersionArn;
+        reqParams.boto3['GroupId'] = jsonRequestBody['path'].split("/")[3];
+        reqParams.cli['--group-id'] = jsonRequestBody['path'].split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'greengrass',
+            'method': {
+                'api': 'CreateGroupVersion',
+                'boto3': 'create_group_version',
+                'cli': 'create-group-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:iot.DescribeEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "describeEndpoint") {
+
+        outputs.push({
+            'region': region,
+            'service': 'iot',
+            'method': {
+                'api': 'DescribeEndpoint',
+                'boto3': 'describe_endpoint',
+                'cli': 'describe-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateRobot
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobot") {
+        reqParams.boto3['architecture'] = jsonRequestBody.contentString.architecture;
+        reqParams.cli['--architecture'] = jsonRequestBody.contentString.architecture;
+        reqParams.boto3['greengrassGroupId'] = jsonRequestBody.contentString.greengrassGroupId;
+        reqParams.cli['--greengrass-group-id'] = jsonRequestBody.contentString.greengrassGroupId;
+        reqParams.boto3['name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+
+        reqParams.cfn['Architecture'] = jsonRequestBody.contentString.architecture;
+        reqParams.cfn['GreengrassGroupId'] = jsonRequestBody.contentString.greengrassGroupId;
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateRobot',
+                'boto3': 'create_robot',
+                'cli': 'create-robot'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::Robot',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeRobot
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
+        reqParams.boto3['robot'] = jsonRequestBody.contentString.robot;
+        reqParams.cli['--robot'] = jsonRequestBody.contentString.robot;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeRobot',
+                'boto3': 'describe_robot',
+                'cli': 'describe-robot'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateRobotApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplication") {
+        reqParams.boto3['name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['robotSoftwareSuite'] = jsonRequestBody.contentString.robotSoftwareSuite;
+        reqParams.cli['--robot-software-suite'] = jsonRequestBody.contentString.robotSoftwareSuite;
+        reqParams.boto3['sources'] = jsonRequestBody.contentString.sources;
+        reqParams.cli['--sources'] = jsonRequestBody.contentString.sources;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['RobotSoftwareSuite'] = {
+            'Name': jsonRequestBody.contentString.robotSoftwareSuite.name,
+            'Version': jsonRequestBody.contentString.robotSoftwareSuite.version
+        };
+        reqParams.cfn['Sources'] = [];
+        for (var i=0; i<jsonRequestBody.contentString.sources.length; i++) {
+            reqParams.cfn['Sources'].push({
+                'Architecture': jsonRequestBody.contentString.sources[i].architecture,
+                'S3Bucket': jsonRequestBody.contentString.sources[i].s3Bucket,
+                'S3Key': jsonRequestBody.contentString.sources[i].s3Key,
+            });
+        }
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateRobotApplication',
+                'boto3': 'create_robot_application',
+                'cli': 'create-robot-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::RobotApplication',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeRobotApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+        reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
+        reqParams.cli['--application-version'] = jsonRequestBody.contentString.applicationVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeRobotApplication',
+                'boto3': 'describe_robot_application',
+                'cli': 'describe-robot-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateRobotApplicationVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplicationVersion") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+
+        reqParams.cfn['Application'] = jsonRequestBody.contentString.application;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateRobotApplicationVersion',
+                'boto3': 'create_robot_application_version',
+                'cli': 'create-robot-application-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::RobotApplicationVersion',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeRobotApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+        reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
+        reqParams.cli['--application-version'] = jsonRequestBody.contentString.applicationVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeRobotApplication',
+                'boto3': 'describe_robot_application',
+                'cli': 'describe-robot-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:s3.ListObjectsV2
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/s3$/g) && jsonRequestBody.operation == "listObjectsV2") {
+        reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
+        reqParams.cli['--prefix'] = jsonRequestBody.params.prefix;
+        reqParams.boto3['Bucket'] = jsonRequestBody.path.split("/")[1];
+        reqParams.cli['--bucket'] = jsonRequestBody.path.split("/")[1];
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListObjectsV2',
+                'boto3': 'list_objects_v2',
+                'cli': 'list-objects-v2'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateSimulationApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplication") {
+        reqParams.boto3['name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['renderingEngine'] = jsonRequestBody.contentString.renderingEngine;
+        reqParams.cli['--rendering-engine'] = jsonRequestBody.contentString.renderingEngine;
+        reqParams.boto3['robotSoftwareSuite'] = jsonRequestBody.contentString.robotSoftwareSuite;
+        reqParams.cli['--robot-software-suite'] = jsonRequestBody.contentString.robotSoftwareSuite;
+        reqParams.boto3['simulationSoftwareSuite'] = jsonRequestBody.contentString.simulationSoftwareSuite;
+        reqParams.cli['--simulation-software-suite'] = jsonRequestBody.contentString.simulationSoftwareSuite;
+        reqParams.boto3['sources'] = jsonRequestBody.contentString.sources;
+        reqParams.cli['--sources'] = jsonRequestBody.contentString.sources;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.name;
+        reqParams.cfn['RenderingEngine'] = {
+            'Name': jsonRequestBody.contentString.renderingEngine.name,
+            'Version': jsonRequestBody.contentString.renderingEngine.version
+        };
+        reqParams.cfn['RobotSoftwareSuite'] = {
+            'Name': jsonRequestBody.contentString.robotSoftwareSuite.name,
+            'Version': jsonRequestBody.contentString.robotSoftwareSuite.version
+        };
+        reqParams.cfn['SimulationSoftwareSuite'] = {
+            'Name': jsonRequestBody.contentString.simulationSoftwareSuite.name,
+            'Version': jsonRequestBody.contentString.simulationSoftwareSuite.version
+        };
+        reqParams.cfn['Sources'] = [];
+        for (var i=0; i<jsonRequestBody.contentString.sources.length; i++) {
+            reqParams.cfn['Sources'].push({
+                'Architecture': jsonRequestBody.contentString.sources[i].architecture,
+                'S3Bucket': jsonRequestBody.contentString.sources[i].s3Bucket,
+                'S3Key': jsonRequestBody.contentString.sources[i].s3Key,
+            });
+        }
+        reqParams.cfn['Tags'] = jsonRequestBody.contentString.tags;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateSimulationApplication',
+                'boto3': 'create_simulation_application',
+                'cli': 'create-simulation-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::SimulationApplication',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeSimulationApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeSimulationApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+        reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
+        reqParams.cli['--application-version'] = jsonRequestBody.contentString.applicationVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeSimulationApplication',
+                'boto3': 'describe_simulation_application',
+                'cli': 'describe-simulation-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.CreateSimulationApplicationVersion
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplicationVersion") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+
+        reqParams.cfn['Application'] = jsonRequestBody.contentString.application;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'CreateSimulationApplicationVersion',
+                'boto3': 'create_simulation_application_version',
+                'cli': 'create-simulation-application-version'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('robomaker', details.requestId),
+            'region': region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::SimulationApplicationVersion',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DeleteRobotApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+        reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
+        reqParams.cli['--application-version'] = jsonRequestBody.contentString.applicationVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DeleteRobotApplication',
+                'boto3': 'delete_robot_application',
+                'cli': 'delete-robot-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DeleteRobotApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DeleteRobotApplication',
+                'boto3': 'delete_robot_application',
+                'cli': 'delete-robot-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DeleteSimulationApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+        reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
+        reqParams.cli['--application-version'] = jsonRequestBody.contentString.applicationVersion;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DeleteSimulationApplication',
+                'boto3': 'delete_simulation_application',
+                'cli': 'delete-simulation-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DeleteSimulationApplication
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
+        reqParams.boto3['application'] = jsonRequestBody.contentString.application;
+        reqParams.cli['--application'] = jsonRequestBody.contentString.application;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DeleteSimulationApplication',
+                'boto3': 'delete_simulation_application',
+                'cli': 'delete-simulation-application'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DescribeRobot
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
+        reqParams.boto3['robot'] = jsonRequestBody.contentString.robot;
+        reqParams.cli['--robot'] = jsonRequestBody.contentString.robot;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DescribeRobot',
+                'boto3': 'describe_robot',
+                'cli': 'describe-robot'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:robomaker:robomaker.DeleteFleet
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteFleet") {
+        reqParams.boto3['fleet'] = jsonRequestBody.contentString.fleet;
+        reqParams.cli['--fleet'] = jsonRequestBody.contentString.fleet;
+
+        outputs.push({
+            'region': region,
+            'service': 'robomaker',
+            'method': {
+                'api': 'DeleteFleet',
+                'boto3': 'delete_fleet',
+                'cli': 'delete-fleet'
             },
             'options': reqParams,
             'requestDetails': details
