@@ -15831,7 +15831,47 @@ function analyseRequest(details) {
         };
         reqParams.cfn['RoleArn'] = jsonRequestBody.contentString.pipeline.roleArn;
         reqParams.cfn['Name'] = jsonRequestBody.contentString.pipeline.name;
-        reqParams.cfn['Stages'] = jsonRequestBody.contentString.pipeline.stages;
+        reqParams.cfn['Stages'] = [];
+        for (var i=0; i<jsonRequestBody.contentString.pipeline.stages.length; i++) {
+            var actions = [];
+            for (var j=0; j<jsonRequestBody.contentString.pipeline.stages[i].actions.length; j++) {
+                var input_artifacts = null;
+                if (jsonRequestBody.contentString.pipeline.stages[i].actions[j].inputArtifacts.length) {
+                    input_artifacts = [];
+                    for (var k=0; k<jsonRequestBody.contentString.pipeline.stages[i].actions[j].inputArtifacts.length; k++) {
+                        input_artifacts.push({
+                            'Name': jsonRequestBody.contentString.pipeline.stages[i].actions[j].inputArtifacts[k].name
+                        });
+                    }
+                }
+                var output_artifacts = null;
+                if (jsonRequestBody.contentString.pipeline.stages[i].actions[j].outputArtifacts.length) {
+                    output_artifacts = [];
+                    for (var k=0; k<jsonRequestBody.contentString.pipeline.stages[i].actions[j].outputArtifacts.length; k++) {
+                        output_artifacts.push({
+                            'Name': jsonRequestBody.contentString.pipeline.stages[i].actions[j].outputArtifacts[k].name
+                        });
+                    }
+                }
+                actions.push({
+                    'Name': jsonRequestBody.contentString.pipeline.stages[i].actions[j].name,
+                    'ActionTypeId': {
+                        'Category': jsonRequestBody.contentString.pipeline.stages[i].actions[j].actionTypeId.category,
+                        'Owner': jsonRequestBody.contentString.pipeline.stages[i].actions[j].actionTypeId.owner,
+                        'Provider': jsonRequestBody.contentString.pipeline.stages[i].actions[j].actionTypeId.provider,
+                        'Version': jsonRequestBody.contentString.pipeline.stages[i].actions[j].actionTypeId.version
+                    },
+                    'Configuration': jsonRequestBody.contentString.pipeline.stages[i].actions[j].configuration,
+                    'Region': jsonRequestBody.contentString.pipeline.stages[i].actions[j].region,
+                    'InputArtifacts': input_artifacts,
+                    'OutputArtifacts': output_artifacts
+                });
+            }
+            reqParams.cfn['Stages'].push({
+                'Name': jsonRequestBody.contentString.pipeline.stages[i].name,
+                'Actions': actions
+            });
+        }
 
         reqParams.tf['artifact_store'] = jsonRequestBody.contentString.pipeline.artifactStore;
         reqParams.tf['role_arn'] = jsonRequestBody.contentString.pipeline.roleArn;
@@ -37898,6 +37938,23 @@ function analyseRequest(details) {
 
         reqParams.boto3['webhook'] = jsonRequestBody.contentString.webhook;
         reqParams.cli['--webhook'] = jsonRequestBody.contentString.webhook;
+
+        reqParams.cfn['Name'] = jsonRequestBody.contentString.webhook.name;
+        reqParams.cfn['TargetPipeline'] = jsonRequestBody.contentString.webhook.targetPipeline;
+        reqParams.cfn['TargetAction'] = jsonRequestBody.contentString.webhook.targetAction;
+        reqParams.cfn['Authentication'] = jsonRequestBody.contentString.webhook.authentication;
+        reqParams.cfn['AuthenticationConfiguration'] = jsonRequestBody.contentString.webhook.authenticationConfiguration;
+        if (jsonRequestBody.contentString.webhook.filters.length) {
+            reqParams.cfn['Filters'] = [];
+            for (var i=0; i<jsonRequestBody.contentString.webhook.filters.length; i++) {
+                reqParams.cfn['Filters'].push({
+                    'JsonPath': jsonRequestBody.contentString.webhook.filters[i].jsonPath,
+                    'MatchEquals': jsonRequestBody.contentString.webhook.filters[i].matchEquals
+                });
+            }
+        }
+        reqParams.cfn['TargetPipelineVersion'] = 'REPLACE ME'; // TODO
+        reqParams.cfn['RegisterWithThirdParty'] = true;
 
         outputs.push({
             'region': region,
