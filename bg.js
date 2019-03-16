@@ -10593,6 +10593,66 @@ function analyseRequest(details) {
         return {};
     }
 
+
+    // autogen:ec2:ec2.CreateRouteTable
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRouteTable\?/g)) {
+        reqParams.iam['Resource'] = [
+            "*"
+        ];
+
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+
+        reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
+
+        reqParams.tf['vpc_id'] = jsonRequestBody.vpcId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateRouteTable',
+                'boto3': 'create_route_table',
+                'cli': 'create-route-table'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::RouteTable',
+            'terraformType': 'aws_route_table',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteRouteTable
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteRouteTable\?/g)) {
+        reqParams.boto3['RouteTableId'] = jsonRequestBody.routeTableId;
+        reqParams.cli['--route-table-id'] = jsonRequestBody.routeTableId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteRouteTable',
+                'boto3': 'delete_route_table',
+                'cli': 'delete-route-table'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
     // autogen:ec2:ec2.DescribeRouteTables
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
@@ -51573,6 +51633,80 @@ function analyseRequest(details) {
                 'api': 'DeleteFleet',
                 'boto3': 'delete_fleet',
                 'cli': 'delete-fleet'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.ListTopics
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listTopics") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.ListSubscriptions
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listSubscriptions") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListSubscriptions',
+                'boto3': 'list_subscriptions',
+                'cli': 'list-subscriptions'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:sns.ListPlatformApplications
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listPlatformApplications") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListPlatformApplications',
+                'boto3': 'list_platform_applications',
+                'cli': 'list-platform-applications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:sns:kms.DescribeKey
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+        reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'DescribeKey',
+                'boto3': 'describe_key',
+                'cli': 'describe-key'
             },
             'options': reqParams,
             'requestDetails': details
