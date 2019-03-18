@@ -9695,6 +9695,45 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.AllocateAddress
+    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
+        reqParams.iam['Resource'] = [
+            "*"
+        ];
+
+        reqParams.boto3['Domain'] = jsonRequestBody.Domain;
+        reqParams.cli['--domain'] = jsonRequestBody.Domain;
+
+        reqParams.cfn['Domain'] = jsonRequestBody.Domain;
+
+        reqParams.tf['vpc'] = true;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AllocateAddress',
+                'boto3': 'allocate_address',
+                'cli': 'allocate-address'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EIP',
+            'terraformType': 'aws_eip',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
     // autogen:ec2:ec2.DescribeInstances
     if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
