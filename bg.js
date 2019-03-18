@@ -2181,25 +2181,45 @@ function processCfnParameter(param, spacing, index) {
         var pre_return_str = "";
         for (var i=0; i<index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
-                if (tracked_resources[i].returnValues.Ref == param) {
+                if (
+                    tracked_resources[i].returnValues.Ref == param &&
+                    tracked_resources[i].returnValues.Ref != "" &&
+                    tracked_resources[i].returnValues.Ref != []
+                ) {
                     return "!Ref " + tracked_resources[i].logicalId;
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                        if (
+                            tracked_resources[i].returnValues.GetAtt[attr_name] === param &&
+                            tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
+                            tracked_resources[i].returnValues.GetAtt[attr_name] != []
+                        ) {
                             return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
                         }
                     }
                 }
-                for (var j=0; j<10 && param.includes(tracked_resources[i].returnValues.Ref); j++) { // replace many
-                    pre_return_str = "!Sub ";
-                    param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
+                if (
+                    param.includes(tracked_resources[i].returnValues.Ref) &&
+                    tracked_resources[i].returnValues.Ref != "" &&
+                    tracked_resources[i].returnValues.Ref != []
+                ) {
+                    for (var j=0; j<10 && param.includes(tracked_resources[i].returnValues.Ref); j++) { // replace many
+                        pre_return_str = "!Sub ";
+                        param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
+                    }
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
-                        for (var j=0; j<10 && param.includes(tracked_resources[i].returnValues.GetAtt[attr_name]); j++) { // replace many
-                            pre_return_str = "!Sub ";
-                            param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
+                        if (
+                            param.includes(tracked_resources[i].returnValues.GetAtt[attr_name]) &&
+                            tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
+                            tracked_resources[i].returnValues.GetAtt[attr_name] != []
+                        ) {
+                            for (var j=0; j<10; j++) { // replace many
+                                pre_return_str = "!Sub ";
+                                param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
+                            }
                         }
                     }
                 }
