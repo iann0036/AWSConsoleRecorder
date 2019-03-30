@@ -22,6 +22,23 @@ window.onload = function(){
     });
 
     chrome.runtime.sendMessage(null, {
+        "action": "getCfnSpacing"
+    }, null, function(cfnspacing){
+        console.warn("---");
+        console.log(cfnspacing);
+        $('#cfnspacing').val(cfnspacing).trigger('change');
+
+        document.getElementById('cfnspacing').onchange = function(evt) {
+            if (evt.target.value) {
+                chrome.runtime.sendMessage(null, {
+                    "action": "setCfnSpacing",
+                    "cfnspacing": evt.target.value
+                });
+            }
+        };
+    });
+
+    chrome.runtime.sendMessage(null, {
         "action": "getTheme"
     }, null, function(theme){
         chrome.runtime.sendMessage(null, {

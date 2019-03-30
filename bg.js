@@ -5,6 +5,7 @@ var recording = false;
 var intercept = false;
 var theme = "material";
 var global_used_refs = [];
+var cfn_spacing = "    ";
 
 setTimeout(function(){
     chrome.storage.local.get('blocking', function (isBlocking) {
@@ -22,6 +23,16 @@ setTimeout(function(){
     chrome.storage.local.get('theme', function (whichTheme) {
         if (whichTheme.theme !== undefined) {
             theme = whichTheme.theme;
+        }
+    });
+    
+    chrome.storage.local.get('cfnspacing', function (cfnspacing) {
+        if (cfnspacing.cfnspacing !== undefined) {
+            if (cfnspacing.cfnspacing == 4) {
+                cfn_spacing = "    ";
+            } else if (cfnspacing.cfnspacing == 2) {
+                cfn_spacing = "  ";
+            }
         }
     });
 }, 1);
@@ -2246,9 +2257,15 @@ function processCfnParameter(param, spacing, index) {
             paramitems.push(processCfnParameter(paramitem, spacing, index));
         });
 
-        return `
+        if (cfn_spacing.length == 4) {
+            return `
 ` + ' '.repeat(spacing + 2) + "- " + paramitems.join(`
-` + ' '.repeat(spacing + 2) + "- ")
+` + ' '.repeat(spacing + 2) + "- ");
+        }
+        
+        return `
+` + ' '.repeat(spacing) + "- " + paramitems.join(`
+` + ' '.repeat(spacing) + "- ");
     }
     if (typeof param == "object") {
         if (Object.keys(param).length === 0 && param.constructor === Object) {
@@ -2256,7 +2273,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processCfnParameter(param[key], spacing + 4, index);
+            var subvalue = processCfnParameter(param[key], spacing + cfn_spacing.length, index);
             if (subvalue !== undefined) {
                 paramitems.push(key + ": " + subvalue);
             }
@@ -2267,8 +2284,8 @@ function processCfnParameter(param, spacing, index) {
         }
 
         return `
-` + ' '.repeat(spacing + 4) + paramitems.join(`
-` + ' '.repeat(spacing + 4))
+` + ' '.repeat(spacing + cfn_spacing.length) + paramitems.join(`
+` + ' '.repeat(spacing + cfn_spacing.length))
     }
     
     return undefined;
@@ -3562,11 +3579,11 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined && options[option] !== null) {
-                var optionvalue = processCfnParameter(options[option], 12, index);
+                var optionvalue = processCfnParameter(options[option], (cfn_spacing.length * 3), index);
 
                 if (optionvalue !== undefined) {
                     params += `
-            ${option}: ${optionvalue}`;
+${cfn_spacing}${cfn_spacing}${cfn_spacing}${option}: ${optionvalue}`;
                 }
             }
         }
@@ -3575,14 +3592,14 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
     }
 
     if (params.trim() == "") {
-        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
-        Type: "${type}"
+        output += `${cfn_spacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+        ${cfn_spacing}${cfn_spacing}Type: "${type}"
 
 `;
     } else {
-        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
-        Type: "${type}"
-        Properties:${params}
+        output += `${cfn_spacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+${cfn_spacing}${cfn_spacing}Type: "${type}"
+${cfn_spacing}${cfn_spacing}Properties:${params}
 `;
     }
 
@@ -3754,7 +3771,7 @@ func main() {
 `,
         'cfn': `${!has_cfn ? '# No resources created in recording' : `AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
-    Generator: "console-recorder"
+${cfn_spacing}Generator: "console-recorder"
 Description: ""
 Resources:
 `}`,
@@ -4124,6 +4141,16 @@ chrome.runtime.onMessage.addListener(
             sendResponse(true);
         } else if (message.action == "getBlockingStatus") {
             sendResponse(blocking);
+        } else if (message.action == "getCfnSpacing") {
+            sendResponse(cfn_spacing.length);
+        } else if (message.action == "setCfnSpacing") {
+            if (message.cfnspacing == 4) {
+                cfn_spacing = "    ";
+            } else if (message.cfnspacing == 2) {
+                cfn_spacing = "  ";
+            }
+            chrome.storage.local.set({cfnspacing: message.cfnspacing});
+            sendResponse(true);
         } else if (message.action == "getTheme") {
             sendResponse(theme);
         } else if (message.action == "setTheme") {
