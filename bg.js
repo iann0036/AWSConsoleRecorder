@@ -17457,10 +17457,10 @@ function analyseRequest(details) {
                     "*"
                 ];
 
-                reqParams.boto3['ConnectionInput'] = jsonRequestBody.actions;
-                reqParams.cli['--connection-input'] = jsonRequestBody.actions;
+                reqParams.boto3['ConnectionInput'] = jsonRequestBody.actions[0].parameters[0].ConnectionInput;
+                reqParams.cli['--connection-input'] = jsonRequestBody.actions[0].parameters[0].ConnectionInput;
 
-                reqParams.cfn['ConnectionInput'] = jsonRequestBody.actions;
+                reqParams.cfn['ConnectionInput'] = jsonRequestBody.actions[0].parameters[0].ConnectionInput;
 
                 outputs.push({
                     'region': region,

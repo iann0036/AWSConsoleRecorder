@@ -24,8 +24,6 @@ window.onload = function(){
     chrome.runtime.sendMessage(null, {
         "action": "getCfnSpacing"
     }, null, function(cfnspacing){
-        console.warn("---");
-        console.log(cfnspacing);
         $('#cfnspacing').val(cfnspacing).trigger('change');
 
         document.getElementById('cfnspacing').onchange = function(evt) {
