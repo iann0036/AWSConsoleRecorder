@@ -4209,7 +4209,8 @@ chrome.runtime.onMessage.addListener(
                 analyseRequest,
                 {urls: [
                     "*://*.aws.amazon.com/*",
-                    "*://*.amazonaws.com/*"
+                    "*://*.amazonaws.com/*",
+                    "*://*.amazonaws-us-gov.com/*"
                 ]},
                 ["requestBody","blocking"]
             );
@@ -4219,7 +4220,8 @@ chrome.runtime.onMessage.addListener(
                     {
                         url: [
                             "*://*.aws.amazon.com/*",
-                            "*://*.amazonaws.com/*"
+                            "*://*.amazonaws.com/*",
+                            "*://*.amazonaws-us-gov.com/*"
                         ]
                     },
                     function(tabArray) {
@@ -5414,7 +5416,7 @@ function analyseRequest(details) {
         }
     }
 
-    var region_check = /.+\/\/([a-zA-Z-]+\-[0-9]+)\.(?:console|lightsail)\.aws\.amazon\.com/g.exec(details.url);
+    var region_check = /.+\/\/([a-zA-Z-]+\-[0-9]+)\.(?:console|lightsail)\.(?:aws\.amazon|amazonaws-us-gov)\.com/g.exec(details.url);
     if (region_check && region_check[1]) {
         region = region_check[1];
     } else {
@@ -5453,7 +5455,7 @@ function analyseRequest(details) {
     
     
     // manual:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getMergedInstanceList\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getMergedInstanceList\?/g)) {
         if ('filters' in jsonRequestBody) {
             reqParams.cli['--filters'] = jsonRequestBody.filters;
             reqParams.boto3['Filter'] = [];
@@ -5482,7 +5484,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeImages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getPrivateImageList\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getPrivateImageList\?/g)) {
         if (jsonRequestBody['publicAndPrivate'] != true) {
             reqParams.boto3['Owner'] = ['self'];
             reqParams.cli['--owners'] = "self";
@@ -5522,7 +5524,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeImages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=searchAmis\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=searchAmis\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.count;
         outputs.push({
             'region': region,
@@ -5540,7 +5542,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getVpcs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getVpcs\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5557,7 +5559,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSubnets\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getSubnets\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5574,7 +5576,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeHosts
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSdkResources_Hosts\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getSdkResources_Hosts\?/g)) {
         if ('filters' in jsonRequestBody) {
             reqParams.cli['--filters'] = jsonRequestBody.filters;
             reqParams.boto3['Filter'] = [];
@@ -5602,7 +5604,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:iam.ListInstanceProfiles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getInstanceProfileList\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getInstanceProfileList\?/g)) {
         outputs.push({
             'region': region,
             'service': 'iam',
@@ -5619,7 +5621,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeNetworkInterfaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getNetworkInterfaces\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getNetworkInterfaces\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5636,7 +5638,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getAvailabilityZones\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getAvailabilityZones\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5653,7 +5655,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getSecurityGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getSecurityGroups\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5670,7 +5672,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeKeyPairs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getKeyPairList\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getKeyPairList\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -5687,7 +5689,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.CreateSecurityGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=createSecurityGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=createSecurityGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -5744,7 +5746,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.AuthorizeSecurityGroupIngress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=authorizeIngress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=authorizeIngress\?/g)) {
         if ('groupId' in jsonRequestBody) {
             reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
             reqParams.cli['--group-id'] = jsonRequestBody.groupId;
@@ -5813,7 +5815,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.RunInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.RunInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.RunInstances\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:instance/*",
             "arn:aws:ec2:*:*:volume/*",
@@ -6171,7 +6173,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.TerminateInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=terminateInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=terminateInstances\?/g)) {
         reqParams.iam['Resource'] = [];
         
         reqParams.boto3['InstanceIds'] = jsonRequestBody.instanceIds;
@@ -6203,7 +6205,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeLaunchTemplates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribeLaunchTemplates\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribeLaunchTemplates\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -6220,7 +6222,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ds.DescribeDirectories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.directoryservice.+.DescribeDirectories\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.directoryservice.+.DescribeDirectories\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ds',
@@ -6237,7 +6239,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribePlacementGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribePlacementGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call\=com.amazonaws.ec2.AmazonEC2.DescribePlacementGroups\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -6254,7 +6256,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeSpotPriceHistory
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getCurrentSpotPrice\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getCurrentSpotPrice\?/g)) {
         outputs.push({
             'region': region,
             'service': 'ec2',
@@ -6271,7 +6273,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTags\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getTags\?/g)) {
         reqParams.boto3['Filter'] = [];
         reqParams.cli['--filter'] = [];
 
@@ -6320,7 +6322,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.DescribeInstanceAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call\=getTerminationProtection\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call\=getTerminationProtection\?/g)) {
         reqParams.boto3['InstanceId'] = jsonRequestBody.instanceId;
         reqParams.boto3['Attribute'] = "disableApiTermination";
         reqParams.cli['--instance-id'] = jsonRequestBody.instanceId;
@@ -6342,7 +6344,7 @@ function analyseRequest(details) {
     }
 
     // manual:s3:s3.CreateBucket
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "CreateBucket") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "CreateBucket") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6387,7 +6389,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.PutBucketVersioning
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketVersioning") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketVersioning") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6418,7 +6420,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.PutBucketMetricsConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketMetrics") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketMetrics") {
         reqParams.iam['Action'] = [
             's3:PutMetricsConfiguration'
         ];
@@ -6452,7 +6454,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.PutBucketTagging
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketTagging") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketTagging") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6483,7 +6485,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.PutBucketAcl
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketAcl") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketAcl") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6514,7 +6516,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.PutBucketLogging
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketLogging") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketLogging") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6545,7 +6547,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.DeleteBucket
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "DeleteBucket") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "DeleteBucket") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -6575,7 +6577,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.ListObjects
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListObjects") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListObjects") {
         reqParams.boto3['BucketName'] = jsonRequestBody.path;
         reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
         reqParams.cli['_'] = [
@@ -6598,7 +6600,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketVersioning
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketVersioning") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketVersioning") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6619,7 +6621,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketLogging
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketLogging") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketLogging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6640,7 +6642,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketTagging
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketTagging") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketTagging") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6661,7 +6663,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketNotificationConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketNotification") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketNotification") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6682,7 +6684,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketWebsite
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketWebsite") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketWebsite") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6703,7 +6705,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketRequestPayment
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketRequestPayment") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketRequestPayment") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6724,7 +6726,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketAccelerateConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAccelerate") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAccelerate") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6745,7 +6747,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketEncryption
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketDefaultEncryption") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketDefaultEncryption") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6766,7 +6768,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketReplication
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketReplication") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketReplication") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6787,7 +6789,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketMetricsConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketMetrics") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketMetrics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6808,7 +6810,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketAnalyticsConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAnalytics") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAnalytics") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6829,7 +6831,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketLifecycleConfiguration
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetLifecycleConfiguration") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetLifecycleConfiguration") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6850,7 +6852,7 @@ function analyseRequest(details) {
     }
 
     // manual:s3:s3.GetBucketCORS
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketCORS") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketCORS") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6871,7 +6873,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketPolicy
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketPolicy") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketPolicy") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6892,7 +6894,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.GetBucketAcl
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAcl") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetBucketAcl") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
         reqParams.cli['_cli_service'] = "s3api";
@@ -6913,7 +6915,7 @@ function analyseRequest(details) {
     }
     
     // manual:s3:s3.ListBuckets
-    if (details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListAllMyBuckets") {
+    if (details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "ListAllMyBuckets") {
         outputs.push({
             'region': region,
             'service': 's3',
@@ -6930,7 +6932,7 @@ function analyseRequest(details) {
     }
 
     // manual:s3:cloudtrail.DescribeTrails
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/cloudtrail-proxy$/g) && jsonRequestBody.operation == "DescribeTrails") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/cloudtrail-proxy$/g) && jsonRequestBody.operation == "DescribeTrails") {
         reqParams.boto3['includeShadowTrails'] = jsonRequestBody.content.includeShadowTrails;
         reqParams.boto3['trailNameList'] = jsonRequestBody.content.trailNameList;
         if (jsonRequestBody.content.includeShadowTrails === true)
@@ -6956,7 +6958,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.DescribeEnvironmentMemberships
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironmentMemberships" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironmentMemberships" && jsonRequestBody.method == "POST") {
         reqParams.boto3['permissions'] = jsonRequestBody.contentString.permissions;
         reqParams.cli['--permissions'] = jsonRequestBody.contentString.permissions;
         reqParams.boto3['maxResults'] = jsonRequestBody.contentString.maxResults;
@@ -6978,7 +6980,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.DescribeEnvironments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironments" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEnvironments" && jsonRequestBody.method == "POST") {
         reqParams.boto3['environmentIds'] = jsonRequestBody.contentString.environmentIds;
         reqParams.cli['--environment-ids'] = jsonRequestBody.contentString.environmentIds;
 
@@ -6998,7 +7000,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.ListEnvironments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "listEnvironments" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "listEnvironments" && jsonRequestBody.method == "POST") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
 
@@ -7018,7 +7020,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.UpdateEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEC2Remote" && jsonRequestBody.method == "POST" && jsonRequestBody.operation == "updateEnvironment" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "describeEC2Remote" && jsonRequestBody.method == "POST" && jsonRequestBody.operation == "updateEnvironment" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:cloud9:*:*:environment:" + jsonRequestBody.contentString.environmentId
         ];
@@ -7051,7 +7053,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs" && jsonRequestBody.method == "POST") {
 
         outputs.push({
             'region': region,
@@ -7069,7 +7071,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets" && jsonRequestBody.method == "POST") {
 
         outputs.push({
             'region': region,
@@ -7087,7 +7089,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.CreateEnvironmentEC2
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "createEnvironmentEC2" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "createEnvironmentEC2" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -7149,7 +7151,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloud9:cloud9.DeleteEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "deleteEnvironment" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloud9\/api\/cloud9$/g) && jsonRequestBody.operation == "deleteEnvironment" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:cloud9:*:*:environment:" + jsonRequestBody.contentString.environmentId
         ];
@@ -7178,7 +7180,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:medialive.ListInputSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -7196,7 +7198,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:medialive.ListChannels
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/channels$/g) && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -7214,7 +7216,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:medialive.CreateInputSecurityGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/inputSecurityGroups$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -7243,7 +7245,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:ssm.GetParametersByPath
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/ssm$/g) && jsonRequestBody.operation == "getParametersByPath" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/ssm$/g) && jsonRequestBody.operation == "getParametersByPath" && jsonRequestBody.method == "POST") {
         reqParams.boto3['Path'] = jsonRequestBody.contentString.Path;
         reqParams.cli['--path'] = jsonRequestBody.contentString.Path;
 
@@ -7263,7 +7265,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -7281,7 +7283,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:iam.GetRolePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "getRolePolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/iam$/g) && jsonRequestBody.operation == "getRolePolicy") {
 
         outputs.push({
             'region': region,
@@ -7299,7 +7301,7 @@ function analyseRequest(details) {
     }
 
     // autogen:medialive:medialive.CreateChannel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/medialive\/api\/channels$/g) && jsonRequestBody.operation == "createChannels" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/medialive\/api\/channels$/g) && jsonRequestBody.operation == "createChannels" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -7342,7 +7344,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.DescribeFileSystems
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=describeFileSystems$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=describeFileSystems$/g)) {
 
         outputs.push({
             'region': region,
@@ -7360,7 +7362,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=listKeys$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=listKeys$/g)) {
 
         outputs.push({
             'region': region,
@@ -7378,7 +7380,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=describeKey$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=describeKey$/g)) {
         reqParams.boto3['KeyId'] = jsonRequestBody.kmsKeyId;
         reqParams.cli['--key-id'] = jsonRequestBody.kmsKeyId;
 
@@ -7398,7 +7400,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.CreateFileSystem
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=createFileSystem$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=createFileSystem$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -7458,7 +7460,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.CreateMountTarget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=createMountTarget$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=createMountTarget$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/" + jsonRequestBody.fileSystemId
         ];
@@ -7510,7 +7512,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.DescribeMountTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=describeMountTargets$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=describeMountTargets$/g)) {
         reqParams.boto3['FileSystemId'] = jsonRequestBody.fileSystemId;
         reqParams.cli['--file-system-id'] = jsonRequestBody.fileSystemId;
 
@@ -7530,7 +7532,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.DescribeTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=describeTags$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=describeTags$/g)) {
         reqParams.boto3['FileSystemId'] = jsonRequestBody.fileSystemId;
         reqParams.cli['--file-system-id'] = jsonRequestBody.fileSystemId;
 
@@ -7550,7 +7552,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.UpdateFileSystem
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=modifyThroughputMode$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=modifyThroughputMode$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/" + jsonRequestBody.fileSystemId
         ];
@@ -7583,7 +7585,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.DeleteMountTarget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=deleteMountTarget$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=deleteMountTarget$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/*"
         ];
@@ -7612,7 +7614,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.DeleteFileSystem
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?region=.+&type=deleteFileSystem$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?region=.+&type=deleteFileSystem$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/" + jsonRequestBody.fileSystemId
         ];
@@ -7641,7 +7643,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.GetEventSelectors
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/getEventSelectors\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/getEventSelectors\?/g)) {
         reqParams.boto3['TrailName'] = getUrlValue(details.url, 'trailArn');
         reqParams.cli['--trail-name'] = getUrlValue(details.url, 'trailArn');
 
@@ -7661,7 +7663,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.DescribeTrails
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/resources\/trails\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/resources\/trails\?/g)) {
         reqParams.boto3['IncludeShadowTrails'] = getUrlValue(details.url, 'includeShadowTrails');
         reqParams.cli['--include-shadow-trails'] = getUrlValue(details.url, 'includeShadowTrails');
 
@@ -7681,7 +7683,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.LookupEvents
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/lookupEvents\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/lookupEvents\?/g)) {
         reqParams.boto3['EndTime'] = getUrlValue(details.url, 'endTime');
         reqParams.cli['--end-time'] = getUrlValue(details.url, 'endTime');
         reqParams.boto3['StartTime'] = getUrlValue(details.url, 'startTime');
@@ -7703,7 +7705,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:sns.ListTopics
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/getSnsTopicNameToArnMapByRegion\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/getSnsTopicNameToArnMapByRegion\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7721,7 +7723,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:lambda.ListFunctions
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/listLambdaFunctions\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/listLambdaFunctions\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7739,7 +7741,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.CreateTrail
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/subscribe\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/subscribe\?/g)) {
         var prefix = getUrlValue(details.url, 's3KeyPrefix');
         if (!prefix) {
             prefix = "";
@@ -7827,7 +7829,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.GetTrailStatus
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/resources\/status\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/resources\/status\?/g)) {
         reqParams.boto3['Name'] = getUrlValue(details.url, 'trailArn');
         reqParams.cli['--name'] = getUrlValue(details.url, 'trailArn');
 
@@ -7847,7 +7849,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.ListTags
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cloudtrail\/service\/listTags\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudtrail\/service\/listTags\?/g)) {
         reqParams.boto3['ResourceIdList'] = [getUrlValue(details.url, 'trailArn')];
         reqParams.cli['--resource-id-list'] = [getUrlValue(details.url, 'trailArn')];
 
@@ -7867,7 +7869,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.DescribePendingAggregationRequests
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describePendingAggregationRequests\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/aggregationAuthorization\/describePendingAggregationRequests\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7885,7 +7887,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.DescribeConfigurationRecorders
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listConfigurationRecorders\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/listConfigurationRecorders\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7903,7 +7905,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.DescribeDeliveryChannels
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listDeliveryChannels\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/listDeliveryChannels\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7921,7 +7923,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:iam.ListRoles
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/iam\/listRoles\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/iam\/listRoles\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7939,7 +7941,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:s3.ListBuckets
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listS3Buckets\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/listS3Buckets\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7957,7 +7959,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:sns.ListTopics
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/listSnsTopics\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/listSnsTopics\?/g)) {
 
         outputs.push({
             'region': region,
@@ -7975,7 +7977,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:iam.CreateServiceLinkedRole
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/createServiceLinkedRole\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/createServiceLinkedRole\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:role/*"
         ];
@@ -8019,7 +8021,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:s3.CreateBucket
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/createS3BucketForConfiguration\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/createS3BucketForConfiguration\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.s3BucketName
         ];
@@ -8063,7 +8065,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListDetectors
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "ListDetectors" || jsonRequestBody.operation == "listDetectors") && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "ListDetectors" || jsonRequestBody.operation == "listDetectors") && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -8081,7 +8083,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetInvitationsCount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetInvitationsCount" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetInvitationsCount" && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -8099,7 +8101,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateDetector
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "CreateDetector" || jsonRequestBody.operation == "createDetector") && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && (jsonRequestBody.operation == "CreateDetector" || jsonRequestBody.operation == "createDetector") && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -8143,7 +8145,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFindings" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFindings" && jsonRequestBody.method == "POST") {
         reqParams.boto3['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
         reqParams.cli['--finding-criteria'] = jsonRequestBody.contentString.findingCriteria;
         reqParams.boto3['SortCriteria'] = jsonRequestBody.contentString.sortCriteria;
@@ -8169,7 +8171,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetMasterAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetMasterAccount" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetMasterAccount" && jsonRequestBody.method == "GET") {
 
         outputs.push({
             'region': region,
@@ -8187,7 +8189,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListMembers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListMembers" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListMembers" && jsonRequestBody.method == "GET") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -8207,7 +8209,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetDetector
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetDetector" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetDetector" && jsonRequestBody.method == "GET") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -8227,7 +8229,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetFindingsStatistics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindingsStatistics" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindingsStatistics" && jsonRequestBody.method == "POST") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['FindingCriteria'] = jsonRequestBody.contentString.findingCriteria;
@@ -8251,7 +8253,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListFilters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFilters" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListFilters" && jsonRequestBody.method == "GET") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -8271,7 +8273,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateMembers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateMembers" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateMembers" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8321,7 +8323,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.DeleteMembers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "DeleteMembers" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "DeleteMembers" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8352,7 +8354,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListIPSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
@@ -8374,7 +8376,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListThreatIntelSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListThreatIntelSets" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListThreatIntelSets" && jsonRequestBody.method == "GET") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
@@ -8396,7 +8398,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:iam.ListPolicyVersions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListPolicyVersions" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListPolicyVersions" && jsonRequestBody.method == "POST") {
         reqParams.boto3['PolicyArn'] = jsonRequestBody.contentString.match(/PolicyArn\=(.+)\&Version/g)[1];
         reqParams.cli['--policy-arn'] = jsonRequestBody.contentString.match(/PolicyArn\=(.+)\&Version/g)[1]; // "Action=ListPolicyVersions&PolicyArn=arn:aws:iam::aws:policy/aws-service-role/AmazonGuardDutyServiceRolePolicy&Version=2010-05-08"
 
@@ -8416,7 +8418,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateIPSet" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateIPSet" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8476,7 +8478,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListIPSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ListIPSets" && jsonRequestBody.method == "GET") {
         reqParams.boto3['DetectorId'] =jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
@@ -8498,7 +8500,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetIPSet" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetIPSet" && jsonRequestBody.method == "GET") {
         reqParams.boto3['IpSetId'] = jsonRequestBody.path.split("/")[4];
         reqParams.cli['--ip-set-id'] = jsonRequestBody.path.split("/")[4];
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
@@ -8520,7 +8522,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.UpdateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateIPSet" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateIPSet" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2] + "/ipset/" + jsonRequestBody.path.split("/")[4]
         ];
@@ -8553,7 +8555,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ArchiveFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ArchiveFindings" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "ArchiveFindings" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8584,7 +8586,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.UnarchiveFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UnarchiveFindings" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UnarchiveFindings" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8615,7 +8617,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindings" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "GetFindings" && jsonRequestBody.method == "POST") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['FindingIds'] = jsonRequestBody.contentString.findingIds;
@@ -8639,7 +8641,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:iam.ListAttachedRolePolicies
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListAttachedRolePolicies" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/iam$/g) && jsonRequestBody.operation == "ListAttachedRolePolicies" && jsonRequestBody.method == "POST") {
         reqParams.boto3['RoleName'] = jsonRequestBody.contentString.match(/RoleName\=(.+)\&Version/g)[1];;
         reqParams.cli['--role-name'] = jsonRequestBody.contentString.match(/RoleName\=(.+)\&Version/g)[1];;
 
@@ -8659,7 +8661,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateSampleFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateSampleFindings" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateSampleFindings" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8688,7 +8690,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.UpdateDetector
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateDetector" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "UpdateDetector" && jsonRequestBody.method == "POST") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -8722,7 +8724,7 @@ function analyseRequest(details) {
 
     // autogen:efs:efs.CreateTags
     // autogen:efs:efs.DeleteTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifyTags") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifyTags") {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/" + jsonRequestBody.fileSystemId
         ];
@@ -8771,7 +8773,7 @@ function analyseRequest(details) {
     }
 
     // autogen:efs:efs.ModifyMountTargetSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifySecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/efs\/ajax\/api\?/g) && getUrlValue(details.url, 'type') == "modifySecurityGroups") {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticfilesystem:*:*:file-system/" + jsonRequestBody.fileSystemId
         ];
@@ -8802,7 +8804,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.ListBrokers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.path == "/brokers" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.path == "/brokers" && jsonRequestBody.method == "GET") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -8822,7 +8824,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeVpcs") {
 
         outputs.push({
             'region': region,
@@ -8840,7 +8842,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.ListConfigurations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/configurations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/configurations") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['NextToken'] = jsonRequestBody.params.nextToken;
@@ -8862,7 +8864,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSubnets") {
 
         outputs.push({
             'region': region,
@@ -8880,7 +8882,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/ec2$/g) && jsonRequestBody.params.Action == "DescribeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -8898,7 +8900,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.CreateBroker
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/brokers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/brokers") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9031,7 +9033,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.CreateConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/configurations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/configurations") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9083,7 +9085,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.DescribeConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+/g)) {
         reqParams.boto3['ConfigurationId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--configuration-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -9103,7 +9105,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.DescribeConfigurationRevision
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+\/revisions\/.+/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon-mq\/api\/mq$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/\/configurations\/.+\/revisions\/.+/g)) {
         reqParams.boto3['ConfigurationId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--configuration-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['ConfigurationRevision'] = jsonRequestBody.path.split("/")[4];
@@ -9125,7 +9127,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeLaunchTemplateVersions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeLaunchTemplateVersions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeLaunchTemplateVersions\?/g)) {
         reqParams.boto3['LaunchTemplateId'] = jsonRequestBody.LaunchTemplateId;
         reqParams.cli['--launch-template-id'] = jsonRequestBody.LaunchTemplateId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
@@ -9147,7 +9149,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeKeyPairs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeKeyPairs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeKeyPairs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9165,7 +9167,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9183,7 +9185,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeHosts
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeHosts\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeHosts\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9201,7 +9203,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9219,7 +9221,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSnapshots
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshotsAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getSnapshotsAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9237,7 +9239,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVolumes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getMergedVolumesAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getMergedVolumesAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9255,7 +9257,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getTagsAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getTagsAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9273,7 +9275,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateLaunchTemplate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateLaunchTemplate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateLaunchTemplate\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9413,7 +9415,7 @@ function analyseRequest(details) {
 
     // autogen:ec2:ec2.CreateTags
     // autogen:ec2:ec2.DeleteTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=updateTags\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=updateTags\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9460,7 +9462,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateKeyPair
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=createKeyPair\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=createKeyPair\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9489,7 +9491,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteKeyPair
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteKeyPair\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deleteKeyPair\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9518,7 +9520,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ImportKeyPair
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=importKeyPair\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=importKeyPair\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9562,7 +9564,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNetworkInterface
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNetworkInterface\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNetworkInterface\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9614,7 +9616,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeFlowLogs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSdkResources_FlowLog\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getSdkResources_FlowLog\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9632,7 +9634,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNetworkInterface
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteNetworkInterface\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deleteNetworkInterface\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9661,7 +9663,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAddresses
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAddresses\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAddresses\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9679,7 +9681,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AllocateAddress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9723,7 +9725,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AllocateAddress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateAddress\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9762,7 +9764,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -9782,7 +9784,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkInterfaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkInterfaces\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkInterfaces\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -9802,7 +9804,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateAddress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateAddress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateAddress\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9856,7 +9858,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DisassociateAddress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DisassociateAddress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DisassociateAddress\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9885,7 +9887,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ReleaseAddress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReleaseAddress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReleaseAddress\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9914,7 +9916,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:config.DescribeConfigurationRecorders
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.config\.AmazonConfig\.DescribeConfigurationRecorders\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.config\.AmazonConfig\.DescribeConfigurationRecorders\?/g)) {
 
         outputs.push({
             'region': region,
@@ -9932,7 +9934,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AllocateHosts
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateHosts\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AllocateHosts\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -9985,7 +9987,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRegions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRegions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRegions") {
 
         outputs.push({
             'region': region,
@@ -10003,7 +10005,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAccountAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAccountAttributes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAccountAttributes\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10021,7 +10023,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -10039,7 +10041,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getVpcAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getVpcAttributes") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -10059,7 +10061,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeFlowLogs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=getSdkResources_FlowLog\?/g) && jsonRequestBody.methodName == "describeFlowLogs" && jsonRequestBody.clientType == "com.amazonaws.services.ec2.AmazonEC2Client") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=getSdkResources_FlowLog\?/g) && jsonRequestBody.methodName == "describeFlowLogs" && jsonRequestBody.clientType == "com.amazonaws.services.ec2.AmazonEC2Client") {
         reqParams.boto3['Filter'] = jsonRequestBody.filters;
         reqParams.cli['--filter'] = jsonRequestBody.filters;
 
@@ -10079,7 +10081,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g) && gwtRequest['method'] == "getVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g) && gwtRequest['method'] == "getVpcs") {
 
         outputs.push({
             'region': region,
@@ -10097,7 +10099,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRouteTables") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getRouteTables") {
 
         outputs.push({
             'region': region,
@@ -10115,7 +10117,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInternetGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.operation == "DescribeInternetGateways" && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.operation == "DescribeInternetGateways" && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2") {
 
         outputs.push({
             'region': region,
@@ -10133,7 +10135,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeEgressOnlyInternetGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2" && jsonRequestBody.operation == "DescribeEgressOnlyInternetGateways") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2" && jsonRequestBody.operation == "DescribeEgressOnlyInternetGateways") {
 
         outputs.push({
             'region': region,
@@ -10151,7 +10153,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -10169,7 +10171,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAddresses
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAddresses\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAddresses\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10187,7 +10189,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpcEndpoints\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpcEndpoints\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10205,7 +10207,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpointServiceConfigurations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServiceConfigurations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServiceConfigurations\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
 
@@ -10225,7 +10227,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNatGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeNatGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeNatGateways\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10243,7 +10245,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAccountAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAccountAttributes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAccountAttributes\?/g)) {
         reqParams.boto3['AttributeNames'] = jsonRequestBody.attributeNames;
         reqParams.cli['--attribute-names'] = jsonRequestBody.attributeNames;
 
@@ -10263,7 +10265,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcPeeringConnections
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.operation == "DescribeVpcPeeringConnections" && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.elasticconsole\.backend\.master\.ElasticConsoleBackendService\.GetMergedResources\?/g) && jsonRequestBody.operation == "DescribeVpcPeeringConnections" && jsonRequestBody.service == "com.amazonaws.ec2.AmazonEC2") {
 
         outputs.push({
             'region': region,
@@ -10281,7 +10283,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkAcls
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNetworkACLs" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNetworkACLs" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -10299,7 +10301,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeStaleSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeStaleSecurityGroups\?/g) && jsonRequestBody.clientType == "com.amazonaws.services.ec2.AmazonEC2Client" && jsonRequestBody.methodName == "describeStaleSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeStaleSecurityGroups\?/g) && jsonRequestBody.clientType == "com.amazonaws.services.ec2.AmazonEC2Client" && jsonRequestBody.methodName == "describeStaleSecurityGroups") {
         reqParams.boto3['VpcId'] = jsonRequestBody.request.vpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.request.vpcId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.request.maxResults;
@@ -10321,7 +10323,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeCustomerGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeCustomerGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeCustomerGateways\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10339,7 +10341,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpnGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpnGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpnGateways\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10357,7 +10359,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpnConnections
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpnConnections\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpnConnections\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10375,7 +10377,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10422,7 +10424,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:logs.DescribeLogGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.logs\.v20140328\.Logs_20140328\.DescribeLogGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.logs\.v20140328\.Logs_20140328\.DescribeLogGroups\?/g)) {
 
         outputs.push({
             'region': region,
@@ -10440,7 +10442,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazon\.webservices\.auth\.identity\.v20100508\.AWSIdentityManagementV20100508\.ListRoles\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazon\.webservices\.auth\.identity\.v20100508\.AWSIdentityManagementV20100508\.ListRoles\?/g)) {
         reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
 
@@ -10460,7 +10462,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateFlowLogs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateFlowLogs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateFlowLogs\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10531,7 +10533,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteFlowLogs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteFlowLogs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteFlowLogs\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10560,7 +10562,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DisassociateVpcCidrBlock
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DisassociateVpcCidrBlock\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DisassociateVpcCidrBlock\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10589,7 +10591,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getInstancesForVPC" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "getInstancesForVPC" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -10607,7 +10609,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteVpc" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10636,7 +10638,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10681,7 +10683,7 @@ function analyseRequest(details) {
 
 
     // autogen:ec2:ec2.CreateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRouteTable\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRouteTable\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10720,7 +10722,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteRouteTable\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteRouteTable\?/g)) {
         reqParams.boto3['RouteTableId'] = jsonRequestBody.routeTableId;
         reqParams.cli['--route-table-id'] = jsonRequestBody.routeTableId;
 
@@ -10740,7 +10742,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
 
         outputs.push({
             'region': region,
@@ -10758,7 +10760,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteEgressOnlyInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteEgressOnlyInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteEgressOnlyInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10787,7 +10789,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateEgressOnlyInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateEgressOnlyInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateEgressOnlyInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10831,7 +10833,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:internet-gateway/" + jsonRequestBody.internetGatewayId
         ];
@@ -10860,7 +10862,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=createTags\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=createTags\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10891,7 +10893,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -10935,7 +10937,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:route-table/" + getPipeSplitField(requestBody, 17)
         ];
@@ -10964,7 +10966,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteDhcpOptions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteDhcpOptions\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:dhcp-options/" + jsonRequestBody.request.dhcpOptionsId
         ];
@@ -10993,7 +10995,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNatGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNatGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateNatGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11041,7 +11043,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNatGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteNatGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteNatGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11070,7 +11072,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11114,7 +11116,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteNetworkACL" && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService") {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:network-acl/" + getPipeSplitField(requestBody, 17)
         ];
@@ -11143,7 +11145,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateCustomerGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateCustomerGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateCustomerGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11191,7 +11193,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteCustomerGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteCustomerGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteCustomerGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:customer-gateway/" + jsonRequestBody.CustomerGatewayId
         ];
@@ -11220,7 +11222,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpnGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11262,7 +11264,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpnGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpnGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpnGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -11291,7 +11293,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.ListQueues
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "listQueues") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "listQueues") {
 
         outputs.push({
             'region': region,
@@ -11309,7 +11311,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonKMS$/g) && gwtRequest['method'] == "listKeys" && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonKMSService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonKMS$/g) && gwtRequest['method'] == "listKeys" && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonKMSService") {
 
         outputs.push({
             'region': region,
@@ -11327,7 +11329,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.DeleteQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "deleteQueue") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['service'] == "com.amazonaws.console.sqs.shared.services.AmazonSQSService" && gwtRequest['method'] == "deleteQueue") {
         reqParams.iam['Resource'] = [
             "arn:aws:sqs:*:*:" + getPipeSplitField(requestBody, 10).split("/").pop()
         ];
@@ -11356,7 +11358,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListGroups
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/groups$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups$/g)) {
 
         outputs.push({
             'region': region,
@@ -11374,7 +11376,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListUsers
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users$/g)) {
 
         outputs.push({
             'region': region,
@@ -11392,7 +11394,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListPolicies
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/policies$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies$/g)) {
 
         outputs.push({
             'region': region,
@@ -11410,7 +11412,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateUser
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:user/" + jsonRequestBody.name
         ];
@@ -11457,15 +11459,15 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.AttachUserPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/attachments$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/attachments$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
         ];
 
         reqParams.boto3['PolicyArn'] = jsonRequestBody.policyArn;
         reqParams.cli['--policy-arn'] = jsonRequestBody.policyArn;
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11488,22 +11490,22 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.AddUserToGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/groups\/.+\/members$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/.+\/members$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:group/" + /.+console\.aws\.amazon\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1]
+            "arn:aws:iam::*:group/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1]
         ];
 
         reqParams.boto3['UserName'] = jsonRequestBody.userName;
         reqParams.cli['--user-name'] = jsonRequestBody.userName;
-        reqParams.boto3['GroupName'] = /.+console\.aws\.amazon\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--group-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
+        reqParams.boto3['GroupName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--group-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
 
         reqParams.cfn['Users'] = [jsonRequestBody.userName];
-        reqParams.cfn['GroupName'] = /.+console\.aws\.amazon\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
+        reqParams.cfn['GroupName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1];
 
         reqParams.tf['user'] = jsonRequestBody.userName;
         reqParams.tf['groups'] = [
-            /.+console\.aws\.amazon\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1]
+            /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/groups\/(.+)\//g.exec(details.url)[1]
         ];
 
         outputs.push({
@@ -11538,9 +11540,9 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListGroupsForUser
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/groups$/g)) {
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/groups$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11558,9 +11560,9 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListAccessKeys
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11578,9 +11580,9 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.GetLoginProfile
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/loginProfile$/g)) {
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/loginProfile$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11598,19 +11600,19 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateLoginProfile
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/loginProfile$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/loginProfile$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
         reqParams.boto3['Password'] = jsonRequestBody.password;
         reqParams.cli['--password'] = jsonRequestBody.password;
         reqParams.boto3['PasswordResetRequired'] = jsonRequestBody.resetRequired;
         reqParams.cli['--password-reset-required'] = jsonRequestBody.resetRequired;
 
-        reqParams.tf['name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
+        reqParams.tf['name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1];
         reqParams.tf['pgp_key'] = "REPLACEME"
         reqParams.tf['password_reset_required'] = jsonRequestBody.resetRequired;
 
@@ -11645,7 +11647,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListAccountAliases
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/aliases$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/aliases$/g)) {
 
         outputs.push({
             'region': region,
@@ -11663,9 +11665,9 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.GetUser
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/[^/]+$/g)) {
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/[^/]+$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11683,13 +11685,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.DeleteUser
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/[^/]+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/[^/]+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\//g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -11712,7 +11714,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getAccount" && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/account") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getAccount" && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/account") {
 
         outputs.push({
             'region': region,
@@ -11730,7 +11732,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetRestApis
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/restapis") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/restapis") {
         reqParams.boto3['limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
 
@@ -11750,7 +11752,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetRestApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -11770,7 +11772,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetAuthorizers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/authorizers$/g) && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/authorizers$/g) && jsonRequestBody.method == "GET") {
         reqParams.boto3['Limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
         reqParams.boto3['RestApiId'] = jsonRequestBody.path.split("/")[2];
@@ -11792,7 +11794,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetRequestValidators
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/requestvalidators$/g) && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/requestvalidators$/g) && jsonRequestBody.method == "GET") {
         reqParams.boto3['limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
@@ -11814,7 +11816,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetDocumentationParts
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts$/g)) {
         reqParams.boto3['limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
@@ -11836,7 +11838,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetResources
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources$/g) && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources$/g) && jsonRequestBody.method == "GET") {
         reqParams.boto3['embed'] = jsonRequestBody.params.embed;
         reqParams.cli['--embed'] = jsonRequestBody.params.embed;
         reqParams.boto3['limit'] = jsonRequestBody.params.limit;
@@ -11860,7 +11862,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetStages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/stages$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/stages$/g)) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -11880,7 +11882,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetUsagePlans
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/usageplans" && jsonRequestBody.method == "GET") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/usageplans" && jsonRequestBody.method == "GET") {
         reqParams.boto3['Limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
 
@@ -11900,7 +11902,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.PutMethod
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+$/g) && jsonRequestBody.method == "PUT") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+$/g) && jsonRequestBody.method == "PUT") {
         reqParams.boto3['authorizationType'] = jsonRequestBody.contentString.authorizationType;
         reqParams.cli['--authorization-type'] = jsonRequestBody.contentString.authorizationType;
         reqParams.boto3['requestParameters'] = jsonRequestBody.contentString.requestParameters;
@@ -11956,7 +11958,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.PutMethodResponse
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/responses\/[0-9]+$/g) && jsonRequestBody.method == "PUT") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/responses\/[0-9]+$/g) && jsonRequestBody.method == "PUT") {
         reqParams.boto3['responseModels'] = jsonRequestBody.contentString.responseModels;
         reqParams.cli['--response-models'] = jsonRequestBody.contentString.responseModels;
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
@@ -12005,7 +12007,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:lambda.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/lambda$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/2015-03-31/functions/") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/lambda$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/2015-03-31/functions/") {
 
         outputs.push({
             'region': region,
@@ -12023,7 +12025,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.PutIntegration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/integration$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/integration$/g)) {
         reqParams.boto3['type'] = jsonRequestBody.contentString.type;
         reqParams.cli['--type'] = jsonRequestBody.contentString.type;
         reqParams.boto3['requestTemplates'] = jsonRequestBody.contentString.requestTemplates;
@@ -12072,7 +12074,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.PutIntegrationResponse
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/integration\/responses\/[0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+\/integration\/responses\/[0-9]+$/g)) {
         reqParams.boto3['responseTemplates'] = jsonRequestBody.contentString.responseTemplates;
         reqParams.cli['--response-templates'] = jsonRequestBody.contentString.responseTemplates;
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
@@ -12121,7 +12123,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateDocumentationPart
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts$/g) && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts$/g) && jsonRequestBody.method == "POST") {
         reqParams.boto3['properties'] = jsonRequestBody.contentString.properties;
         reqParams.cli['--properties'] = jsonRequestBody.contentString.properties;
         reqParams.boto3['location'] = jsonRequestBody.contentString.location;
@@ -12164,7 +12166,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteDocumentationPart
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/documentation\/parts\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['documentationPartId'] = jsonRequestBody.path.split("/")[5];
@@ -12191,7 +12193,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteMethod
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/resources\/[a-zA-Z0-9]+\/methods\/[A-Z]+$/g)) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['resourceId'] = jsonRequestBody.path.split("/")[4];
@@ -12220,7 +12222,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:cognito-idp.ListUserPools
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/cognito-idp$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/" && jsonRequestBody.headers.X-Amz-Target == "AWSCognitoIdentityProviderService.ListUserPools") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/cognito-idp$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/" && jsonRequestBody.headers.X-Amz-Target == "AWSCognitoIdentityProviderService.ListUserPools") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -12240,7 +12242,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateAuthorizer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/authorizers$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/authorizers$/g)) {
         reqParams.boto3['type'] = jsonRequestBody.contentString.type;
         reqParams.cli['--type'] = jsonRequestBody.contentString.type;
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
@@ -12299,7 +12301,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.PutGatewayResponse
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/gatewayresponses\/[a-zA-Z0-9_]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/gatewayresponses\/[a-zA-Z0-9_]+$/g)) {
         reqParams.boto3['statusCode'] = jsonRequestBody.contentString.statusCode;
         reqParams.cli['--status-code'] = jsonRequestBody.contentString.statusCode;
         reqParams.boto3['responseParameters'] = jsonRequestBody.contentString.responseParameters;
@@ -12348,7 +12350,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateModel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/models$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/models$/g)) {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['contentType'] = jsonRequestBody.contentString.contentType;
@@ -12401,7 +12403,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteModel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/models\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/^\/restapis\/[a-zA-Z0-9]+\/models\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['modelName'] = jsonRequestBody.path.split("/")[4];
@@ -12428,7 +12430,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:cloudwatch.GetMetricStatistics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/monitoring$/g) && jsonRequestBody.params.Action == "GetMetricStatistics") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/monitoring$/g) && jsonRequestBody.params.Action == "GetMetricStatistics") {
         reqParams.boto3['Namespace'] = jsonRequestBody.params.Namespace;
         reqParams.cli['--namespace'] = jsonRequestBody.params.Namespace;
         reqParams.boto3['StartTime'] = jsonRequestBody.params.StartTime;
@@ -12458,7 +12460,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateUsagePlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/usageplans") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/usageplans") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['description'] = jsonRequestBody.contentString.description;
@@ -12522,7 +12524,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetStage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getStage") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getStage") {
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--rest-api-id'] = jsonRequestBody.path.split("/")[2];
         reqParams.boto3['stageName'] = jsonRequestBody.path.split("/")[4];
@@ -12544,7 +12546,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetDeployment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getDeployment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.operation == "getDeployment") {
         reqParams.boto3['embed'] = jsonRequestBody.params.embed;
         reqParams.cli['--embed'] = jsonRequestBody.params.embed;
         reqParams.boto3['restApiId'] = jsonRequestBody.path.split("/")[2];
@@ -12568,7 +12570,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateApiKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/apikeys" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/apikeys" && jsonRequestBody.method == "POST") {
         reqParams.boto3['enabled'] = jsonRequestBody.contentString.enabled;
         reqParams.cli['--enabled'] = jsonRequestBody.contentString.enabled;
         reqParams.boto3['generateDistinctId'] = jsonRequestBody.contentString.generateDistinctId;
@@ -12621,7 +12623,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteUsagePlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/usageplans\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/usageplans\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['usagePlanId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--usage-plan-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -12646,7 +12648,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetApiKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/apikeys\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path.match(/^\/apikeys\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['includeValue'] = jsonRequestBody.params.includeValue;
         reqParams.cli['--include-value'] = jsonRequestBody.params.includeValue;
         reqParams.boto3['apiKey'] = jsonRequestBody.path.split("/")[2];
@@ -12668,7 +12670,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.UpdateApiKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PATCH" && jsonRequestBody.path.match(/^\/apikeys\/[a-zA-Z0-9]+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "PATCH" && jsonRequestBody.path.match(/^\/apikeys\/[a-zA-Z0-9]+$/g)) {
         reqParams.boto3['patchOperations'] = jsonRequestBody.contentString.patchOperations;
         reqParams.cli['--patch-operations'] = jsonRequestBody.contentString.patchOperations;
         reqParams.boto3['apiKey'] = jsonRequestBody.path.split("/")[2];
@@ -12695,7 +12697,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:acm.ListCertificates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/acm$/g) && jsonRequestBody.headers.X-Amz-Target == "CertificateManager.ListCertificates") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/acm$/g) && jsonRequestBody.headers.X-Amz-Target == "CertificateManager.ListCertificates") {
 
         outputs.push({
             'region': region,
@@ -12713,7 +12715,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GetDomainNames
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/domainnames") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/domainnames") {
         reqParams.boto3['limit'] = jsonRequestBody.params.limit;
         reqParams.cli['--limit'] = jsonRequestBody.params.limit;
 
@@ -12733,7 +12735,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateDomainName
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/domainnames") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/domainnames") {
         reqParams.boto3['DomainName'] = jsonRequestBody.contentString.domainName;
         reqParams.cli['--domain-name'] = jsonRequestBody.contentString.domainName;
         reqParams.boto3['CertificateArn'] = jsonRequestBody.contentString.certificateArn;
@@ -12776,7 +12778,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteClientCertificate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/clientcertificates" && jsonRequestBody.path == "/clientcertificates/oty57y" && jsonRequestBody.method == "DELETE") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/clientcertificates" && jsonRequestBody.path == "/clientcertificates/oty57y" && jsonRequestBody.method == "DELETE") {
         reqParams.boto3['clientCertificateId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--client-certificate-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -12801,7 +12803,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:elbv2.DescribeLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/elbv2$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/vpclinks" && jsonRequestBody.params.Action == "DescribeLoadBalancers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/elbv2$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/vpclinks" && jsonRequestBody.params.Action == "DescribeLoadBalancers") {
 
         outputs.push({
             'region': region,
@@ -12819,7 +12821,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.UpdateAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/account" && jsonRequestBody.method == "PATCH") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/account" && jsonRequestBody.method == "PATCH") {
         reqParams.boto3['patchOperations'] = jsonRequestBody.contentString.patchOperations;
         reqParams.cli['--patch-operations'] = jsonRequestBody.contentString.patchOperations;
 
@@ -12854,7 +12856,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:lambda.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctions\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctions\//g)) {
         reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
 
@@ -12874,7 +12876,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:kinesis.ListStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListKinesisStreams\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListKinesisStreams\//g)) {
         reqParams.boto3['Limit'] = jsonRequestBody.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.Limit;
 
@@ -12894,7 +12896,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:sns.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSNSTopics\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSNSTopics\//g)) {
 
         outputs.push({
             'region': region,
@@ -12912,7 +12914,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:autoscaling.DescribeAutoScalingGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeAutoScalingGroups\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeAutoScalingGroups\//g)) {
 
         outputs.push({
             'region': region,
@@ -12930,7 +12932,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:sqs.ListQueues
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSQSQueues\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListSQSQueues\//g)) {
 
         outputs.push({
             'region': region,
@@ -12948,7 +12950,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:ecs.ListTaskDefinitionFamilies
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListTaskDefinitionFamilies\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListTaskDefinitionFamilies\//g)) {
 
         outputs.push({
             'region': region,
@@ -12966,7 +12968,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:stepfunctions.ListStateMachines
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListStepFunctionsStateMachines\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListStepFunctionsStateMachines\//g)) {
         reqParams.boto3['maxResults'] = jsonRequestBody.MaxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.MaxResults;
 
@@ -12986,7 +12988,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:ssm.ListDocuments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListDocuments\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListDocuments\//g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
         reqParams.boto3['DocumentFilterList'] = jsonRequestBody.DocumentFilterList;
@@ -13008,7 +13010,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:firehose.ListDeliveryStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListFirehoseDeliveryStreams\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListFirehoseDeliveryStreams\//g)) {
         reqParams.boto3['Limit'] = jsonRequestBody.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.Limit;
 
@@ -13028,7 +13030,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRoles\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRoles\//g)) {
         reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxItems;
 
@@ -13048,7 +13050,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:cloudtrail.DescribeTrails
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeTrails\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DescribeTrails\//g)) {
 
         outputs.push({
             'region': region,
@@ -13066,7 +13068,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:lambda.ListVersionsByFunction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionVersions\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionVersions\//g)) {
         reqParams.boto3['FunctionName'] = jsonRequestBody.FunctionName;
         reqParams.cli['--function-name'] = jsonRequestBody.FunctionName;
         reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
@@ -13088,7 +13090,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:lambda.ListAliases
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionAliases\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListLambdaFunctionAliases\//g)) {
         reqParams.boto3['FunctionName'] = jsonRequestBody.FunctionName;
         reqParams.cli['--function-name'] = jsonRequestBody.FunctionName;
         reqParams.boto3['MaxItems'] = jsonRequestBody.MaxItems;
@@ -13110,7 +13112,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:events.PutRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.SaveRule\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.SaveRule\//g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13180,7 +13182,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:events.ListRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRules\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.ListRules\//g)) {
         reqParams.boto3['NextToken'] = jsonRequestBody.NextToken;
         reqParams.cli['--next-token'] = jsonRequestBody.NextToken;
         reqParams.boto3['NamePrefix'] = jsonRequestBody.NamePrefix;
@@ -13202,7 +13204,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:events.DisableRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DisableRule\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DisableRule\//g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:events:*:*:rule/" + jsonRequestBody.Name
         ];
@@ -13231,7 +13233,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:events.EnableRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.EnableRule\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.EnableRule\//g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:events:*:*:rule/" + jsonRequestBody.Name
         ];
@@ -13260,7 +13262,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudwatch:events.DeleteRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DeleteRule\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.DeleteRule\//g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:events:*:*:rule/" + jsonRequestBody.Name
         ];
@@ -13289,7 +13291,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:ds.DescribeDirectories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeDirectories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeDirectories") {
 
         outputs.push({
             'region': region,
@@ -13307,7 +13309,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.DescribeWorkspaceBundles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceBundles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceBundles") {
 
         outputs.push({
             'region': region,
@@ -13325,7 +13327,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "listKeys") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "listKeys") {
 
         outputs.push({
             'region': region,
@@ -13343,7 +13345,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.DescribeWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceImages") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "describeWorkspaceImages") {
 
         outputs.push({
             'region': region,
@@ -13361,7 +13363,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.CreateWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "createRegistration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "createRegistration") {
         reqParams.iam['Resource'] = [
             "arn:aws:sky:*:*:workspace/*",
             "arn:aws:sky:*:*:workspacebundle/" + getPipeSplitField(requestBody, 18)
@@ -13426,7 +13428,7 @@ function analyseRequest(details) {
     }
 
     // autogen:workspaces:workspaces.TerminateWorkspaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "terminateWorkspaces") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/workspaces\/workspaces\/SkyLightService$/g) && gwtRequest['method'] == "terminateWorkspaces") {
         reqParams.iam['Resource'] = [
             "arn:aws:sky:*:*:workspace/" + getPipeSplitField(requestBody, 12)
         ];
@@ -13459,7 +13461,7 @@ function analyseRequest(details) {
     }
 
     // autogen:athena:athena.CreateNamedQuery
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/athena\/rpc\/query\/save$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/athena\/rpc\/query\/save$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13515,7 +13517,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.CreateGraphqlApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createGraphqlApi") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createGraphqlApi") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13563,7 +13565,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.CreateApiKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createApiKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createApiKey") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13611,7 +13613,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:dynamodb.CreateTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/dynamodb$/g) && jsonRequestBody.operation == "createTable") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/dynamodb$/g) && jsonRequestBody.operation == "createTable") {
         reqParams.iam['Resource'] = [
             "arn:aws:dynamodb:*:*:table/" + jsonRequestBody.contentString.TableName
         ];
@@ -13664,7 +13666,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:dynamodb.DescribeTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/dynamodb$/g) && jsonRequestBody.operation == "describeTable") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/dynamodb$/g) && jsonRequestBody.operation == "describeTable") {
         reqParams.boto3['TableName'] = jsonRequestBody.contentString.TableName;
         reqParams.cli['--table-name'] = jsonRequestBody.contentString.TableName;
 
@@ -13684,7 +13686,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.StartSchemaCreation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "startSchemaCreation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "startSchemaCreation") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13728,7 +13730,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.GetSchemaCreationStatus
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "getSchemaCreationStatus") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "getSchemaCreationStatus") {
         reqParams.boto3['apiId'] = jsonRequestBody.path.split("/")[3];
         reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
 
@@ -13748,7 +13750,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.CreateDataSource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createDataSource") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createDataSource") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13816,7 +13818,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.CreateResolver
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createResolver") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createResolver") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13872,7 +13874,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListResolvers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listResolvers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listResolvers") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['apiId'] = jsonRequestBody.path.split("/")[3];
@@ -13896,7 +13898,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.UpdateGraphqlApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "updateGraphqlApi") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "updateGraphqlApi") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13929,7 +13931,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.DeleteGraphqlApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "deleteGraphqlApi") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "deleteGraphqlApi") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -13958,7 +13960,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeLaunchTemplates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeLaunchTemplates\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeLaunchTemplates\?/g)) {
         reqParams.boto3['LaunchTemplateNames'] = jsonRequestBody.LaunchTemplateNames;
         reqParams.cli['--launch-template-names'] = jsonRequestBody.LaunchTemplateNames;
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
@@ -13982,7 +13984,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getLoadBalancersAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getLoadBalancersAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -14000,7 +14002,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.CreateLaunchConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=CreateLaunchConfiguration\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=CreateLaunchConfiguration\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/" + jsonRequestBody.LaunchConfigurationName
         ];
@@ -14121,7 +14123,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeLaunchConfigurations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeLaunchConfigurations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeLaunchConfigurations\?/g)) {
         reqParams.boto3['LaunchConfigurationNames'] = jsonRequestBody.LaunchConfigurationNames;
         reqParams.cli['--launch-configuration-names'] = jsonRequestBody.LaunchConfigurationNames;
 
@@ -14141,7 +14143,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeTargetGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeTargetGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeTargetGroups\?/g)) {
 
         outputs.push({
             'region': region,
@@ -14159,7 +14161,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.CreateAutoScalingGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=CreateAutoScalingGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=CreateAutoScalingGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14246,7 +14248,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.PutScalingPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=PutScalingPolicy\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=PutScalingPolicy\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14298,7 +14300,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.PutNotificationConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=PutNotificationConfiguration\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=PutNotificationConfiguration\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14331,7 +14333,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeScalingActivities
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeScalingActivities\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeScalingActivities\?/g)) {
         reqParams.boto3['AutoScalingGroupName'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.cli['--auto-scaling-group-name'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.boto3['NextToken'] = jsonRequestBody.NextToken;
@@ -14353,7 +14355,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribePolicies
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribePolicies\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribePolicies\?/g)) {
         reqParams.boto3['AutoScalingGroupName'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.cli['--auto-scaling-group-name'] = jsonRequestBody.AutoScalingGroupName;
 
@@ -14373,7 +14375,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeTags\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeTags\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -14393,7 +14395,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeScheduledActions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeScheduledActions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeScheduledActions\?/g)) {
         reqParams.boto3['AutoScalingGroupName'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.cli['--auto-scaling-group-name'] = jsonRequestBody.AutoScalingGroupName;
 
@@ -14413,7 +14415,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeLifecycleHooks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeLifecycleHooks\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeLifecycleHooks\?/g)) {
         reqParams.boto3['AutoScalingGroupName'] = jsonRequestBody.AutoScalingGroupName;
         reqParams.cli['--auto-scaling-group-name'] = jsonRequestBody.AutoScalingGroupName;
 
@@ -14433,7 +14435,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DescribeNotificationConfigurations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DescribeNotificationConfigurations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DescribeNotificationConfigurations\?/g)) {
         reqParams.boto3['AutoScalingGroupNames'] = jsonRequestBody.AutoScalingGroupNames;
         reqParams.cli['--auto-scaling-group-names'] = jsonRequestBody.AutoScalingGroupNames;
 
@@ -14453,7 +14455,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DeleteLaunchConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DeleteLaunchConfiguration\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DeleteLaunchConfiguration\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/" + jsonRequestBody.LaunchConfigurationName
         ];
@@ -14482,7 +14484,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DeleteAutoScalingGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DeleteAutoScalingGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DeleteAutoScalingGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14513,7 +14515,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.PutScheduledUpdateGroupAction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=PutScheduledUpdateGroupAction\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=PutScheduledUpdateGroupAction\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14568,7 +14570,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DeleteScheduledAction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DeleteScheduledAction\?&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DeleteScheduledAction\?&/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14599,7 +14601,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.PutLifecycleHook
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=PutLifecycleHook\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=PutLifecycleHook\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14663,7 +14665,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:autoscaling.DeleteLifecycleHook
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/autoscaling\/acb\?call=DeleteLifecycleHook\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/autoscaling\/acb\?call=DeleteLifecycleHook\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/" + jsonRequestBody.AutoScalingGroupName
         ];
@@ -14694,7 +14696,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.DescribeComputeEnvironments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describecomputeenvironments") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describecomputeenvironments") {
 
         outputs.push({
             'region': region,
@@ -14712,7 +14714,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -14730,7 +14732,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.DescribeJobDefinitions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describeJobDefinitions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describeJobDefinitions") {
 
         outputs.push({
             'region': region,
@@ -14748,7 +14750,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.ListInstanceProfiles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "ListInstanceProfiles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "ListInstanceProfiles") {
         reqParams.boto3['MaxItems'] = jsonRequestBody.params.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.params.MaxItems;
 
@@ -14768,7 +14770,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeVpcs") {
 
         outputs.push({
             'region': region,
@@ -14786,7 +14788,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.ListInstanceProfiles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "ListInstanceProfiles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "ListInstanceProfiles") {
         reqParams.boto3['MaxItems'] = jsonRequestBody.params.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.params.MaxItems;
 
@@ -14806,7 +14808,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSubnets") {
 
         outputs.push({
             'region': region,
@@ -14824,7 +14826,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -14842,7 +14844,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.AttachRolePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "AttachRolePolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "AttachRolePolicy") {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:role/" + jsonRequestBody.params.RoleName
         ];
@@ -14873,7 +14875,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.CreateInstanceProfile
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "CreateInstanceProfile") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "CreateInstanceProfile") {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:instance-profile/" + jsonRequestBody.params.InstanceProfileName
         ];
@@ -14902,7 +14904,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:iam.AddRoleToInstanceProfile
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "AddRoleToInstanceProfile") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/iam$/g) && jsonRequestBody.operation == "AddRoleToInstanceProfile") {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:instance-profile/" + jsonRequestBody.params.InstanceProfileName
         ];
@@ -14932,7 +14934,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.CreateComputeEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "createcomputeenvironment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "createcomputeenvironment") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -14985,7 +14987,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.DescribeComputeEnvironments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describecomputeenvironments") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "describecomputeenvironments") {
         reqParams.boto3['computeEnvironments'] = jsonRequestBody.contentString.computeEnvironments;
         reqParams.cli['--compute-environments'] = jsonRequestBody.contentString.computeEnvironments;
 
@@ -15005,7 +15007,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.CreateJobQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "createjobqueue") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "createjobqueue") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -15061,7 +15063,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.RegisterJobDefinition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "registerjobdefinition") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "registerjobdefinition") {
         reqParams.iam['Resource'] = [
             "arn:aws:batch:*:*:job-definition/" + jsonRequestBody.contentString.jobDefinitionName + ":*"
         ];
@@ -15117,7 +15119,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.SubmitJob
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "submitjob") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "submitjob") {
         reqParams.iam['Resource'] = [
             "arn:aws:batch:*:*:job-definition/" + jsonRequestBody.contentString.jobDefinitionName + ":*",
             "arn:aws:batch:*:*:job-queue/" + jsonRequestBody.contentString.jobQueue
@@ -15153,7 +15155,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.ListJobs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "listjobs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "listjobs") {
         reqParams.boto3['jobQueue'] = jsonRequestBody.contentString.jobQueue;
         reqParams.cli['--job-queue'] = jsonRequestBody.contentString.jobQueue;
         reqParams.boto3['jobStatus'] = jsonRequestBody.contentString.jobStatus;
@@ -15175,7 +15177,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.CancelJob
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "cancelJob") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "cancelJob") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -15206,7 +15208,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.DeleteComputeEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "deletecomputeenvironment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "deletecomputeenvironment") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -15235,7 +15237,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.UpdateComputeEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "updatecomputeenvironment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "updatecomputeenvironment") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -15266,7 +15268,7 @@ function analyseRequest(details) {
     }
 
     // autogen:batch:batch.DeregisterJobDefinition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "deregisterjobdefinition") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/batch\/api\/batch$/g) && jsonRequestBody.operation == "deregisterjobdefinition") {
         reqParams.iam['Resource'] = [
             "arn:aws:batch:*:*:job-definition/" + jsonRequestBody.contentString.jobDefinitionName + ":*"
         ];
@@ -15295,7 +15297,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.CreateApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:application:" + jsonRequestBody.contentString.applicationName
         ];
@@ -15344,7 +15346,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.GetApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getApplication") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15366,7 +15368,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.ListApplicationRevisions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listApplicationRevisions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listApplicationRevisions") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['ApplicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15392,7 +15394,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.ListDeploymentGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentGroups") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15414,7 +15416,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.ListDeploymentConfigs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
         reqParams.cli['_cli_service'] = "deploy";
 
         outputs.push({
@@ -15433,7 +15435,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.CreateDeploymentGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeploymentGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeploymentGroup") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentgroup:" + jsonRequestBody.contentString.applicationName + "/" + jsonRequestBody.contentString.deploymentGroupName
         ];
@@ -15502,7 +15504,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.GetDeploymentGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getDeploymentGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "getDeploymentGroup") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15526,7 +15528,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.ListDeployments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeployments") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeployments") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15550,7 +15552,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.ListDeploymentConfigs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "listDeploymentConfigs") {
         reqParams.cli['_cli_service'] = "deploy";
 
         outputs.push({
@@ -15569,7 +15571,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.BatchGetDeploymentGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeploymentGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeploymentGroups") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['applicationName'] = jsonRequestBody.contentString.applicationName;
@@ -15593,7 +15595,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.CreateDeployment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeployment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeployment") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentgroup:" + jsonRequestBody.contentString.applicationName + "/" + jsonRequestBody.contentString.deploymentGroupName
         ];
@@ -15631,7 +15633,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.StopDeployment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "stopDeployment") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "stopDeployment") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -15663,7 +15665,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.CreateDeploymentConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeploymentConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "createDeploymentConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentconfig:" + jsonRequestBody.contentString.deploymentConfigName
         ];
@@ -15709,7 +15711,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.DeleteDeploymentConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "deleteDeploymentConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "deleteDeploymentConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:deploymentconfig:" + jsonRequestBody.contentString.deploymentConfigName
         ];
@@ -15739,7 +15741,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.BatchGetDeployments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeployments") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "batchGetDeployments") {
         reqParams.cli['_cli_service'] = "deploy";
 
         reqParams.boto3['deploymentIds'] = jsonRequestBody.contentString.deploymentIds;
@@ -15761,7 +15763,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codedeploy:codedeploy.DeleteApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "deleteApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codedeploy$/g) && jsonRequestBody.operation == "deleteApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:codedeploy:*:*:application:" + jsonRequestBody.contentString.applicationName
         ];
@@ -15791,7 +15793,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.ListActionTypes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "listActionTypes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "listActionTypes") {
 
         outputs.push({
             'region': region,
@@ -15809,7 +15811,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.ListPipelines
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "listPipelines") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "listPipelines") {
 
         outputs.push({
             'region': region,
@@ -15827,7 +15829,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codebuild:codebuild.ListProjects
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "listProjects") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "listProjects") {
 
         outputs.push({
             'region': region,
@@ -15845,7 +15847,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.ListRepositories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listRepositories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listRepositories") {
 
         outputs.push({
             'region': region,
@@ -15863,7 +15865,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codebuild:codebuild.ListCuratedEnvironmentImages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "listCuratedEnvironmentImages") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "listCuratedEnvironmentImages") {
 
         outputs.push({
             'region': region,
@@ -15881,7 +15883,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codebuild:codebuild.CreateProject
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "createProject") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "createProject") {
         reqParams.iam['Resource'] = [
             "arn:aws:codebuild:*:*:project/" + jsonRequestBody.contentString.name
         ];
@@ -15943,7 +15945,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codebuild:codebuild.BatchGetProjects
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "batchGetProjects") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codebuild$/g) && jsonRequestBody.operation == "batchGetProjects") {
         reqParams.boto3['names'] = jsonRequestBody.contentString.names;
         reqParams.cli['--names'] = jsonRequestBody.contentString.names;
 
@@ -15963,7 +15965,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.CreatePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "createPipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "createPipeline") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.pipeline.name
         ];
@@ -16056,7 +16058,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.GetPipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipeline") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
 
@@ -16076,7 +16078,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.GetPipelineState
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipelineState") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipelineState") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
 
@@ -16096,7 +16098,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.GetPipelineExecution
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipelineExecution") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "getPipelineExecution") {
         reqParams.boto3['pipelineExecutionId'] = jsonRequestBody.contentString.pipelineExecutionId;
         reqParams.cli['--pipeline-execution-id'] = jsonRequestBody.contentString.pipelineExecutionId;
         reqParams.boto3['pipelineName'] = jsonRequestBody.contentString.pipelineName;
@@ -16118,7 +16120,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.UpdatePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "updatePipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "updatePipeline") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.pipeline.name
         ];
@@ -16147,7 +16149,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.DeletePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "deletePipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "deletePipeline") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.name
         ];
@@ -16176,7 +16178,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.CreateRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "createRepository") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "createRepository") {
         reqParams.iam['Resource'] = [
             "arn:aws:codecommit:*:*:" + jsonRequestBody.contentString.repositoryName
         ];
@@ -16224,7 +16226,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.GetRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "getRepository") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "getRepository") {
         reqParams.boto3['repositoryName'] = jsonRequestBody.contentString.repositoryName;
         reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
 
@@ -16244,7 +16246,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.ListRepositories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listRepositories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listRepositories") {
         reqParams.boto3['SortBy'] = jsonRequestBody.contentString.sortBy;
         reqParams.cli['--sort-by'] = jsonRequestBody.contentString.sortBy;
         reqParams.boto3['Order'] = jsonRequestBody.contentString.order;
@@ -16266,7 +16268,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.ListPullRequests
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listPullRequests") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "listPullRequests") {
         reqParams.boto3['maxResults'] = jsonRequestBody.contentString.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
         reqParams.boto3['repositoryName'] = jsonRequestBody.contentString.repositoryName;
@@ -16290,7 +16292,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codecommit:codecommit.DeleteRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "deleteRepository") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codecommit$/g) && jsonRequestBody.operation == "deleteRepository") {
         reqParams.iam['Resource'] = [
             "arn:aws:codecommit:*:*:" + jsonRequestBody.contentString.repositoryName
         ];
@@ -16319,7 +16321,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.ProvisionProduct
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/stack\/launch\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/stack\/launch\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16380,7 +16382,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.CreateProduct
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/product\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/product\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16454,7 +16456,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.ListPortfolios
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/list\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/portfolio\/list\?/g)) {
         reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
         reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
 
@@ -16474,7 +16476,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.CreatePortfolio
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/portfolio\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16526,7 +16528,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.AssociateProductWithPortfolio
-    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/product\/portfolio\?/g)) {
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/product\/portfolio\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16573,7 +16575,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.CreatePortfolioShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/share\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/portfolio\/share\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16617,7 +16619,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.ListTagOptions
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/list\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/tagOption\/list\?/g)) {
         reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
         reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
 
@@ -16637,7 +16639,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.CreateTagOption
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/create\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/tagOption\/create\?/g)) {
         reqParams.boto3['Key'] = jsonRequestBody.key;
         reqParams.cli['--key'] = jsonRequestBody.key;
         reqParams.boto3['Value'] = jsonRequestBody.value;
@@ -16677,7 +16679,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.DescribeTagOption
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/describe\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/tagOption\/describe\?/g)) {
         reqParams.boto3['Id'] = getUrlValue(details.url, 'id');
         reqParams.cli['--id'] = getUrlValue(details.url, 'id');
 
@@ -16697,7 +16699,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.AssociateTagOptionWithResource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/tagOption\/associate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/tagOption\/associate\?/g)) {
         reqParams.boto3['ResourceId'] = jsonRequestBody.resourceId;
         reqParams.cli['--resource-id'] = jsonRequestBody.resourceId;
         reqParams.boto3['TagOptionId'] = jsonRequestBody.tagOptionId;
@@ -16737,7 +16739,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.AssociatePrincipalWithPortfolio
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/principal\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/portfolio\/principal\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -16799,7 +16801,7 @@ function analyseRequest(details) {
     // manual:elasticache:elasticache.CreateCacheParameterGroup
     // manual:elasticache:ec2.DescribeAvailabilityZones
     // manual:elasticache:elasticache.CreateReplicationGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticache\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticache\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
             if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
@@ -17263,7 +17265,7 @@ function analyseRequest(details) {
     // autogen:glue:glue.DeleteJob
     // autogen:glue:glue.DeleteTrigger
     // autogen:glue:glue.GetDevEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glue\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/glue\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
             if (action['action'] == "com.amazonaws.console.glue.awssdk.shared.context.AWSGlueContext.getDatabases") {
@@ -18308,7 +18310,7 @@ function analyseRequest(details) {
     // autogen:rds:rds.CreateDBClusterParameterGroup
     // autogen:rds:rds.StartDBCluster
     // autogen:rds:rds.DeleteDBInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
             if (action['action'] == "com.amazonaws.console.rds.shared.DbSecurityGroupContext.list") {
@@ -19198,7 +19200,7 @@ function analyseRequest(details) {
     }
        
     // autogen:lambda:lambda.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listFunctions&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listFunctions&/g)) {
 
         outputs.push({
             'region': region,
@@ -19216,7 +19218,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
 
         outputs.push({
             'region': region,
@@ -19234,7 +19236,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listRoles&/g)) {
 
         outputs.push({
             'region': region,
@@ -19252,7 +19254,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listVpcs&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listVpcs&/g)) {
 
         outputs.push({
             'region': region,
@@ -19270,7 +19272,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.GetFunctionConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getFunctionConfiguration&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=getFunctionConfiguration&/g)) {
         reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
         reqParams.cli['--function-name'] = jsonRequestBody.functionName;
 
@@ -19290,7 +19292,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.GetFunction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getFunctionCode&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=getFunctionCode&/g)) {
         reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
         reqParams.cli['--function-name'] = jsonRequestBody.functionName;
 
@@ -19310,7 +19312,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.ListTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listTags&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listTags&/g)) {
         reqParams.boto3['Resource'] = jsonRequestBody.functionName;
         reqParams.cli['--resource'] = jsonRequestBody.functionName;
 
@@ -19330,7 +19332,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:iam.GetRole
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getRole&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=getRole&/g)) {
         reqParams.boto3['RoleName'] = jsonRequestBody.roleName;
         reqParams.cli['--role-name'] = jsonRequestBody.roleName;
 
@@ -19350,7 +19352,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:kms.ListKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=listKmsKeys&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=listKmsKeys&/g)) {
 
         outputs.push({
             'region': region,
@@ -19368,7 +19370,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.CreateAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=createAlias&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=createAlias&/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lambda:*:*:function:" + jsonRequestBody.functionName
         ];
@@ -19424,7 +19426,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.GetAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=getAlias&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=getAlias&/g)) {
         reqParams.boto3['FunctionName'] = jsonRequestBody.functionName;
         reqParams.cli['--function-name'] = jsonRequestBody.functionName;
         reqParams.boto3['Name'] = jsonRequestBody.name;
@@ -19446,7 +19448,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.DeleteFunction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=deleteFunction&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=deleteFunction&/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lambda:*:*:function:" + jsonRequestBody.functionName
         ];
@@ -19477,7 +19479,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.PublishVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?operation=publishVersion&/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?operation=publishVersion&/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lambda:*:*:function:" + jsonRequestBody.functionName
         ];
@@ -19609,7 +19611,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.ListDomainNames
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "ListDomainNames") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "ListDomainNames") {
 
         outputs.push({
             'region': region,
@@ -19627,7 +19629,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.ListElasticsearchVersions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "ListElasticsearchVersions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "ListElasticsearchVersions") {
 
         outputs.push({
             'region': region,
@@ -19645,7 +19647,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.ListElasticsearchInstanceTypes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "listElasticsearchInstanceTypes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "listElasticsearchInstanceTypes") {
 
         outputs.push({
             'region': region,
@@ -19663,7 +19665,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/kms$/g) && jsonRequestBody.operation == "DescribeKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/kms$/g) && jsonRequestBody.operation == "DescribeKey") {
         reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
         reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
 
@@ -19683,7 +19685,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeVpcs") {
 
         outputs.push({
             'region': region,
@@ -19701,7 +19703,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:iam.GetRole
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/iam$/g) && jsonRequestBody.operation == "GetRole") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/iam$/g) && jsonRequestBody.operation == "GetRole") {
         reqParams.boto3['RoleName'] = jsonRequestBody.params.RoleName;
         reqParams.cli['--role-name'] = jsonRequestBody.params.RoleName;
 
@@ -19721,7 +19723,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSubnets") {
 
         outputs.push({
             'region': region,
@@ -19739,7 +19741,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/ec2$/g) && jsonRequestBody.operation == "DescribeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -19757,7 +19759,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.CreateElasticsearchDomain
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "CreateElasticsearchDomain") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "CreateElasticsearchDomain") {
         reqParams.iam['Resource'] = [
             "arn:aws:es:*:*:domain/" + jsonRequestBody.contentString.DomainName
         ];
@@ -19869,7 +19871,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.DescribeElasticsearchDomain
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeElasticsearchDomain") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeElasticsearchDomain") {
         reqParams.boto3['DomainName'] = jsonRequestBody.path.split("/")[4];
         reqParams.cli['--domain-name'] = jsonRequestBody.path.split("/")[4];
 
@@ -19889,7 +19891,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.GetUpgradeStatus
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetUpgradeStatus") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetUpgradeStatus") {
         reqParams.boto3['DomainName'] = jsonRequestBody.path.split("/")[4];
         reqParams.cli['--domain-name'] = jsonRequestBody.path.split("/")[4];
 
@@ -19909,7 +19911,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.GetCompatibleElasticsearchVersions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetCompatibleElasticsearchVersions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetCompatibleElasticsearchVersions") {
         reqParams.boto3['DomainName'] = jsonRequestBody.params.domainName;
         reqParams.cli['--domain-name'] = jsonRequestBody.params.domainName;
 
@@ -19929,7 +19931,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.GetUpgradeHistory
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetUpgradeHistory") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "GetUpgradeHistory") {
         reqParams.boto3['DomainName'] = jsonRequestBody.path.split("/")[3];
         reqParams.cli['--domain-name'] = jsonRequestBody.path.split("/")[3];
 
@@ -19949,7 +19951,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.DeleteElasticsearchDomain
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DeleteElasticsearchDomain") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DeleteElasticsearchDomain") {
         reqParams.iam['Resource'] = [
             "arn:aws:es:*:*:domain/" + jsonRequestBody.contentString.DomainName
         ];
@@ -19978,7 +19980,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.DescribeReservedElasticsearchInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeReservedElasticsearchInstances") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeReservedElasticsearchInstances") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -19998,7 +20000,7 @@ function analyseRequest(details) {
     }
 
     // autogen:es:es.DescribeElasticsearchDomains
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeElasticsearchDomains") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/es\/api\/es$/g) && jsonRequestBody.operation == "DescribeElasticsearchDomains") {
         reqParams.boto3['DomainNames'] = jsonRequestBody.contentString.DomainNames;
         reqParams.cli['--domain-names'] = jsonRequestBody.contentString.DomainNames;
 
@@ -20018,7 +20020,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListTopics$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/ListTopics$/g)) {
 
         outputs.push({
             'region': region,
@@ -20036,7 +20038,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListSubscriptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListSubscriptions$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/ListSubscriptions$/g)) {
 
         outputs.push({
             'region': region,
@@ -20054,7 +20056,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.CreateTopic
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/CreateTopic$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/CreateTopic$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sns:*:*:" + jsonRequestBody.topicName
         ];
@@ -20098,7 +20100,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.SetTopicAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/SetTopicAttributes$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/SetTopicAttributes$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sns:*:*:" + jsonRequestBody.topicArn.split(":").pop()
         ];
@@ -20149,7 +20151,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.DeleteTopic
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/DeleteTopic$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/DeleteTopic$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sns:*:*:" + jsonRequestBody.topicArn.split(":").pop()
         ];
@@ -20178,7 +20180,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListPlatformApplications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/ListPlatformApplications$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/ListPlatformApplications$/g)) {
         reqParams.boto3['NextToken'] = jsonRequestBody.nextToken;
         reqParams.cli['--next-token'] = jsonRequestBody.nextToken;
 
@@ -20198,7 +20200,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.Subscribe
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/Subscribe$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/Subscribe$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sns:*:*:" + jsonRequestBody.topicArn.split(":").pop()
         ];
@@ -20250,7 +20252,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.GetTopicAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v2\/GetTopicAttributes$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v2\/GetTopicAttributes$/g)) {
         reqParams.boto3['TopicArn'] = jsonRequestBody.topicArn;
         reqParams.cli['--topic-arn'] = jsonRequestBody.topicArn;
 
@@ -20270,7 +20272,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -20288,7 +20290,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -20306,7 +20308,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ds.CreateDirectory
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateDirectory") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateDirectory") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20383,7 +20385,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ds.DescribeDirectories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DescribeDirectories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DescribeDirectories") {
         reqParams.boto3['DirectoryIds'] = jsonRequestBody.contentString.DirectoryIds;
         reqParams.cli['--directory-ids'] = jsonRequestBody.contentString.DirectoryIds;
 
@@ -20403,7 +20405,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ds.DeleteDirectory
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DeleteDirectory") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "DeleteDirectory") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20454,7 +20456,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ds:ds.CreateMicrosoftAD
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateMicrosoftAD") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/directoryservicev2\/api\/galaxy$/g) && jsonRequestBody.operation == "CreateMicrosoftAD") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20531,7 +20533,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcClassicLinkDnsSupport
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcClassicLinkDnsSupport\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcClassicLinkDnsSupport\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20549,7 +20551,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeSubnets\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20567,7 +20569,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20585,7 +20587,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20603,7 +20605,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateSubnet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateSubnet\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateSubnet\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20659,7 +20661,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNatGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=getNatGatewayUnsupportedZones\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=getNatGatewayUnsupportedZones\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20677,7 +20679,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstances\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -20697,7 +20699,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkInterfaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkInterfaces\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkInterfaces\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -20717,7 +20719,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcEndpoints\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcEndpoints\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.request.filters;
         reqParams.cli['--filters'] = jsonRequestBody.request.filters;
 
@@ -20737,7 +20739,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeEgressOnlyInternetGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeEgressOnlyInternetGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeEgressOnlyInternetGateways\?/g)) {
 
         outputs.push({
             'region': region,
@@ -20755,7 +20757,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNatGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteNatGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_deleteNatGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20784,7 +20786,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createVpc") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20831,7 +20833,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcs") {
 
         outputs.push({
             'region': region,
@@ -20849,7 +20851,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getDHCPOptions") {
 
         outputs.push({
             'region': region,
@@ -20867,7 +20869,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getVpcAttributes") {
         reqParams.boto3['VpcId'] = getPipeSplitField(requestBody, 17);
         reqParams.cli['--vpc-id'] = getPipeSplitField(requestBody, 17);
 
@@ -20887,7 +20889,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getRouteTables") {
 
         outputs.push({
             'region': region,
@@ -20905,7 +20907,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkAcls
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createDHCPOption" && gwtRequest['method'] == "getNetworkACLs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createDHCPOption" && gwtRequest['method'] == "getNetworkACLs") {
 
         outputs.push({
             'region': region,
@@ -20923,7 +20925,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "createNetworkACL") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -20967,7 +20969,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteNetworkAcl
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyIngressRulesForNetworkACL" && gwtRequest['method'] == "deleteNetworkACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyIngressRulesForNetworkACL" && gwtRequest['method'] == "deleteNetworkACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:network-acl/" + getPipeSplitField(requestBody, 17)
         ];
@@ -20996,7 +20998,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "deleteRouteTable") {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:route-table/" + getPipeSplitField(requestBody, 17)
         ];
@@ -21025,7 +21027,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -21045,7 +21047,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getSubnets") {
 
         outputs.push({
             'region': region,
@@ -21063,7 +21065,7 @@ function analyseRequest(details) {
     }
 
     // manual:ec2:ec2.CreateNetworkAclEntry
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && (gwtRequest['method'] == "modifyIngressRulesForNetworkACL" || gwtRequest['method'] == "modifyEgressRulesForNetworkACL")) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && (gwtRequest['method'] == "modifyIngressRulesForNetworkACL" || gwtRequest['method'] == "modifyEgressRulesForNetworkACL")) {
         for (var i=0; i<gwtRequest.args[2].value.value.length; i++) {
             var reqParams = {
                 'boto3': {},
@@ -21167,7 +21169,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "modifyDHCPOptions") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -21215,7 +21217,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNatGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNatGateways") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['method'] == "getNatGateways") {
 
         outputs.push({
             'region': region,
@@ -21233,7 +21235,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateVpcCidrBlock
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateVpcCidrBlock\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateVpcCidrBlock\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -21284,7 +21286,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2GetLoadBalancers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2GetLoadBalancers\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21302,7 +21304,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInternetGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getInternetGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getInternetGateways\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21320,7 +21322,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getRouteTables\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getRouteTables\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -21340,7 +21342,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:acm.ListCertificates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=listAcmCertificates\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=listAcmCertificates\?/g)) {
         reqParams.boto3['CertificateStatuses'] = jsonRequestBody.CertificateStatusList;
         reqParams.cli['--certificate-statuses'] = jsonRequestBody.CertificateStatusList;
 
@@ -21360,7 +21362,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:iam.ListServerCertificates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=listServerCertificates\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=listServerCertificates\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21378,7 +21380,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeSSLPolicies
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeSSLPolicies\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeSSLPolicies\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21396,7 +21398,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeAccountLimits
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getAccountLimits\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getAccountLimits\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21414,7 +21416,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getMergedInstanceListAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getMergedInstanceListAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21432,7 +21434,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSecurityGroupsAutoUpdate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getSecurityGroupsAutoUpdate\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21450,7 +21452,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.CreateLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2CreateLoadBalancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2CreateLoadBalancer\?/g)) {
         if (jsonRequestBody.type == "application") {
             reqParams.iam['Resource'] = [
                 "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/" + jsonRequestBody.name + "/*"
@@ -21524,7 +21526,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.CreateTargetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2CreateTargetGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2CreateTargetGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticloadbalancing:*:*:targetgroup/" + jsonRequestBody.Name + "/*"
         ];
@@ -21614,7 +21616,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.CreateListener
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2CreateListener\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2CreateListener\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.loadBalancerArn
         ];
@@ -21679,7 +21681,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2GetLoadBalancers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2GetLoadBalancers\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21697,7 +21699,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeLoadBalancerAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeLoadBalancerAttributes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeLoadBalancerAttributes\?/g)) {
         reqParams.boto3['LoadBalancerArn'] = jsonRequestBody.loadBalancerArn;
         reqParams.cli['--load-balancer-arn'] = jsonRequestBody.loadBalancerArn;
 
@@ -21717,7 +21719,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:config.DescribeConfigurationRecorders
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=describeConfigurationRecorders\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=describeConfigurationRecorders\?/g)) {
 
         outputs.push({
             'region': region,
@@ -21735,7 +21737,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:waf-regional.GetWebACLForResource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getWebACLForResource\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getWebACLForResource\?/g)) {
         reqParams.boto3['ResourceArn'] = jsonRequestBody.resourceArn;
         reqParams.cli['--resource-arn'] = jsonRequestBody.resourceArn;
 
@@ -21755,7 +21757,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeRules\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeRules\?/g)) {
         reqParams.boto3['ListenerArn'] = jsonRequestBody.listenerArn;
         reqParams.cli['--listener-arn'] = jsonRequestBody.listenerArn;
 
@@ -21775,7 +21777,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeListeners
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeListeners\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeListeners\?/g)) {
         reqParams.boto3['LoadBalancerArn'] = jsonRequestBody.loadBalancerArn;
         reqParams.cli['--load-balancer-arn'] = jsonRequestBody.loadBalancerArn;
 
@@ -21795,7 +21797,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.CreateRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2CreateRule\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2CreateRule\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.listenerArn
         ];
@@ -21842,7 +21844,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DeleteRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DeleteRule\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DeleteRule\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.ruleArn
         ];
@@ -21871,7 +21873,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DeleteListener
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DeleteListener\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DeleteListener\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.listenerArn
         ];
@@ -21900,7 +21902,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DeleteLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DeleteLoadBalancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DeleteLoadBalancer\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.loadBalancerArn
         ];
@@ -21929,7 +21931,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DeleteTargetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DeleteTargetGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DeleteTargetGroup\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.targetGroupArn
         ];
@@ -21958,7 +21960,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elb.CreateLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=createLoadBalancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=createLoadBalancer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticloadbalancing:*:*:loadbalancer/" + jsonRequestBody.loadBalancerName
         ];
@@ -22014,7 +22016,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elb.ConfigureHealthCheck
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=configureHealthCheck\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=configureHealthCheck\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticloadbalancing:*:*:loadbalancer/" + jsonRequestBody.loadBalancerName
         ];
@@ -22045,7 +22047,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elb.ModifyLoadBalancerAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=modifyLoadBalancerAttributes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=modifyLoadBalancerAttributes\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticloadbalancing:*:*:loadbalancer/" + jsonRequestBody.loadBalancerName
         ];
@@ -22094,7 +22096,7 @@ function analyseRequest(details) {
     // manual:cloudwatch:logs.PutSubscriptionFilter
     // manual:cloudwatch:cloudwatch.PutMetricAlarm
     // manual:cloudwatch:cloudwatch.DeleteAlarms
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\//g)) {
         if (jsonRequestBody.I && jsonRequestBody.I[0] && jsonRequestBody.I[0]["O"] && jsonRequestBody.I[0]["O"] == "wuLyBG8jCdQ61w9bK2g4kaSdI4Q") {
             reqParams.iam['Resource'] = [
                 "*"
@@ -22478,7 +22480,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.CreateQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "createQueue") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "createQueue") {
         reqParams.iam['Resource'] = [
             "arn:aws:sqs:*:*:" + gwtRequest.args[0].value
         ];
@@ -22522,7 +22524,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.GetQueueAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "getQueueAttributes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "getQueueAttributes") {
         reqParams.boto3['QueueUrl'] = getPipeSplitField(requestBody, 11);
         reqParams.cli['--queue-url'] = getPipeSplitField(requestBody, 11);
         reqParams.boto3['AttributeNames'] = getPipeSplitField(requestBody, 14);
@@ -22544,7 +22546,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.SetQueueAttributes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "setQueueAttributes" && getPipeSplitField(requestBody, 13) == "Policy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g) && gwtRequest['method'] == "setQueueAttributes" && getPipeSplitField(requestBody, 13) == "Policy") {
         reqParams.iam['Resource'] = [
             "arn:aws:sqs:*:*:" + getPipeSplitField(requestBody, 11).split("/").pop()
         ];
@@ -22596,7 +22598,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sqs:sqs.DeleteQueue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sqs\/sqsconsole\/AmazonSQS$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sqs\/sqsconsole\/AmazonSQS$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sqs:*:*:" + getPipeSplitField(requestBody, 10).split("/").pop()
         ];
@@ -22625,7 +22627,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.GetHostedZoneCount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "getHostedZoneCount") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "getHostedZoneCount") {
 
         outputs.push({
             'region': region,
@@ -22643,7 +22645,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.ListHostedZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHostedZones") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHostedZones") {
         reqParams.boto3['MaxItems'] = getPipeSplitField(requestBody, 10);
         reqParams.cli['--max-items'] = getPipeSplitField(requestBody, 10);
 
@@ -22663,7 +22665,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.CreateHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPrivateHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPrivateHostedZone") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -22735,7 +22737,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.CreateHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPublicHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "createPublicHostedZone") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -22792,7 +22794,7 @@ function analyseRequest(details) {
 
 
     // autogen:route53:route53.ListGeoLocations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listGeoLocationDetails") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listGeoLocationDetails") {
 
         outputs.push({
             'region': region,
@@ -22810,7 +22812,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.ListHealthChecks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHealthChecks") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "listHealthChecks") {
 
         outputs.push({
             'region': region,
@@ -22828,7 +22830,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.DeleteHostedZone
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "deleteHostedZone") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "deleteHostedZone") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53:::hostedzone/" + getPipeSplitField(requestBody, 10)
         ];
@@ -22857,7 +22859,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-availability\-zones\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/list\-availability\-zones\?/g)) {
 
         outputs.push({
             'region': region,
@@ -22875,7 +22877,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-vpcs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/list\-vpcs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -22893,7 +22895,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-subnets\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/list\-subnets\?/g)) {
 
         outputs.push({
             'region': region,
@@ -22911,7 +22913,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.CreateStack
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-stack\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/create\-stack\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -23025,7 +23027,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.CreateApp
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-app\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/create\-app\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23115,7 +23117,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.CreateLayer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-layer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/create\-layer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23269,7 +23271,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.CreateInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-instance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/create\-instance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23367,7 +23369,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DescribeLayers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-layers\?region=ap\-southeast\-2$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/describe\-layers\?region=ap\-southeast\-2$/g)) {
         reqParams.boto3['StackId'] = jsonRequestBody.StackId;
         reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
 
@@ -23387,7 +23389,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.UpdateLayer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/update\-layer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/update\-layer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23444,7 +23446,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.RegisterVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/register\-volume\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/register\-volume\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23488,7 +23490,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DescribeVolumes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-volumes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/describe\-volumes\?/g)) {
         reqParams.boto3['StackId'] = jsonRequestBody.StackId;
         reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
 
@@ -23508,7 +23510,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.CreateUserProfile
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/create\-user\-profile\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/create\-user\-profile\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -23561,7 +23563,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DescribeElasticLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/list\-elastic\-load\-balancers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/list\-elastic\-load\-balancers\?/g)) {
         reqParams.boto3['StackId'] = jsonRequestBody.StackId;
         reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
 
@@ -23581,7 +23583,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.AttachElasticLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/attach\-elastic\-load\-balancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/attach\-elastic\-load\-balancer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/*/"
         ];
@@ -23625,7 +23627,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DeleteInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-instance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/delete\-instance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/*/"
         ];
@@ -23654,7 +23656,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elb.DeleteLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteLoadBalancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deleteLoadBalancer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticloadbalancing:*:*:loadbalancer/" + jsonRequestBody.loadBalancerName
         ];
@@ -23683,7 +23685,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DetachElasticLoadBalancer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/detach\-elastic\-load\-balancer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/detach\-elastic\-load\-balancer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/*/"
         ];
@@ -23709,7 +23711,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DeleteLayer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-layer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/delete\-layer\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/*/"
         ];
@@ -23738,7 +23740,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DeleteApp
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-app\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/delete\-app\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/*/"
         ];
@@ -23767,7 +23769,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DeleteStack
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/delete\-stack\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/delete\-stack\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -23804,7 +23806,7 @@ function analyseRequest(details) {
     // autogen:redshift:redshift.CreateCluster
     // autogen:redshift:redshift.CreateClusterParameterGroup
     // autogen:redshift:redshift.CreateClusterSubnetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/redshift\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/redshift\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
             if (action['action'] == "EC2.DescribeSecurityGroupsDefault") {
@@ -24083,7 +24085,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListIPSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListIPSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListIPSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24103,7 +24105,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListSqlInjectionMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSqlInjectionMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSqlInjectionMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24123,7 +24125,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListSizeConstraintSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSizeConstraintSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSizeConstraintSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24143,7 +24145,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListXssMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListXssMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListXssMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24163,7 +24165,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListGeoMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListGeoMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListGeoMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24183,7 +24185,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListByteMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListByteMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListByteMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24203,7 +24205,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListRegexMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRegexMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRegexMatchSets") {
         reqParams.boto3['NextMarker'] = jsonRequestBody.content.NextMarker;
         reqParams.cli['--next-marker'] = jsonRequestBody.content.NextMarker;
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
@@ -24225,7 +24227,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.GetChangeToken
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.GetChangeToken") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.GetChangeToken") {
 
         outputs.push({
             'region': region,
@@ -24243,7 +24245,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:xssmatchset/*"
         ];
@@ -24289,7 +24291,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:xssmatchset/" + jsonRequestBody.content.XssMatchSetId
         ];
@@ -24322,7 +24324,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:ipset/*"
         ];
@@ -24368,7 +24370,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:ipset/" + jsonRequestBody.content.IPSetId
         ];
@@ -24401,7 +24403,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sizeconstraintset/*"
         ];
@@ -24447,7 +24449,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sizeconstraintset/" + jsonRequestBody.content.SizeConstraintSetId
         ];
@@ -24480,7 +24482,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRules") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24500,7 +24502,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListRateBasedRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRateBasedRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRateBasedRules") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24520,7 +24522,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListSubscribedRuleGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSubscribedRuleGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListSubscribedRuleGroups") {
 
         outputs.push({
             'region': region,
@@ -24538,7 +24540,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.ListRuleGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRuleGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.ListRuleGroups") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -24558,7 +24560,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sqlinjectionmatchset/*"
         ];
@@ -24604,7 +24606,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sqlinjectionmatchset/" + jsonRequestBody.content.SqlInjectionMatchSetId
         ];
@@ -24637,7 +24639,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:rule/*"
         ];
@@ -24687,7 +24689,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:rule/" + jsonRequestBody.content.RuleId
         ];
@@ -24720,7 +24722,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateWebACL
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateWebACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateWebACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:webacl/*"
         ];
@@ -24769,7 +24771,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateWebACL
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateWebACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateWebACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:webacl/" + jsonRequestBody.content.WebACLId
         ];
@@ -24804,7 +24806,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:xssmatchset/" + jsonRequestBody.content.XssMatchSetId
         ];
@@ -24835,7 +24837,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:ipset/" + jsonRequestBody.content.IPSetId
         ];
@@ -24866,7 +24868,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sizeconstraintset/" + jsonRequestBody.content.SizeConstraintSetId
         ];
@@ -24897,7 +24899,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:sqlinjectionmatchset/" + jsonRequestBody.content.SqlInjectionMatchSetId
         ];
@@ -24928,7 +24930,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:rule/" + jsonRequestBody.content.RuleId
         ];
@@ -24959,7 +24961,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.CreateByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.CreateByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:bytematchset/*"
         ];
@@ -25005,7 +25007,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.UpdateByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.UpdateByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
@@ -25038,7 +25040,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf.DeleteByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_20150824.DeleteByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf::*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
@@ -25069,7 +25071,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.DescribeCrossAccountAccessRole
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeCrossAccountAccessRole") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/DescribeCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeCrossAccountAccessRole") {
 
         outputs.push({
             'region': region,
@@ -25087,7 +25089,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.ListAssessmentTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
         reqParams.boto3['maxResults'] = jsonRequestBody.content.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
 
@@ -25107,7 +25109,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.ListRulesPackages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListRulesPackages") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/ListRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListRulesPackages") {
         reqParams.boto3['maxResults'] = jsonRequestBody.content.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
 
@@ -25127,7 +25129,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.DescribeRulesPackages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeRulesPackages") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/DescribeRulesPackages$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeRulesPackages") {
         reqParams.boto3['rulesPackageArns'] = jsonRequestBody.content.rulesPackageArns;
         reqParams.cli['--rules-package-arns'] = jsonRequestBody.content.rulesPackageArns;
 
@@ -25147,7 +25149,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.RegisterCrossAccountAccessRole
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/RegisterCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.RegisterCrossAccountAccessRole") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/RegisterCrossAccountAccessRole$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.RegisterCrossAccountAccessRole") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25176,7 +25178,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.CreateAssessmentTarget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateAssessmentTarget$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTarget") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/CreateAssessmentTarget$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTarget") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25217,7 +25219,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.ListAssessmentTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/ListAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTargets") {
         reqParams.boto3['maxResults'] = jsonRequestBody.content.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.content.maxResults;
 
@@ -25237,7 +25239,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.CreateAssessmentTemplate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateAssessmentTemplate$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTemplate") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/CreateAssessmentTemplate$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateAssessmentTemplate") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25293,7 +25295,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.DescribeAssessmentTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/DescribeAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeAssessmentTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/DescribeAssessmentTargets$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.DescribeAssessmentTargets") {
         reqParams.boto3['assessmentTargetArns'] = jsonRequestBody.content.assessmentTargetArns;
         reqParams.cli['--assessment-target-arns'] = jsonRequestBody.content.assessmentTargetArns;
 
@@ -25313,7 +25315,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.ListAssessmentTemplates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListAssessmentTemplates$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTemplates") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/ListAssessmentTemplates$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListAssessmentTemplates") {
         reqParams.boto3['assessmentTargetArns'] = jsonRequestBody.content.assessmentTargetArns;
         reqParams.cli['--assessment-target-arns'] = jsonRequestBody.content.assessmentTargetArns;
         reqParams.boto3['maxResults'] = jsonRequestBody.content.maxResults;
@@ -25335,7 +25337,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:events.PutRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutRule") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25368,7 +25370,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:events.PutTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.PutTargets") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25399,7 +25401,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:events.ListRuleNamesByTarget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.ListRuleNamesByTarget") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.ListRuleNamesByTarget") {
         reqParams.boto3['TargetArn'] = jsonRequestBody.content.TargetArn;
         reqParams.cli['--target-arn'] = jsonRequestBody.content.TargetArn;
 
@@ -25419,7 +25421,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:events.DescribeRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.DescribeRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/events\-proxy$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.DescribeRule") {
         reqParams.boto3['Name'] = jsonRequestBody.content.Name;
         reqParams.cli['--name'] = jsonRequestBody.content.Name;
 
@@ -25439,7 +25441,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.ListEventSubscriptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/ListEventSubscriptions$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListEventSubscriptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/ListEventSubscriptions$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.ListEventSubscriptions") {
         reqParams.boto3['resourceArn'] = jsonRequestBody.content.resourceArn;
         reqParams.cli['--resource-arn'] = jsonRequestBody.content.resourceArn;
         reqParams.boto3['maxResults'] = jsonRequestBody.content.maxResults;
@@ -25461,7 +25463,7 @@ function analyseRequest(details) {
     }
 
     // autogen:inspector:inspector.CreateResourceGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/inspector\/service\/CreateResourceGroup$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateResourceGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/inspector\/service\/CreateResourceGroup$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.inspector.v20160216.InspectorService.CreateResourceGroup") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25502,7 +25504,7 @@ function analyseRequest(details) {
     }
 
     // manual:budgets:budgets.CreateBudget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/billing\/budgets\/v1\/budgetsV2\/budget\/create?$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/billing\/budgets\/v1\/budgetsV2\/budget\/create?$/g)) {
         reqParams.boto3['Budget'] = jsonRequestBody.budget;
         reqParams.cli['--budget'] = jsonRequestBody.budget;
         reqParams.boto3['NotificationWithSubscribersList'] = jsonRequestBody.notificationWithSubscribersList;
@@ -25542,7 +25544,7 @@ function analyseRequest(details) {
     }
 
     // autogen:acm:acm-pca.ListCertificateAuthorities
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/list_certificate_authorities\.json$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/acm\/ajax\/list_certificate_authorities\.json$/g)) {
 
         outputs.push({
             'region': region,
@@ -25560,7 +25562,7 @@ function analyseRequest(details) {
     }
 
     // autogen:acm:acm.RequestCertificate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/request_cert\.json$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/acm\/ajax\/request_cert\.json$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -25612,7 +25614,7 @@ function analyseRequest(details) {
     }
 
     // autogen:acm:acm.DescribeCertificate
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/acm\/ajax\/describe_cert\.json\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/acm\/ajax\/describe_cert\.json\?/g)) {
         reqParams.boto3['CertificateArn'] = getUrlValue(details.url, 'arn');
         reqParams.cli['--certificate-arn'] = getUrlValue(details.url, 'arn');
 
@@ -25632,7 +25634,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.ListUserPools
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/pool\?/g)) {
         reqParams.boto3['NextToken'] = getUrlValue(details.url, 'next_token');
         reqParams.cli['--next-token'] = getUrlValue(details.url, 'next_token');
         reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'max_results');
@@ -25654,7 +25656,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:iam.ListRoles
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/iam\/roles\?$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/iam\/roles\?$/g)) {
 
         outputs.push({
             'region': region,
@@ -25672,7 +25674,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:pinpoint.GetApps
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/pinpoint\/appIds\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/pinpoint\/appIds\?/g)) {
         reqParams.boto3['PageSize'] = getUrlValue(details.url, 'pageSize');
         reqParams.cli['--page-size'] = getUrlValue(details.url, 'pageSize');
 
@@ -25692,7 +25694,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:acm.ListCertificates
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/acm\/listCertificates\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/acm\/listCertificates\?/g)) {
 
         outputs.push({
             'region': region,
@@ -25710,7 +25712,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.CreateUserPool
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/pool$/g)) {
         var pools = JSON.parse(jsonRequestBody.pool);
 
         function processPool(pool) {
@@ -25923,7 +25925,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.SetUserPoolMfaConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/mfaConfig$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/pool\/mfaConfig$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
         ];
@@ -25974,7 +25976,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.ListUsers
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/user\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/user\?/g)) {
         reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
         reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
         reqParams.boto3['Limit'] = getUrlValue(details.url, 'maxResults');
@@ -25996,7 +25998,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.ListGroups
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group\?id=us\-west\-2_mswODcnxC&maxResults=60$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/group\?id=us\-west\-2_mswODcnxC&maxResults=60$/g)) {
         reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
         reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
         reqParams.boto3['Limit'] = getUrlValue(details.url, 'maxResults');
@@ -26018,7 +26020,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.ListUserPoolClients
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/client\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/pool\/client\?/g)) {
         reqParams.boto3['UserPoolId'] = getUrlValue(details.url, 'id');
         reqParams.cli['--user-pool-id'] = getUrlValue(details.url, 'id');
         reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'max_results');
@@ -26042,7 +26044,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.AdminCreateUser
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/user$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/user$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.poolId[0]
         ];
@@ -26141,7 +26143,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.CreateGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/group$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
         ];
@@ -26202,7 +26204,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.AdminAddUserToGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/group\/user$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/group\/user$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
         ];
@@ -26249,7 +26251,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.CreateUserPoolClient
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/signin\/pool\/client$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/signin\/pool\/client$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
         ];
@@ -26330,7 +26332,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-identity:cognito-identity.CreateIdentityPool
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/pool$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/pool$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -26390,7 +26392,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.DescribeConfigurationAggregators
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregators\/describeConfigurationAggregators\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/aggregators\/describeConfigurationAggregators\?/g)) {
 
         outputs.push({
             'region': region,
@@ -26408,7 +26410,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.PutConfigurationAggregator
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregators\/putConfigurationAggregator\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/aggregators\/putConfigurationAggregator\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:config:*:*:config-aggregator/*"
         ];
@@ -26455,7 +26457,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.PutConfigRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/configRule\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/configRule\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:config:*:*:config-rule/*"
         ];
@@ -26559,7 +26561,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.ListDocuments
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listDocuments") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listDocuments") {
         reqParams.boto3['Filters'] = jsonRequestBody.contentString.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.contentString.Filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
@@ -26581,7 +26583,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.CreateDocument
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createDocument") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createDocument") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -26635,7 +26637,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DescribeDocumentPermission
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeDocumentPermission") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeDocumentPermission") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
         reqParams.boto3['PermissionType'] = jsonRequestBody.contentString.PermissionType;
@@ -26657,7 +26659,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DeleteDocument
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteDocument") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteDocument") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:document/" + jsonRequestBody.contentString.Name
         ];
@@ -26686,7 +26688,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DescribeParameters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeParameters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeParameters") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -26706,7 +26708,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.PutParameter
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "putParameter") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "putParameter") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:parameter/" + jsonRequestBody.contentString.Name
         ];
@@ -26762,7 +26764,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DeleteParameters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteParameters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteParameters") {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['Names'] = jsonRequestBody.contentString.Names;
@@ -26793,7 +26795,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DescribeMaintenanceWindows
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeMaintenanceWindows") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describeMaintenanceWindows") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -26813,7 +26815,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.CreateMaintenanceWindow
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createMaintenanceWindow") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createMaintenanceWindow") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -26876,7 +26878,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DescribePatchBaselines
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describePatchBaselines") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "describePatchBaselines") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -26896,7 +26898,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.RegisterTargetWithMaintenanceWindow
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTargetWithMaintenanceWindow") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTargetWithMaintenanceWindow") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:maintenancewindow/" + jsonRequestBody.contentString.WindowId
         ];
@@ -26954,7 +26956,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DeleteMaintenanceWindow
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteMaintenanceWindow") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteMaintenanceWindow") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:maintenancewindow/" + jsonRequestBody.contentString.WindowId
         ];
@@ -26983,7 +26985,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.CreatePatchBaseline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createPatchBaseline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createPatchBaseline") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27042,7 +27044,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.ListResourceDataSync
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listResourceDataSync") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listResourceDataSync") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -27062,7 +27064,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ec2.DescribeRegions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ec2$/g) && jsonRequestBody.operation == "describeRegions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ec2$/g) && jsonRequestBody.operation == "describeRegions") {
 
         outputs.push({
             'region': region,
@@ -27080,7 +27082,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.CreateResourceDataSync
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createResourceDataSync") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createResourceDataSync") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27136,7 +27138,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.GetInventorySchema
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "getInventorySchema") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "getInventorySchema") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -27156,7 +27158,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.CreateAssociation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createAssociation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "createAssociation") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:document/" + jsonRequestBody.contentString.Name
         ];
@@ -27212,7 +27214,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.ListAssociations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listAssociations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "listAssociations") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -27232,7 +27234,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ssm:ssm.DeleteAssociation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteAssociation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "deleteAssociation") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:document/" + jsonRequestBody.contentString.Name
         ]; // TODO: Check .Name exists
@@ -27261,7 +27263,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.CreateBuild
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/builds\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27305,7 +27307,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.ListFleets
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/fleets$/g)) {
 
         outputs.push({
             'region': region,
@@ -27323,7 +27325,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.CreateFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/fleets$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27384,7 +27386,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.PutScalingPolicy
-    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets\/.+\/scaling\-policies$/g)) {
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/fleets\/.+\/scaling\-policies$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27427,7 +27429,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.DescribeFleetAttributes
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/fleets\/describe\-fleet\-attributes\/params\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/fleets\/describe\-fleet\-attributes\/params\?/g)) {
         reqParams.boto3['FleetIds'] = getUrlValue(details.url, 'fleetIds');
         reqParams.cli['--fleet-ids'] = getUrlValue(details.url, 'fleetIds');
 
@@ -27447,7 +27449,7 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.CreateAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/aliases$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27508,13 +27510,13 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.DeleteBuild
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/build\-/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/builds\/build\-/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['BuildId'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--build-id'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['BuildId'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--build-id'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/builds\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -27537,13 +27539,13 @@ function analyseRequest(details) {
     }
 
     // autogen:gamelift:gamelift.DeleteAlias
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/alias\-/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/aliases\/alias\-/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['AliasId'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--alias-id'] = /.+console\.aws\.amazon\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['AliasId'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--alias-id'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/gamelift\/home\/api\/aliases\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -27566,7 +27568,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.DescribeLimits
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeLimits") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeLimits") {
 
         outputs.push({
             'region': region,
@@ -27584,7 +27586,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.CreateStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "CreateStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "CreateStream") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesis:*:*:stream/" + jsonRequestBody.content.StreamName
         ];
@@ -27632,7 +27634,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.ListStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreams") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreams") {
 
         outputs.push({
             'region': region,
@@ -27650,7 +27652,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.DescribeStreamSummary
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeStreamSummary") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DescribeStreamSummary") {
         reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
         reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
 
@@ -27670,7 +27672,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.ListStreamConsumers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreamConsumers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListStreamConsumers") {
         reqParams.boto3['StreamARN'] = jsonRequestBody.content.StreamARN;
         reqParams.cli['--stream-arn'] = jsonRequestBody.content.StreamARN;
 
@@ -27690,7 +27692,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.DeleteStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DeleteStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "DeleteStream") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesis:*:*:stream/" + jsonRequestBody.content.StreamName
         ];
@@ -27721,7 +27723,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:firehose.ListDeliveryStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
 
         outputs.push({
             'region': region,
@@ -27739,7 +27741,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:s3.HeadBucket
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/s3\-proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/s3\-proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -27766,7 +27768,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:logs.DescribeLogGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "DescribeLogGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "DescribeLogGroups") {
         reqParams.boto3['LogGroupNamePrefix'] = jsonRequestBody.content.logGroupNamePrefix;
         reqParams.cli['--log-group-name-prefix'] = jsonRequestBody.content.logGroupNamePrefix;
 
@@ -27786,7 +27788,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:logs.CreateLogGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogGroup") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27815,7 +27817,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:logs.CreateLogStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/logs\-proxy$/g) && jsonRequestBody.operation == "CreateLogStream") {
         reqParams.iam['Resource'] = [
             "arn:aws:logs:*:*:log-group:" + jsonRequestBody.content.logGroupName
         ];
@@ -27846,7 +27848,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:firehose.CreateDeliveryStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "CreateDeliveryStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "CreateDeliveryStream") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27916,7 +27918,7 @@ function analyseRequest(details) {
     }
 
     // autogen:firehose:firehose.DeleteDeliveryStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "DeleteDeliveryStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/firehose\/proxy$/g) && jsonRequestBody.operation == "DeleteDeliveryStream") {
         reqParams.iam['Resource'] = [
             "arn:aws:firehose:*:*:deliverystream/" + jsonRequestBody.content.DeliveryStreamName
         ];
@@ -27945,7 +27947,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteSubnet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteSubnet\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteSubnet\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -27974,7 +27976,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSecurityGroups\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
@@ -27996,7 +27998,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpointServices
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServices\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServices\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
@@ -28018,7 +28020,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribePrefixLists
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribePrefixLists\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribePrefixLists\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -28038,7 +28040,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpcEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpoint\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpoint\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -28113,7 +28115,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpcEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcEndpoints\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcEndpoints\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -28142,7 +28144,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:kms.ListKeys
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/listEncryptionKeys\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/encryptionKeys\/listEncryptionKeys\?/g)) {
 
         outputs.push({
             'region': region,
@@ -28160,7 +28162,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListUsers
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/users$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/users$/g)) {
 
         outputs.push({
             'region': region,
@@ -28178,7 +28180,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListRoles
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/roles$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/roles$/g)) {
 
         outputs.push({
             'region': region,
@@ -28196,7 +28198,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:kms.CreateKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/createKey$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/encryptionKeys\/createKey$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -28271,7 +28273,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:kms.GetKeyPolicy
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/getKeyPolicy\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/encryptionKeys\/getKeyPolicy\?/g)) {
         reqParams.boto3['KeyId'] = getUrlValue(details.url, 'keyId');
         reqParams.cli['--key-id'] = getUrlValue(details.url, 'keyId');
 
@@ -28291,7 +28293,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:kms.ListResourceTags
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/listResourceTags\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/encryptionKeys\/listResourceTags\?/g)) {
         reqParams.boto3['KeyId'] = getUrlValue(details.url, 'keyId');
         reqParams.cli['--key-id'] = getUrlValue(details.url, 'keyId');
 
@@ -28311,7 +28313,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:kms.ScheduleKeyDeletion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/encryptionKeys\/scheduleKeyDeletion$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/encryptionKeys\/scheduleKeyDeletion$/g)) {
         jsonRequestBody.keyIdList.forEach(keyId => {
             reqParams.iam['Resource'] = [
                 "arn:aws:kms:*:*:key/" + keyId
@@ -28344,7 +28346,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/groups\/createGroup$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/groups\/createGroup$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:group/" + jsonRequestBody.groupName[0]
         ];
@@ -28438,7 +28440,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListGroups
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/groups$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/groups$/g)) {
 
         outputs.push({
             'region': region,
@@ -28456,7 +28458,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateRole
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:role/" + jsonRequestBody.name
         ];
@@ -28507,17 +28509,17 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateInstanceProfile
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/instanceProfiles$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.+\/instanceProfiles$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:instance-profile/" + /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1]
+            "arn:aws:iam::*:instance-profile/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['InstanceProfileName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
-        reqParams.cli['--instance-profile-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+        reqParams.boto3['InstanceProfileName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+        reqParams.cli['--instance-profile-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
 
-        reqParams.cfn['InstanceProfileName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+        reqParams.cfn['InstanceProfileName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
 
-        reqParams.tf['name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
+        reqParams.tf['name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/instanceProfiles$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -28551,13 +28553,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.AttachRolePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/attachments$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.+\/attachments$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:role/" + /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1]
+            "arn:aws:iam::*:role/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['RoleName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1];
-        reqParams.cli['--role-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1];
+        reqParams.boto3['RoleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1];
+        reqParams.cli['--role-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/attachments$/g.exec(details.url)[1];
         reqParams.boto3['PolicyArn'] = jsonRequestBody.policyArn;
         reqParams.cli['--policy-arn'] = jsonRequestBody.policyArn;
 
@@ -28582,7 +28584,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreatePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/policies\/create$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies\/create$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:policy/" + jsonRequestBody.policyName
         ];
@@ -28634,13 +28636,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.DeletePolicy
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/policies\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies\/.+$/g)) {
         reqParams.iam['Resource'] = [
-            /.+console\.aws\.amazon\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1]
+            /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['PolicyArn'] = /.+console\.aws\.amazon\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--policy-arn'] = /.+console\.aws\.amazon\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['PolicyArn'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--policy-arn'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/policies\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -28663,15 +28665,15 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.DeleteAccessKey
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys\/.+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
-        reqParams.boto3['AccessKeyId'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--access-key-id'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys\/.+$/g.exec(details.url)[1];
+        reqParams.boto3['AccessKeyId'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--access-key-id'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -28694,9 +28696,9 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.ListAccessKeys
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -28748,7 +28750,7 @@ function analyseRequest(details) {
     // autogen:dms:dms.DescribeTableStatistics
     // autogen:dms:dms.DescribeReplicationTaskAssessmentResults
     // autogen:dms:dms.DeleteReplicationTask
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/dms\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
             if (action['action'] == "com.amazonaws.console.dms.awssdk.shared.context.AWSDatabaseMigrationServiceContext.describeReplicationSubnetGroups") {
@@ -29540,7 +29542,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.DescribeApplicationVersions
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
 
         outputs.push({
             'region': region,
@@ -29558,7 +29560,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.ListPlatformVersions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/platforms\/list\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/platforms\/list\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -29578,7 +29580,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.CreateApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/applications\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticbeanstalk:*:*:application/" + jsonRequestBody.applicationName
         ];
@@ -29622,7 +29624,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.CreateEnvironment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/environments\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticbeanstalk:*:*:environment/" + jsonRequestBody.applicationName + "/" + jsonRequestBody.environmentName
         ];
@@ -29683,7 +29685,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.CreateApplicationVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticbeanstalk:*:*:environment/" + jsonRequestBody.applicationName + "/" + jsonRequestBody.environmentName, // TODO: check environmentName is set
             "arn:aws:elasticbeanstalk:*:*:applicationversion/" + jsonRequestBody.applicationName + "/" + jsonRequestBody.versionLabel
@@ -29733,7 +29735,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.CreateConfigurationTemplate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/configurationTemplate\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/applications\/configurationTemplate\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticbeanstalk:*:*:configurationtemplate/" + jsonRequestBody.applicationName + "/" + jsonRequestBody.templateName
         ];
@@ -29792,7 +29794,7 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.DeleteApplicationVersion
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/applications\/versions\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:elasticbeanstalk:*:*:applicationversion/" + getUrlValue(details.url, 'applicationName') + "/" + getUrlValue(details.url, 'versionLabel')
         ];
@@ -29825,9 +29827,9 @@ function analyseRequest(details) {
     }
 
     // autogen:elasticbeanstalk:elasticbeanstalk.DeleteEnvironmentConfiguration
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\//g)) {
-        reqParams.boto3['EnvironmentName'] = /.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
-        reqParams.cli['--environment-name'] = /.+console\.aws\.amazon\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/environments\//g)) {
+        reqParams.boto3['EnvironmentName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
+        reqParams.cli['--environment-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticbeanstalk\/service\/environments\/(.+)\?/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -29850,7 +29852,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.ListThings
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thing\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\?/g)) {
 
         outputs.push({
             'region': region,
@@ -29868,7 +29870,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.CreateThingType
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thingType$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thingType$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iot:*:*:thingtype/" + jsonRequestBody.thingTypeName
         ];
@@ -29899,7 +29901,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.CreateThing
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/provision\/thing$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/provision\/thing$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iot:*:*:thing/" + jsonRequestBody.templateBody.Resources.Thing.Properties.ThingName,
             "arn:aws:iot:*:*:billinggroup/*"
@@ -29946,7 +29948,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVolume\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVolume\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:volume/*"
         ];
@@ -30010,7 +30012,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSnapshots
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSnapshots\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSnapshots\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
 
@@ -30030,7 +30032,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getInstanceList\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getInstanceList\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -30050,7 +30052,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AttachVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=attachVolume\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=attachVolume\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:instance/" + jsonRequestBody.instanceId,
             "arn:aws:ec2:*:*:volume/" + jsonRequestBody.volumeId
@@ -30098,7 +30100,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeLoadBalancers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazon\.elb\.version_2015_12_01\.ElasticLoadBalancing_v10\.DescribeLoadBalancers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazon\.elb\.version_2015_12_01\.ElasticLoadBalancing_v10\.DescribeLoadBalancers\?/g)) {
 
         outputs.push({
             'region': region,
@@ -30116,7 +30118,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpcEndpointServiceConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpointServiceConfiguration\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpointServiceConfiguration\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30159,7 +30161,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpointServicePermissions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServicePermissions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointServicePermissions\?/g)) {
         reqParams.boto3['ServiceId'] = jsonRequestBody.ServiceId;
         reqParams.cli['--service-id'] = jsonRequestBody.ServiceId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
@@ -30181,7 +30183,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ModifyVpcEndpointServicePermissions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ModifyVpcEndpointServicePermissions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ModifyVpcEndpointServicePermissions\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30248,7 +30250,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreatePlacementGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreatePlacementGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreatePlacementGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30290,7 +30292,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeletePlacementGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeletePlacementGroup\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeletePlacementGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30314,7 +30316,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInstanceCreditSpecifications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstanceCreditSpecifications\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstanceCreditSpecifications\?/g)) {
         reqParams.boto3['InstanceIds'] = jsonRequestBody.InstanceIds;
         reqParams.cli['--instance-ids'] = jsonRequestBody.InstanceIds;
 
@@ -30334,7 +30336,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeIdFormat
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeIdFormat\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeIdFormat\?/g)) {
 
         outputs.push({
             'region': region,
@@ -30352,7 +30354,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AttachNetworkInterface
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=attachNetworkInterface\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=attachNetworkInterface\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30399,7 +30401,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DetachNetworkInterface
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=detachNetworkInterface\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=detachNetworkInterface\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30425,7 +30427,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeNetworkAcls
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkAcls\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeNetworkAcls\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -30445,7 +30447,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ReplaceNetworkAclAssociation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReplaceNetworkAclAssociation\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.ReplaceNetworkAclAssociation\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30484,7 +30486,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateRouteTable\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateRouteTable\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30523,7 +30525,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateRestApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/restapis") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/restapis") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.info.title;
         reqParams.cli['--name'] = jsonRequestBody.contentString.info.title;
         reqParams.boto3['description'] = jsonRequestBody.contentString.info.description;
@@ -30570,7 +30572,7 @@ function analyseRequest(details) {
 
 
     // autogen:apigateway:apigatewayv2.CreateApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path == "/apis") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path == "/apis") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
@@ -30607,7 +30609,7 @@ function analyseRequest(details) {
 
 
     // autogen:apigateway:apigateway.CreateResource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/resources\/.+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/resources\/.+$/g)) {
         reqParams.boto3['restApiId'] = /^\/restapis\/(.+)\/resources\/.+$/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/resources\/.+$/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['parentId'] = /^\/restapis\/.+\/resources\/(.+)$/g.exec(jsonRequestBody.path)[1];
@@ -30650,7 +30652,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateStage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/stages$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/stages$/g)) {
         reqParams.boto3['restApiId'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/stages$/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['stageName'] = jsonRequestBody.contentString.stageName;
@@ -30698,7 +30700,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateUsagePlanKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/usageplans\/.+\/keys$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/usageplans\/.+\/keys$/g)) {
         reqParams.boto3['usagePlanId'] = /^\/usageplans\/(.+)\/keys$/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--usage-plan-id'] = /^\/usageplans\/(.+)\/keys$/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['keyId'] = jsonRequestBody.contentString.keyId;
@@ -30741,7 +30743,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ecr.CreateRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/repository\/create\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/repository\/create\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -30780,7 +30782,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DescribeStacks
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks$/g)) {
 
         outputs.push({
             'region': region,
@@ -30798,7 +30800,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DescribeFleets
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets$/g)) {
 
         outputs.push({
             'region': region,
@@ -30816,7 +30818,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.CreateStack
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:appstream:*:*:stack/" + jsonRequestBody.name
         ];
@@ -30867,7 +30869,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.CreateFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:appstream:*:*:fleet/" + jsonRequestBody.name
         ];
@@ -30936,7 +30938,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DescribeImages
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/images$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/images$/g)) {
 
         outputs.push({
             'region': region,
@@ -30954,7 +30956,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DescribeImageBuilders
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders$/g)) {
 
         outputs.push({
             'region': region,
@@ -30972,7 +30974,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.CreateImageBuilder
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:appstream:*:*:image-builder/" + jsonRequestBody.name
         ];
@@ -31044,7 +31046,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.CreateDirectoryConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/directory\-configs$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -31086,7 +31088,7 @@ function analyseRequest(details) {
     }
 
     // manual:appstream:appstream.CreateUser
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/users$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/users$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -31131,7 +31133,7 @@ function analyseRequest(details) {
     }
 
     // manual:appstream:appstream.BatchAssociateUserStack
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/users$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/users$/g)) {
         for (var i=0; i<jsonRequestBody.length; i++) {
             reqParams.iam['Resource'] = [
                 "*"
@@ -31178,19 +31180,19 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.AssociateFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/.+\/associations$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/.+\/associations$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:appstream:*:*:fleet/" + /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1],
+            "arn:aws:appstream:*:*:fleet/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1],
             "arn:aws:appstream:*:*:stack/" + jsonRequestBody.stackName
         ];
 
         reqParams.boto3['StackName'] = jsonRequestBody.stackName;
         reqParams.cli['--stack-name'] = jsonRequestBody.stackName;
-        reqParams.boto3['FleetName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
-        reqParams.cli['--fleet-name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+        reqParams.boto3['FleetName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+        reqParams.cli['--fleet-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
 
         reqParams.cfn['StackName'] = jsonRequestBody.stackName;
-        reqParams.cfn['FleetName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
+        reqParams.cfn['FleetName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)\/associations$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31218,13 +31220,13 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DeleteStack
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks\/.+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:appstream:*:*:stack/" + /.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1]
+            "arn:aws:appstream:*:*:stack/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['Name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/stacks\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31242,13 +31244,13 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DeleteImageBuilder
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders\/.+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:appstream:*:*:image-builder/" + /.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1]
+            "arn:aws:appstream:*:*:image-builder/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['Name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/image\-builders\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31266,13 +31268,13 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DeleteDirectoryConfig
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/directory\-configs\/.+$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['DirectoryName'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--directory-name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['DirectoryName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--directory-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/directory\-configs\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31290,13 +31292,13 @@ function analyseRequest(details) {
     }
 
     // autogen:appstream:appstream.DeleteFleet
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/.+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:appstream:*:*:fleet/" + /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1]
+            "arn:aws:appstream:*:*:fleet/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['Name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--name'] = /.+console\.aws\.amazon\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['Name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appstream2\/api\/fleets\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -31314,7 +31316,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListIPSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListIPSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListIPSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31334,7 +31336,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListSqlInjectionMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSqlInjectionMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSqlInjectionMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31354,7 +31356,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListSizeConstraintSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSizeConstraintSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSizeConstraintSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31374,7 +31376,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListXssMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListXssMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListXssMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31394,7 +31396,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListGeoMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListGeoMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListGeoMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31414,7 +31416,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListByteMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListByteMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListByteMatchSets") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31434,7 +31436,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListRegexMatchSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRegexMatchSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRegexMatchSets") {
         reqParams.boto3['NextMarker'] = jsonRequestBody.content.NextMarker;
         reqParams.cli['--next-marker'] = jsonRequestBody.content.NextMarker;
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
@@ -31456,7 +31458,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.GetChangeToken
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.GetChangeToken") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.GetChangeToken") {
 
         outputs.push({
             'region': region,
@@ -31474,7 +31476,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:xssmatchset/*"
         ];
@@ -31520,7 +31522,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:xssmatchset/" + jsonRequestBody.content.XssMatchSetId
         ];
@@ -31553,7 +31555,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:ipset/*"
         ];
@@ -31599,7 +31601,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:ipset/" + jsonRequestBody.content.IPSetId
         ];
@@ -31632,7 +31634,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sizeconstraintset/*"
         ];
@@ -31678,7 +31680,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sizeconstraintset/" + jsonRequestBody.content.SizeConstraintSetId
         ];
@@ -31711,7 +31713,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRules") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31731,7 +31733,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListRateBasedRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRateBasedRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRateBasedRules") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31751,7 +31753,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListSubscribedRuleGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSubscribedRuleGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListSubscribedRuleGroups") {
 
         outputs.push({
             'region': region,
@@ -31769,7 +31771,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.ListRuleGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRuleGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.ListRuleGroups") {
         reqParams.boto3['Limit'] = jsonRequestBody.content.Limit;
         reqParams.cli['--limit'] = jsonRequestBody.content.Limit;
 
@@ -31789,7 +31791,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sqlinjectionmatchset/*"
         ];
@@ -31835,7 +31837,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sqlinjectionmatchset/" + jsonRequestBody.content.SqlInjectionMatchSetId
         ];
@@ -31868,7 +31870,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:rule/*"
         ];
@@ -31918,7 +31920,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:rule/" + jsonRequestBody.content.RuleId
         ];
@@ -31951,7 +31953,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateWebACL
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateWebACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateWebACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:webacl/*"
         ];
@@ -32000,7 +32002,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateWebACL
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateWebACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateWebACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:webacl/" + jsonRequestBody.content.WebACLId
         ];
@@ -32035,7 +32037,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteXssMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteXssMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteXssMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:xssmatchset/" + jsonRequestBody.content.XssMatchSetId
         ];
@@ -32066,7 +32068,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteIPSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteIPSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteIPSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:ipset/" + jsonRequestBody.content.IPSetId
         ];
@@ -32097,7 +32099,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteSizeConstraintSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSizeConstraintSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSizeConstraintSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sizeconstraintset/" + jsonRequestBody.content.SizeConstraintSetId
         ];
@@ -32128,7 +32130,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteSqlInjectionMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSqlInjectionMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteSqlInjectionMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:sqlinjectionmatchset/" + jsonRequestBody.content.SqlInjectionMatchSetId
         ];
@@ -32159,7 +32161,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:rule/" + jsonRequestBody.content.RuleId
         ];
@@ -32190,7 +32192,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.CreateByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.CreateByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:bytematchset/*"
         ];
@@ -32236,7 +32238,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.UpdateByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.UpdateByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
@@ -32269,7 +32271,7 @@ function analyseRequest(details) {
     }
 
     // autogen:waf:waf-regional.DeleteByteMatchSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteByteMatchSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSWAF_Regional_20161128.DeleteByteMatchSet") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:bytematchset/" + jsonRequestBody.content.ByteMatchSetId
         ];
@@ -32300,7 +32302,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:eks.CreateCluster
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/eks$/g) && jsonRequestBody.operation == "createCluster") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/eks$/g) && jsonRequestBody.operation == "createCluster") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -32359,7 +32361,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-projects:iot1click-projects.ListProjects
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/projects") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "GET" && jsonRequestBody.path == "/projects") {
 
         outputs.push({
             'region': region,
@@ -32377,7 +32379,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-projects:iot1click-projects.CreateProject
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/projects") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/projects") {
         reqParams.iam['Resource'] = [
             "arn:aws:iot1click:*:*:projects/" + jsonRequestBody.contentString.projectName
         ];
@@ -32419,7 +32421,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-projects:iot1click-projects.CreatePlacement
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/projects\/.+\/placements$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/iot1click$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/^\/projects\/.+\/placements$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iot1click:*:*:projects/" + jsonRequestBody.contentString.projectName
         ]; // TODO: Check projectName exists
@@ -32461,7 +32463,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -32479,7 +32481,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -32497,7 +32499,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -32515,7 +32517,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.ListNotebookInstanceLifecycleConfigs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstanceLifecycleConfigs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstanceLifecycleConfigs") {
 
         outputs.push({
             'region': region,
@@ -32533,7 +32535,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.CreateNotebookInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstance") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstance") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:notebook-instance/" + jsonRequestBody.contentString.NotebookInstanceName
         ];
@@ -32587,7 +32589,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.ListNotebookInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstances") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listNotebookInstances") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
         reqParams.boto3['SortBy'] = jsonRequestBody.contentString.SortBy;
@@ -32611,7 +32613,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.CreateNotebookInstanceLifecycleConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstanceLifecycleConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createNotebookInstanceLifecycleConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/" + jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName
         ];
@@ -32653,7 +32655,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.DeleteNotebookInstanceLifecycleConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstanceLifecycleConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstanceLifecycleConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/" + jsonRequestBody.contentString.NotebookInstanceLifecycleConfigName
         ];
@@ -32677,7 +32679,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.StopNotebookInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "stopNotebookInstance") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "stopNotebookInstance") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:notebook-instance/" + jsonRequestBody.contentString.NotebookInstanceName
         ];
@@ -32701,7 +32703,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.ListModels
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listModels") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listModels") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
         reqParams.boto3['SortBy'] = jsonRequestBody.contentString.SortBy;
@@ -32725,7 +32727,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.ListEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpoints") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpoints") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
         reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
@@ -32747,7 +32749,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.ListEndpointConfigs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpointConfigs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "listEndpointConfigs") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
         reqParams.boto3['SortOrder'] = jsonRequestBody.contentString.SortOrder;
@@ -32769,7 +32771,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.DeleteNotebookInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstance") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteNotebookInstance") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:notebook-instance/" + jsonRequestBody.contentString.NotebookInstanceName
         ];
@@ -32793,7 +32795,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.CreateModel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createModel") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createModel") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:model/" + jsonRequestBody.contentString.ModelName
         ];
@@ -32841,7 +32843,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.CreateApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "CreateApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "CreateApplication") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -32890,7 +32892,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.DescribeApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DescribeApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DescribeApplication") {
         reqParams.boto3['ApplicationName'] = jsonRequestBody.content.ApplicationName;
         reqParams.cli['--application-name'] = jsonRequestBody.content.ApplicationName;
 
@@ -32910,7 +32912,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:firehose.ListDeliveryStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/firehose\-proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/firehose\-proxy$/g) && jsonRequestBody.operation == "ListDeliveryStreams") {
 
         outputs.push({
             'region': region,
@@ -32928,7 +32930,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesis.ListStreams
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "ListStreams") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "ListStreams") {
 
         outputs.push({
             'region': region,
@@ -32946,7 +32948,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesis.CreateStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "CreateStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "CreateStream") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesis:*:*:stream/" + jsonRequestBody.content.StreamName
         ];
@@ -32989,7 +32991,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesis.DescribeStream
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "DescribeStream") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "DescribeStream") {
         reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
         reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
 
@@ -33009,7 +33011,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesis.PutRecords
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "PutRecords") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/kinesis\-proxy$/g) && jsonRequestBody.operation == "PutRecords") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesis:*:*:stream/" + jsonRequestBody.content.StreamName
         ];
@@ -33035,7 +33037,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.DiscoverInputSchema
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DiscoverInputSchema") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DiscoverInputSchema") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -33063,7 +33065,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.AddApplicationInput
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationInput") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationInput") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33091,7 +33093,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.StartApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StartApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StartApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33117,7 +33119,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.UpdateApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "UpdateApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "UpdateApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33145,7 +33147,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:lambda.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/lambda\-proxy$/g) && jsonRequestBody.operation == "ListFunctions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/lambda\-proxy$/g) && jsonRequestBody.operation == "ListFunctions") {
 
         outputs.push({
             'region': region,
@@ -33163,7 +33165,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.AddApplicationOutput
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationOutput") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationOutput") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33205,7 +33207,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.StopApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StopApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "StopApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33229,7 +33231,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalytics.DeleteApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DeleteApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "DeleteApplication") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -33255,7 +33257,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesis:kinesis.ListShards
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListShards") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesis\/proxy$/g) && jsonRequestBody.operation == "ListShards") {
         reqParams.boto3['StreamName'] = jsonRequestBody.content.StreamName;
         reqParams.cli['--stream-name'] = jsonRequestBody.content.StreamName;
 
@@ -33275,7 +33277,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudformation:cloudformation.CreateStack
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudformation\/service\/stacks\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudformation\/service\/stacks\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cloudformation:*:*:stack/" + jsonRequestBody.stackName + "/*"
         ];
@@ -33355,7 +33357,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudformation:cloudformation.DeleteStack
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/cloudformation\/service\/stacks\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudformation\/service\/stacks\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cloudformation:*:*:stack/*/" + getUrlValue(details.url, 'stackId')
         ];
@@ -33399,7 +33401,7 @@ function analyseRequest(details) {
     // autogen:neptune:neptune.CreateDBClusterParameterGroup
     // autogen:neptune:neptune.DeleteDBParameterGroup
     // autogen:neptune:neptune.DeleteDBSubnetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/neptune\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/neptune\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
 
@@ -33919,7 +33921,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateVpcLink
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/vpclinks" && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path == "/vpclinks" && jsonRequestBody.method == "POST") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['description'] = jsonRequestBody.contentString.description;
@@ -33962,7 +33964,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.DeleteStage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/$\/restapis\/.+\/stages\/.+^/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "DELETE" && jsonRequestBody.path.match(/$\/restapis\/.+\/stages\/.+^/g)) {
         reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/stages\/.+^/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/stages\/.+^/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['stageName'] = /$\/restapis\/.+\/stages\/(.+)^/g.exec(jsonRequestBody.path)[1];
@@ -33984,7 +33986,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateDeployment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/deployments^/g) && jsonRequestBody.method == "POST") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/$\/restapis\/.+\/deployments^/g) && jsonRequestBody.method == "POST") {
         reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/deployments^/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['stageName'] = jsonRequestBody.contentString.stageName;
@@ -34028,7 +34030,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateRequestValidator
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/$\/restapis\/.+\/requestvalidators^/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path.match(/$\/restapis\/.+\/requestvalidators^/g)) {
         reqParams.boto3['restApiId'] = /$\/restapis\/(.+)\/requestvalidators^/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /$\/restapis\/(.+)\/requestvalidators^/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
@@ -34069,7 +34071,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.GenerateClientCertificate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/clientcertificates") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.method == "POST" && jsonRequestBody.path == "/clientcertificates") {
 
         outputs.push({
             'region': region,
@@ -34098,7 +34100,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ecs.ListClusters
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/list\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/list\?/g)) {
         reqParams.boto3['maxResults'] = getUrlValue(details.url, 'maxResults');
         reqParams.cli['--max-results'] = getUrlValue(details.url, 'maxResults');
 
@@ -34118,7 +34120,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ec2.DescribeVpcs
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/describeVpcs\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/ec2\/describeVpcs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -34136,7 +34138,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ec2.DescribeAvailabilityZones
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/describeAvailabilityZones\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/ec2\/describeAvailabilityZones\?/g)) {
 
         outputs.push({
             'region': region,
@@ -34154,7 +34156,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ecs.CreateCluster
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/create\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/create\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34193,7 +34195,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:logs.DescribeLogGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/logs\/describeLogGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/logs\/describeLogGroups\?/g)) {
         reqParams.boto3['LogGroupNamePrefix'] = jsonRequestBody.logGroupNamePrefix;
         reqParams.cli['--log-group-name-prefix'] = jsonRequestBody.logGroupNamePrefix;
 
@@ -34213,7 +34215,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ecs.RegisterTaskDefinition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/taskDefinitions\/register\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/taskDefinitions\/register\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34273,7 +34275,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:servicediscovery.ListNamespaces
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/serviceDiscovery\/listNamespaces\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/serviceDiscovery\/listNamespaces\?/g)) {
 
         outputs.push({
             'region': region,
@@ -34291,7 +34293,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ec2.CreateSecurityGroup
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/ec2\/createSecurityGroup\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/ec2\/createSecurityGroup\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34338,7 +34340,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:ecs.CreateService
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/.+\/services\/create\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/.+\/services\/create\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34365,8 +34367,8 @@ function analyseRequest(details) {
         reqParams.cli['--network-configuration'] = jsonRequestBody.networkConfiguration;
         reqParams.boto3['schedulingStrategy'] = jsonRequestBody.schedulingStrategy;
         reqParams.cli['--scheduling-strategy'] = jsonRequestBody.schedulingStrategy;
-        reqParams.boto3['cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
-        reqParams.cli['--cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+        reqParams.boto3['cluster'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+        reqParams.cli['--cluster'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
 
         reqParams.cfn['ServiceName'] = jsonRequestBody.serviceName;
         reqParams.cfn['TaskDefinition'] = jsonRequestBody.taskDefinition;
@@ -34379,7 +34381,7 @@ function analyseRequest(details) {
         reqParams.cfn['PlatformVersion'] = jsonRequestBody.platformVersion;
         reqParams.cfn['NetworkConfiguration'] = jsonRequestBody.networkConfiguration;
         reqParams.cfn['SchedulingStrategy'] = jsonRequestBody.schedulingStrategy;
-        reqParams.cfn['Cluster'] = /.+console\.aws\.amazon\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
+        reqParams.cfn['Cluster'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/clusters\/(.+)\/services\/create\?/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -34407,7 +34409,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:application-autoscaling.RegisterScalableTarget
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/anyScale\/scalableTargets\/register\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/anyScale\/scalableTargets\/register\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34458,7 +34460,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecs:application-autoscaling.PutScalingPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecs\/proxy\/anyScale\/scalingPolicies\/put/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecs\/proxy\/anyScale\/scalingPolicies\/put/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -34561,7 +34563,7 @@ function analyseRequest(details) {
     // autogen:dynamodb:dax.DeleteCluster
     // manual:dynamodb:dynamodb.PutItem
     // manual:dynamodb:dynamodb.CreateGlobalTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/dynamodb\/rpc$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dynamodb\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
 
@@ -35176,7 +35178,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.CreateActivity
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/create$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/activities\/create$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -35215,7 +35217,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.ListActivities
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/list$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/activities\/list$/g)) {
         reqParams.boto3['maxResults'] = jsonRequestBody.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
 
@@ -35235,7 +35237,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.DeleteActivity
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/activities\/delete$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/activities\/delete$/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.activityArn
         ];
@@ -35259,7 +35261,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.ListStateMachines
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/statemachines$/g)) {
         reqParams.boto3['maxResults'] = jsonRequestBody.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
 
@@ -35279,7 +35281,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.DescribeStateMachine
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/details$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/statemachines\/details$/g)) {
         reqParams.boto3['stateMachineArn'] = jsonRequestBody.stateMachineArn;
         reqParams.cli['--state-machine-arn'] = jsonRequestBody.stateMachineArn;
 
@@ -35299,7 +35301,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.CreateStateMachine
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/create$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/statemachines\/create$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -35346,7 +35348,7 @@ function analyseRequest(details) {
     }
 
     // autogen:states:stepfunctions.DeleteStateMachine
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/states\/service\/statemachines\/delete$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/states\/service\/statemachines\/delete$/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.stateMachineArn
         ];
@@ -35370,7 +35372,7 @@ function analyseRequest(details) {
     }
 
     // autogen:s3:s3.PutBucketPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "PutBucketPolicy") {
         reqParams.iam['Resource'] = [
             'arn:aws:s3:::' + jsonRequestBody.path
         ];
@@ -35413,7 +35415,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateThreatIntelSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "createThreatIntelSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "createThreatIntelSet") {
         reqParams.iam['Resource'] = [
             'arn:aws:guardduty:*:*:detector/' + jsonRequestBody.path.split("/")[2]
         ];
@@ -35470,7 +35472,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.CreateFilter
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateFilter") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "CreateFilter") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['Description'] = jsonRequestBody.contentString.description;
@@ -35517,7 +35519,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListRoots
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/roots$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/roots$/g)) {
 
         outputs.push({
             'region': region,
@@ -35535,7 +35537,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListCreateAccountStatus
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/account\-creation\-requests\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/account\-creation\-requests\?/g)) {
         reqParams.boto3['States'] = [getUrlValue(details.url, 'statuses')];
         reqParams.cli['--states'] = [getUrlValue(details.url, 'statuses')];
 
@@ -35555,7 +35557,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListAccounts
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
 
         outputs.push({
             'region': region,
@@ -35573,7 +35575,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.DescribeAccount
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
         reqParams.boto3['AccountId'] = getUrlValue(details.url, 'accountId');
         reqParams.cli['--account-id'] = getUrlValue(details.url, 'accountId');
 
@@ -35593,7 +35595,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.CreateAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/accounts$/g)) {
         reqParams.iam['Resource'] = [
             '*'
         ];
@@ -35635,7 +35637,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListOrganizationalUnitsForParent
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
         reqParams.boto3['ParentId'] = getUrlValue(details.url, 'parentId');
         reqParams.cli['--parent-id'] = getUrlValue(details.url, 'parentId');
 
@@ -35655,7 +35657,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.CreateOrganizationalUnit
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
         reqParams.iam['Resource'] = [
             'arn:aws:organizations::${MasterAccountId}:ou/*/*',
             'arn:aws:organizations::${MasterAccountId}:root/*/*'
@@ -35682,7 +35684,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListParents
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/parents\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/parents\?/g)) {
         reqParams.boto3['ChildId'] = getUrlValue(details.url, 'childId');
         reqParams.cli['--child-id'] = getUrlValue(details.url, 'childId');
 
@@ -35702,7 +35704,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.MoveAccount
-    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/accounts\?/g)) {
         reqParams.iam['Resource'] = [
             'arn:aws:organizations::${MasterAccountId}:account/*/' + getUrlValue(details.url, 'accountId'),
             'arn:aws:organizations::${MasterAccountId}:ou/*/*',
@@ -35732,7 +35734,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.ListPolicies
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
 
         outputs.push({
             'region': region,
@@ -35750,7 +35752,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.DescribePolicy
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
         reqParams.boto3['PolicyId'] = getUrlValue(details.url, 'policyId');
         reqParams.cli['--policy-id'] = getUrlValue(details.url, 'policyId');
 
@@ -35770,7 +35772,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.CreatePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/policies$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -35815,7 +35817,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.DeletePolicy
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/policies\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:organizations::${MasterAccountId}:policy/*/*/p-" + getUrlValue(details.url, 'policyId')
         ]; // TODO: check if p- prefix necessary
@@ -35839,7 +35841,7 @@ function analyseRequest(details) {
     }
 
     // autogen:organizations:organizations.DeleteOrganizationalUnit
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/organizations\/api\/local\/v1\/ous\?/g)) {
         reqParams.iam['Resource'] = [
             'arn:aws:organizations::${MasterAccountId}:ou/*/ou-' + getUrlValue(details.url, 'organizationalUnitId')
         ]; // TODO: check if ou- prefix necessary
@@ -35863,7 +35865,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.GetServiceGraph
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetServiceGraph/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=GetServiceGraph/g)) {
         reqParams.boto3['StartTime'] = jsonRequestBody.content.StartTime;
         reqParams.cli['--start-time'] = jsonRequestBody.content.StartTime;
         reqParams.boto3['EndTime'] = jsonRequestBody.content.EndTime;
@@ -35885,7 +35887,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.GetEncryptionConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetEncryptionConfig/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=GetEncryptionConfig/g)) {
 
         outputs.push({
             'region': region,
@@ -35903,7 +35905,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.GetTraceSummaries
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetTraceSummaries/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=GetTraceSummaries/g)) {
         reqParams.boto3['StartTime'] = jsonRequestBody.content.StartTime;
         reqParams.cli['--start-time'] = jsonRequestBody.content.StartTime;
         reqParams.boto3['EndTime'] = jsonRequestBody.content.EndTime;
@@ -35925,7 +35927,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.GetSamplingRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingRules/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=GetSamplingRules/g)) {
 
         outputs.push({
             'region': region,
@@ -35943,7 +35945,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.GetSamplingStatisticSummaries
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=GetSamplingStatisticSummaries/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=GetSamplingStatisticSummaries/g)) {
 
         outputs.push({
             'region': region,
@@ -35961,7 +35963,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.CreateSamplingRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=CreateSamplingRule/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=CreateSamplingRule/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -35985,7 +35987,7 @@ function analyseRequest(details) {
     }
 
     // autogen:xray:xray.DeleteSamplingRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/xray\/data\/proxy\?call=DeleteSamplingRule/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/xray\/data\/proxy\?call=DeleteSamplingRule/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36009,7 +36011,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.DescribeCases
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/describeCases$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/describeCases$/g)) {
         reqParams.boto3['IncludeCommunications'] = jsonRequestBody.includeCommunications;
         reqParams.cli['--include-communications'] = jsonRequestBody.includeCommunications;
         reqParams.boto3['IncludeResolvedCases'] = jsonRequestBody.includeResolvedCases;
@@ -36037,7 +36039,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.DescribeSeverityLevels
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/describeSeverityLevels$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/describeSeverityLevels$/g)) {
         reqParams.boto3['Language'] = jsonRequestBody.language;
         reqParams.cli['--language'] = jsonRequestBody.language;
 
@@ -36057,7 +36059,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.DescribeServices
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/describeServices$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/describeServices$/g)) {
         reqParams.boto3['ServiceCodeList'] = [jsonRequestBody.issueType];
         reqParams.cli['--service-code-list'] = [jsonRequestBody.issueType];
         reqParams.boto3['Language'] = jsonRequestBody.language;
@@ -36079,7 +36081,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.DescribeCommunications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/describeCommunications$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/describeCommunications$/g)) {
         reqParams.boto3['CaseId'] = jsonRequestBody.caseId;
         reqParams.cli['--case-id'] = jsonRequestBody.caseId;
         reqParams.boto3['NextToken'] = jsonRequestBody.nextToken;
@@ -36101,7 +36103,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.CreateCase
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/createCase$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/createCase$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36139,7 +36141,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.ListSecrets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "ListSecrets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "ListSecrets") {
 
         outputs.push({
             'region': region,
@@ -36157,7 +36159,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:rds.DescribeDBInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/rds$/g) && jsonRequestBody.operation == "describeDBInstances") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/rds$/g) && jsonRequestBody.operation == "describeDBInstances") {
 
         outputs.push({
             'region': region,
@@ -36175,7 +36177,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:rds.DescribeDBClusters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
 
         outputs.push({
             'region': region,
@@ -36193,7 +36195,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.DescribeSecret
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "DescribeSecret") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "DescribeSecret") {
         reqParams.boto3['SecretId'] = jsonRequestBody.content.SecretId;
         reqParams.cli['--secret-id'] = jsonRequestBody.content.SecretId;
 
@@ -36213,7 +36215,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:lambda.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/lambda$/g) && jsonRequestBody.operation == "listFunctions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/lambda$/g) && jsonRequestBody.operation == "listFunctions") {
         reqParams.boto3['MaxItems'] = jsonRequestBody.params.MaxItems;
         reqParams.cli['--max-items'] = jsonRequestBody.params.MaxItems;
 
@@ -36233,7 +36235,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.CreateSecret
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "CreateSecret") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "CreateSecret") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36281,7 +36283,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.RotateSecret
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "RotateSecret") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "RotateSecret") {
         reqParams.iam['Resource'] = [
             "arn:aws:secretsmanager:*:*:secret:" + jsonRequestBody.content.SecretId
         ];
@@ -36325,7 +36327,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.DeleteSecret
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "DeleteSecret") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "DeleteSecret") {
         reqParams.iam['Resource'] = [
             "arn:aws:secretsmanager:*:*:secret:" + jsonRequestBody.content.SecretId
         ];
@@ -36351,7 +36353,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:dlm.GetLifecyclePolicies
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.GetLifecyclePolicies\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.GetLifecyclePolicies\?/g)) {
 
         outputs.push({
             'region': region,
@@ -36369,7 +36371,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.webservices\.auth\.identity\.v20100508\.AWSIdentityManagementV20100508\.ListRoles\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.webservices\.auth\.identity\.v20100508\.AWSIdentityManagementV20100508\.ListRoles\?/g)) {
 
         outputs.push({
             'region': region,
@@ -36387,7 +36389,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:dlm.CreateLifecyclePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.CreateLifecyclePolicy\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.CreateLifecyclePolicy\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36432,7 +36434,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:dlm.GetLifecyclePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.GetLifecyclePolicy\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.GetLifecyclePolicy\?/g)) {
         reqParams.boto3['PolicyId'] = jsonRequestBody.PolicyId;
         reqParams.cli['--policy-id'] = jsonRequestBody.PolicyId;
 
@@ -36452,7 +36454,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:dlm.DeleteLifecyclePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.DeleteLifecyclePolicy\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazon\.abslifecyclefrontendlambda\.dlm_20180112\.DeleteLifecyclePolicy\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36476,7 +36478,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:serverlessrepo.CreateCloudFormationChangeSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/serverlessapplicationrepository$/g) && jsonRequestBody.operation == "createCloudFormationChangeSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/serverlessapplicationrepository$/g) && jsonRequestBody.operation == "createCloudFormationChangeSet") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36504,7 +36506,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.GetSendStatistics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "getSendStatistics") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "getSendStatistics") {
 
         outputs.push({
             'region': region,
@@ -36522,7 +36524,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.GetSendQuota
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "getSendQuota") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "getSendQuota") {
 
         outputs.push({
             'region': region,
@@ -36540,7 +36542,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.ListConfigurationSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "listConfigurationSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "listConfigurationSets") {
 
         outputs.push({
             'region': region,
@@ -36558,7 +36560,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.CreateConfigurationSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createConfigurationSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createConfigurationSet") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36597,7 +36599,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.CreateConfigurationSetEventDestination
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "saveConfigurationSetEventDestination") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "saveConfigurationSetEventDestination") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36676,7 +36678,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.CreateReceiptFilter
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptFilter") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptFilter") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36735,7 +36737,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.DescribeConfigurationSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "describeConfigurationSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "describeConfigurationSet") {
         reqParams.boto3['ConfigurationSetName'] = gwtRequest['args'][0].value.value;
         reqParams.cli['--configuration-set-name'] = gwtRequest['args'][0].value.value;
 
@@ -36755,7 +36757,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.CreateReceiptRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptRule") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36875,7 +36877,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:sns.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SNSService" && gwtRequest['method'] == "listTopics") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SNSService" && gwtRequest['method'] == "listTopics") {
 
         outputs.push({
             'region': region,
@@ -36893,7 +36895,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:firehose.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.KinesisFirehoseService" && gwtRequest['method'] == "listStreams") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.KinesisFirehoseService" && gwtRequest['method'] == "listStreams") {
 
         outputs.push({
             'region': region,
@@ -36911,7 +36913,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.DeleteConfigurationSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "deleteConfigurationSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "deleteConfigurationSet") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36935,7 +36937,7 @@ function analyseRequest(details) {
     }
 
     // manual:ses:ses.CreateReceiptRuleSet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptRuleSet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ses\/sesconsole\/AmazonSES$/g) && gwtRequest['service'] == "com.amazon.bacon.console.shared.services.SESService" && gwtRequest['method'] == "createReceiptRuleSet") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -36974,7 +36976,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.CreateConstraint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/constraint\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/constraint\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37069,7 +37071,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.DeleteConstraint
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/constraint\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/constraint\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37093,7 +37095,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicecatalog:servicecatalog.AcceptPortfolioShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/servicecatalog\/service\/portfolio\/share\/accept\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/servicecatalog\/service\/portfolio\/share\/accept\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37129,7 +37131,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.ListResolverEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverEndpoints") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverEndpoints") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -37149,7 +37151,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.ListResolverRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -37169,7 +37171,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -37187,7 +37189,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.ListResolverRuleAssociations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRuleAssociations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRuleAssociations") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -37207,7 +37209,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.ListResolverRules
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listResolverRules") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -37227,7 +37229,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -37245,7 +37247,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
 
         outputs.push({
             'region': region,
@@ -37263,7 +37265,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -37281,7 +37283,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.CreateResolverEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverEndpoint") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverEndpoint") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-endpoint/*"
         ];
@@ -37331,7 +37333,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.CreateResolverRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "createResolverRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-rule/*"
         ];
@@ -37384,7 +37386,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.AssociateResolverRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "associateResolverRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "associateResolverRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-rule/" + jsonRequestBody.contentString.ResolverRuleId
         ];
@@ -37426,7 +37428,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.UpdateResolverRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "getResolverRule" && jsonRequestBody.operation == "updateResolverRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "getResolverRule" && jsonRequestBody.operation == "updateResolverRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-rule/" + jsonRequestBody.contentString.ResolverRuleId
         ];
@@ -37452,7 +37454,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.ListTagsForResource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listTagsForResource") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "listTagsForResource") {
         reqParams.boto3['ResourceArn'] = jsonRequestBody.contentString.ResourceArn;
         reqParams.cli['--resource-arn'] = jsonRequestBody.contentString.ResourceArn;
 
@@ -37472,7 +37474,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.DeleteResolverRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-rule/" + jsonRequestBody.contentString.ResolverRuleId
         ];
@@ -37496,7 +37498,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53resolver.DeleteResolverEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverEndpoint") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53resolver\/api\/route53resolver$/g) && jsonRequestBody.operation == "deleteResolverEndpoint") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53resolver:*:*:resolver-endpoint/" + jsonRequestBody.contentString.ResolverEndpointId
         ];
@@ -37520,7 +37522,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.GetGraphqlApi
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "getGraphqlApi") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "getGraphqlApi") {
         reqParams.boto3['apiId'] = jsonRequestBody.path.split("/")[3];
         reqParams.cli['--api-id'] = jsonRequestBody.path.split("/")[3];
 
@@ -37540,7 +37542,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListApiKeys
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listApiKeys") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listApiKeys") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
@@ -37562,7 +37564,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListTypes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listTypes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listTypes") {
         reqParams.boto3['format'] = jsonRequestBody.params.format;
         reqParams.cli['--format'] = jsonRequestBody.params.format;
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
@@ -37586,7 +37588,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListDataSources
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listDataSources") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listDataSources") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['apiId'] = jsonRequestBody.path.split("/")[3];
@@ -37608,7 +37610,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListGraphqlApis
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listGraphqlApis") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listGraphqlApis") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
 
@@ -37628,7 +37630,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.ListFunctions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listFunctions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "listFunctions") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split("/")[3];
@@ -37650,7 +37652,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.CreateFunction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createFunction") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "createFunction") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37704,7 +37706,7 @@ function analyseRequest(details) {
     }
 
     // autogen:appsync:appsync.DeleteFunction
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "deleteFunction") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appsync\/api\/appsync$/g) && jsonRequestBody.operation == "deleteFunction") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37730,7 +37732,7 @@ function analyseRequest(details) {
     }
 
     // autogen:s3:s3.ListBuckets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
 
         outputs.push({
             'region': region,
@@ -37748,7 +37750,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.DescribeRepositories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/ecr$/g) && jsonRequestBody.operation == "describeRepositories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/ecr$/g) && jsonRequestBody.operation == "describeRepositories") {
 
         outputs.push({
             'region': region,
@@ -37766,7 +37768,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -37784,7 +37786,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.DescribeTrails
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "describeTrails") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "describeTrails") {
 
         outputs.push({
             'region': region,
@@ -37802,7 +37804,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.GetEventSelectors
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
         reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
         reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
 
@@ -37822,7 +37824,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.PutEventSelectors
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "putEventSelectors") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "putEventSelectors") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37848,7 +37850,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.StartLogging
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "startLogging") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "startLogging") {
         reqParams.iam['Resource'] = [
             "arn:aws:cloudtrail:*:*:trail/" + jsonRequestBody.contentString.Name
         ];
@@ -37872,7 +37874,7 @@ function analyseRequest(details) {
     }
 
     // autogen:events:events.PutRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putRule") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37902,7 +37904,7 @@ function analyseRequest(details) {
     }
 
     // autogen:events:events.PutTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "putTargets") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -37928,7 +37930,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.DisableStageTransition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "disableStageTransition") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "disableStageTransition") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.pipelineName + "/" + jsonRequestBody.contentString.stageName
         ];
@@ -37958,7 +37960,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.EnableStageTransition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "enableStageTransition") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "enableStageTransition") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.pipelineName + "/" + jsonRequestBody.contentString.stageName
         ];
@@ -37986,7 +37988,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudtrail:cloudtrail.GetEventSelectors
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/cloudtrail$/g) && jsonRequestBody.operation == "getEventSelectors") {
         reqParams.boto3['TrailName'] = jsonRequestBody.contentString.TrailName;
         reqParams.cli['--trail-name'] = jsonRequestBody.contentString.TrailName;
 
@@ -38006,7 +38008,7 @@ function analyseRequest(details) {
     }
 
     // autogen:events:events.DeleteRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "deleteRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "deleteRule") {
         reqParams.iam['Resource'] = [
             "arn:aws:events:*:*:rule/" + jsonRequestBody.contentString.Name
         ];
@@ -38030,7 +38032,7 @@ function analyseRequest(details) {
     }
 
     // autogen:events:events.ListTargetsByRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "listTargetsByRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "listTargetsByRule") {
         reqParams.boto3['Rule'] = jsonRequestBody.contentString.Rule;
         reqParams.cli['--rule'] = jsonRequestBody.contentString.Rule;
 
@@ -38050,7 +38052,7 @@ function analyseRequest(details) {
     }
 
     // autogen:events:events.RemoveTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "removeTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/events$/g) && jsonRequestBody.operation == "removeTargets") {
         reqParams.iam['Resource'] = [
             "arn:aws:events:*:*:rule/" + jsonRequestBody.contentString.Rule
         ];
@@ -38076,7 +38078,7 @@ function analyseRequest(details) {
     }
 
     // autogen:codepipeline:codepipeline.PutWebhook
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "putWebhook") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/codesuite\/api\/codepipeline$/g) && jsonRequestBody.operation == "putWebhook") {
         reqParams.iam['Resource'] = [
             "arn:aws:codepipeline:*:*:" + jsonRequestBody.contentString.targetPipeline,
             "arn:aws:codepipeline:*:*:webhook:" + jsonRequestBody.contentString.webhook.name
@@ -38128,7 +38130,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeDhcpOptions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeDhcpOptions\?/g)) {
 
         outputs.push({
             'region': region,
@@ -38146,7 +38148,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateDhcpOptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDhcpOptions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDhcpOptions\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -38200,7 +38202,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateSubnetCidrBlock
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateSubnetCidrBlock\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateSubnetCidrBlock\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -38239,17 +38241,17 @@ function analyseRequest(details) {
     }
 
     // manual:iam:iam.CreateAccessKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/accessKeys$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
 
-        reqParams.cfn['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.cfn['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
 
-        reqParams.tf['user'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
+        reqParams.tf['user'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/accessKeys$/g.exec(details.url)[1];
         reqParams.tf['pgp_key'] = "REPLACEME";
 
         outputs.push({
@@ -38279,7 +38281,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-devices:iot1click-devices.UnclaimDevice
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/unclaim$/g) && jsonRequestBody.method == "PUT") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/unclaim$/g) && jsonRequestBody.method == "PUT") {
         reqParams.iam['Resource'] = [
             "arn:aws:iot1click:*:*:devices/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -38303,7 +38305,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-devices:iot1click-devices.InitiateDeviceClaim
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/devices\/.+\/initiate\-claim$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/^\/devices\/.+\/initiate\-claim$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iot1click:*:*:devices/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -38340,7 +38342,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot1click-devices:iot1click-devices.FinalizeDeviceClaim
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/finalize\-claim$/g) && jsonRequestBody.method == "PUT") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot1click\/api\/devices$/g) && jsonRequestBody.path.match(/^\/devices\/.+\/finalize\-claim$/g) && jsonRequestBody.method == "PUT") {
         reqParams.iam['Resource'] = [
             "arn:aws:iot1click:*:*:devices/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -38364,7 +38366,7 @@ function analyseRequest(details) {
     }
 
     // manual:cloudwatch:cloudwatch.PutDashboard
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/dashboards\.PutDashboard\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/dashboards\.PutDashboard\//g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -38407,13 +38409,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.DeleteCertificate
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/certificate\/[a-f0-9]+$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iot:*:*:cert/" + /.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1]
+            "arn:aws:iot:*:*:cert/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1]
         ];
 
-        reqParams.boto3['certificateId'] = /.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
-        reqParams.cli['--certificate-id'] = /.+console\.aws\.amazon\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
+        reqParams.boto3['certificateId'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
+        reqParams.cli['--certificate-id'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/certificate\/[a-f0-9]+$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -38431,7 +38433,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.CreateCertificateFromCsr
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/certificate$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/certificate$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -38474,7 +38476,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.CreatePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/policy$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/policy$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -38517,7 +38519,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.AttachPrincipalPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/principal\/attach$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/principal\/attach$/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.principal
         ];
@@ -38560,7 +38562,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.ListNamespaces
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "listNamespaces") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "listNamespaces") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -38580,7 +38582,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.DeleteNamespace
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "deleteNamespace") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "deleteNamespace") {
         reqParams.iam['Resource'] = [
             "arn:aws:servicediscovery:*:*:stack/*",
             "arn:aws:servicediscovery:*:*:service/*"
@@ -38605,7 +38607,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.GetOperation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "getOperation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "getOperation") {
         reqParams.boto3['OperationId'] = jsonRequestBody.contentString.OperationId;
         reqParams.cli['--operation-id'] = jsonRequestBody.contentString.OperationId;
 
@@ -38625,7 +38627,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -38643,7 +38645,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.CreatePrivateDnsNamespace
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPrivateDnsNamespace") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPrivateDnsNamespace") {
         reqParams.iam['Resource'] = [
             "arn:aws:servicediscovery:*:*:stack/" + jsonRequestBody.contentString.Name
         ];
@@ -38692,7 +38694,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.CreateHttpNamespace
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createHttpNamespace") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createHttpNamespace") {
         reqParams.iam['Resource'] = [
             "arn:aws:servicediscovery:*:*:stack/" + jsonRequestBody.contentString.Name
         ];
@@ -38737,7 +38739,7 @@ function analyseRequest(details) {
     }
 
     // autogen:servicediscovery:servicediscovery.CreatePublicDnsNamespace
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPublicDnsNamespace") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudmap\/api\/servicediscovery$/g) && jsonRequestBody.operation == "createPublicDnsNamespace") {
         reqParams.iam['Resource'] = [
             "arn:aws:servicediscovery:*:*:stack/" + jsonRequestBody.contentString.Name
         ];
@@ -38782,7 +38784,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeTransitGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGateways\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
         reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
 
@@ -38802,7 +38804,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateTransitGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGateway\?/g)) {
         reqParams.boto3['Description'] = jsonRequestBody.Description;
         reqParams.cli['--description'] = jsonRequestBody.Description;
         reqParams.boto3['Options'] = jsonRequestBody.Options;
@@ -38876,7 +38878,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeCustomerGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeCustomerGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeCustomerGateways\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -38896,7 +38898,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeTransitGatewayRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGatewayRouteTables\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTransitGatewayRouteTables\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
         reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
 
@@ -38916,7 +38918,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateTransitGatewayVpcAttachment
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayVpcAttachment\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayVpcAttachment\?/g)) {
         reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
         reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
@@ -38986,7 +38988,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpnConnection
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnection\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnection\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -39041,7 +39043,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateTransitGatewayRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRouteTable\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRouteTable\?/g)) {
         reqParams.boto3['TransitGatewayId'] = jsonRequestBody.TransitGatewayId;
         reqParams.cli['--transit-gateway-id'] = jsonRequestBody.TransitGatewayId;
         reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecifications;
@@ -39101,7 +39103,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.GetTransitGatewayRouteTableAssociations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTableAssociations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTableAssociations\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
@@ -39123,7 +39125,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.GetTransitGatewayRouteTablePropagations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTablePropagations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetTransitGatewayRouteTablePropagations\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
@@ -39145,7 +39147,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.SearchTransitGatewayRoutes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.SearchTransitGatewayRoutes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.SearchTransitGatewayRoutes\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
@@ -39169,7 +39171,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AssociateTransitGatewayRouteTable
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateTransitGatewayRouteTable\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AssociateTransitGatewayRouteTable\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
@@ -39208,7 +39210,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.EnableTransitGatewayRouteTablePropagation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableTransitGatewayRouteTablePropagation\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableTransitGatewayRouteTablePropagation\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['TransitGatewayAttachmentId'] = jsonRequestBody.TransitGatewayAttachmentId;
@@ -39247,7 +39249,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateTransitGatewayRoute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRoute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateTransitGatewayRoute\?/g)) {
         reqParams.boto3['TransitGatewayRouteTableId'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.cli['--transit-gateway-route-table-id'] = jsonRequestBody.TransitGatewayRouteTableId;
         reqParams.boto3['DestinationCidrBlock'] = jsonRequestBody.DestinationCidrBlock;
@@ -39293,7 +39295,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.DeleteLayerVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "deleteLayerVersion") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "deleteLayerVersion") {
         reqParams.iam['Resource'] = [
             "arn:aws:lambda:*:*:layer:" + jsonRequestBody.layerName + ":" + jsonRequestBody.version
         ];
@@ -39319,7 +39321,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.ListLayers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "listLayers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "listLayers") {
 
         outputs.push({
             'region': region,
@@ -39393,7 +39395,7 @@ function analyseRequest(details) {
     // autogen:elasticmapreduce:emr.CreateSecurityConfiguration
     // autogen:elasticmapreduce:emr.AddJobFlowSteps
     // autogen:elasticmapreduce:emr.AddInstanceGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/elasticmapreduce\/srf$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/elasticmapreduce\/srf$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
  
@@ -39699,7 +39701,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.CreateHealthCheck
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/healthchecks\/service\/healthcheck$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/healthchecks\/service\/healthcheck$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:route53:::healthcheck/*"
         ];
@@ -39794,7 +39796,7 @@ function analyseRequest(details) {
     }
 
     // autogen:route53:route53.DeleteHealthCheck
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/healthchecks\/service\/healthcheck\/delete$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/healthchecks\/service\/healthcheck\/delete$/g)) {
         for (var i=0; i<jsonRequestBody.healthCheckIds.length; i++) {
             reqParams = {
                 'boto3': {},
@@ -39829,7 +39831,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpnConnectionRoute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnectionRoute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpnConnectionRoute\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -39872,7 +39874,7 @@ function analyseRequest(details) {
     }
 
     // manual:cloudwatch:events.PutPermission
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.PutPermission\//g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudwatch\/CloudWatch\/data\/jetstream\.PutPermission\//g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -39914,13 +39916,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.DisableTopicRule
-    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+\/disable$/g) && formRequestBody._ == "{") {
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/.+\/disable$/g) && formRequestBody._ == "{") {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['ruleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
-        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
+        reqParams.boto3['ruleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)\/disable$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -39938,13 +39940,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.EnableTopicRule
-    if (details.method == "PUT" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+\/enable$/g)) {
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/.+\/enable$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['ruleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
-        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
+        reqParams.boto3['ruleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)\/enable$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -39962,13 +39964,13 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.DeleteTopicRule
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule\/.+$/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/.+$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['ruleName'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
-        reqParams.cli['--rule-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
+        reqParams.boto3['ruleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
+        reqParams.cli['--rule-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule\/(.+)$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -39986,7 +39988,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.CreateTopicRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/rule$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/rule$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40197,20 +40199,20 @@ function analyseRequest(details) {
     }
 
     // autogen:iot:iot.AttachThingPrincipal
-    if (details.method == "PATCH" && details.url.match(/.+console\.aws\.amazon\.com\/iot\/api\/thing\/.+\/principal\/attach$/g)) {
+    if (details.method == "PATCH" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\/.+\/principal\/attach$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
 
-        reqParams.boto3['ThingName'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
-        reqParams.cli['--thing-name'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.boto3['ThingName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.cli['--thing-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
         reqParams.boto3['Principal'] = jsonRequestBody.principal;
         reqParams.cli['--principal'] = jsonRequestBody.principal;
 
-        reqParams.cfn['ThingName'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.cfn['ThingName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
         reqParams.cfn['Principal'] = jsonRequestBody.principal;
 
-        reqParams.tf['thing'] = /.+console\.aws\.amazon\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
+        reqParams.tf['thing'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iot\/api\/thing\/(.+)\/principal\/attach$/g.exec(details.url)[1];
         reqParams.tf['principal'] = jsonRequestBody.principal;
 
         outputs.push({
@@ -40240,7 +40242,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.AddListenerCertificates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2AddListenerCertificates\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2AddListenerCertificates\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.listenerArn
         ];
@@ -40283,7 +40285,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateDocumentationVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/documentation\/versions$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/restapis\/.+\/documentation\/versions$/g)) {
         reqParams.boto3['restApiId'] = /^\/restapis\/(.+)\/documentation\/versions$/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--rest-api-id'] = /^\/restapis\/(.+)\/documentation\/versions$/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['documentationVersion'] = jsonRequestBody.contentString.documentationVersion;
@@ -40328,7 +40330,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigateway.CreateBasePathMapping
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/domainname\/.+\/basepathmappings$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigateway$/g) && jsonRequestBody.path.match(/^\/domainname\/.+\/basepathmappings$/g)) {
         reqParams.boto3['domainName'] = /^\/domainname\/(.+)\/basepathmappings$/g.exec(jsonRequestBody.path)[1];
         reqParams.cli['--domain-name'] = /^\/domainname\/(.+)\/basepathmappings$/g.exec(jsonRequestBody.path)[1];
         reqParams.boto3['basePath'] = jsonRequestBody.contentString.basePath;
@@ -40375,7 +40377,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpcPeeringConnection
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcPeeringConnection\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcPeeringConnection\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:vpc/" + jsonRequestBody.vpcId,
             "arn:aws:ec2:*:*:vpc-peering-connection/*"
@@ -40427,7 +40429,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpcPeeringConnection
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcPeeringConnection\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpcPeeringConnection\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:vpc-peering-connection/" + jsonRequestBody.vpcPeeringConnectionId
         ];
@@ -40451,7 +40453,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kms:kms.CreateKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createKey") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40500,7 +40502,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kms:kms.CreateAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createAlias") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kms\/api\/kms$/g) && jsonRequestBody.operation == "createAlias") {
         reqParams.iam['Resource'] = [
             "arn:aws:kms:*:*:key/" + jsonRequestBody.contentString.TargetKeyId
         ];
@@ -40543,7 +40545,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudfront:cloudfront.CreateCloudFrontOriginAccessIdentity
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createOai") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createOai") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40590,7 +40592,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.PutAggregationAuthorization
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/putAggregationAuthorization\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/aggregationAuthorization\/putAggregationAuthorization\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:config:*:*:aggregation-authorization/" + jsonRequestBody.authorizedAccountId + "/" + jsonRequestBody.authorizedAwsRegion
         ];
@@ -40633,7 +40635,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.DescribeAggregationAuthorizations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/aggregationAuthorization\/describeAggregationAuthorizations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/aggregationAuthorization\/describeAggregationAuthorizations\?/g)) {
 
         outputs.push({
             'region': region,
@@ -40651,7 +40653,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:sns.CreateTopic
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/setupSnsTopic\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/setupSnsTopic\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:sns:*:*:" + jsonRequestBody.topicName
         ];
@@ -40675,7 +40677,7 @@ function analyseRequest(details) {
     }
 
     // autogen:config:config.PutConfigurationRecorder
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/config\/service\/subscribeToStarling\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/config\/service\/subscribeToStarling\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40809,7 +40811,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DetachInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40835,7 +40837,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeInternetGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInternetGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInternetGateways\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -40855,7 +40857,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AttachInternetGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachInternetGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachInternetGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40894,7 +40896,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.AttachVpnGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachVpnGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AttachVpnGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40937,7 +40939,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DetachVpnGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachVpnGateway\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DetachVpnGateway\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -40963,7 +40965,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.EnableVgwRoutePropagation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableVgwRoutePropagation\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.EnableVgwRoutePropagation\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -41006,7 +41008,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRouteTables
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeRouteTables\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeRouteTables\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.__metaData.filters;
         reqParams.cli['--filters'] = jsonRequestBody.__metaData.filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
@@ -41028,7 +41030,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpnGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpnGateways\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpnGateways\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -41048,7 +41050,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.AcceptInvitation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "acceptInvitation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "acceptInvitation") {
         reqParams.iam['Resource'] = [
             "arn:aws:guardduty:*:*:detector/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -41090,7 +41092,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.ListInvitations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "listInvitations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "listInvitations") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -41110,7 +41112,7 @@ function analyseRequest(details) {
     }
 
     // autogen:guardduty:guardduty.GetMasterAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "getMasterAccount") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/guardduty\/api\/guardduty$/g) && jsonRequestBody.operation == "getMasterAccount") {
         reqParams.boto3['DetectorId'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--detector-id'] = jsonRequestBody.path.split("/")[2];
 
@@ -41130,25 +41132,25 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.PutUserPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/users\/.+\/inlinePolicies$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/.+\/inlinePolicies$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:user/" + /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1]
+            "arn:aws:iam::*:user/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1]
         ];
 
         reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
         reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
         reqParams.boto3['PolicyDocument'] = jsonRequestBody.document;
         reqParams.cli['--policy-document'] = jsonRequestBody.document;
-        reqParams.boto3['UserName'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
-        reqParams.cli['--user-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.boto3['UserName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.cli['--user-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
 
         reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
         reqParams.cfn['PolicyDocument'] = jsonRequestBody.document;
-        reqParams.cfn['Users'] = [/.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
+        reqParams.cfn['Users'] = [/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
 
         reqParams.tf['name'] = jsonRequestBody.policyName;
         reqParams.tf['policy'] = jsonRequestBody.document;
-        reqParams.tf['user'] = /.+console\.aws\.amazon\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.tf['user'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/users\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -41177,25 +41179,25 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.PutRolePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/api\/roles\/.+\/inlinePolicies$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.+\/inlinePolicies$/g)) {
         reqParams.iam['Resource'] = [
-            "arn:aws:iam::*:role/" + /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1]
+            "arn:aws:iam::*:role/" + /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1]
         ];
 
         reqParams.boto3['PolicyName'] = jsonRequestBody.policyName;
         reqParams.cli['--policy-name'] = jsonRequestBody.policyName;
         reqParams.boto3['PolicyDocument'] = jsonRequestBody.document;
         reqParams.cli['--policy-document'] = jsonRequestBody.document;
-        reqParams.boto3['RoleName'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
-        reqParams.cli['--role-name'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.boto3['RoleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.cli['--role-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
 
         reqParams.cfn['PolicyName'] = jsonRequestBody.policyName;
         reqParams.cfn['PolicyDocument'] = jsonRequestBody.document;
-        reqParams.cfn['Roles'] = [/.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
+        reqParams.cfn['Roles'] = [/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1]];
 
         reqParams.tf['name'] = jsonRequestBody.policyName;
         reqParams.tf['policy'] = jsonRequestBody.document;
-        reqParams.tf['role'] = /.+console\.aws\.amazon\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
+        reqParams.tf['role'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.+)\/inlinePolicies$/g.exec(details.url)[1];
 
         outputs.push({
             'region': region,
@@ -41224,7 +41226,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.PutGroupPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/PutGroupPolicy$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/proxy\/PutGroupPolicy$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:iam::*:group/" + jsonRequestBody.groupName
         ];
@@ -41271,7 +41273,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.CreateEndpointConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpointConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpointConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:endpoint-config/" + jsonRequestBody.contentString.EndpointConfigName
         ];
@@ -41316,7 +41318,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.CreateEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpoint") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "createEndpoint") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:endpoint/" + jsonRequestBody.contentString.EndpointName
         ];
@@ -41358,7 +41360,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.DeleteEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpoint") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpoint") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:endpoint/" + jsonRequestBody.contentString.EndpointName
         ];
@@ -41382,7 +41384,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.DeleteEndpointConfig
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpointConfig") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteEndpointConfig") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:endpoint-config/" + jsonRequestBody.contentString.EndpointConfigName
         ];
@@ -41406,7 +41408,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sagemaker:sagemaker.DeleteModel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteModel") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sagemaker\/api\/sagemaker$/g) && jsonRequestBody.operation == "deleteModel") {
         reqParams.iam['Resource'] = [
             "arn:aws:sagemaker:*:*:model/" + jsonRequestBody.contentString.ModelName
         ];
@@ -41430,7 +41432,7 @@ function analyseRequest(details) {
     }
 
     // manual:waf-regional:waf-regional.AssociateWebACL
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers['X-Amz-Target'] == "AWSWAF_Regional_20161128.AssociateWebACL") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/waf\/api\/waf\-regional$/g) && jsonRequestBody.headers['X-Amz-Target'] == "AWSWAF_Regional_20161128.AssociateWebACL") {
         reqParams.iam['Resource'] = [
             "arn:aws:waf-regional:*:*:webacl/" + jsonRequestBody.content.WebACLId,
             jsonRequestBody.content.ResourceArn
@@ -41474,7 +41476,7 @@ function analyseRequest(details) {
     }
 
     // autogen:s3:s3.HeadBucket
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "HeadBucket") {
         reqParams.iam['Resource'] = [
             "arn:aws:s3:::" + jsonRequestBody.path
         ];
@@ -41501,7 +41503,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:cloudformation.DescribeStacks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "describeStack") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "describeStack") {
         reqParams.boto3['StackName'] = jsonRequestBody.stackArn;
         reqParams.cli['--stack-name'] = jsonRequestBody.stackArn;
 
@@ -41521,7 +41523,7 @@ function analyseRequest(details) {
     }
 
     // autogen:secretsmanager:secretsmanager.GetSecretValue
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "GetSecretValue") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/secretsmanager\/api\/secretsmanager$/g) && jsonRequestBody.operation == "GetSecretValue") {
         reqParams.iam['Resource'] = [
             "arn:aws:secretsmanager:*:*:secret:" + jsonRequestBody.content.SecretId
         ];
@@ -41545,7 +41547,7 @@ function analyseRequest(details) {
     }
 
     // autogen:kinesisanalytics:kinesisanalyticsv2.AddApplicationReferenceDataSource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationReferenceDataSource") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/kinesisanalytics\/proxy$/g) && jsonRequestBody.operation == "AddApplicationReferenceDataSource") {
         reqParams.iam['Resource'] = [
             "arn:aws:kinesisanalytics:*:*:application/" + jsonRequestBody.content.ApplicationName
         ];
@@ -41587,7 +41589,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-identity.SetIdentityPoolRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/pool\/edit\/\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/pool\/edit\/\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -41677,7 +41679,7 @@ function analyseRequest(details) {
     }
 
     // manual:ssm:ssm.RegisterTaskWithMaintenanceWindow
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTaskWithMaintenanceWindow") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/systems\-manager\/api\/ssm$/g) && jsonRequestBody.operation == "registerTaskWithMaintenanceWindow") {
         reqParams.iam['Resource'] = [
             "arn:aws:ssm:*:*:maintenancewindow/" + jsonRequestBody.contentString.WindowId
         ];
@@ -41780,7 +41782,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.DescribeRepositories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "describeRepositories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "describeRepositories") {
         reqParams.boto3['maxResults'] = jsonRequestBody.contentString.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.contentString.maxResults;
 
@@ -41800,7 +41802,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.CreateRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "createRepository") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "createRepository") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -41839,7 +41841,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.DeleteRepository
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "deleteRepository") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "deleteRepository") {
         reqParams.iam['Resource'] = [
             "arn:aws:ecr:*:*:repository/" + jsonRequestBody.contentString.repositoryName
         ];
@@ -41865,7 +41867,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -41883,7 +41885,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -41901,7 +41903,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -41919,7 +41921,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -41937,7 +41939,7 @@ function analyseRequest(details) {
     }
 
     // autogen:eks:eks.ListClusters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/eks\/api\/eks$/g) && jsonRequestBody.operation == "listClusters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/eks\/api\/eks$/g) && jsonRequestBody.operation == "listClusters") {
 
         outputs.push({
             'region': region,
@@ -41955,7 +41957,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mq:mq.UpdateBroker
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/amazon\-mq\/api\/mq$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/\/brokers\/.+/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amazon\-mq\/api\/mq$/g) && jsonRequestBody.method == "PUT" && jsonRequestBody.path.match(/\/brokers\/.+/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -41997,7 +41999,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.ListPipelines
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listPipelines") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listPipelines") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
 
@@ -42017,7 +42019,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -42035,7 +42037,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.CreateChannel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createChannel") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createChannel") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:channel/" + jsonRequestBody.contentString.channelName
         ];
@@ -42088,7 +42090,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iot.CreateTopicRule
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iot$/g) && jsonRequestBody.operation == "createTopicRule") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iot$/g) && jsonRequestBody.operation == "createTopicRule") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -42114,7 +42116,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.ListChannels
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listChannels") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listChannels") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
 
@@ -42134,7 +42136,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.ListDatastores
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatastores") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatastores") {
         reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
 
@@ -42154,7 +42156,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.CreatePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createPipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createPipeline") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:pipeline/" + jsonRequestBody.contentString.pipelineName
         ];
@@ -42192,7 +42194,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.CreateDatastore
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDatastore") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDatastore") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:datastore/" + jsonRequestBody.contentString.datastoreName
         ];
@@ -42245,7 +42247,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.DeleteChannel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteChannel") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteChannel") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:channel/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -42269,7 +42271,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.DeletePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deletePipeline") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deletePipeline") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:pipeline/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -42293,7 +42295,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.DeleteDatastore
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteDatastore") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "deleteDatastore") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:datastore/" + jsonRequestBody.path.split("/")[2]
         ];
@@ -42317,7 +42319,7 @@ function analyseRequest(details) {
     }
 
     // manual:route53:route53.ChangeResourceRecordSets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "changeResourceRecordSets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/route53\/route53console\/route53$/g) && gwtRequest['method'] == "changeResourceRecordSets") {
         reqParams.iam['Resource'] = [
             "arn:aws:route53:::hostedzone/" + gwtRequest.args[0].value.value
         ];
@@ -42403,7 +42405,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.RegisterImage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=registerImage\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=registerImage\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -42451,7 +42453,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeCapacityReservations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeCapacityReservations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeCapacityReservations\?/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.MaxResults;
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
@@ -42473,7 +42475,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.StopInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=stopInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=stopInstances\?/g)) {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['InstanceIds'] = jsonRequestBody.instanceIds;
@@ -42500,7 +42502,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.StartInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=startInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=startInstances\?/g)) {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['InstanceIds'] = jsonRequestBody.instanceIds;
@@ -42525,7 +42527,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.RebootInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=rebootInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=rebootInstances\?/g)) {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['InstanceIds'] = jsonRequestBody.instanceIds;
@@ -42550,7 +42552,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSpotFleetRequests
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/list_spot_requests\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/list_spot_requests\?/g)) {
         reqParams.boto3['MaxResults'] = getUrlValue(details.url, 'size');
         reqParams.cli['--max-items'] = getUrlValue(details.url, 'size');
 
@@ -42570,7 +42572,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_vpcs$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/describe_vpcs$/g)) {
 
         outputs.push({
             'region': region,
@@ -42588,7 +42590,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeKeyPairs
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_keypairs$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/describe_keypairs$/g)) {
 
         outputs.push({
             'region': region,
@@ -42606,7 +42608,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAvailabilityZones
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_zones$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/describe_zones$/g)) {
 
         outputs.push({
             'region': region,
@@ -42624,7 +42626,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSecurityGroups
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_security_groups$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/describe_security_groups$/g)) {
 
         outputs.push({
             'region': region,
@@ -42642,7 +42644,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:iam.ListInstanceProfiles
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/describe_instance_profiles$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/describe_instance_profiles$/g)) {
 
         outputs.push({
             'region': region,
@@ -42660,7 +42662,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeLaunchTemplates
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/lt\/list_launch_templates$/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/lt\/list_launch_templates$/g)) {
 
         outputs.push({
             'region': region,
@@ -42678,7 +42680,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeLaunchTemplateVersions
-    if (details.method == "GET" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/lt\/describe_launchtemplate_data\?/g)) {
+    if (details.method == "GET" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/lt\/describe_launchtemplate_data\?/g)) {
         reqParams.boto3['LaunchTemplateId'] = getUrlValue(details.url, 'templateId');
         reqParams.cli['--launch-template-id'] = getUrlValue(details.url, 'templateId');
         reqParams.boto3['Versions'] = [getUrlValue(details.url, 'versionNumber')];
@@ -42700,7 +42702,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.RequestSpotFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/fleet$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/fleet$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -42796,7 +42798,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CancelSpotFleetRequests
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2sp\/services\/bulkCancelFleets$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2sp\/services\/bulkCancelFleets$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -42822,7 +42824,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.CreateDataset
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDataset") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "createDataset") {
         reqParams.iam['Resource'] = [
             "arn:aws:iotanalytics:*:*:dataset/" + jsonRequestBody.contentString.datasetName
         ];
@@ -42903,7 +42905,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iotanalytics:iotanalytics.ListDatasets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatasets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iotanalytics\/api\/iotanalytics$/g) && jsonRequestBody.operation == "listDatasets") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
 
@@ -42923,7 +42925,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateRoute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRoute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateRoute\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:route-table/" + jsonRequestBody.routeTableId
         ];
@@ -42994,7 +42996,7 @@ function analyseRequest(details) {
     }
  
     // autogen:autoscaling-plans:autoscaling-plans.CreateScalingPlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "createScalingPlan") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "createScalingPlan") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43035,7 +43037,7 @@ function analyseRequest(details) {
     }
 
     // autogen:autoscaling-plans:autoscaling-plans.DescribeScalingPlans
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "describeScalingPlans") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "describeScalingPlans") {
         reqParams.boto3['ScalingPlanNames'] = jsonRequestBody.contentString.ScalingPlanNames;
         reqParams.cli['--scaling-plan-names'] = jsonRequestBody.contentString.ScalingPlanNames;
         reqParams.boto3['ScalingPlanVersion'] = jsonRequestBody.contentString.ScalingPlanVersion;
@@ -43057,7 +43059,7 @@ function analyseRequest(details) {
     }
 
     // autogen:autoscaling-plans:autoscaling-plans.DeleteScalingPlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "deleteScalingPlan") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/awsautoscaling\/api\/autoscalingplans$/g) && jsonRequestBody.operation == "deleteScalingPlan") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43083,7 +43085,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpc\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpc\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43127,7 +43129,7 @@ function analyseRequest(details) {
     }
 
     // autogen:acm-pca:acm-pca.CreateCertificateAuthority
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.CreateCertificateAuthority") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.CreateCertificateAuthority") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43187,7 +43189,7 @@ function analyseRequest(details) {
     }
 
     // autogen:acm-pca:acm-pca.ListCertificateAuthorities
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.ListCertificateAuthorities") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/acm\-pca\/api\/acm\-pca$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.acmpca.ACMPrivateCA.ListCertificateAuthorities") {
 
         outputs.push({
             'region': region,
@@ -43205,7 +43207,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.ListAgents
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listAgents") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listAgents") {
 
         outputs.push({
             'region': region,
@@ -43223,7 +43225,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.ListLocations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listLocations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listLocations") {
 
         outputs.push({
             'region': region,
@@ -43241,7 +43243,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:sts.GetCallerIdentity
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/sts$/g) && jsonRequestBody.operation == "getCallerIdentity") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/sts$/g) && jsonRequestBody.operation == "getCallerIdentity") {
 
         outputs.push({
             'region': region,
@@ -43259,7 +43261,7 @@ function analyseRequest(details) {
     }
 
     // autogen:glacier:glacier.ListVaults
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "ListVaults") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "ListVaults") {
 
         outputs.push({
             'region': region,
@@ -43277,7 +43279,7 @@ function analyseRequest(details) {
     }
 
     // autogen:glacier:sns.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/sns\-proxy$/g) && jsonRequestBody.params.Action == "ListTopics") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/glacier\/sns\-proxy$/g) && jsonRequestBody.params.Action == "ListTopics") {
 
         outputs.push({
             'region': region,
@@ -43295,7 +43297,7 @@ function analyseRequest(details) {
     }
 
     // autogen:glacier:glacier.CreateVault
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "CreateVault") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.operation == "CreateVault") {
         reqParams.iam['Resource'] = [
             "arn:aws:glacier:*:*:vaults/" + jsonRequestBody.path.split("/")[3]
         ];
@@ -43331,7 +43333,7 @@ function analyseRequest(details) {
     }
 
     // autogen:glacier:glacier.InitiateVaultLock
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.path.split("/")[4] == "lock-policy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/glacier\/glacier\-proxy$/g) && jsonRequestBody.path.split("/")[4] == "lock-policy") {
         reqParams.iam['Resource'] = [
             "arn:aws:glacier:*:*:vaults/" + jsonRequestBody.path.split("/")[3]
         ];
@@ -43371,7 +43373,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.ListLicenseConfigurations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListLicenseConfigurations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListLicenseConfigurations") {
 
         outputs.push({
             'region': region,
@@ -43389,7 +43391,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.CreateLicenseConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.CreateLicenseConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.CreateLicenseConfiguration") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43448,7 +43450,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.GetLicenseConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.GetLicenseConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.GetLicenseConfiguration") {
         reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
         reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
 
@@ -43468,7 +43470,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.ListUsageForLicenseConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListUsageForLicenseConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListUsageForLicenseConfiguration") {
         reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
         reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
         reqParams.boto3['NextToken'] = jsonRequestBody.contentString.NextToken;
@@ -43490,7 +43492,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeRegions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getRegions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getRegions\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43508,7 +43510,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=describeKey\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=describeKey\?/g)) {
         reqParams.boto3['KeyId'] = jsonRequestBody.keyId;
         reqParams.cli['--key-id'] = jsonRequestBody.keyId;
 
@@ -43528,7 +43530,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CopyImage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=copyImage\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=copyImage\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43573,7 +43575,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpoints
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpoints\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpoints\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
 
@@ -43593,7 +43595,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVolumes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getVolumes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getVolumes\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
 
@@ -43613,7 +43615,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateImage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=createImage\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=createImage\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43659,7 +43661,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeImageAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getImageAttribute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getImageAttribute\?/g)) {
         reqParams.boto3['ImageId'] = jsonRequestBody.imageId;
         reqParams.cli['--image-id'] = jsonRequestBody.imageId;
         reqParams.boto3['Attribute'] = jsonRequestBody.attribute;
@@ -43681,7 +43683,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSnapshots
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshots\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getSnapshots\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.count;
@@ -43703,7 +43705,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVolumes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getMergedVolumes\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getMergedVolumes\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.filters;
         reqParams.cli['--filters'] = jsonRequestBody.filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.count;
@@ -43725,7 +43727,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.ListAssociationsForLicenseConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListAssociationsForLicenseConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.ListAssociationsForLicenseConfiguration") {
         reqParams.boto3['LicenseConfigurationArn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
         reqParams.cli['--license-configuration-arn'] = jsonRequestBody.contentString.LicenseConfigurationArn;
         reqParams.boto3['NextToken'] = jsonRequestBody.contentString.NextToken;
@@ -43747,7 +43749,7 @@ function analyseRequest(details) {
     }
 
     // autogen:license-manager:license-manager.UpdateLicenseSpecificationsForResource
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.UpdateLicenseSpecificationsForResource") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/license\-manager\/api\/license\-manager$/g) && jsonRequestBody.headers.X-Amz-Target == "com.amazonaws.license.manager.V2018_08_01.AWSLicenseManager.UpdateLicenseSpecificationsForResource") {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['ResourceArn'] = jsonRequestBody.contentString.ResourceArn;
@@ -43787,7 +43789,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeAddresses
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getAddresses\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getAddresses\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43805,7 +43807,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteSnapshot
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteSnapshot\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deleteSnapshot\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*::snapshot/" + jsonRequestBody.snapshotId
         ];
@@ -43829,7 +43831,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeSnapshotAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=getSnapshotAttribute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getSnapshotAttribute\?/g)) {
         reqParams.boto3['SnapshotId'] = jsonRequestBody.snapshotId;
         reqParams.cli['--snapshot-id'] = jsonRequestBody.snapshotId;
         reqParams.boto3['Attribute'] = jsonRequestBody.attribute;
@@ -43851,7 +43853,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeregisterImage
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deregisterImage\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deregisterImage\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -43875,7 +43877,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetInstances
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetInstances\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43893,7 +43895,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetExportSnapshotRecords
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetExportSnapshotRecords\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetExportSnapshotRecords\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43911,7 +43913,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetCloudFormationStackRecords
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetCloudFormationStackRecords\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetCloudFormationStackRecords\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43929,7 +43931,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetRegions
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetRegions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetRegions\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43947,7 +43949,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetBundles
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetBundles\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetBundles\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43965,7 +43967,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetBlueprints
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetBlueprints\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetBlueprints\?/g)) {
 
         outputs.push({
             'region': region,
@@ -43983,7 +43985,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetDisks
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetDisks\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetDisks\?/g)) {
 
         outputs.push({
             'region': region,
@@ -44001,7 +44003,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetStaticIps
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetStaticIps\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetStaticIps\?/g)) {
 
         outputs.push({
             'region': region,
@@ -44019,7 +44021,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.GetOperations
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/GetOperations\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/GetOperations\?/g)) {
 
         outputs.push({
             'region': region,
@@ -44037,7 +44039,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.StopInstance
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/StopInstance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/StopInstance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*"
         ];
@@ -44061,7 +44063,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.StartInstance
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/StartInstance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/StartInstance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*"
         ];
@@ -44085,7 +44087,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.RebootInstance
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/RebootInstance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/RebootInstance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*"
         ];
@@ -44109,7 +44111,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.DeleteInstance
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DeleteInstance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/DeleteInstance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*"
         ];
@@ -44133,7 +44135,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.CreateKeyPair
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateKeyPair\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/CreateKeyPair\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:KeyPair/*"
         ];
@@ -44169,7 +44171,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.CreateInstances
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateInstances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/CreateInstances\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:KeyPair/*"
         ];
@@ -44235,7 +44237,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.AllocateStaticIp
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/AllocateStaticIp\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/AllocateStaticIp\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:StaticIp/*"
         ];
@@ -44271,7 +44273,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.AttachStaticIp
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/AttachStaticIp\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/AttachStaticIp\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*",
             "arn:aws:lightsail:*:*:StaticIp/*"
@@ -44311,7 +44313,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.DetachStaticIp
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DetachStaticIp\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/DetachStaticIp\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Instance/*",
             "arn:aws:lightsail:*:*:StaticIp/*"
@@ -44336,7 +44338,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.ReleaseStaticIp
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/ReleaseStaticIp\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/ReleaseStaticIp\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:StaticIp/*"
         ];
@@ -44360,7 +44362,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.CreateDomain
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/CreateDomain\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/CreateDomain\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Domain/*"
         ];
@@ -44398,7 +44400,7 @@ function analyseRequest(details) {
     }
 
     // manual:lightsail:lightsail.DeleteDomain
-    if (details.method == "POST" && details.url.match(/.+lightsail\.aws\.amazon\.com\/ls\/api\/2016\-11\-28\/DeleteDomain\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+lightsail\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ls\/api\/2016\-11\-28\/DeleteDomain\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:lightsail:*:*:Domain/*"
         ];
@@ -44422,7 +44424,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListGateways
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listGateways") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listGateways") {
 
         outputs.push({
             'region': region,
@@ -44440,7 +44442,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListFileShares
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listFileShares") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listFileShares") {
 
         outputs.push({
             'region': region,
@@ -44458,7 +44460,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListVolumes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumes") {
 
         outputs.push({
             'region': region,
@@ -44476,7 +44478,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListTapes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listTapes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listTapes") {
 
         outputs.push({
             'region': region,
@@ -44494,7 +44496,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeStaleSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeStaleSecurityGroups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeStaleSecurityGroups\?/g)) {
         reqParams.boto3['VpcId'] = jsonRequestBody.request.vpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.request.vpcId;
         reqParams.boto3['MaxResults'] = jsonRequestBody.request.maxResults;
@@ -44516,7 +44518,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.RevokeSecurityGroupIngress
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=revokeIngress\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=revokeIngress\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ec2:*:*:security-group/" + jsonRequestBody.groupId
         ];
@@ -44542,7 +44544,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -44560,7 +44562,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ActivateGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "activateGateway") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "activateGateway") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -44617,7 +44619,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListLocalDisks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listLocalDisks") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listLocalDisks") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
 
@@ -44637,7 +44639,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.CreateNFSFileShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createNfsFileShare") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createNfsFileShare") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayArn[0]
         ];
@@ -44700,7 +44702,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeNFSFileShares
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeNfsFileShares") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeNfsFileShares") {
         reqParams.boto3['FileShareARNList'] = jsonRequestBody.fileShareArnList;
         reqParams.cli['--file-share-arn-list'] = jsonRequestBody.fileShareArnList;
 
@@ -44720,7 +44722,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeGatewayInformation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeGateway") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeGateway") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
 
@@ -44740,7 +44742,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DeleteGateway
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteGateway") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteGateway") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayArn[0]
         ];
@@ -44764,7 +44766,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeSMBSettings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeSmbSettings") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeSmbSettings") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
 
@@ -44784,7 +44786,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeMaintenanceStartTime
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeMaintenanceStartTime") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeMaintenanceStartTime") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
 
@@ -44805,7 +44807,7 @@ function analyseRequest(details) {
 
     // autogen:storagegateway:storagegateway.AddCache
     // autogen:storagegateway:storagegateway.AddUploadBuffer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "configureLocalStorage") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "configureLocalStorage") {
         if (jsonRequestBody["cacheDiskIds[]"]) {
             reqParams.iam['Resource'] = [
                 jsonRequestBody.gatewayArn[0]
@@ -44913,7 +44915,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.CreateSMBFileShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createSmbFileShare") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createSmbFileShare") {
         reqParams.boto3['Authentication'] = jsonRequestBody.authentication[0];
         reqParams.cli['--authentication'] = jsonRequestBody.authentication[0];
         reqParams.boto3['DefaultStorageClass'] = jsonRequestBody.defaultStorageClass[0];
@@ -44969,7 +44971,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.SetSMBGuestPassword
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "setSmbGuestPassword") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "setSmbGuestPassword") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
         reqParams.boto3['Password'] = jsonRequestBody.smbGuestPassword[0];
@@ -44991,7 +44993,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.RefreshCache
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "refreshCache") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "refreshCache") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.fileShareArn[0]
         ];
@@ -45015,7 +45017,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DeleteFileShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteFileShare") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteFileShare") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.fileShareArn[0]
         ];
@@ -45041,7 +45043,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=deleteVolume\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=deleteVolume\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:storagegateway:*:*:gateway/*/volume/" + jsonRequestBody.volumeId
         ];
@@ -45065,7 +45067,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.CreateTapes
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createTapes") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createTapes") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayARN[0]
         ];
@@ -45095,7 +45097,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DeleteTape
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteTape") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteTape") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayARN[0]
         ];
@@ -45121,7 +45123,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeUploadBuffer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeUploadBuffer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeUploadBuffer") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayARN[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayARN[0];
 
@@ -45141,7 +45143,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeBandwidthRateLimit
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeBandwidthRateLimit") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeBandwidthRateLimit") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
 
@@ -45161,7 +45163,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DescribeVTLDevices
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeVtlDevices") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "describeVtlDevices") {
         reqParams.boto3['GatewayARN'] = jsonRequestBody.gatewayArn[0];
         reqParams.cli['--gateway-arn'] = jsonRequestBody.gatewayArn[0];
 
@@ -45181,7 +45183,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.UpdateVTLDeviceType
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateVtlDeviceType") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateVtlDeviceType") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.vtlDeviceArn[0]
         ];
@@ -45207,7 +45209,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DeleteBandwidthRateLimit
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteBandwidthRateLimit") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteBandwidthRateLimit") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayArn[0]
         ];
@@ -45233,7 +45235,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.UpdateBandwidthRateLimit
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateBandwidthRateLimit") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "updateBandwidthRateLimit") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayArn[0]
         ];
@@ -45265,7 +45267,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.CreateCachediSCSIVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createVolume" && jsonRequestBody.gatewayType[0] == "CACHED") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "createVolume" && jsonRequestBody.gatewayType[0] == "CACHED") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.gatewayArn[0]
         ];
@@ -45316,7 +45318,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.DeleteVolume
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteVolume") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "deleteVolume") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.volumeArn[0]
         ];
@@ -45340,7 +45342,7 @@ function analyseRequest(details) {
     }
 
     // autogen:storagegateway:storagegateway.ListVolumeInitiators
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumeInitiators") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/storagegateway\/ajax\/api$/g) && jsonRequestBody.type[0] == "listVolumeInitiators") {
         reqParams.boto3['VolumeARN'] = jsonRequestBody.volumeArn[0];
         reqParams.cli['--volume-arn'] = jsonRequestBody.volumeArn[0];
 
@@ -45360,7 +45362,7 @@ function analyseRequest(details) {
     }
 
     // manual:cloudfront:cloudfront.CreateStreamingDistribution
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createStreamingDistribution") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudfront\/cloudfrontconsole\/cloudfront$/g) && gwtRequest['service'] == "com.amazonaws.cloudfront.console.gwt.CloudFrontService" && gwtRequest['method'] == "createStreamingDistribution") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -45448,7 +45450,7 @@ function analyseRequest(details) {
     }
 
     // autogen:lambda:lambda.CreateEventSourceMapping
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "createRelation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/lambda\/services\/ajax\?/g) && jsonRequestBody.operation == "createRelation") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -45506,7 +45508,7 @@ function analyseRequest(details) {
     }
 
     // manual:swf:swf.RegisterDomain
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/swf\/console\/SWFService$/g) && gwtRequest['service'] == "com.amazonaws.swf.console.gwtcoral.client.com.amazonaws.swf.service.model.SimpleWorkflowService" && gwtRequest['method'] == "RegisterDomain") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/swf\/console\/SWFService$/g) && gwtRequest['service'] == "com.amazonaws.swf.console.gwtcoral.client.com.amazonaws.swf.service.model.SimpleWorkflowService" && gwtRequest['method'] == "RegisterDomain") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -45548,7 +45550,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DescribeLayers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-layers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/describe\-layers\?/g)) {
         reqParams.boto3['StackId'] = jsonRequestBody.StackId;
         reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
 
@@ -45568,7 +45570,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.DescribeInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/describe\-instances\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/describe\-instances\?/g)) {
         reqParams.boto3['StackId'] = jsonRequestBody.StackId;
         reqParams.cli['--stack-id'] = jsonRequestBody.StackId;
 
@@ -45588,7 +45590,7 @@ function analyseRequest(details) {
     }
 
     // autogen:rds:rds.DescribeDBInstances
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeDBInstances") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeDBInstances") {
 
         outputs.push({
             'region': region,
@@ -45606,7 +45608,7 @@ function analyseRequest(details) {
     }
 
     // autogen:rds:rds.DescribeGlobalClusters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeGlobalClusters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeGlobalClusters") {
 
         outputs.push({
             'region': region,
@@ -45624,7 +45626,7 @@ function analyseRequest(details) {
     }
 
     // autogen:rds:rds.DescribePendingMaintenanceActions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
 
         outputs.push({
             'region': region,
@@ -45642,7 +45644,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworks.RegisterRdsDbInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/s\/register\-rds\-db\-instance\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/s\/register\-rds\-db\-instance\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:opsworks:*:*:stack/" + jsonRequestBody.StackId + "/"
         ];
@@ -45687,7 +45689,7 @@ function analyseRequest(details) {
     }
 
     // autogen:pinpoint:pinpoint.CreateApp
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/pinpoint\/api\/apps$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/pinpoint\/api\/apps$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:mobiletargeting:*:*:apps"
         ];
@@ -45719,7 +45721,7 @@ function analyseRequest(details) {
     // autogen:pinpoint:pinpoint.UpdateGcmChannel
     // autogen:pinpoint:pinpoint.UpdateBaiduChannel
     // autogen:pinpoint:pinpoint.UpdateAdmChannel
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/pinpoint\/api\/app\/settings\/channels$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/pinpoint\/api\/app\/settings\/channels$/g)) {
         if (jsonRequestBody.sms) {
             reqParams.iam['Resource'] = [
                 "arn:aws:mobiletargeting:*:*:apps/" + jsonRequestBody.appId
@@ -45984,7 +45986,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.CreateAgent
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createAgent") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createAgent") {
         reqParams.boto3['ActivationKey'] = jsonRequestBody.contentString.ActivationKey;
         reqParams.cli['--activation-key'] = jsonRequestBody.contentString.ActivationKey;
         reqParams.boto3['AgentName'] = jsonRequestBody.contentString.AgentName;
@@ -46027,7 +46029,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.ListTasks
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listTasks") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "listTasks") {
 
         outputs.push({
             'region': region,
@@ -46045,7 +46047,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DescribeAgent
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeAgent") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeAgent") {
         reqParams.boto3['AgentArn'] = jsonRequestBody.contentString.AgentArn;
         reqParams.cli['--agent-arn'] = jsonRequestBody.contentString.AgentArn;
 
@@ -46065,7 +46067,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:s3.ListBuckets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
 
         outputs.push({
             'region': region,
@@ -46083,7 +46085,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:efs.DescribeFileSystems
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeFileSystems") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeFileSystems") {
 
         outputs.push({
             'region': region,
@@ -46101,7 +46103,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -46119,7 +46121,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.CreateLocationS3
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationS3") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationS3") {
         reqParams.boto3['S3BucketArn'] = jsonRequestBody.contentString.S3BucketArn;
         reqParams.cli['--s3-bucket-arn'] = jsonRequestBody.contentString.S3BucketArn;
         reqParams.boto3['S3Config'] = jsonRequestBody.contentString.S3Config;
@@ -46167,7 +46169,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.CreateLocationNfs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationNfs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationNfs") {
         reqParams.boto3['OnPremConfig'] = jsonRequestBody.contentString.OnPremConfig;
         reqParams.cli['--on-prem-config'] = jsonRequestBody.contentString.OnPremConfig;
         reqParams.boto3['ServerHostname'] = jsonRequestBody.contentString.ServerHostname;
@@ -46215,7 +46217,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DescribeLocationNfs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
         reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
         reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
 
@@ -46235,7 +46237,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:efs.DescribeMountTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeMountTargets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/efs$/g) && jsonRequestBody.operation == "describeMountTargets") {
         reqParams.boto3['FileSystemId'] = jsonRequestBody.params.FileSystemId;
         reqParams.cli['--file-system-id'] = jsonRequestBody.params.FileSystemId;
 
@@ -46255,7 +46257,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.CreateLocationEfs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationEfs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createLocationEfs") {
         reqParams.boto3['Ec2Config'] = jsonRequestBody.contentString.Ec2Config;
         reqParams.cli['--ec-2-config'] = jsonRequestBody.contentString.Ec2Config;
         reqParams.boto3['EfsFilesystemArn'] = jsonRequestBody.contentString.EfsFilesystemArn;
@@ -46304,7 +46306,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DescribeLocationNfs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeLocationNfs") {
         reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
         reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
 
@@ -46324,7 +46326,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.CreateTask
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createTask") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "createTask") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
         reqParams.boto3['SourceLocationArn'] = jsonRequestBody.contentString.SourceLocationArn;
@@ -46386,7 +46388,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DescribeTask
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeTask") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "describeTask") {
         reqParams.boto3['TaskArn'] = jsonRequestBody.contentString.TaskArn;
         reqParams.cli['--task-arn'] = jsonRequestBody.contentString.TaskArn;
 
@@ -46406,7 +46408,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DeleteTask
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteTask") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteTask") {
         reqParams.boto3['TaskArn'] = jsonRequestBody.contentString.TaskArn;
         reqParams.cli['--task-arn'] = jsonRequestBody.contentString.TaskArn;
 
@@ -46426,7 +46428,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DeleteAgent
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteAgent") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteAgent") {
         reqParams.boto3['AgentArn'] = jsonRequestBody.contentString.AgentArn;
         reqParams.cli['--agent-arn'] = jsonRequestBody.contentString.AgentArn;
 
@@ -46446,7 +46448,7 @@ function analyseRequest(details) {
     }
 
     // autogen:datasync:datasync.DeleteLocation
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteLocation") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datasync\/api\/datasync$/g) && jsonRequestBody.operation == "deleteLocation") {
         reqParams.boto3['LocationArn'] = jsonRequestBody.contentString.LocationArn;
         reqParams.cli['--location-arn'] = jsonRequestBody.contentString.LocationArn;
 
@@ -46466,7 +46468,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpointServices
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcEndpointServices\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_describeVpcEndpointServices\?/g)) {
 
         outputs.push({
             'region': region,
@@ -46484,7 +46486,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpcs\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2ux\.elasticconsole\.generated\.ElasticConsoleBackendGenerated\.MergedDescribeVpcs\?/g)) {
 
         outputs.push({
             'region': region,
@@ -46502,7 +46504,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcAttribute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcAttribute\?/g)) {
         reqParams.boto3['VpcId'] = jsonRequestBody.VpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.VpcId;
         reqParams.boto3['Attribute'] = jsonRequestBody.Attribute;
@@ -46524,7 +46526,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DeleteVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpc\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteVpc\?/g)) {
         reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
 
@@ -46544,7 +46546,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.AddCommunicationToCase
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/addCommunicationToCase$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/addCommunicationToCase$/g)) {
         reqParams.boto3['CaseId'] = jsonRequestBody.caseId;
         reqParams.cli['--case-id'] = jsonRequestBody.caseId;
         reqParams.boto3['CommunicationBody'] = jsonRequestBody.communicationBody;
@@ -46570,7 +46572,7 @@ function analyseRequest(details) {
     }
 
     // autogen:support:support.ResolveCase
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/support\/invoke\/resolveCase$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/support\/invoke\/resolveCase$/g)) {
         reqParams.boto3['CaseId'] = jsonRequestBody.caseId;
         reqParams.cli['--case-id'] = jsonRequestBody.caseId;
 
@@ -46590,7 +46592,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpcEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_createVpcEndpoint\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\?call=callSdk_com\.amazonaws\.services\.ec2\.AmazonEC2Client_createVpcEndpoint\?/g)) {
         reqParams.boto3['VpcId'] = jsonRequestBody.request.vpcId;
         reqParams.cli['--vpc-id'] = jsonRequestBody.request.vpcId;
         reqParams.boto3['RouteTableIds'] = jsonRequestBody.request.routeTableIds;
@@ -46625,7 +46627,7 @@ function analyseRequest(details) {
     // manual:ec2:ec2.ModifyVpcAttribute
     // manual:ec2:ec2.CreateTags
     // manual:ec2:ec2.CreateTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "createVpcWithPublicSubnet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vpc\/VpcConsoleService$/g) && gwtRequest['service'] == "amazonaws.console.vpc.client.VpcConsoleService" && gwtRequest['method'] == "createVpcWithPublicSubnet") {
         if (gwtRequest['args'][1]['value']['stepnumber']['stepnumber'] == 12) { // only record at the end of the wizard
             // Create VPC
             reqParams.iam['Resource'] = [
@@ -47134,7 +47136,7 @@ function analyseRequest(details) {
     }
 
     // autogen:s3:s3.GetObjectLockConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetObjectLockConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/proxy$/g) && jsonRequestBody.operation == "GetObjectLockConfiguration") {
         reqParams.boto3['Bucket'] = jsonRequestBody.path;
         reqParams.cli['--bucket'] = jsonRequestBody.path;
 
@@ -47154,7 +47156,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.CreateContainer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.CreateContainer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.CreateContainer") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -47190,7 +47192,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.ListContainers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.ListContainers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.ListContainers") {
 
         outputs.push({
             'region': region,
@@ -47208,7 +47210,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.GetCorsPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetCorsPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetCorsPolicy") {
         reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
         reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
 
@@ -47228,7 +47230,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.GetContainerPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetContainerPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.GetContainerPolicy") {
         reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
         reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
 
@@ -47248,7 +47250,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.DescribeContainer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DescribeContainer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DescribeContainer") {
         reqParams.boto3['ContainerName'] = jsonRequestBody.contentString.ContainerName;
         reqParams.cli['--container-name'] = jsonRequestBody.contentString.ContainerName;
 
@@ -47268,7 +47270,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.PutContainerPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.PutContainerPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.PutContainerPolicy") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -47307,7 +47309,7 @@ function analyseRequest(details) {
     }
 
     // autogen:mediastore:mediastore.DeleteContainer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DeleteContainer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/mediastore\/api\/mediastore$/g) && jsonRequestBody.headers.X-Amz-Target == "MediaStore_20170901.DeleteContainer") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -47331,7 +47333,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DescribeDBClusters
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
 
         outputs.push({
             'region': region,
@@ -47349,7 +47351,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DescribePendingMaintenanceActions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describePendingMaintenanceActions") {
 
         outputs.push({
             'region': region,
@@ -47367,7 +47369,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DescribeDBSubnetGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBSubnetGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBSubnetGroups") {
 
         outputs.push({
             'region': region,
@@ -47385,7 +47387,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -47403,7 +47405,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DescribeDBClusterParameterGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusterParameterGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "describeDBClusterParameterGroups") {
 
         outputs.push({
             'region': region,
@@ -47421,7 +47423,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -47439,7 +47441,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -47457,7 +47459,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
 
         outputs.push({
             'region': region,
@@ -47475,7 +47477,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.CreateDBSubnetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBSubnetGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBSubnetGroup") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
         
         reqParams.boto3['SubnetIds'] = [];
@@ -47529,7 +47531,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.CreateDBClusterParameterGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBClusterParameterGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBClusterParameterGroup") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['Description'] = splitContentString.Description;
@@ -47574,7 +47576,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
         reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
         reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
 
@@ -47594,7 +47596,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.CreateDBCluster
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBCluster") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBCluster") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['EngineVersion'] = splitContentString.EngineVersion;
@@ -47675,7 +47677,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.CreateDBInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBInstance") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "createDBInstance") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['DBClusterIdentifier'] = splitContentString.DBClusterIdentifier;
@@ -47717,7 +47719,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DeleteDBInstance
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBInstance") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBInstance") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['DBInstanceIdentifier'] = splitContentString.DBInstanceIdentifier;
@@ -47739,7 +47741,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DeleteDBCluster
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBCluster") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBCluster") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['FinalDBSnapshotIdentifier'] = splitContentString.FinalDBSnapshotIdentifier;
@@ -47765,7 +47767,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DeleteDBSubnetGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBSubnetGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBSubnetGroup") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['DBSubnetGroupName'] = splitContentString.DBSubnetGroupName;
@@ -47787,7 +47789,7 @@ function analyseRequest(details) {
     }
 
     // autogen:docdb:docdb.DeleteDBClusterParameterGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBClusterParameterGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/docdb\/api\/rds$/g) && jsonRequestBody.operation == "deleteDBClusterParameterGroup") {
         var splitContentString = JSON.parse('{"' + decodeURI(jsonRequestBody.contentString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
         reqParams.boto3['DBClusterParameterGroupName'] = splitContentString.DBClusterParameterGroupName;
@@ -47809,7 +47811,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cloudfront:cloudfront.CreateDistribution
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cloudfront\/cloudfrontconsole\/service\/distribution$/g) && gwtRequest['method'] == "createDistribution" && gwtRequest['service'] == "com.amazonaws.cloudfront.console.shared.service.DistributionService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cloudfront\/cloudfrontconsole\/service\/distribution$/g) && gwtRequest['method'] == "createDistribution" && gwtRequest['service'] == "com.amazonaws.cloudfront.console.shared.service.DistributionService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48074,7 +48076,7 @@ function analyseRequest(details) {
     }
 
     // manual:datapipeline:datapipeline.CreatePipeline
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/datapipeline\/datapipeline\/dispatch$/g) && gwtRequest['method'] == "dispatch" && gwtRequest['service'] == "edp.console.client.dispatch.DispatchService") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/datapipeline\/datapipeline\/dispatch$/g) && gwtRequest['method'] == "dispatch" && gwtRequest['service'] == "edp.console.client.dispatch.DispatchService") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48180,7 +48182,7 @@ function analyseRequest(details) {
     }
 
     // autogen:resource-groups:resource-groups.CreateGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/resource\-groups\/api\/ardi$/g) && jsonRequestBody.operation == "createGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/resource\-groups\/api\/ardi$/g) && jsonRequestBody.operation == "createGroup") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48224,7 +48226,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ModifyImageAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=modifyImageAndSnapshotPermissions\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=modifyImageAndSnapshotPermissions\?/g)) {
         if (jsonRequestBody.launchPermission.add) {
             reqParams.iam['Resource'] = [
                 "*"
@@ -48296,7 +48298,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.CreateProject
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.CreateProject") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.CreateProject") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48331,7 +48333,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.ListProjects
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListProjects") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListProjects") {
 
         outputs.push({
             'region': region,
@@ -48349,7 +48351,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.GetProject
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetProject") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetProject") {
         reqParams.boto3['arn'] = jsonRequestBody.content.arn;
         reqParams.cli['--arn'] = jsonRequestBody.content.arn;
 
@@ -48369,7 +48371,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.ListRuns
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRuns") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRuns") {
         reqParams.boto3['arn'] = jsonRequestBody.content.arn;
         reqParams.cli['--arn'] = jsonRequestBody.content.arn;
 
@@ -48389,7 +48391,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.ListRemoteAccessSessions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRemoteAccessSessions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.ListRemoteAccessSessions") {
         reqParams.boto3['arn'] = jsonRequestBody.content.arn;
         reqParams.cli['--arn'] = jsonRequestBody.content.arn;
 
@@ -48409,7 +48411,7 @@ function analyseRequest(details) {
     }
 
     // autogen:devicefarm:devicefarm.GetAccountSettings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetAccountSettings") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/devicefarm\/proxy$/g) && jsonRequestBody.headers.Operation == "DeviceFarm_20150623.GetAccountSettings") {
 
         outputs.push({
             'region': region,
@@ -48427,7 +48429,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:cloudtrail.LookupEvents
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/cloudtrail$/g) && jsonRequestBody.operation == "lookupEvents") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/cloudtrail$/g) && jsonRequestBody.operation == "lookupEvents") {
         reqParams.boto3['LookupAttributes'] = jsonRequestBody.contentString.LookupAttributes;
         reqParams.cli['--lookup-attributes'] = jsonRequestBody.contentString.LookupAttributes;
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
@@ -48449,7 +48451,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.GetLifecyclePolicyPreview
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicyPreview") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicyPreview") {
         reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
         reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
@@ -48471,7 +48473,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.GetLifecyclePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getLifecyclePolicy") {
         reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
         reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
 
@@ -48491,7 +48493,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.DescribeImages
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "describeImages") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "describeImages") {
         reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
         reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.maxResults;
@@ -48513,7 +48515,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.GetRepositoryPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getRepositoryPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "getRepositoryPolicy") {
         reqParams.boto3['RepositoryName'] = jsonRequestBody.contentString.repositoryName;
         reqParams.cli['--repository-name'] = jsonRequestBody.contentString.repositoryName;
 
@@ -48533,7 +48535,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.DeleteRepositoryPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "deleteRepositoryPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "deleteRepositoryPolicy") {
         reqParams.iam['Resource'] = [
             "arn:aws:ecr:*:*:repository/" + jsonRequestBody.contentString.repositoryName
         ];
@@ -48557,7 +48559,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.SetRepositoryPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "setRepositoryPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "setRepositoryPolicy") {
         reqParams.iam['Resource'] = [
             "arn:aws:ecr:*:*:repository/" + jsonRequestBody.contentString.repositoryName
         ];
@@ -48596,7 +48598,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ecr:ecr.PutLifecyclePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "putLifecyclePolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ecr\/api\/ecr$/g) && jsonRequestBody.operation == "putLifecyclePolicy") {
         reqParams.iam['Resource'] = [
             "arn:aws:ecr:*:*:repository/" + jsonRequestBody.contentString.repositoryName
         ];
@@ -48635,7 +48637,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.ListFleets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listFleets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listFleets") {
 
         outputs.push({
             'region': region,
@@ -48653,7 +48655,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.CreateFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "createFleet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "createFleet") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48681,7 +48683,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DescribeFleetMetadata
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeFleetMetadata") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeFleetMetadata") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48701,7 +48703,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DescribeIdentityProviderConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeIdentityProviderConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeIdentityProviderConfiguration") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48721,7 +48723,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DescribeAuditStreamConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeAuditStreamConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeAuditStreamConfiguration") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48741,7 +48743,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DescribeDevicePolicyConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeDevicePolicyConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeDevicePolicyConfiguration") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48761,7 +48763,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DescribeCompanyNetworkConfiguration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeCompanyNetworkConfiguration") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "describeCompanyNetworkConfiguration") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48781,7 +48783,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.ListWebsiteCertificateAuthorities
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listWebsiteCertificateAuthorities") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "listWebsiteCertificateAuthorities") {
         reqParams.boto3['FleetArn'] = jsonRequestBody.contentString.FleetArn;
         reqParams.cli['--fleet-arn'] = jsonRequestBody.contentString.FleetArn;
 
@@ -48801,7 +48803,7 @@ function analyseRequest(details) {
     }
 
     // autogen:worklink:worklink.DeleteFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "deleteFleet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/worklink\/api\/worklink$/g) && jsonRequestBody.operation == "deleteFleet") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.contentString.FleetArn
         ];
@@ -48825,7 +48827,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListBackupJobs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupJobs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupJobs") {
         reqParams.boto3['ByCreatedAfter'] = jsonRequestBody.params.createdAfter;
         reqParams.cli['--by-created-after'] = jsonRequestBody.params.createdAfter;
         reqParams.boto3['ByState'] = jsonRequestBody.params.state;
@@ -48847,7 +48849,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListRestoreJobs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listRestoreJobs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listRestoreJobs") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -48867,7 +48869,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListBackupPlans
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlans") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlans") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -48887,7 +48889,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListBackupPlanTemplates
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlanTemplates") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupPlanTemplates") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
 
@@ -48907,7 +48909,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.GetBackupPlanFromTemplate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlanFromTemplate") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlanFromTemplate") {
         reqParams.boto3['BackupPlanTemplateId'] = jsonRequestBody.path.split("/")[4];
         reqParams.cli['--backup-plan-template-id'] = jsonRequestBody.path.split("/")[4];
 
@@ -48927,7 +48929,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.CreateBackupVault
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupVault") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupVault") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48951,7 +48953,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.CreateBackupPlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupPlan") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "createBackupPlan") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -48977,7 +48979,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.GetBackupPlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlan") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupPlan") {
         reqParams.boto3['BackupPlanId'] = jsonRequestBody.path.split("/")[3];
         reqParams.cli['--backup-plan-id'] = jsonRequestBody.path.split("/")[3];
 
@@ -48997,7 +48999,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListBackupSelections
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupSelections") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupSelections") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
         reqParams.boto3['BackupPlanId'] = jsonRequestBody.path.split("/")[3];
@@ -49019,7 +49021,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.ListTags
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listTags") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listTags") {
         reqParams.boto3['ResourceArn'] = jsonRequestBody.path.split("/")[2];
         reqParams.cli['--resource-arn'] = jsonRequestBody.path.split("/")[2];
 
@@ -49039,7 +49041,7 @@ function analyseRequest(details) {
     }
 
     // autogen:backup:backup.DeleteBackupPlan
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "deleteBackupPlan") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "deleteBackupPlan") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49063,7 +49065,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworkscm.DescribeServers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeServers\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/k\/DescribeServers\?/g)) {
 
         outputs.push({
             'region': region,
@@ -49081,7 +49083,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworkscm.CreateServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/CreateServer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/k\/CreateServer\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49155,7 +49157,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworkscm.DescribeBackups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DescribeBackups\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/k\/DescribeBackups\?/g)) {
         reqParams.boto3['ServerName'] = jsonRequestBody.ServerName;
         reqParams.cli['--server-name'] = jsonRequestBody.ServerName;
 
@@ -49175,7 +49177,7 @@ function analyseRequest(details) {
     }
 
     // autogen:opsworks:opsworkscm.DeleteServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/opsworks\/k\/DeleteServer\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/opsworks\/k\/DeleteServer\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49199,7 +49201,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.CreateUserPoolDomain
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/domain$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/domain$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + jsonRequestBody.id[0]
         ];
@@ -49247,7 +49249,7 @@ function analyseRequest(details) {
     }
 
     // autogen:cognito-idp:cognito-idp.DeleteUserPoolDomain
-    if (details.method == "DELETE" && details.url.match(/.+console\.aws\.amazon\.com\/cognito\/data\/domain\?/g)) {
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/cognito\/data\/domain\?/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:cognito-idp:*:*:userpool/" + getUrlValue(details.url, 'id')
         ];
@@ -49273,7 +49275,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.DeleteAccountAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/aliases\/.+$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/aliases\/.+$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49294,7 +49296,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.CreateAccountAlias
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/aliases$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/aliases$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49330,7 +49332,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.UpdateAccountPasswordPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/UpdateAccountPasswordPolicy$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/proxy\/UpdateAccountPasswordPolicy$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49390,7 +49392,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.DeleteAccountPasswordPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/DeleteAccountPasswordPolicy$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/proxy\/DeleteAccountPasswordPolicy$/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49411,7 +49413,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.RegisterTargets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2RegisterTargets\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2RegisterTargets\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.targetGroupArn
         ];
@@ -49454,7 +49456,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:elbv2.DescribeTargetHealth
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=elbV2DescribeTargetHealth\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=elbV2DescribeTargetHealth\?/g)) {
         reqParams.boto3['TargetGroupArn'] = jsonRequestBody.TargetGroupArn;
         reqParams.cli['--target-group-arn'] = jsonRequestBody.TargetGroupArn;
 
@@ -49474,7 +49476,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.ModifyNetworkInterfaceAttribute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\?call=modifyNetworkInterfaceAttribute\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=modifyNetworkInterfaceAttribute\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49517,7 +49519,7 @@ function analyseRequest(details) {
     }
 
     // autogen:s3:s3control.PutPublicAccessBlock
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/s3\/command$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/s3\/command$/g)) {
         reqParams.iam['Action'] = [
             's3:PutAccountPublicAccessBlock'
         ];
@@ -49572,7 +49574,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.CreateServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createServer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createServer") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49623,7 +49625,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.ListServers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listServers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listServers") {
 
         outputs.push({
             'region': region,
@@ -49641,7 +49643,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:s3.ListBuckets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
 
         outputs.push({
             'region': region,
@@ -49659,7 +49661,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.CreateUser
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createUser") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "createUser") {
         reqParams.iam['Resource'] = [
             "arn:aws:transfer:*:*:server/" + jsonRequestBody.contentString.ServerId
         ];
@@ -49754,7 +49756,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.ListUsers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listUsers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "listUsers") {
         reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
         reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
 
@@ -49774,7 +49776,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.DescribeServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "describeServer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "describeServer") {
         reqParams.boto3['ServerId'] = jsonRequestBody.contentString.ServerId;
         reqParams.cli['--server-id'] = jsonRequestBody.contentString.ServerId;
 
@@ -49794,7 +49796,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.StopServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "stopServer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "stopServer") {
         reqParams.iam['Resource'] = [
             "arn:aws:transfer:*:*:server/" + jsonRequestBody.contentString.ServerId
         ];
@@ -49818,7 +49820,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.StartServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "startServer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "startServer") {
         reqParams.iam['Resource'] = [
             "arn:aws:transfer:*:*:server/" + jsonRequestBody.contentString.ServerId
         ];
@@ -49842,7 +49844,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.DeleteUser
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteUser") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteUser") {
         reqParams.iam['Resource'] = [
             "arn:aws:transfer:*:*:user/" + jsonRequestBody.contentString.ServerId + "/" + jsonRequestBody.contentString.UserName
         ];
@@ -49868,7 +49870,7 @@ function analyseRequest(details) {
     }
 
     // autogen:transfer:transfer.DeleteServer
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteServer") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/transfer\/api\/transfer$/g) && jsonRequestBody.operation == "deleteServer") {
         reqParams.iam['Resource'] = [
             "arn:aws:transfer:*:*:server/" + jsonRequestBody.contentString.ServerId
         ];
@@ -49892,7 +49894,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.DisableSecurityHub
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "disableSecurityHub") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "disableSecurityHub") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49913,7 +49915,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.EnableSecurityHub
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableSecurityHub") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableSecurityHub") {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -49944,7 +49946,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.GetFindings
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getFindings") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getFindings") {
         reqParams.boto3['SortCriteria'] = jsonRequestBody.contentString.SortCriteria;
         reqParams.cli['--sort-criteria'] = jsonRequestBody.contentString.SortCriteria;
         reqParams.boto3['Filters'] = jsonRequestBody.contentString.Filters;
@@ -49968,7 +49970,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.GetInsights
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getInsights") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getInsights") {
         reqParams.boto3['MaxResults'] = jsonRequestBody.contentString.MaxResults;
         reqParams.cli['--max-items'] = jsonRequestBody.contentString.MaxResults;
 
@@ -49988,7 +49990,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.BatchEnableStandards
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "batchEnableStandards") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "batchEnableStandards") {
         reqParams.iam['Resource'] = [];
 
         reqParams.boto3['StandardsSubscriptionRequests'] = jsonRequestBody.contentString.StandardsSubscriptionRequests;
@@ -50026,7 +50028,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.GetMasterAccount
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getMasterAccount") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "getMasterAccount") {
 
         outputs.push({
             'region': region,
@@ -50044,7 +50046,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.ListInvitations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listInvitations") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listInvitations") {
 
         outputs.push({
             'region': region,
@@ -50062,7 +50064,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.ListMembers
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listMembers") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listMembers") {
 
         outputs.push({
             'region': region,
@@ -50080,7 +50082,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.ListEnabledProductsForImport
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listEnabledProductsForImport") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "listEnabledProductsForImport") {
 
         outputs.push({
             'region': region,
@@ -50098,7 +50100,7 @@ function analyseRequest(details) {
     }
 
     // autogen:securityhub:securityhub.EnableImportFindingsForProduct
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableImportFindingsForProduct") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/securityhub\/api\/securityhub$/g) && jsonRequestBody.operation == "enableImportFindingsForProduct") {
         reqParams.iam['Resource'] = [
             jsonRequestBody.contentString.ProductArn
         ];
@@ -50134,7 +50136,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateDefaultVpc
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDefaultVpc\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateDefaultVpc\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -50165,7 +50167,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ram.CreateResourceShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.CreateResourceShare$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.CreateResourceShare$/g)) {
         reqParams.iam['Resource'] = [
             "arn:aws:ram:*:*:resource-share/" + jsonRequestBody.name
         ];
@@ -50226,7 +50228,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ram.GetResourceShares
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShares$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShares$/g)) {
         reqParams.boto3['ResourceOwner'] = jsonRequestBody.resourceOwner;
         reqParams.cli['--resource-owner'] = jsonRequestBody.resourceOwner;
 
@@ -50246,7 +50248,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ram.DeleteResourceShare
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.DeleteResourceShare$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.DeleteResourceShare$/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.resourceShareArn
         ];
@@ -50270,7 +50272,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:globalaccelerator.CreateAccelerator
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.CreateAccelerator\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.CreateAccelerator\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -50314,7 +50316,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:globalaccelerator.DeleteAccelerator
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.DeleteAccelerator\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.globalaccelerator\.v20180706\.GlobalAccelerator_V20180706\.DeleteAccelerator\?/g)) {
         reqParams.iam['Resource'] = [
             jsonRequestBody.AcceleratorArn
         ];
@@ -50338,7 +50340,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigatewayv2.CreateIntegration
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path.match(/^\/apis\/.+\/integrations$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.path.match(/^\/apis\/.+\/integrations$/g)) {
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
         reqParams.cli['--api-id'] = jsonRequestBody.path.split('/')[2];
         reqParams.boto3['IntegrationType'] = jsonRequestBody.contentString.integrationType;
@@ -50391,7 +50393,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigatewayv2.CreateRoute
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRoute") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRoute") {
         reqParams.boto3['RouteKey'] = jsonRequestBody.contentString.routeKey;
         reqParams.cli['--route-key'] = jsonRequestBody.contentString.routeKey;
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
@@ -50426,7 +50428,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigatewayv2.CreateRouteResponse
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRouteResponse") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createRouteResponse") {
         reqParams.boto3['RouteResponseKey'] = jsonRequestBody.contentString.routeResponseKey;
         reqParams.cli['--route-response-key'] = jsonRequestBody.contentString.routeResponseKey;
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
@@ -50464,7 +50466,7 @@ function analyseRequest(details) {
     }
 
     // autogen:apigateway:apigatewayv2.CreateIntegrationResponse
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createIntegrationResponse") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/apigateway\/api\/apigatewayv2$/g) && jsonRequestBody.operation == "createIntegrationResponse") {
         reqParams.boto3['IntegrationResponseKey'] = jsonRequestBody.contentString.integrationResponseKey;
         reqParams.cli['--integration-response-key'] = jsonRequestBody.contentString.integrationResponseKey;
         reqParams.boto3['ApiId'] = jsonRequestBody.path.split('/')[2];
@@ -50502,7 +50504,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.CreateVpcEndpointConnectionNotification
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpointConnectionNotification\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateVpcEndpointConnectionNotification\?/g)) {
         reqParams.iam['Resource'] = [
             "*"
         ];
@@ -50544,7 +50546,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ec2:ec2.DescribeVpcEndpointConnectionNotifications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointConnectionNotifications\?/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcEndpointConnectionNotifications\?/g)) {
         reqParams.boto3['Filters'] = jsonRequestBody.Filters;
         reqParams.cli['--filters'] = jsonRequestBody.Filters;
         reqParams.boto3['MaxResults'] = jsonRequestBody.MaxResults;
@@ -50566,7 +50568,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:ds.DescribeDirectories
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/directoryservice$/g) && jsonRequestBody.operation == "describeDirectories") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/directoryservice$/g) && jsonRequestBody.operation == "describeDirectories") {
 
         outputs.push({
             'region': region,
@@ -50584,7 +50586,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:ec2.DescribeSecurityGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
 
         outputs.push({
             'region': region,
@@ -50602,7 +50604,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeSubnets") {
 
         outputs.push({
             'region': region,
@@ -50620,7 +50622,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
 
         outputs.push({
             'region': region,
@@ -50638,7 +50640,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
         reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
         reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
 
@@ -50658,7 +50660,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:fsx.DescribeFileSystems
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "describeFileSystems") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "describeFileSystems") {
 
         outputs.push({
             'region': region,
@@ -50676,7 +50678,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:fsx.CreateFileSystem
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "createFileSystem") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "createFileSystem") {
         reqParams.iam['Resource'] = [
             "arn:aws:fsx:*:*:file-system/*"
         ];
@@ -50732,7 +50734,7 @@ function analyseRequest(details) {
     }
 
     // autogen:fsx:fsx.DeleteFileSystem
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "deleteFileSystem") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/fsx\/api\/fsx$/g) && jsonRequestBody.operation == "deleteFileSystem") {
         reqParams.iam['Resource'] = [
             "arn:aws:fsx:*:*:file-system/*"
         ];
@@ -50758,7 +50760,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ram.GetResourceShareInvitations
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShareInvitations$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.resourcesharing\.V2018_01_04\.AmazonResourceSharing\.GetResourceShareInvitations$/g)) {
         reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
         reqParams.cli['--max-results'] = jsonRequestBody.maxResults;
 
@@ -50778,7 +50780,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ec2.DescribeAvailabilityZones
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones$/g)) {
 
         outputs.push({
             'region': region,
@@ -50796,7 +50798,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:organizations.DescribeOrganization
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazon\.awsorganizations\.v20161128\.AWSOrganizationsV20161128\.DescribeOrganization$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazon\.awsorganizations\.v20161128\.AWSOrganizationsV20161128\.DescribeOrganization$/g)) {
 
         outputs.push({
             'region': region,
@@ -50814,7 +50816,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ec2.DescribeSubnets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets$/g)) {
 
         outputs.push({
             'region': region,
@@ -50832,7 +50834,7 @@ function analyseRequest(details) {
     }
 
     // autogen:ram:ec2.DescribeVpcs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ram\/ccb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs$/g)) {
         reqParams.boto3['VpcIds'] = jsonRequestBody.VpcIds;
         reqParams.cli['--vpc-ids'] = jsonRequestBody.VpcIds;
 
@@ -50852,7 +50854,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.ListFleets
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listFleets") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listFleets") {
 
         outputs.push({
             'region': region,
@@ -50870,7 +50872,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.ListRobots
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobots") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobots") {
 
         outputs.push({
             'region': region,
@@ -50888,7 +50890,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.ListRobotApplications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobotApplications") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listRobotApplications") {
 
         outputs.push({
             'region': region,
@@ -50906,7 +50908,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.ListSimulationApplications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationApplications") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationApplications") {
 
         outputs.push({
             'region': region,
@@ -50924,7 +50926,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.ListSimulationJobs
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationJobs") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "listSimulationJobs") {
 
         outputs.push({
             'region': region,
@@ -50942,7 +50944,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createFleet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createFleet") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
 
@@ -50975,7 +50977,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeFleet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeFleet") {
         reqParams.boto3['fleet'] = jsonRequestBody.contentString.fleet;
         reqParams.cli['--fleet'] = jsonRequestBody.contentString.fleet;
 
@@ -50995,7 +50997,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iam.ListGroups
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "listGroups") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "listGroups") {
 
         outputs.push({
             'region': region,
@@ -51013,7 +51015,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iam.ListRoles
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iam$/g) && jsonRequestBody.operation == "listRoles") {
 
         outputs.push({
             'region': region,
@@ -51031,7 +51033,7 @@ function analyseRequest(details) {
     }
 
     // autogen:iam:iam.UpdateAssumeRolePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/iam\/service\/proxy\/UpdateAssumeRolePolicy$/g)) {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/service\/proxy\/UpdateAssumeRolePolicy$/g)) {
         reqParams.boto3['RoleName'] = jsonRequestBody.roleName;
         reqParams.cli['--role-name'] = jsonRequestBody.roleName;
         reqParams.boto3['PolicyDocument'] = jsonRequestBody.policyDocument;
@@ -51053,7 +51055,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.CreateKeysAndCertificate
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createKeysAndCertificate") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createKeysAndCertificate") {
         reqParams.boto3['setAsActive'] = jsonRequestBody.params.setAsActive;
         reqParams.cli['--set-as-active'] = jsonRequestBody.params.setAsActive;
 
@@ -51073,7 +51075,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.CreateThing
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createThing") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createThing") {
         reqParams.boto3['thingName'] = jsonRequestBody['path'].split("/")[2];
         reqParams.cli['--thing-name'] = jsonRequestBody['path'].split("/")[2];
 
@@ -51093,7 +51095,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.AttachThingPrincipal
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachThingPrincipal") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachThingPrincipal") {
         reqParams.boto3['principal'] = jsonRequestBody.headers.x-amzn-principal;
         reqParams.cli['--principal'] = jsonRequestBody.headers.x-amzn-principal;
         reqParams.boto3['thingName'] = jsonRequestBody['path'].split("/")[2];
@@ -51115,7 +51117,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.CreatePolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "createPolicy") {
         reqParams.boto3['policyDocument'] = jsonRequestBody.contentString.policyDocument;
         reqParams.cli['--policy-document'] = jsonRequestBody.contentString.policyDocument;
         reqParams.boto3['policyName'] = jsonRequestBody['path'].split("/")[2];
@@ -51137,7 +51139,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.AttachPolicy
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachPolicy") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "attachPolicy") {
         reqParams.boto3['target'] = jsonRequestBody.contentString.target;
         reqParams.cli['--target'] = jsonRequestBody.contentString.target;
         reqParams.boto3['policyName'] = jsonRequestBody['path'].split("/")[2];
@@ -51159,7 +51161,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:greengrass.CreateGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroup") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
 
@@ -51179,7 +51181,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:greengrass.AssociateRoleToGroup
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "associateRoleToGroup") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "associateRoleToGroup") {
         reqParams.boto3['RoleArn'] = jsonRequestBody.contentString.RoleArn;
         reqParams.cli['--role-arn'] = jsonRequestBody.contentString.RoleArn;
         reqParams.boto3['GroupId'] = jsonRequestBody['path'].split("/")[3];
@@ -51201,7 +51203,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:greengrass.CreateCoreDefinition
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinition") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinition") {
         reqParams.boto3['Name'] = jsonRequestBody.contentString.Name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.Name;
 
@@ -51221,7 +51223,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:greengrass.CreateCoreDefinitionVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinitionVersion") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createCoreDefinitionVersion") {
         reqParams.boto3['Cores'] = jsonRequestBody.contentString.Cores;
         reqParams.cli['--cores'] = jsonRequestBody.contentString.Cores;
         reqParams.boto3['CoreDefinitionId'] = jsonRequestBody['path'].split("/")[4];
@@ -51243,7 +51245,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:greengrass.CreateGroupVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroupVersion") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/greengrass$/g) && jsonRequestBody.operation == "createGroupVersion") {
         reqParams.boto3['CoreDefinitionVersionArn'] = jsonRequestBody.contentString.CoreDefinitionVersionArn;
         reqParams.cli['--core-definition-version-arn'] = jsonRequestBody.contentString.CoreDefinitionVersionArn;
         reqParams.boto3['GroupId'] = jsonRequestBody['path'].split("/")[3];
@@ -51265,7 +51267,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:iot.DescribeEndpoint
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "describeEndpoint") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/iot$/g) && jsonRequestBody.operation == "describeEndpoint") {
 
         outputs.push({
             'region': region,
@@ -51283,7 +51285,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateRobot
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobot") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobot") {
         reqParams.boto3['architecture'] = jsonRequestBody.contentString.architecture;
         reqParams.cli['--architecture'] = jsonRequestBody.contentString.architecture;
         reqParams.boto3['greengrassGroupId'] = jsonRequestBody.contentString.greengrassGroupId;
@@ -51322,7 +51324,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeRobot
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
         reqParams.boto3['robot'] = jsonRequestBody.contentString.robot;
         reqParams.cli['--robot'] = jsonRequestBody.contentString.robot;
 
@@ -51342,7 +51344,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateRobotApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplication") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['robotSoftwareSuite'] = jsonRequestBody.contentString.robotSoftwareSuite;
@@ -51391,7 +51393,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeRobotApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
         reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
@@ -51413,7 +51415,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateRobotApplicationVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplicationVersion") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createRobotApplicationVersion") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
 
@@ -51445,7 +51447,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeRobotApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobotApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
         reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
@@ -51467,7 +51469,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:s3.ListObjectsV2
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/s3$/g) && jsonRequestBody.operation == "listObjectsV2") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/s3$/g) && jsonRequestBody.operation == "listObjectsV2") {
         reqParams.boto3['Prefix'] = jsonRequestBody.params.prefix;
         reqParams.cli['--prefix'] = jsonRequestBody.params.prefix;
         reqParams.boto3['Bucket'] = jsonRequestBody.path.split("/")[1];
@@ -51489,7 +51491,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateSimulationApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplication") {
         reqParams.boto3['name'] = jsonRequestBody.contentString.name;
         reqParams.cli['--name'] = jsonRequestBody.contentString.name;
         reqParams.boto3['renderingEngine'] = jsonRequestBody.contentString.renderingEngine;
@@ -51550,7 +51552,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeSimulationApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeSimulationApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeSimulationApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
         reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
@@ -51572,7 +51574,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.CreateSimulationApplicationVersion
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplicationVersion") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "createSimulationApplicationVersion") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
 
@@ -51604,7 +51606,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DeleteRobotApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
         reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
@@ -51626,7 +51628,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DeleteRobotApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteRobotApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
 
@@ -51646,7 +51648,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DeleteSimulationApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
         reqParams.boto3['applicationVersion'] = jsonRequestBody.contentString.applicationVersion;
@@ -51668,7 +51670,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DeleteSimulationApplication
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteSimulationApplication") {
         reqParams.boto3['application'] = jsonRequestBody.contentString.application;
         reqParams.cli['--application'] = jsonRequestBody.contentString.application;
 
@@ -51688,7 +51690,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DescribeRobot
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "describeRobot") {
         reqParams.boto3['robot'] = jsonRequestBody.contentString.robot;
         reqParams.cli['--robot'] = jsonRequestBody.contentString.robot;
 
@@ -51708,7 +51710,7 @@ function analyseRequest(details) {
     }
 
     // autogen:robomaker:robomaker.DeleteFleet
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteFleet") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/robomaker\/api\/robomaker$/g) && jsonRequestBody.operation == "deleteFleet") {
         reqParams.boto3['fleet'] = jsonRequestBody.contentString.fleet;
         reqParams.cli['--fleet'] = jsonRequestBody.contentString.fleet;
 
@@ -51728,7 +51730,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListTopics
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listTopics") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listTopics") {
 
         outputs.push({
             'region': region,
@@ -51746,7 +51748,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListSubscriptions
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listSubscriptions") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listSubscriptions") {
 
         outputs.push({
             'region': region,
@@ -51764,7 +51766,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:sns.ListPlatformApplications
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listPlatformApplications") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v3\/api\/sns$/g) && jsonRequestBody.operation == "listPlatformApplications") {
 
         outputs.push({
             'region': region,
@@ -51782,7 +51784,7 @@ function analyseRequest(details) {
     }
 
     // autogen:sns:kms.DescribeKey
-    if (details.method == "POST" && details.url.match(/.+console\.aws\.amazon\.com\/sns\/v3\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/sns\/v3\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
         reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
         reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
 
