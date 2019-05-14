@@ -5416,6 +5416,9 @@ function analyseRequest(details) {
         }
     }
 
+    if (details.url.indexOf("amazonaws-us-gov.com") !== -1) {
+        region = "us-gov-west-1";
+    }
     var region_check = /.+\/\/([a-zA-Z-]+\-[0-9]+)\.(?:console|lightsail)\.(?:aws\.amazon|amazonaws-us-gov)\.com/g.exec(details.url);
     if (region_check && region_check[1]) {
         region = region_check[1];
