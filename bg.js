@@ -34242,16 +34242,230 @@ function analyseRequest(details) {
         reqParams.boto3['taskRoleArn'] = jsonRequestBody.taskRoleArn;
         reqParams.cli['--task-role-arn'] = jsonRequestBody.taskRoleArn;
 
-        reqParams.cfn['RequiresCompatibilities'] = jsonRequestBody.requiresCompatibilities;
-        reqParams.cfn['ContainerDefinitions'] = jsonRequestBody.containerDefinitions;
-        reqParams.cfn['Volumes'] = jsonRequestBody.volumes;
-        reqParams.cfn['NetworkMode'] = jsonRequestBody.networkMode;
-        reqParams.cfn['Memory'] = jsonRequestBody.memory;
-        reqParams.cfn['Cpu'] = jsonRequestBody.cpu;
-        reqParams.cfn['ExecutionRoleArn'] = jsonRequestBody.executionRoleArn;
+        if (jsonRequestBody.containerDefinitions) {
+            reqParams.cfn['ContainerDefinitions'] = [];
+            jsonRequestBody.containerDefinitions.forEach(containerDefinition => {
+                var repositoryCredentials = null;
+                if (containerDefinition.repositoryCredentials) {
+                    repositoryCredentials = {
+                        'CredentialsParameter': containerDefinition.repositoryCredentials.credentialsParameter
+                    };
+                }
+                var portMappings = null;
+                if (containerDefinition.portMappings) {
+                    portMappings = [];
+                    containerDefinition.portMappings.forEach(portmapping => {
+                        portMappings.push({
+                            'ContainerPort': portmapping.containerPort,
+                            'HostPort': portmapping.hostPort,
+                            'Protocol': portmapping.protocol
+                        });
+                    });
+                }
+                var environment = null;
+                if (containerDefinition.environment) {
+                    environment = [];
+                    containerDefinition.environment.forEach(env => {
+                        environment.push({
+                            'Name': env.name,
+                            'Value': env.value
+                        });
+                    });
+                }
+                var mountPoints = null;
+                if (containerDefinition.mountPoints) {
+                    mountPoints = [];
+                    containerDefinition.mountPoints.forEach(mountpoint => {
+                        mountPoints.push({
+                            'SourceVolume': mountpoint.sourceVolume,
+                            'ContainerPath': mountpoint.containerPath,
+                            'ReadOnly': mountpoint.readOnly
+                        });
+                    });
+                }
+                var volumesFrom = null;
+                if (containerDefinition.volumesFrom) {
+                    volumesFrom = [];
+                    containerDefinition.volumesFrom.forEach(vf => {
+                        volumesFrom.push({
+                            'SourceContainer': vf.sourceContainer,
+                            'ReadOnly': vf.readOnly
+                        });
+                    });
+                }
+                var linuxParameters = null;
+                if (containerDefinition.linuxParameters) {
+                    var capabilities = null;
+                    if (containerDefinition.linuxParameters.capabilities) {
+                        capabilities = {
+                            'Add': containerDefinition.linuxParameters.capabilities.add,
+                            'Drop': containerDefinition.linuxParameters.capabilities.drop
+                        };
+                    }
+                    var devices = null;
+                    if (containerDefinition.linuxParameters.devices) {
+                        devices = [];
+                        containerDefinition.linuxParameters.devices.forEach(device => {
+                            devices.push({
+                                'HostPath': device.hostPath,
+                                'ContainerPath': device.containerPath,
+                                'Permissions': device.permissions
+                            });
+                        });
+                    }
+                    var tmpfs = null;
+                    if (containerDefinition.linuxParameters.tmpfs) {
+                        tmpfs = [];
+                        containerDefinition.linuxParameters.tmpfs.forEach(fs => {
+                            tmpfs.push({
+                                'ContainerPath': fs.containerPath,
+                                'Size': fs.size,
+                                'MountOptions': fs.mountOptions
+                            });
+                        });
+                    }
+                    linuxParameters = {
+                        'Capabilities': capabilities,
+                        'Devices': devices,
+                        'InitProcessEnabled': containerDefinition.linuxParameters.initProcessEnabled,
+                        'SharedMemorySize': containerDefinition.linuxParameters.sharedMemorySize,
+                        'Tmpfs': tmpfs
+                    }
+                }
+                var secrets = null;
+                if (jsonRequestBody.secrets) {
+                    secrets = [];
+                    jsonRequestBody.secrets.forEach(secret => {
+                        secrets.push({
+                            'Name': secret.name,
+                            'ValueFrom': secret.valueFrom
+                        });
+                    });
+                }
+                var dependsOn = null;
+                if (jsonRequestBody.dependsOn) {
+                    dependsOn = [];
+                    jsonRequestBody.dependsOn.forEach(depends => {
+                        dependsOn.push({
+                            'ContainerName': depends.containerName,
+                            'Condition': depends.condition
+                        });
+                    });
+                }
+                var extraHosts = null;
+                if (jsonRequestBody.extraHosts) {
+                    extraHosts = [];
+                    jsonRequestBody.extraHosts.forEach(extrahost => {
+                        extraHosts.push({
+                            'Hostname': extrahost.hostname,
+                            'IpAddress': extrahost.ipAddress
+                        });
+                    });
+                }
+                var ulimits = null;
+                if (jsonRequestBody.ulimits) {
+                    ulimits = [];
+                    jsonRequestBody.ulimits.forEach(ulimit => {
+                        ulimits.push({
+                            'Name': ulimit.name,
+                            'SoftLimit': ulimit.softLimit,
+                            'HardLimit': ulimit.hardLimit
+                        });
+                    });
+                }
+                var logConfiguration = null;
+                if (jsonRequestBody.logConfiguration) {
+                    logConfiguration = {
+                        'LogDriver': jsonRequestBody.logConfiguration.logDriver,
+                        'Options': jsonRequestBody.logConfiguration.options
+                    };
+                }
+                var healthCheck = null;
+                if (jsonRequestBody.healthCheck) {
+                    healthCheck = {
+                        'Command': jsonRequestBody.healthCheck.command,
+                        'Interval': jsonRequestBody.healthCheck.interval,
+                        'Timeout': jsonRequestBody.healthCheck.timeout,
+                        'Retries': jsonRequestBody.healthCheck.retries,
+                        'StartPeriod': jsonRequestBody.healthCheck.startPeriod
+                    };
+                }
+                reqParams.cfn['ContainerDefinitions'].push({
+                    'Command': containerDefinition.command,
+                    'Cpu': (containerDefinition.cpu == 0) ? null : containerDefinition.cpu,
+                    'DisableNetworking': containerDefinition.disableNetworking,
+                    'DnsSearchDomains': containerDefinition.dnsSearchDomains,
+                    'DnsServers': containerDefinition.dnsServers,
+                    'DockerLabels': containerDefinition.dockerLabels,
+                    'DockerSecurityOptions': containerDefinition.dockerSecurityOptions,
+                    'EntryPoint': containerDefinition.entryPoint,
+                    'Environment': environment,
+                    'Essential': containerDefinition.essential,
+                    'ExtraHosts': extraHosts,
+                    'HealthCheck': healthCheck,
+                    'Hostname': containerDefinition.hostname,
+                    'Image': containerDefinition.image,
+                    'Links': containerDefinition.links,
+                    'LinuxParameters': linuxParameters,
+                    'LogConfiguration': logConfiguration,
+                    'Memory': containerDefinition.memory,
+                    'MemoryReservation': containerDefinition.memoryReservation,
+                    'MountPoints': mountPoints,
+                    'Name': containerDefinition.name,
+                    'PortMappings': portMappings,
+                    'Privileged': containerDefinition.privileged,
+                    'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
+                    'RepositoryCredentials': repositoryCredentials,      
+                    'Ulimits': ulimits,
+                    'User': containerDefinition.user,
+                    'VolumesFrom': volumesFrom,
+                    'WorkingDirectory': containerDefinition.workingDirectory
+                });
+            });
+        }
         reqParams.cfn['Family'] = jsonRequestBody.family;
         reqParams.cfn['TaskRoleArn'] = jsonRequestBody.taskRoleArn;
-
+        reqParams.cfn['ExecutionRoleArn'] = jsonRequestBody.executionRoleArn;
+        reqParams.cfn['NetworkMode'] = jsonRequestBody.networkMode;
+        if (jsonRequestBody.volumes) {
+            reqParams.cfn['Volumes'] = [];
+            jsonRequestBody.volumes.forEach(volume => {
+                var host = null;
+                if (volume.host) {
+                    host = {
+                        'SourcePath': volume.host.sourcePath
+                    };
+                }
+                var dockerVolumeConfiguration = null;
+                if (volume.dockerVolumeConfiguration) {
+                    dockerVolumeConfiguration = {
+                        'Scope': volume.dockerVolumeConfiguration.scope,
+                        'Autoprovision': volume.dockerVolumeConfiguration.autoprovision,
+                        'Driver': volume.dockerVolumeConfiguration.driver,
+                        'DriverOpts': volume.dockerVolumeConfiguration.driverOpts,
+                        'Labels': volume.dockerVolumeConfiguration.labels
+                    };
+                }
+                reqParams.cfn['Volumes'].push({
+                    'Name': volume.name,
+                    'Host': host,
+                    'DockerVolumeConfiguration': dockerVolumeConfiguration
+                });
+            });
+        }
+        reqParams.cfn['RequiresCompatibilities'] = jsonRequestBody.requiresCompatibilities;
+        reqParams.cfn['Cpu'] = jsonRequestBody.cpu;
+        reqParams.cfn['Memory'] = jsonRequestBody.memory;
+        if (jsonRequestBody.placementConstraints) {
+            reqParams.cfn['PlacementConstraints'] = [];
+            jsonRequestBody.placementConstraints.forEach(placementConstraint => {
+                reqParams.cfn['PlacementConstraints'].push({
+                    'Type': placementConstraint.type,
+                    'Expression': placementConstraint.expression
+                });
+            });
+        }
+        
         outputs.push({
             'region': region,
             'service': 'ecs',
