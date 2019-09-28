@@ -49153,6 +49153,16 @@ function analyseRequest(details) {
 
         reqParams.boto3['CreatorRequestId'] = jsonRequestBody.contentString.CreatorRequestId;
         reqParams.cli['--creator-request-id'] = jsonRequestBody.contentString.CreatorRequestId;
+        reqParams.boto3['BackupVaultTags'] = jsonRequestBody.contentString.BackupVaultTags;
+        reqParams.cli['--backup-vault-tags'] = jsonRequestBody.contentString.BackupVaultTags;
+        reqParams.boto3['EncryptionKeyArn'] = jsonRequestBody.contentString.EncryptionKeyArn;
+        reqParams.cli['--encryption-key-arn'] = jsonRequestBody.contentString.EncryptionKeyArn;
+        reqParams.boto3['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--backup-vault-name'] = jsonRequestBody.path.split("/")[2];
+
+        reqParams.cfn['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cfn['BackupVaultTags'] = jsonRequestBody.contentString.BackupVaultTags;
+        reqParams.cfn['EncryptionKeyArn'] = jsonRequestBody.contentString.EncryptionKeyArn;
 
         outputs.push({
             'region': region,
@@ -49164,6 +49174,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('backup', details.requestId),
+            'region': region,
+            'service': 'backup',
+            'type': 'AWS::Backup::BackupVault',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
@@ -49180,6 +49200,9 @@ function analyseRequest(details) {
         reqParams.boto3['BackupPlanTags'] = jsonRequestBody.contentString.BackupPlanTags;
         reqParams.cli['--backup-plan-tags'] = jsonRequestBody.contentString.BackupPlanTags;
 
+        reqParams.cfn['BackupPlan'] = jsonRequestBody.contentString.BackupPlan;
+        reqParams.cfn['BackupPlanTags'] = jsonRequestBody.contentString.BackupPlanTags;
+
         outputs.push({
             'region': region,
             'service': 'backup',
@@ -49190,6 +49213,16 @@ function analyseRequest(details) {
             },
             'options': reqParams,
             'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('backup', details.requestId),
+            'region': region,
+            'service': 'backup',
+            'type': 'AWS::Backup::BackupPlan',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
         });
         
         return {};
@@ -52012,6 +52045,146 @@ function analyseRequest(details) {
                 'api': 'DescribeKey',
                 'boto3': 'describe_key',
                 'cli': 'describe-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListBackupVaults
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listBackupVaults") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListBackupVaults',
+                'boto3': 'list_backup_vaults',
+                'cli': 'list-backup-vaults'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:kms.DescribeKey
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/kms$/g) && jsonRequestBody.operation == "describeKey") {
+        reqParams.boto3['KeyId'] = jsonRequestBody.contentString.KeyId;
+        reqParams.cli['--key-id'] = jsonRequestBody.contentString.KeyId;
+
+        outputs.push({
+            'region': region,
+            'service': 'kms',
+            'method': {
+                'api': 'DescribeKey',
+                'boto3': 'describe_key',
+                'cli': 'describe-key'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.DescribeBackupVault
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "describeBackupVault") {
+        reqParams.boto3['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--backup-vault-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'DescribeBackupVault',
+                'boto3': 'describe_backup_vault',
+                'cli': 'describe-backup-vault'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListRecoveryPointsByBackupVault
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listRecoveryPointsByBackupVault") {
+        reqParams.boto3['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--backup-vault-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListRecoveryPointsByBackupVault',
+                'boto3': 'list_recovery_points_by_backup_vault',
+                'cli': 'list-recovery-points-by-backup-vault'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.GetBackupVaultAccessPolicy
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "getBackupVaultAccessPolicy") {
+        reqParams.boto3['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--backup-vault-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'GetBackupVaultAccessPolicy',
+                'boto3': 'get_backup_vault_access_policy',
+                'cli': 'get-backup-vault-access-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.ListProtectedResources
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "listProtectedResources") {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'ListProtectedResources',
+                'boto3': 'list_protected_resources',
+                'cli': 'list-protected-resources'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:backup:backup.DeleteBackupVault
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/backup\/api\/backup$/g) && jsonRequestBody.operation == "deleteBackupVault") {
+        reqParams.boto3['BackupVaultName'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--backup-vault-name'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'backup',
+            'method': {
+                'api': 'DeleteBackupVault',
+                'boto3': 'delete_backup_vault',
+                'cli': 'delete-backup-vault'
             },
             'options': reqParams,
             'requestDetails': details
