@@ -16422,7 +16422,13 @@ function analyseRequest(details) {
         reqParams.cfn['SupportEmail'] = jsonRequestBody.supportEmail;
         reqParams.cfn['SupportUrl'] = jsonRequestBody.supportUrl;
         reqParams.cfn['SupportDescription'] = jsonRequestBody.supportDescription;
-        reqParams.cfn['ProvisioningArtifactParameters'] = jsonRequestBody.provisioningArtifactParameters;
+        if (jsonRequestBody.provisioningArtifactParameters) {
+            reqParams.cfn['ProvisioningArtifactParameters'] = [{
+                'Name': jsonRequestBody.provisioningArtifactParameters.name,
+                'Description': jsonRequestBody.provisioningArtifactParameters.description,
+                'Info': jsonRequestBody.provisioningArtifactParameters.info
+            }];
+        }
         reqParams.cfn['Name'] = jsonRequestBody.provisioningArtifactParameters.name;
         reqParams.cfn['Description'] = jsonRequestBody.provisioningArtifactParameters.description;
 
