@@ -52199,4 +52199,548 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:amplify:amplify.ListApps
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "listApps") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'ListApps',
+                'boto3': 'list_apps',
+                'cli': 'list-apps'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:s3.ListBuckets
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/s3$/g) && jsonRequestBody.operation == "listBuckets") {
+
+        outputs.push({
+            'region': region,
+            'service': 's3',
+            'method': {
+                'api': 'ListBuckets',
+                'boto3': 'list_buckets',
+                'cli': 'list-buckets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.CreateApp
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "createApp") {
+        reqParams.boto3['name'] = jsonRequestBody.contentString.name;
+        reqParams.cli['--name'] = jsonRequestBody.contentString.name;
+        reqParams.boto3['platform'] = jsonRequestBody.contentString.platform;
+        reqParams.cli['--platform'] = jsonRequestBody.contentString.platform;
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'CreateApp',
+                'boto3': 'create_app',
+                'cli': 'create-app'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.CreateBranch
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "createBranch") {
+        reqParams.boto3['branchName'] = jsonRequestBody.contentString.branchName;
+        reqParams.cli['--branch-name'] = jsonRequestBody.contentString.branchName;
+        reqParams.boto3['stage'] = jsonRequestBody.contentString.stage;
+        reqParams.cli['--stage'] = jsonRequestBody.contentString.stage;
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'CreateBranch',
+                'boto3': 'create_branch',
+                'cli': 'create-branch'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.StartDeployment
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "startDeployment") {
+        reqParams.boto3['sourceUrl'] = jsonRequestBody.contentString.sourceUrl;
+        reqParams.cli['--source-url'] = jsonRequestBody.contentString.sourceUrl;
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['branchName'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--branch-name'] = jsonRequestBody.path.split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'StartDeployment',
+                'boto3': 'start_deployment',
+                'cli': 'start-deployment'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.ListWebhooks
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "listWebhooks") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'ListWebhooks',
+                'boto3': 'list_webhooks',
+                'cli': 'list-webhooks'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.ListBranches
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "listBranches") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'ListBranches',
+                'boto3': 'list_branches',
+                'cli': 'list-branches'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.ListDomainAssociations
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "listDomainAssociations") {
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'ListDomainAssociations',
+                'boto3': 'list_domain_associations',
+                'cli': 'list-domain-associations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.ListJobs
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "listJobs") {
+        reqParams.boto3['maxResults'] = jsonRequestBody.params.maxResults;
+        reqParams.cli['--max-results'] = jsonRequestBody.params.maxResults;
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['branchName'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--branch-name'] = jsonRequestBody.path.split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'ListJobs',
+                'boto3': 'list_jobs',
+                'cli': 'list-jobs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.GetJob
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "getJob") {
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['branchName'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--branch-name'] = jsonRequestBody.path.split("/")[4];
+        reqParams.boto3['jobId'] = jsonRequestBody.path.split("/")[6];
+        reqParams.cli['--job-id'] = jsonRequestBody.path.split("/")[6];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'GetJob',
+                'boto3': 'get_job',
+                'cli': 'get-job'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.DeleteBranch
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "deleteBranch") {
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+        reqParams.boto3['branchName'] = jsonRequestBody.path.split("/")[4];
+        reqParams.cli['--branch-name'] = jsonRequestBody.path.split("/")[4];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'DeleteBranch',
+                'boto3': 'delete_branch',
+                'cli': 'delete-branch'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:amplify.DeleteApp
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/amplify$/g) && jsonRequestBody.operation == "deleteApp") {
+        reqParams.boto3['appId'] = jsonRequestBody.path.split("/")[2];
+        reqParams.cli['--app-id'] = jsonRequestBody.path.split("/")[2];
+
+        outputs.push({
+            'region': region,
+            'service': 'amplify',
+            'method': {
+                'api': 'DeleteApp',
+                'boto3': 'delete_app',
+                'cli': 'delete-app'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:events.ListRules
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/cloudwatchevents$/g) && jsonRequestBody.headers.X-Amz-Target == "AWSEvents.ListRules") {
+
+        outputs.push({
+            'region': region,
+            'service': 'events',
+            'method': {
+                'api': 'ListRules',
+                'boto3': 'list_rules',
+                'cli': 'list-rules'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:amplify:sns.ListTopics
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/amplify\/api\/sns$/g) && jsonRequestBody.operation == "listTopics") {
+
+        outputs.push({
+            'region': region,
+            'service': 'sns',
+            'method': {
+                'api': 'ListTopics',
+                'boto3': 'list_topics',
+                'cli': 'list-topics'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.ListMeshes
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "listMeshes") {
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'ListMeshes',
+                'boto3': 'list_meshes',
+                'cli': 'list-meshes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.DescribeMesh
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "describeMesh") {
+        reqParams.boto3['meshName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--mesh-name'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'DescribeMesh',
+                'boto3': 'describe_mesh',
+                'cli': 'describe-mesh'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.DescribeVirtualRouter
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "describeVirtualRouter") {
+        reqParams.boto3['meshName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--mesh-name'] = jsonRequestBody.path.split("/")[3];
+        reqParams.boto3['virtualRouterName'] = jsonRequestBody.path.split("/")[5];
+        reqParams.cli['--virtual-router-name'] = jsonRequestBody.path.split("/")[5];
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'DescribeVirtualRouter',
+                'boto3': 'describe_virtual_router',
+                'cli': 'describe-virtual-router'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.CreateMesh
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "createMesh") {
+        reqParams.boto3['meshName'] = jsonRequestBody.contentString.meshName;
+        reqParams.cli['--mesh-name'] = jsonRequestBody.contentString.meshName;
+        reqParams.boto3['spec'] = jsonRequestBody.contentString.spec;
+        reqParams.cli['--spec'] = jsonRequestBody.contentString.spec;
+        reqParams.boto3['clientToken'] = jsonRequestBody.contentString.clientToken;
+        reqParams.cli['--client-token'] = jsonRequestBody.contentString.clientToken;
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'CreateMesh',
+                'boto3': 'create_mesh',
+                'cli': 'create-mesh'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.CreateVirtualNode
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "createVirtualNode") {
+        reqParams.boto3['spec'] = jsonRequestBody.contentString.spec;
+        reqParams.cli['--spec'] = jsonRequestBody.contentString.spec;
+        reqParams.boto3['virtualNodeName'] = jsonRequestBody.contentString.virtualNodeName;
+        reqParams.cli['--virtual-node-name'] = jsonRequestBody.contentString.virtualNodeName;
+        reqParams.boto3['clientToken'] = jsonRequestBody.contentString.clientToken;
+        reqParams.cli['--client-token'] = jsonRequestBody.contentString.clientToken;
+        reqParams.boto3['meshName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--mesh-name'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'CreateVirtualNode',
+                'boto3': 'create_virtual_node',
+                'cli': 'create-virtual-node'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:appmesh:appmesh.DeleteMesh
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/appmesh\/api\/appmesh$/g) && jsonRequestBody.operation == "deleteMesh") {
+        reqParams.boto3['meshName'] = jsonRequestBody.path.split("/")[3];
+        reqParams.cli['--mesh-name'] = jsonRequestBody.path.split("/")[3];
+
+        outputs.push({
+            'region': region,
+            'service': 'appmesh',
+            'method': {
+                'api': 'DeleteMesh',
+                'boto3': 'delete_mesh',
+                'cli': 'delete-mesh'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeClientVpnEndpoints
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeClientVpnEndpoints\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeClientVpnEndpoints',
+                'boto3': 'describe_client_vpn_endpoints',
+                'cli': 'describe-client-vpn-endpoints'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:acm.ListCertificates
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazon\.certificatemanager\.CertificateManager\.ListCertificates\?/g)) {
+        reqParams.boto3['MaxItems'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--max-items'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'acm',
+            'method': {
+                'api': 'ListCertificates',
+                'boto3': 'list_certificates',
+                'cli': 'list-certificates'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ds.DescribeDirectories
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.directoryservice\.v20150416\.DirectoryService_20150416\.DescribeDirectories\?/g)) {
+        reqParams.boto3['Limit'] = jsonRequestBody.__metaData.count;
+        reqParams.cli['--limit'] = jsonRequestBody.__metaData.count;
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DescribeDirectories',
+                'boto3': 'describe_directories',
+                'cli': 'describe-directories'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateClientVpnEndpoint
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/vpc\/vcb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateClientVpnEndpoint\?/g)) {
+        reqParams.boto3['Description'] = jsonRequestBody.Description;
+        reqParams.cli['--description'] = jsonRequestBody.Description;
+        reqParams.boto3['ClientCidrBlock'] = jsonRequestBody.ClientCidrBlock;
+        reqParams.cli['--client-cidr-block'] = jsonRequestBody.ClientCidrBlock;
+        reqParams.boto3['ServerCertificateArn'] = jsonRequestBody.ServerCertificateArn;
+        reqParams.cli['--server-certificate-arn'] = jsonRequestBody.ServerCertificateArn;
+        reqParams.boto3['TransportProtocol'] = jsonRequestBody.TransportProtocol;
+        reqParams.cli['--transport-protocol'] = jsonRequestBody.TransportProtocol;
+        reqParams.boto3['SplitTunnel'] = jsonRequestBody.SplitTunnel;
+        reqParams.cli['--split-tunnel'] = jsonRequestBody.SplitTunnel;
+        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.boto3['AuthenticationOptions'] = jsonRequestBody.AuthenticationOptions;
+        reqParams.cli['--authentication-options'] = jsonRequestBody.AuthenticationOptions;
+        reqParams.boto3['DnsServers'] = jsonRequestBody.DnsServers;
+        reqParams.cli['--dns-servers'] = jsonRequestBody.DnsServers;
+        reqParams.boto3['ConnectionLogOptions'] = jsonRequestBody.ConnectionLogOptions;
+        reqParams.cli['--connection-log-options'] = jsonRequestBody.ConnectionLogOptions;
+
+        reqParams.cfn['Description'] = jsonRequestBody.Description;
+        reqParams.cfn['TransportProtocol'] = jsonRequestBody.TransportProtocol;
+        reqParams.cfn['SplitTunnel'] = jsonRequestBody.SplitTunnel;
+        reqParams.cfn['ServerCertificateArn'] = jsonRequestBody.ServerCertificateArn;
+        reqParams.cfn['ClientCidrBlock'] = jsonRequestBody.ClientCidrBlock;
+        reqParams.cfn['DnsServers'] = jsonRequestBody.DnsServers;
+        reqParams.cfn['AuthenticationOptions'] = jsonRequestBody.AuthenticationOptions;
+        reqParams.cfn['ConnectionLogOptions'] = jsonRequestBody.ConnectionLogOptions;
+        reqParams.cfn['TagSpecifications'] = jsonRequestBody.TagSpecifications;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateClientVpnEndpoint',
+                'boto3': 'create_client_vpn_endpoint',
+                'cli': 'create-client-vpn-endpoint'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::ClientVpnEndpoint',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
 }
