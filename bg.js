@@ -29972,25 +29972,32 @@ function analyseRequest(details) {
         reqParams.cli['--snapshot-id'] = jsonRequestBody.SnapshotId;
         reqParams.boto3['Encrypted'] = jsonRequestBody.Encrypted;
         reqParams.cli['--encrypted'] = jsonRequestBody.Encrypted;
-        reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecification;
-        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecification;
+        if (jsonRequestBody.TagSpecification && jsonRequestBody.TagSpecification[0] && jsonRequestBody.TagSpecification[0].Tag) {
+            jsonRequestBody.TagSpecification[0]['Tags'] = jsonRequestBody.TagSpecification[0].Tag;
+            delete jsonRequestBody.TagSpecification[0].Tag;
+
+            reqParams.boto3['TagSpecifications'] = jsonRequestBody.TagSpecification;
+            reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecification;
+        }
 
         reqParams.cfn['VolumeType'] = jsonRequestBody.VolumeType;
         reqParams.cfn['Size'] = jsonRequestBody.Size;
         reqParams.cfn['AvailabilityZone'] = jsonRequestBody.AvailabilityZone;
         reqParams.cfn['SnapshotId'] = jsonRequestBody.SnapshotId;
         reqParams.cfn['Encrypted'] = jsonRequestBody.Encrypted;
-        reqParams.cfn['Tags'] = jsonRequestBody.TagSpecification; // TODO, check
+        if (jsonRequestBody.TagSpecification && jsonRequestBody.TagSpecification[0] && jsonRequestBody.TagSpecification[0].Tags) {
+            reqParams.cfn['Tags'] = jsonRequestBody.TagSpecification[0].Tags;
+        }
 
         reqParams.tf['type'] = jsonRequestBody.VolumeType;
         reqParams.tf['size'] = jsonRequestBody.Size;
         reqParams.tf['availability_zone'] = jsonRequestBody.AvailabilityZone;
         reqParams.tf['snapshot_id'] = jsonRequestBody.SnapshotId;
         reqParams.tf['encrypted'] = jsonRequestBody.Encrypted;
-        if (jsonRequestBody.TagSpecification) {
+        if (jsonRequestBody.TagSpecification && jsonRequestBody.TagSpecification[0] && jsonRequestBody.TagSpecification[0].Tags) {
             reqParams.tf['tags'] = {};
-            for (var i=0; i<jsonRequestBody.TagSpecification.length; i++) {
-                reqParams.tf['tags'][jsonRequestBody.TagSpecification[i].key] = jsonRequestBody.TagSpecification[i].value;
+            for (var i=0; i<jsonRequestBody.TagSpecification[0].Tags.length; i++) {
+                reqParams.tf['tags'][jsonRequestBody.TagSpecification[0].Tags[i].Key] = jsonRequestBody.TagSpecification[0].Tags[i].Value;
             }
         }
 
