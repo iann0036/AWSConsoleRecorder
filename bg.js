@@ -18432,8 +18432,10 @@ function analyseRequest(details) {
                     
                     reqParams.boto3['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
                     reqParams.cli['--backup-retention-period'] = action['parameters'][0]['backupRetentionPeriod'];
-                    reqParams.boto3['DatabaseName'] = action['parameters'][0]['DBName'];
-                    reqParams.cli['--database-name'] = action['parameters'][0]['DBName'];
+                    if (action['parameters'][0]['DBName'] != "") {
+                        reqParams.boto3['DatabaseName'] = action['parameters'][0]['DBName'];
+                        reqParams.cli['--database-name'] = action['parameters'][0]['DBName'];
+                    }
                     reqParams.boto3['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
                     reqParams.cli['--db-cluster-identifier'] = action['parameters'][0]['dbClusterIdentifier'];
                     reqParams.boto3['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
@@ -18464,7 +18466,9 @@ function analyseRequest(details) {
                     }
 
                     reqParams.cfn['BackupRetentionPeriod'] = action['parameters'][0]['backupRetentionPeriod'];
-                    reqParams.cfn['DatabaseName'] = action['parameters'][0]['DBName'];
+                    if (action['parameters'][0]['DBName'] != "") {
+                        reqParams.cfn['DatabaseName'] = action['parameters'][0]['DBName'];
+                    }
                     reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
                     reqParams.cfn['DBClusterParameterGroupName'] = action['parameters'][0]['DBClusterParameterGroupName'];
                     reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
@@ -18482,7 +18486,9 @@ function analyseRequest(details) {
                     }
 
                     reqParams.tf['backup_retention_period'] = action['parameters'][0]['backupRetentionPeriod'];
-                    reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                    if (action['parameters'][0]['DBName'] != "") {
+                        reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                    }
                     reqParams.tf['cluster_identifier'] = action['parameters'][0]['dbClusterIdentifier'];
                     reqParams.tf['db_cluster_parameter_group_name'] = action['parameters'][0]['DBClusterParameterGroupName'];
                     reqParams.tf['db_subnet_group_name'] = action['parameters'][0]['DBSubnetGroupName'];
@@ -18569,8 +18575,10 @@ function analyseRequest(details) {
                 reqParams.cli['--db-instance-class'] = action['parameters'][0]['DBInstanceClass'];
                 reqParams.boto3['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
                 reqParams.cli['--db-instance-identifier'] = action['parameters'][0]['DBInstanceIdentifier'];
-                reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
-                reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
+                    reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.boto3['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
                 reqParams.cli['--db-parameter-group-name'] = action['parameters'][0]['DBParameterGroupName'];
                 reqParams.boto3['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
@@ -18620,7 +18628,9 @@ function analyseRequest(details) {
                 reqParams.cfn['AvailabilityZone'] = action['parameters'][0]['availabilityZone'];
                 reqParams.cfn['DBInstanceClass'] = action['parameters'][0]['DBInstanceClass'];
                 reqParams.cfn['DBInstanceIdentifier'] = action['parameters'][0]['DBInstanceIdentifier'];
-                reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.cfn['DBParameterGroupName'] = action['parameters'][0]['DBParameterGroupName'];
                 reqParams.cfn['DBSubnetGroupName'] = action['parameters'][0]['DBSubnetGroupName'];
                 reqParams.cfn['DBClusterIdentifier'] = action['parameters'][0]['dbClusterIdentifier'];
@@ -18650,7 +18660,9 @@ function analyseRequest(details) {
                 reqParams.tf['availability_zone'] = action['parameters'][0]['availabilityZone'];
                 reqParams.tf['instance_class'] = action['parameters'][0]['DBInstanceClass'];
                 reqParams.tf['identifier'] = action['parameters'][0]['DBInstanceIdentifier'];
-                reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.tf['parameter_group_name'] = action['parameters'][0]['DBParameterGroupName'];
                 reqParams.tf['db_subnet_group_name'] = action['parameters'][0]['DBSubnetGroupName'];
                 reqParams.tf['cluster_identifier'] = action['parameters'][0]['dbClusterIdentifier'];
@@ -23917,8 +23929,10 @@ function analyseRequest(details) {
                 reqParams.cli['--cluster-type'] = action['parameters'][0]['clusterType'];
                 reqParams.boto3['ClusterVersion'] = action['parameters'][0]['clusterVersion'];
                 reqParams.cli['--cluster-version'] = action['parameters'][0]['clusterVersion'];
-                reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
-                reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.boto3['DBName'] = action['parameters'][0]['DBName'];
+                    reqParams.cli['--db-name'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.boto3['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
                 reqParams.cli['--kms-key-id'] = action['parameters'][0]['kmsKeyId'];
                 reqParams.boto3['MaintenanceTrackName'] = action['parameters'][0]['maintenanceTrackName'];
@@ -23944,7 +23958,9 @@ function analyseRequest(details) {
                 reqParams.cfn['ClusterIdentifier'] = action['parameters'][0]['clusterIdentifier'];
                 reqParams.cfn['ClusterType'] = action['parameters'][0]['clusterType'];
                 reqParams.cfn['ClusterVersion'] = action['parameters'][0]['clusterVersion'];
-                reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.cfn['DBName'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.cfn['KmsKeyId'] = action['parameters'][0]['kmsKeyId'];
                 reqParams.cfn['MasterUserPassword'] = action['parameters'][0]['masterUserPassword'];
                 reqParams.cfn['MasterUsername'] = action['parameters'][0]['masterUsername'];
@@ -23962,7 +23978,9 @@ function analyseRequest(details) {
                 reqParams.tf['cluster_identifier'] = action['parameters'][0]['clusterIdentifier'];
                 reqParams.tf['cluster_type'] = action['parameters'][0]['clusterType'];
                 reqParams.tf['cluster_version'] = action['parameters'][0]['clusterVersion'];
-                reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                if (action['parameters'][0]['DBName'] != "") {
+                    reqParams.tf['database_name'] = action['parameters'][0]['DBName'];
+                }
                 reqParams.tf['kms_key_id'] = action['parameters'][0]['kmsKeyId'];
                 reqParams.tf['master_password'] = action['parameters'][0]['masterUserPassword'];
                 reqParams.tf['master_username'] = action['parameters'][0]['masterUsername'];
@@ -52745,6 +52763,450 @@ function analyseRequest(details) {
             'options': reqParams,
             'requestDetails': details,
             'was_blocked': blocking
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:ec2.DescribeSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/ec2$/g) && jsonRequestBody.operation == "describeSecurityGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSecurityGroups',
+                'boto3': 'describe_security_groups',
+                'cli': 'describe-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/ec2$/g) && jsonRequestBody.operation == "describeVpcs") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.DescribeDBSubnetGroups
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeDBSubnetGroups") {
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'DescribeDBSubnetGroups',
+                'boto3': 'describe_db_subnet_groups',
+                'cli': 'describe-db-subnet-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.CreateDBInstance
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "createDBInstance") {
+        var urlparts = {};
+        jsonRequestBody.contentString.split("&").forEach(function(part) {
+            var item = part.split("=");
+            urlparts[item[0]] = decodeURIComponent(item[1]);
+        });
+
+        reqParams.boto3['AllocatedStorage'] = urlparts['AllocatedStorage'];
+        reqParams.cli['--allocated-storage'] = urlparts['AllocatedStorage'];
+        reqParams.boto3['AutoMinorVersionUpgrade'] = urlparts['AutoMinorVersionUpgrade'];
+        reqParams.cli['--auto-minor-version-upgrade'] = urlparts['AutoMinorVersionUpgrade'];
+        reqParams.boto3['BackupRetentionPeriod'] = urlparts['BackupRetentionPeriod'];
+        reqParams.cli['--backup-retention-period'] = urlparts['BackupRetentionPeriod'];
+        reqParams.boto3['CopyTagsToSnapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.cli['--copy-tags-to-snapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.boto3['DBInstanceClass'] = urlparts['DBInstanceClass'];
+        reqParams.cli['--db-instance-class'] = urlparts['DBInstanceClass'];
+        reqParams.boto3['DBInstanceIdentifier'] = urlparts['DBInstanceIdentifier'];
+        reqParams.cli['--db-instance-identifier'] = urlparts['DBInstanceIdentifier'];
+        if (urlparts['DBName'] != "") {
+            reqParams.boto3['DBName'] = urlparts['DBName'];
+            reqParams.cli['--db-name'] = urlparts['DBName'];
+        }
+        reqParams.boto3['DBParameterGroupName'] = urlparts['DBParameterGroupName'];
+        reqParams.cli['--db-parameter-group-name'] = urlparts['DBParameterGroupName'];
+        reqParams.boto3['DBSubnetGroupName'] = urlparts['DBSubnetGroupName'];
+        reqParams.cli['--db-subnet-group-name'] = urlparts['DBSubnetGroupName'];
+        reqParams.boto3['DeletionProtection'] = urlparts['DeletionProtection'];
+        reqParams.cli['--deletion-protection'] = urlparts['DeletionProtection'];
+        reqParams.boto3['EnableCloudwatchLogsExports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.cli['--enable-cloudwatch-logs-exports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.boto3['EnableIAMDatabaseAuthentication'] = urlparts['EnableIAMDatabaseAuthentication'];
+        reqParams.cli['--enable-iam-database-authentication'] = urlparts['EnableIAMDatabaseAuthentication'];
+        reqParams.boto3['EnablePerformanceInsights'] = urlparts['EnablePerformanceInsights'];
+        reqParams.cli['--enable-performance-insights'] = urlparts['EnablePerformanceInsights'];
+        reqParams.boto3['Engine'] = urlparts['Engine'];
+        reqParams.cli['--engine'] = urlparts['Engine'];
+        reqParams.boto3['EngineVersion'] = urlparts['EngineVersion'];
+        reqParams.cli['--engine-version'] = urlparts['EngineVersion'];
+        reqParams.boto3['MasterUserPassword'] = urlparts['MasterUserPassword'];
+        reqParams.cli['--master-user-password'] = urlparts['MasterUserPassword'];
+        reqParams.boto3['MasterUsername'] = urlparts['MasterUsername'];
+        reqParams.cli['--master-username'] = urlparts['MasterUsername'];
+        reqParams.boto3['MaxAllocatedStorage'] = urlparts['MaxAllocatedStorage'];
+        reqParams.cli['--max-allocated-storage'] = urlparts['MaxAllocatedStorage'];
+        reqParams.boto3['MultiAZ'] = urlparts['MultiAZ'];
+        reqParams.cli['--multi-az'] = urlparts['MultiAZ'];
+        reqParams.boto3['OptionGroupName'] = urlparts['OptionGroupName'];
+        reqParams.cli['--option-group-name'] = urlparts['OptionGroupName'];
+        reqParams.boto3['Port'] = urlparts['Port'];
+        reqParams.cli['--port'] = urlparts['Port'];
+        reqParams.boto3['PubliclyAccessible'] = urlparts['PubliclyAccessible'];
+        reqParams.cli['--publicly-accessible'] = urlparts['PubliclyAccessible'];
+        reqParams.boto3['StorageEncrypted'] = urlparts['StorageEncrypted'];
+        reqParams.cli['--storage-encrypted'] = urlparts['StorageEncrypted'];
+        reqParams.boto3['StorageType'] = urlparts['StorageType'];
+        reqParams.cli['--storage-type'] = urlparts['StorageType'];
+        reqParams.boto3['Version'] = urlparts['Version'];
+        reqParams.cli['--version'] = urlparts['Version'];
+        reqParams.boto3['VpcSecurityGroupIds'] = urlparts['VpcSecurityGroupIds'];
+        reqParams.cli['--vpc-security-group-ids'] = urlparts['VpcSecurityGroupIds'];
+        
+        reqParams.cfn['AutoMinorVersionUpgrade'] = urlparts['AutoMinorVersionUpgrade'];
+        reqParams.cfn['CopyTagsToSnapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.cfn['MultiAZ'] = urlparts['MultiAZ'];
+        reqParams.cfn['PubliclyAccessible'] = urlparts['PubliclyAccessible'];
+        reqParams.cfn['StorageEncrypted'] = urlparts['StorageEncrypted'];
+        reqParams.cfn['AllocatedStorage'] = urlparts['AllocatedStorage'];
+        reqParams.cfn['BackupRetentionPeriod'] = urlparts['BackupRetentionPeriod'];
+        reqParams.cfn['Iops'] = urlparts['Iops'];
+        reqParams.cfn['MonitoringInterval'] = urlparts['MonitoringInterval'];
+        reqParams.cfn['Port'] = urlparts['Port'];
+        reqParams.cfn['AvailabilityZone'] = urlparts['AvailabilityZone'];
+        reqParams.cfn['DBInstanceClass'] = urlparts['DBInstanceClass'];
+        reqParams.cfn['DBInstanceIdentifier'] = urlparts['DBInstanceIdentifier'];
+        if (urlparts['DBName'] != "") {
+            reqParams.cfn['DBName'] = urlparts['DBName'];
+        }
+        reqParams.cfn['DBParameterGroupName'] = urlparts['DBParameterGroupName'];
+        reqParams.cfn['DBSubnetGroupName'] = urlparts['DBSubnetGroupName'];
+        reqParams.cfn['DBClusterIdentifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.cfn['Engine'] = urlparts['Engine'];
+        reqParams.cfn['EngineVersion'] = urlparts['EngineVersion'];
+        reqParams.cfn['LicenseModel'] = urlparts['LicenseModel'];
+        reqParams.cfn['MasterUserPassword'] = urlparts['MasterUserPassword'];
+        reqParams.cfn['MasterUsername'] = urlparts['MasterUsername'];
+        reqParams.cfn['MonitoringRoleArn'] = urlparts['MonitoringRoleArn'];
+        reqParams.cfn['OptionGroupName'] = urlparts['OptionGroupName'];
+        reqParams.cfn['PreferredMaintenanceWindow'] = urlparts['PreferredMaintenanceWindow'];
+        reqParams.cfn['StorageType'] = urlparts['StorageType'];
+        reqParams.cfn['VPCSecurityGroups'] = urlparts['VPCSecurityGroups'];
+
+        reqParams.tf['auto_minor_version_upgrade'] = urlparts['AutoMinorVersionUpgrade'];
+        reqParams.tf['copy_tags_to_snapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.tf['multi_az'] = urlparts['MultiAZ'];
+        reqParams.tf['publicly_accessible'] = urlparts['PubliclyAccessible'];
+        reqParams.tf['storage_encrypted'] = urlparts['StorageEncrypted'];
+        reqParams.tf['allocated_storage'] = urlparts['AllocatedStorage'];
+        reqParams.tf['backup_retention_period'] = urlparts['BackupRetentionPeriod'];
+        reqParams.tf['iops'] = urlparts['Iops'];
+        reqParams.tf['monitoring_interval'] = urlparts['MonitoringInterval'];
+        reqParams.tf['port'] = urlparts['Port'];
+        reqParams.tf['availability_zone'] = urlparts['AvailabilityZone'];
+        reqParams.tf['instance_class'] = urlparts['DBInstanceClass'];
+        reqParams.tf['identifier'] = urlparts['DBInstanceIdentifier'];
+        if (urlparts['DBName'] != "") {
+            reqParams.tf['database_name'] = urlparts['DBName'];
+        }
+        reqParams.tf['parameter_group_name'] = urlparts['DBParameterGroupName'];
+        reqParams.tf['db_subnet_group_name'] = urlparts['DBSubnetGroupName'];
+        reqParams.tf['cluster_identifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.tf['engine'] = urlparts['Engine'];
+        reqParams.tf['engine_version'] = urlparts['EngineVersion'];
+        reqParams.tf['license_model'] = urlparts['LicenseModel'];
+        reqParams.tf['master_password'] = urlparts['MasterUserPassword'];
+        reqParams.tf['master_username'] = urlparts['MasterUsername'];
+        reqParams.tf['monitoring_role_arn'] = urlparts['MonitoringRoleArn'];
+        reqParams.tf['option_group_name'] = urlparts['OptionGroupName'];
+        reqParams.tf['preferred_maintenance_window'] = urlparts['PreferredMaintenanceWindow'];
+        reqParams.tf['storage_type'] = urlparts['StorageType'];
+        reqParams.tf['vpc_security_group_ids'] = urlparts['VpcSecurityGroupIds'];
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'CreateDBInstance',
+                'boto3': 'create_db_instance',
+                'cli': 'create-db-instance'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('rds', details.requestId),
+            'region': region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBInstance',
+            'terraformType': 'aws_db_instance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:rds:rds.DescribeDBClusters
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "describeDBClusters") {
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'DescribeDBClusters',
+                'boto3': 'describe_db_clusters',
+                'cli': 'describe-db-clusters'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:rds:rds.CreateDBCluster
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/rds\/console\/proxy\/rds$/g) && jsonRequestBody.operation == "createDBCluster") {
+        var urlparts = {};
+        jsonRequestBody.contentString.split("&").forEach(function(part) {
+            var item = part.split("=");
+            urlparts[item[0]] = decodeURIComponent(item[1]);
+        });
+
+        reqParams.boto3['BackupRetentionPeriod'] = urlparts['BackupRetentionPeriod'];
+        reqParams.cli['--backup-retention-period'] = urlparts['BackupRetentionPeriod'];
+        reqParams.boto3['CopyTagsToSnapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.cli['--copy-tags-to-snapshot'] = urlparts['CopyTagsToSnapshot'];
+        reqParams.boto3['DBClusterIdentifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.cli['--db-cluster-identifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.boto3['DBClusterParameterGroupName'] = urlparts['DBClusterParameterGroupName'];
+        reqParams.cli['--db-cluster-parameter-group-name'] = urlparts['DBClusterParameterGroupName'];
+        reqParams.boto3['DBSubnetGroupName'] = urlparts['DBSubnetGroupName'];
+        reqParams.cli['--db-subnet-group-name'] = urlparts['DBSubnetGroupName'];
+        reqParams.boto3['DatabaseName'] = urlparts['DatabaseName'];
+        reqParams.cli['--database-name'] = urlparts['DatabaseName'];
+        reqParams.boto3['DeletionProtection'] = urlparts['DeletionProtection'];
+        reqParams.cli['--deletion-protection'] = urlparts['DeletionProtection'];
+        reqParams.boto3['EnableCloudwatchLogsExports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.cli['--enable-cloudwatch-logs-exports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.boto3['Engine'] = urlparts['Engine'];
+        reqParams.cli['--engine'] = urlparts['Engine'];
+        reqParams.boto3['EngineMode'] = urlparts['EngineMode'];
+        reqParams.cli['--engine-mode'] = urlparts['EngineMode'];
+        reqParams.boto3['EngineVersion'] = urlparts['EngineVersion'];
+        reqParams.cli['--engine-version'] = urlparts['EngineVersion'];
+        reqParams.boto3['MasterUserPassword'] = urlparts['MasterUserPassword'];
+        reqParams.cli['--master-user-password'] = urlparts['MasterUserPassword'];
+        reqParams.boto3['MasterUsername'] = urlparts['MasterUsername'];
+        reqParams.cli['--master-username'] = urlparts['MasterUsername'];
+        reqParams.boto3['Port'] = urlparts['Port'];
+        reqParams.cli['--port'] = urlparts['Port'];
+        reqParams.boto3['PreSignedUrl'] = urlparts['PreSignedUrl'];
+        reqParams.cli['--pre-signed-url'] = urlparts['PreSignedUrl'];
+        reqParams.boto3['StorageEncrypted'] = urlparts['StorageEncrypted'];
+        reqParams.cli['--storage-encrypted'] = urlparts['StorageEncrypted'];
+        reqParams.boto3['Version'] = urlparts['Version'];
+        reqParams.cli['--version'] = urlparts['Version'];
+        reqParams.boto3['VpcSecurityGroupIds'] = urlparts['VpcSecurityGroupIds'];
+        reqParams.cli['--vpc-security-group-ids'] = urlparts['VpcSecurityGroupIds'];
+
+        reqParams.cfn['BackupRetentionPeriod'] = urlparts['BackupRetentionPeriod'];
+        if (urlparts['DBName'] != "") {
+            reqParams.cfn['DatabaseName'] = urlparts['DBName'];
+        }
+        reqParams.cfn['DBClusterIdentifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.cfn['DBClusterParameterGroupName'] = urlparts['DBClusterParameterGroupName'];
+        reqParams.cfn['DBSubnetGroupName'] = urlparts['DBSubnetGroupName'];
+        reqParams.cfn['DeletionProtection'] = urlparts['DeletionProtection'];
+        reqParams.cfn['EnableCloudwatchLogsExports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.cfn['Engine'] = urlparts['Engine'];
+        reqParams.cfn['EngineMode'] = urlparts['EngineMode'];
+        reqParams.cfn['EngineVersion'] = urlparts['EngineVersion'];
+        reqParams.cfn['MasterUserPassword'] = urlparts['MasterUserPassword'];
+        reqParams.cfn['MasterUsername'] = urlparts['MasterUsername'];
+        reqParams.cfn['Port'] = urlparts['Port'];
+        reqParams.cfn['PreferredMaintenanceWindow'] = urlparts['PreferredMaintenanceWindow'];
+        reqParams.cfn['VPCSecurityGroups'] = urlparts['VpcSecurityGroupIds'];
+
+        reqParams.tf['backup_retention_period'] = urlparts['BackupRetentionPeriod'];
+        if (urlparts['DBName'] != "") {
+            reqParams.tf['database_name'] = urlparts['DBName'];
+        }
+        reqParams.tf['cluster_identifier'] = urlparts['DBClusterIdentifier'];
+        reqParams.tf['db_cluster_parameter_group_name'] = urlparts['DBClusterParameterGroupName'];
+        reqParams.tf['db_subnet_group_name'] = urlparts['DBSubnetGroupName'];
+        reqParams.tf['deletion_protection'] = urlparts['DeletionProtection'];
+        reqParams.tf['enabled_cloudwatch_logs_exports'] = urlparts['EnableCloudwatchLogsExports'];
+        reqParams.tf['engine'] = urlparts['Engine'];
+        reqParams.tf['engine_mode'] = urlparts['EngineMode'];
+        reqParams.tf['engine_version'] = urlparts['EngineVersion'];
+        reqParams.tf['master_password'] = urlparts['MasterUserPassword'];
+        reqParams.tf['master_username'] = urlparts['MasterUsername'];
+        reqParams.tf['port'] = urlparts['Port'];
+        reqParams.tf['preferred_maintenance_window'] = urlparts['PreferredMaintenanceWindow'];
+        reqParams.tf['vpc_security_group_ids'] = urlparts['VpcSecurityGroupIds'];
+
+        outputs.push({
+            'region': region,
+            'service': 'rds',
+            'method': {
+                'api': 'CreateDBCluster',
+                'boto3': 'create_db_cluster',
+                'cli': 'create-db-cluster'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('rds', details.requestId),
+            'region': region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBCluster',
+            'terraformType': 'aws_rds_cluster',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:dms:dms.DescribeReplicationInstances
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/v2\/api\/dms$/g) && jsonRequestBody.operation == "describeReplicationInstances") {
+
+        outputs.push({
+            'region': region,
+            'service': 'dms',
+            'method': {
+                'api': 'DescribeReplicationInstances',
+                'boto3': 'describe_replication_instances',
+                'cli': 'describe-replication-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:dms:iam.GetRole
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/v2\/api\/iam$/g) && jsonRequestBody.operation == "getRole") {
+        var urlparts = {};
+        jsonRequestBody.contentString.split("&").forEach(function(part) {
+            var item = part.split("=");
+            urlparts[item[0]] = decodeURIComponent(item[1]);
+        });
+
+        reqParams.boto3['RoleName'] = urlparts['RoleName'];
+        reqParams.cli['--role-name'] = urlparts['RoleName'];
+        reqParams.boto3['Version'] = urlparts['Version'];
+        reqParams.cli['--version'] = urlparts['Version'];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'GetRole',
+                'boto3': 'get_role',
+                'cli': 'get-role'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:dms:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/v2\/api\/ec2$/g) && jsonRequestBody.operation == "describeAvailabilityZones") {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:dms:dms.DescribeOrderableReplicationInstances
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/v2\/api\/dms$/g) && jsonRequestBody.operation == "describeOrderableReplicationInstances") {
+
+        outputs.push({
+            'region': region,
+            'service': 'dms',
+            'method': {
+                'api': 'DescribeOrderableReplicationInstances',
+                'boto3': 'describe_orderable_replication_instances',
+                'cli': 'describe-orderable-replication-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:dms:dms.CreateReplicationSubnetGroup
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dms\/v2\/api\/dms$/g) && jsonRequestBody.operation == "createReplicationSubnetGroup") {
+        reqParams.boto3['ReplicationSubnetGroupIdentifier'] = jsonRequestBody.contentString.ReplicationSubnetGroupIdentifier;
+        reqParams.cli['--replication-subnet-group-identifier'] = jsonRequestBody.contentString.ReplicationSubnetGroupIdentifier;
+        reqParams.boto3['ReplicationSubnetGroupDescription'] = jsonRequestBody.contentString.ReplicationSubnetGroupDescription;
+        reqParams.cli['--replication-subnet-group-description'] = jsonRequestBody.contentString.ReplicationSubnetGroupDescription;
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.contentString.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.contentString.SubnetIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'dms',
+            'method': {
+                'api': 'CreateReplicationSubnetGroup',
+                'boto3': 'create_replication_subnet_group',
+                'cli': 'create-replication-subnet-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
         });
         
         return {};
