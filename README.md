@@ -9,8 +9,6 @@ Need to generate outputs for existing resources? Check out [Former2](https://git
 
 ![Screenshot](assets/screen1.png)
 
-:exclamation: **CAUTION:** This project is currently in beta stages. Some components may not work as expected.
-
 
 ## Installation
 
