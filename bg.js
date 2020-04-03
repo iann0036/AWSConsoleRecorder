@@ -53212,4 +53212,71 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:iam:iam.PutRolePolicy
+    if (details.method == "PUT" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/.*$/g)) {
+        reqParams.boto3['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cli['--policy-document'] = jsonRequestBody.document;
+        reqParams.boto3['RoleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.*)\/inlinePolicies\/.*$/g.exec(details.url)[1];
+        reqParams.cli['--role-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.*)\/inlinePolicies\/.*$/g.exec(details.url)[1];
+        reqParams.boto3['PolicyName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/(.*)$/g.exec(details.url)[1];
+        reqParams.cli['--policy-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/(.*)$/g.exec(details.url)[1];
+
+        reqParams.cfn['PolicyDocument'] = jsonRequestBody.document;
+        reqParams.cfn['Roles'] = [
+            /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.*)\/inlinePolicies\/.*$/g.exec(details.url)[1]
+        ];
+        reqParams.cfn['PolicyName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/(.*)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'PutRolePolicy',
+                'boto3': 'put_role_policy',
+                'cli': 'put-role-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('iam', details.requestId),
+            'region': region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Policy',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:iam:iam.DeleteRolePolicy
+    if (details.method == "DELETE" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/.*$/g)) {
+        reqParams.boto3['RoleName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.*)\/inlinePolicies\/.*$/g.exec(details.url)[1];
+        reqParams.cli['--role-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/(.*)\/inlinePolicies\/.*$/g.exec(details.url)[1];
+        reqParams.boto3['PolicyName'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/(.*)$/g.exec(details.url)[1];
+        reqParams.cli['--policy-name'] = /.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/iam\/api\/roles\/.*\/inlinePolicies\/(.*)$/g.exec(details.url)[1];
+
+        outputs.push({
+            'region': region,
+            'service': 'iam',
+            'method': {
+                'api': 'DeleteRolePolicy',
+                'boto3': 'delete_role_policy',
+                'cli': 'delete-role-policy'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
