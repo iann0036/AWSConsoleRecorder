@@ -2485,35 +2485,53 @@ function parseDynamoItem(obj) {
     
     for (var key in obj) {
         if (obj[key].type == "String") {
-            ret[obj[key].name] = obj[key].stringValue;
+            ret[obj[key].name] = {
+                "S": obj[key].stringValue
+            };
         } else if (obj[key].type == "Map") {
-            ret[obj[key].name] = parseDynamoItem(obj[key].mapValues);
+            ret[obj[key].name] = {
+                "M": parseDynamoItem(obj[key].mapValues)
+            };
         } else if (obj[key].type == "Binary") {
-            ret[obj[key].name] = obj[key].binaryValue;
+            ret[obj[key].name] = {
+                "B": obj[key].binaryValue
+            };
         } else if (obj[key].type == "BinarySet") {
-            ret[obj[key].name] = obj[key].binarySetValues;
+            ret[obj[key].name] = {
+                "BS": obj[key].binarySetValues
+            };
         } else if (obj[key].type == "Boolean") {
-            ret[obj[key].name] = obj[key].booleanValue;
+            ret[obj[key].name] = {
+                "BOOL": obj[key].booleanValue
+            };
         } else if (obj[key].type == "List") {
-            ret[obj[key].name] = [];
+            ret[obj[key].name] = {
+                "L": []
+            };
             for (var j=0; j<obj[key].listValues.length; j++) {
-                ret[obj[key].name].push(parseDynamoItem(obj[key].listValues[j]));
+                ret[obj[key].name]["L"].push(parseDynamoItem(obj[key].listValues[j]));
             }
-        } else if (obj[key].type == "Map") {
-            ret[obj[key].name] = parseDynamoItem(obj[key].mapValues);
         } else if (obj[key].type == "Null") {
-            ret[obj[key].name] = null;
+            ret[obj[key].name] = {
+                "NULL": true
+            };
         } else if (obj[key].type == "Number") {
-            ret[obj[key].name] = Number(obj[key].numberValue);
+            ret[obj[key].name] = {
+                "N": Number(obj[key].numberValue)
+            };
         } else if (obj[key].type == "NumberSet") {
-            ret[obj[key].name] = [];
+            ret[obj[key].name] = {
+                "NS": []
+            };
             for (var j=0; j<obj[key].numberSetValues.length; j++) {
-                ret[obj[key].name].push(Number(obj[key].numberSetValues[j]));
+                ret[obj[key].name]["NS"].push(Number(obj[key].numberSetValues[j]));
             }
         } else if (obj[key].type == "StringSet") {
-            ret[obj[key].name] = [];
+            ret[obj[key].name] = {
+                "SS": []
+            };
             for (var j=0; j<obj[key].stringSetValues.length; j++) {
-                ret[obj[key].name].push(obj[key].stringSetValues[j]);
+                ret[obj[key].name]["SS"].push(obj[key].stringSetValues[j]);
             }
         }
     }
@@ -34812,6 +34830,7 @@ function analyseRequest(details) {
     // manual:dynamodb:dynamodb.PutItem
     // manual:dynamodb:dynamodb.CreateGlobalTable
     // manual:dynamodb:dynamodb.Scan
+    // manual:dynamodb:dynamodb.UpdateItem
     if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dynamodb\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
@@ -35401,6 +35420,57 @@ function analyseRequest(details) {
                 });
                 
                 return {};
+            } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBItemsRequestContext.updateItem") {
+                function composeUpdateExpression(updatedAttributes, removedAttributes) {
+                    expr = "";
+
+                    if (updatedAttributes.length) {
+                        expr += " SET ";
+                        updatedAttributes.forEach(function(item) {
+                            expr += item.name + " = :" + item.name.toLowerCase() + ", ";
+                        });
+                        expr = expr.substring(0, expr.length-2);
+                    }
+                    if (removedAttributes.length) {
+                        expr += " REMOVE ";
+                        removedAttributes.forEach(function(item) {
+                            expr += item.name + ", ";
+                        });
+                        expr = expr.substring(0, expr.length-2);
+                    }
+
+                    return expr.trim();
+                }
+
+                reqParams.boto3['Key'] = parseDynamoItem([action['parameters'][0]['itemKey']['hashKey']]);
+                reqParams.cli['--key'] = parseDynamoItem([action['parameters'][0]['itemKey']['hashKey']]);
+                reqParams.boto3['TableName'] = action['parameters'][0]['tableName'];
+                reqParams.cli['--table-name'] = action['parameters'][0]['tableName'];
+                if (action['parameters'][0]['updatedAttributes'].length) {
+                    var exprattrvalues = parseDynamoItem(action['parameters'][0]['updatedAttributes']);
+
+                    for (key in exprattrvalues) {
+                        exprattrvalues[":" + key.toLowerCase()] = exprattrvalues[key];
+                        delete exprattrvalues[key];
+                    }
+
+                    reqParams.boto3['ExpressionAttributeValues'] = exprattrvalues;
+                    reqParams.cli['--expression-attribute-values'] = exprattrvalues;
+                }
+                reqParams.boto3['UpdateExpression'] = composeUpdateExpression(action['parameters'][0]['updatedAttributes'], action['parameters'][0]['removedAttributes']);
+                reqParams.cli['--update-expression'] = composeUpdateExpression(action['parameters'][0]['updatedAttributes'], action['parameters'][0]['removedAttributes']);
+
+                outputs.push({
+                    'region': region,
+                    'service': 'dynamodb',
+                    'method': {
+                        'api': 'UpdateItem',
+                        'boto3': 'update_item',
+                        'cli': 'update-item'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
             } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.GlobalTablesRequestContext.createGlobalTable") {
                 reqParams.iam['Resource'] = [
                     "arn:aws:dynamodb:*:*:table/" + action['parameters'][0]['globalTableName'],
