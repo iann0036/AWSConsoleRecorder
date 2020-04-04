@@ -34811,6 +34811,7 @@ function analyseRequest(details) {
     // autogen:dynamodb:dax.DeleteCluster
     // manual:dynamodb:dynamodb.PutItem
     // manual:dynamodb:dynamodb.CreateGlobalTable
+    // manual:dynamodb:dynamodb.Scan
     if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/dynamodb\/rpc$/g)) {
         for (var i in jsonRequestBody.actions) {
             var action = jsonRequestBody.actions[i];
@@ -35373,6 +35374,33 @@ function analyseRequest(details) {
                     'requestDetails': details,
                     'was_blocked': blocking
                 });
+            } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.DynamoDBItemsRequestContext.scanTable") {
+                reqParams.boto3['ReturnConsumedCapacity'] = action['parameters'][0]['returnConsumedCapacity'];
+                reqParams.cli['--return-consumed-capacity'] = action['parameters'][0]['returnConsumedCapacity'];
+                reqParams.boto3['Limit'] = action['parameters'][0]['limit'];
+                reqParams.cli['--limit'] = action['parameters'][0]['limit'];
+                reqParams.boto3['FilterExpression'] = action['parameters'][0]['filterExpression'];
+                reqParams.cli['--filter-expression'] = action['parameters'][0]['filterExpression'];
+                reqParams.boto3['TableName'] = action['parameters'][0]['tableName'];
+                reqParams.cli['--table-name'] = action['parameters'][0]['tableName'];
+                reqParams.boto3['ExpressionAttributeValues'] = action['parameters'][0]['valueMap'];
+                reqParams.cli['--expression-attribute-values'] = action['parameters'][0]['valueMap'];
+                reqParams.boto3['ExpressionAttributeNames'] = action['parameters'][0]['attributeNamesMap'];
+                reqParams.cli['--expression-attribute-names'] = action['parameters'][0]['attributeNamesMap'];
+        
+                outputs.push({
+                    'region': region,
+                    'service': 'dynamodb',
+                    'method': {
+                        'api': 'Scan',
+                        'boto3': 'scan',
+                        'cli': 'scan'
+                    },
+                    'options': reqParams,
+                    'requestDetails': details
+                });
+                
+                return {};
             } else if (action['action'] == "com.amazonaws.console.dynamodbv2.shared.GlobalTablesRequestContext.createGlobalTable") {
                 reqParams.iam['Resource'] = [
                     "arn:aws:dynamodb:*:*:table/" + action['parameters'][0]['globalTableName'],
