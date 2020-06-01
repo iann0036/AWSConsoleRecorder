@@ -53377,4 +53377,282 @@ function analyseRequest(details) {
         return {};
     }
 
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribePrefixLists
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribePrefixLists\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.maxResults;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribePrefixLists',
+                'boto3': 'describe_prefix_lists',
+                'cli': 'describe-prefix-lists'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.CreateSecurityGroup
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.CreateSecurityGroup\?/g)) {
+        reqParams.boto3['GroupName'] = jsonRequestBody.groupName;
+        reqParams.cli['--group-name'] = jsonRequestBody.groupName;
+        reqParams.boto3['Description'] = jsonRequestBody.description;
+        reqParams.cli['--description'] = jsonRequestBody.description;
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+
+        reqParams.cfn['GroupDescription'] = jsonRequestBody.description;
+        reqParams.cfn['GroupName'] = jsonRequestBody.groupName;
+        reqParams.cfn['VpcId'] = jsonRequestBody.vpcId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'CreateSecurityGroup',
+                'boto3': 'create_security_group',
+                'cli': 'create-security-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SecurityGroup',
+            'terraformType': 'aws_security_group',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AuthorizeSecurityGroupIngress
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AuthorizeSecurityGroupIngress\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+        reqParams.boto3['IpPermissions'] = jsonRequestBody.ipPermissions;
+        reqParams.cli['--ip-permissions'] = jsonRequestBody.ipPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AuthorizeSecurityGroupIngress',
+                'boto3': 'authorize_security_group_ingress',
+                'cli': 'authorize-security-group-ingress'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.UpdateSecurityGroupRuleDescriptionsEgress
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.UpdateSecurityGroupRuleDescriptionsEgress\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+        reqParams.boto3['IpPermissions'] = jsonRequestBody.ipPermissions;
+        reqParams.cli['--ip-permissions'] = jsonRequestBody.ipPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'UpdateSecurityGroupRuleDescriptionsEgress',
+                'boto3': 'update_security_group_rule_descriptions_egress',
+                'cli': 'update-security-group-rule-descriptions-egress'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.AuthorizeSecurityGroupEgress
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.AuthorizeSecurityGroupEgress\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+        reqParams.boto3['IpPermissions'] = jsonRequestBody.ipPermissions;
+        reqParams.cli['--ip-permissions'] = jsonRequestBody.ipPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'AuthorizeSecurityGroupEgress',
+                'boto3': 'authorize_security_group_egress',
+                'cli': 'authorize-security-group-egress'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.UpdateSecurityGroupRuleDescriptionsIngress
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.UpdateSecurityGroupRuleDescriptionsIngress\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+        reqParams.boto3['IpPermissions'] = jsonRequestBody.ipPermissions;
+        reqParams.cli['--ip-permissions'] = jsonRequestBody.ipPermissions;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'UpdateSecurityGroupRuleDescriptionsIngress',
+                'boto3': 'update_security_group_rule_descriptions_ingress',
+                'cli': 'update-security-group-rule-descriptions-ingress'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeClassicLinkInstances
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeClassicLinkInstances\?/g)) {
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeClassicLinkInstances',
+                'boto3': 'describe_classic_link_instances',
+                'cli': 'describe-classic-link-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DeleteSecurityGroup
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DeleteSecurityGroup\?/g)) {
+        reqParams.boto3['GroupId'] = jsonRequestBody.groupId;
+        reqParams.cli['--group-id'] = jsonRequestBody.groupId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DeleteSecurityGroup',
+                'boto3': 'delete_security_group',
+                'cli': 'delete-security-group'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.maxResults;
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeTags
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeTags\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.maxResults;
+        reqParams.boto3['Filters'] = jsonRequestBody.filters;
+        reqParams.cli['--filters'] = jsonRequestBody.filters;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeTags',
+                'boto3': 'describe_tags',
+                'cli': 'describe-tags'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeStaleSecurityGroups
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeStaleSecurityGroups\?/g)) {
+        reqParams.boto3['MaxResults'] = jsonRequestBody.maxResults;
+        reqParams.cli['--max-items'] = jsonRequestBody.maxResults;
+        reqParams.boto3['VpcId'] = jsonRequestBody.vpcId;
+        reqParams.cli['--vpc-id'] = jsonRequestBody.vpcId;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeStaleSecurityGroups',
+                'boto3': 'describe_stale_security_groups',
+                'cli': 'describe-stale-security-groups'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
