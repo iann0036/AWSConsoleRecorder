@@ -53655,4 +53655,538 @@ function analyseRequest(details) {
         return {};
     }
 
+
+    // autogen:ec2:compute-optimizer.GetEC2InstanceRecommendations
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.computeoptimizer\.version_2019_11_01\.ComputeOptimizerService\.GetEC2InstanceRecommendations$/g)) {
+        reqParams.boto3['instanceArns'] = jsonRequestBody.instanceArns;
+        reqParams.cli['--instance-arns'] = jsonRequestBody.instanceArns;
+        reqParams.boto3['accountIds'] = jsonRequestBody.accountIds;
+        reqParams.cli['--account-ids'] = jsonRequestBody.accountIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'compute-optimizer',
+            'method': {
+                'api': 'GetEC2InstanceRecommendations',
+                'boto3': 'get_ec2_instance_recommendations',
+                'cli': 'get-ec2-instance-recommendations'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeInstanceCreditSpecifications
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeInstanceCreditSpecifications$/g)) {
+        reqParams.boto3['InstanceIds'] = jsonRequestBody.InstanceIds;
+        reqParams.cli['--instance-ids'] = jsonRequestBody.InstanceIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeInstanceCreditSpecifications',
+                'boto3': 'describe_instance_credit_specifications',
+                'cli': 'describe-instance-credit-specifications'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeVpcs
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeVpcs$/g)) {
+        reqParams.boto3['VpcIds'] = jsonRequestBody.VpcIds;
+        reqParams.cli['--vpc-ids'] = jsonRequestBody.VpcIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeVpcs',
+                'boto3': 'describe_vpcs',
+                'cli': 'describe-vpcs'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeSubnets
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeSubnets$/g)) {
+        reqParams.boto3['SubnetIds'] = jsonRequestBody.SubnetIds;
+        reqParams.cli['--subnet-ids'] = jsonRequestBody.SubnetIds;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeSubnets',
+                'boto3': 'describe_subnets',
+                'cli': 'describe-subnets'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.RunInstances
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.RunInstances$/g)) {
+        reqParams.iam['Resource'] = [
+            "arn:aws:ec2:*:*:instance/*",
+            "arn:aws:ec2:*:*:volume/*",
+            "arn:aws:ec2:*::image/" + jsonRequestBody.ImageId,
+            "arn:aws:ec2:*:*:key-pair/" + jsonRequestBody.KeyName
+        ];
+
+        reqParams.boto3['ImageId'] = jsonRequestBody.ImageId;
+        reqParams.boto3['MaxCount'] = jsonRequestBody.MaxCount;
+        reqParams.boto3['MinCount'] = jsonRequestBody.MinCount;
+        reqParams.boto3['KeyName'] = jsonRequestBody.KeyName;
+        if (jsonRequestBody.SecurityGroupIds) {
+            reqParams.boto3['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+            for (var i=0; i<jsonRequestBody.SecurityGroupIds.length; i++) {
+                reqParams.iam['Resource'].push("arn:aws:ec2:*:*:security-group/" + jsonRequestBody.SecurityGroupIds[i]);
+            }
+        }
+        reqParams.boto3['InstanceType'] = jsonRequestBody.InstanceType;
+        reqParams.boto3['Placement'] = jsonRequestBody.Placement;
+        reqParams.boto3['Monitoring'] = jsonRequestBody.Monitoring;
+        reqParams.boto3['DisableApiTermination'] = jsonRequestBody.DisableApiTermination;
+        reqParams.boto3['InstanceInitiatedShutdownBehavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        reqParams.boto3['CreditSpecification'] = jsonRequestBody.CreditSpecification;
+        reqParams.boto3['TagSpecification'] = jsonRequestBody.TagSpecifications;
+        reqParams.boto3['EbsOptimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.boto3['CapacityReservationSpecification'] = jsonRequestBody.CapacityReservationSpecification;
+        reqParams.boto3['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        if (jsonRequestBody.UserData) {
+            reqParams.boto3['UserData'] = atob(jsonRequestBody.UserData);
+        }
+        reqParams.boto3['NetworkInterfaces'] = jsonRequestBody.NetworkInterface;
+        if (jsonRequestBody.IamInstanceProfile) {
+            reqParams.boto3['IamInstanceProfile'] = {
+                'Arn': jsonRequestBody.IamInstanceProfile.Arn
+            };
+        }
+        reqParams.cfn['ImageId'] = jsonRequestBody.ImageId;
+        reqParams.cfn['KeyName'] = jsonRequestBody.KeyName;
+        reqParams.cfn['SecurityGroupIds'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cfn['InstanceType'] = jsonRequestBody.InstanceType;
+        if (jsonRequestBody.Placement && jsonRequestBody.Placement.Tenancy) {
+            reqParams.cfn['Tenancy'] = jsonRequestBody.Placement.Tenancy;
+        }
+        reqParams.cfn['Monitoring'] = jsonRequestBody.Monitoring.Enabled;
+        reqParams.cfn['DisableApiTermination'] = jsonRequestBody.DisableApiTermination;
+        reqParams.cfn['InstanceInitiatedShutdownBehavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        if (jsonRequestBody.CreditSpecification) {
+            reqParams.cfn['CreditSpecification'] = {
+                'CPUCredits': jsonRequestBody.CreditSpecification.CpuCredits
+            }
+        }
+        reqParams.cfn['EbsOptimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.cfn['ElasticInferenceAccelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        reqParams.cfn['UserData'] = jsonRequestBody.UserData;
+        if (jsonRequestBody.IamInstanceProfile) {
+            reqParams.cfn['IamInstanceProfile'] = jsonRequestBody.IamInstanceProfile.Arn;
+        }
+        if (jsonRequestBody.Placement) {
+            if (jsonRequestBody.Placement.GroupName) {
+                reqParams.iam['Resource'].push("arn:aws:ec2:*:*:placement-group/" + jsonRequestBody.Placement.GroupName);
+
+                reqParams.cfn['PlacementGroupName'] = jsonRequestBody.Placement.GroupName;
+            }
+            reqParams.cfn['Tenancy'] = jsonRequestBody.Placement.Tenancy;
+        }
+
+        reqParams.cli['--image-id'] = jsonRequestBody.ImageId;
+        if (jsonRequestBody.MaxCount == jsonRequestBody.MinCount) {
+            reqParams.cli['--count'] = jsonRequestBody.MinCount;
+        } else {
+            reqParams.cli['--count'] = jsonRequestBody.MinCount + ":" + jsonRequestBody.MaxCount;
+        }
+        reqParams.cli['--key-name'] = jsonRequestBody.KeyName;
+        reqParams.cli['--security-group-ids'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.cli['--instance-type'] = jsonRequestBody.InstanceType;
+        reqParams.cli['--placement'] = jsonRequestBody.Placement;
+        reqParams.cli['--monitoring'] = jsonRequestBody.Monitoring;
+        if (jsonRequestBody.DisableApiTermination === true)
+            reqParams.cli['--disable-api-termination'] = null;
+        else if (jsonRequestBody.DisableApiTermination === false)
+            reqParams.cli['--enable-api-termination'] = null;
+        reqParams.cli['--instance-initiated-shutdown-behavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        reqParams.cli['--credit-specification'] = jsonRequestBody.CreditSpecification;
+        reqParams.cli['--tag-specifications'] = jsonRequestBody.TagSpecifications;
+        reqParams.cli['--ebs-optimized'] = jsonRequestBody.EbsOptimized;
+        reqParams.cli['--elastic-inference-accelerators'] = jsonRequestBody.ElasticInferenceAccelerator;
+        if (jsonRequestBody.UserData) {
+            reqParams.cli['--user-data'] = atob(jsonRequestBody.UserData);
+        }
+        reqParams.cli['--network-interfaces'] = jsonRequestBody.NetworkInterface;
+        if (jsonRequestBody.IamInstanceProfile) {
+            reqParams.cli['--iam-instance-profile'] = {
+                'Arn': jsonRequestBody.IamInstanceProfile.Arn
+            };
+        }
+
+        reqParams.tf['ami'] = jsonRequestBody.ImageId;
+        reqParams.tf['key_name'] = jsonRequestBody.KeyName;
+        reqParams.tf['vpc_security_group_ids'] = jsonRequestBody.SecurityGroupIds;
+        reqParams.tf['instance_type'] = jsonRequestBody.InstanceType;
+        if (jsonRequestBody.Placement && jsonRequestBody.Placement.Tenancy) {
+            reqParams.tf['tenancy'] = jsonRequestBody.Placement.Tenancy;
+        }
+        if (jsonRequestBody.Monitoring) {
+            reqParams.tf['monitoring'] = jsonRequestBody.Monitoring.Enabled;
+        }
+        reqParams.tf['disable_api_termination'] = jsonRequestBody.DisableApiTermination;
+        reqParams.tf['instance_initiated_shutdown_behavior'] = jsonRequestBody.InstanceInitiatedShutdownBehavior;
+        if (jsonRequestBody.CreditSpecification) {
+            reqParams.tf['credit_specification'] = {
+                'cpu_credits': jsonRequestBody.CreditSpecification.CpuCredits
+            }
+        }
+
+        if (jsonRequestBody.TagSpecifications) {
+            reqParams.tf['tags'] = {};
+            for (var i=0; i<jsonRequestBody.TagSpecifications.length; i++) {
+                if (jsonRequestBody.TagSpecifications[i].ResourceType == "instance") {
+                    reqParams.cfn['Tags'] = [];
+                    for (var j=0; j<jsonRequestBody.TagSpecifications[i].Tag.length; j++) {
+                        reqParams.tf['tags'][jsonRequestBody.TagSpecifications[i].Tag[j].Key] = jsonRequestBody.TagSpecifications[i].Tag[j].Value;
+                        reqParams.cfn['Tags'].push({
+                            'Key': jsonRequestBody.TagSpecifications[i].Tag[j].Key,
+                            'Value': jsonRequestBody.TagSpecifications[i].Tag[j].Value
+                        });
+                    }
+                }
+            }
+        }
+        reqParams.tf['ebs_optimized'] = jsonRequestBody.EbsOptimized;
+        if (jsonRequestBody.IamInstanceProfile) {
+            reqParams.tf['iam_instance_profile'] = jsonRequestBody.IamInstanceProfile.Arn;
+        }
+
+        reqParams.boto3['BlockDeviceMappings'] = [];
+        reqParams.cli['--block-device-mappings'] = [];
+        reqParams.cfn['BlockDeviceMappings'] = [];
+
+        var used_device_names = [];
+        var instance_type_instance_store_count = { // i cried a little
+            'm5d.large': 1,
+            'm5d.xlarge': 1,
+            'm5d.2xlarge': 1,
+            'm5d.4xlarge': 2,
+            'm5d.12xlarge': 2,
+            'm5d.24xlarge': 4,
+            'c5d.large': 1,
+            'c5d.xlarge': 1,
+            'c5d.2xlarge': 1,
+            'c5d.4xlarge': 1,
+            'c5d.9xlarge': 1,
+            'c5d.18xlarge': 2,
+            'p3dn.24xlarge': 2,
+            'x1.16xlarge': 1,
+            'x1.32xlarge': 2,
+            'x1e.xlarge': 1,
+            'x1e.2xlarge': 1,
+            'x1e.4xlarge': 1,
+            'x1e.8xlarge': 1,
+            'x1e.16xlarge': 1,
+            'x1e.32xlarge': 2,
+            'r5d.large': 1,
+            'r5d.xlarge': 1,
+            'r5d.2xlarge': 1,
+            'r5d.4xlarge': 2,
+            'r5d.12xlarge': 2,
+            'r5d.24xlarge': 4,
+            'z1d.large': 1,
+            'z1d.xlarge': 1,
+            'z1d.2xlarge': 1,
+            'z1d.3xlarge': 1,
+            'z1d.6xlarge': 1,
+            'z1d.12xlarge': 2,
+            'i3.large': 1,
+            'i3.xlarge': 1,
+            'i3.2xlarge': 1,
+            'i3.4xlarge': 2,
+            'i3.8xlarge': 4,
+            'i3.16xlarge': 8,
+            'i3.metal': 8,
+            'h1.2xlarge': 1,
+            'h1.4xlarge': 2,
+            'h1.8xlarge': 4,
+            'h1.16xlarge': 8,
+            'd2.xlarge': 3,
+            'd2.2xlarge': 6,
+            'd2.4xlarge': 12,
+            'd2.8xlarge': 24,
+            'f1.4xlarge': 1
+        };
+
+        for (var i=0; i<jsonRequestBody.BlockDeviceMappings.length; i++) {
+            if (
+                !jsonRequestBody.BlockDeviceMappings[i].DeviceName.startsWith("xvdc") ||
+                jsonRequestBody.BlockDeviceMappings[i].DeviceName.length != 5 ||
+                jsonRequestBody.BlockDeviceMappings[i].VirtualName ||
+                jsonRequestBody.BlockDeviceMappings[i].Ebs
+            ) {
+                reqParams.boto3['BlockDeviceMappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                reqParams.cli['--block-device-mappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'Ebs': jsonRequestBody.BlockDeviceMappings[i].Ebs,
+                    'VirtualName': jsonRequestBody.BlockDeviceMappings[i].VirtualName
+                });
+                used_device_names.push(jsonRequestBody.BlockDeviceMappings[i].DeviceName);
+            }
+
+            if (jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/sda1" || jsonRequestBody.BlockDeviceMappings[i].DeviceName == "/dev/xvda") {
+                if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
+                    reqParams.tf['root_block_device'] = {
+                        'volume_type': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeType,
+                        'volume_size': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeSize
+                    };
+                }
+            } else if (jsonRequestBody.BlockDeviceMappings[i].Ebs) {
+                if (!reqParams.tf['ebs_block_device']) {
+                    reqParams.tf['ebs_block_device'] = [];
+                }
+                reqParams.tf['ebs_block_device'].push({
+                    'device_name': jsonRequestBody.BlockDeviceMappings[i].DeviceName,
+                    'volume_type': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeType,
+                    'volume_size': jsonRequestBody.BlockDeviceMappings[i].Ebs.VolumeSize,
+                    'delete_on_termination': jsonRequestBody.BlockDeviceMappings[i].Ebs.DeleteOnTermination,
+                    'iops': jsonRequestBody.BlockDeviceMappings[i].Ebs.Iops,
+                    'snapshot_id': jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId
+                });
+
+                if (jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId) {
+                    reqParams.iam['Resource'].push("arn:aws:ec2:*::snapshot/" + jsonRequestBody.BlockDeviceMappings[i].Ebs.SnapshotId);
+                }
+            }
+        }
+        instance_store_count = 0;
+        if (instance_type_instance_store_count[jsonRequestBody.InstanceType]) {
+            instance_store_count = instance_type_instance_store_count[jsonRequestBody.InstanceType];
+        }
+        for (var i=0; i<instance_store_count; i++) { // unused instance store volumes
+            var device_name = "xvdc" + String.fromCharCode(97 + i);
+            if (!used_device_names.includes(device_name)) {
+                reqParams.boto3['BlockDeviceMappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
+                reqParams.cli['--block-device-mappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': device_name,
+                    'NoDevice': ''
+                });
+            }
+        }
+
+        if (jsonRequestBody.UserData) {
+            reqParams.tf['user_data'] = atob(jsonRequestBody.UserData);
+        }
+
+        if (jsonRequestBody.NetworkInterface) {
+            reqParams.tf['network_interface'] = [];
+            reqParams.cfn['NetworkInterfaces'] = [];
+            for (var i=0; i<jsonRequestBody.NetworkInterface.length; i++) {
+                if (jsonRequestBody.NetworkInterface[i].NetworkInterfaceId) {
+                    reqParams.iam['Resource'].push("arn:aws:ec2:*:*:network-interface/" + jsonRequestBody.NetworkInterface[i].NetworkInterfaceId);
+                } else {
+                    reqParams.iam['Resource'].push("arn:aws:ec2:*:*:network-interface/*");
+                }
+
+                if (!jsonRequestBody.NetworkInterface[i].NetworkInterfaceId && jsonRequestBody.NetworkInterface[i].SubnetId) {
+                    reqParams.iam['Resource'].push("arn:aws:ec2:*:*:subnet/" + jsonRequestBody.NetworkInterface[i].SubnetId);
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('ec2', details.requestId + "_NetworkInterface" + i),
+                        'region': region,
+                        'service': 'ec2',
+                        'terraformType': 'aws_network_interface',
+                        'options': {
+                            'tf': {
+                                'subnet_id': jsonRequestBody.NetworkInterface[i].SubnetId,
+                                'description': jsonRequestBody.NetworkInterface[i].Description,
+                                'security_groups': jsonRequestBody.NetworkInterface[i].Groups,
+                                'private_ips': jsonRequestBody.NetworkInterface[i].PrivateIpAddresses
+                            }
+                        },
+                        'requestDetails': details,
+                        'was_blocked': blocking
+                    });
+
+                    for (var j=0; j<jsonRequestBody.NetworkInterface[i].Groups.length; j++) {
+                        reqParams.iam['Resource'].push("arn:aws:ec2:*:*:security-group/" + jsonRequestBody.NetworkInterface[i].Groups[j]);
+                    }
+
+                    reqParams.tf['network_interface'].push({
+                        'device_index': jsonRequestBody.NetworkInterface[i].DeviceIndex,
+                        'network_interface_id': "${aws_network_interface." + getResourceName('ec2', details.requestId + "_NetworkInterface" + i) + ".id}",
+                        'delete_on_termination': jsonRequestBody.NetworkInterface[i].DeleteOnTermination
+                    });
+                } else {
+                    reqParams.tf['network_interface'].push({
+                        'device_index': jsonRequestBody.NetworkInterface[i].DeviceIndex,
+                        'network_interface_id': jsonRequestBody.NetworkInterface[i].NetworkInterfaceId,
+                        'delete_on_termination': jsonRequestBody.NetworkInterface[i].DeleteOnTermination
+                    });
+                }
+            
+                cfn_network_interface = jsonRequestBody.NetworkInterface[i];
+                cfn_network_interface['GroupSet'] = cfn_network_interface['Groups'];
+                delete cfn_network_interface['Groups'];
+                reqParams.cfn['NetworkInterfaces'].push(cfn_network_interface);
+            }
+        } else {
+            reqParams.iam['Resource'].push("arn:aws:ec2:*:*:network-interface/*");
+            reqParams.iam['Resource'].push("arn:aws:ec2:*:*:subnet/*");
+        }
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'RunInstances',
+                'boto3': 'run_instances',
+                'cli': 'run-instances'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+
+        tracked_resources.push({
+            'logicalId': getResourceName('ec2', details.requestId),
+            'region': region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Instance',
+            'terraformType': 'aws_instance',
+            'options': reqParams,
+            'requestDetails': details,
+            'was_blocked': blocking
+        });
+
+        if (blocking) {
+            notifyBlocked();
+            return {cancel: true};
+        }
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.GetEbsEncryptionByDefault
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.GetEbsEncryptionByDefault$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'GetEbsEncryptionByDefault',
+                'boto3': 'get_ebs_encryption_by_default',
+                'cli': 'get-ebs-encryption-by-default'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAvailabilityZones
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeAvailabilityZones$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAvailabilityZones',
+                'boto3': 'describe_availability_zones',
+                'cli': 'describe-availability-zones'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ds.DescribeDirectories
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.directoryservice\.v20150416\.DirectoryService_20150416\.DescribeDirectories$/g)) {
+
+        outputs.push({
+            'region': region,
+            'service': 'ds',
+            'method': {
+                'api': 'DescribeDirectories',
+                'boto3': 'describe_directories',
+                'cli': 'describe-directories'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeHosts
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\/elastic\/\?call=com\.amazonaws\.ec2\.AmazonEC2\.DescribeHosts$/g)) {
+        reqParams.boto3['Filter'] = jsonRequestBody.filter;
+        reqParams.cli['--filter'] = jsonRequestBody.filter;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeHosts',
+                'boto3': 'describe_hosts',
+                'cli': 'describe-hosts'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
+    // autogen:ec2:ec2.DescribeAccountAttributes
+    if (details.method == "POST" && details.url.match(/.+console\.(?:aws\.amazon|amazonaws-us-gov)\.com\/ec2\/ecb\?call=getAccountAttributes\?&mbtc=170607945$/g)) {
+        reqParams.boto3['AttributeNames'] = jsonRequestBody.attributeNames;
+        reqParams.cli['--attribute-names'] = jsonRequestBody.attributeNames;
+
+        outputs.push({
+            'region': region,
+            'service': 'ec2',
+            'method': {
+                'api': 'DescribeAccountAttributes',
+                'boto3': 'describe_account_attributes',
+                'cli': 'describe-account-attributes'
+            },
+            'options': reqParams,
+            'requestDetails': details
+        });
+        
+        return {};
+    }
+
 }
