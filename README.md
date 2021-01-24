@@ -2,7 +2,7 @@
 
 [![CloudFormation](https://img.shields.io/badge/CloudFormation-85%25-orange.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#cloudformation-resource-coverage) [![Terraform](https://img.shields.io/badge/Terraform-44%25-blue.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#terraform-coverage) [![SDK/CLI](https://img.shields.io/badge/SDK%2FCLI-19%25-lightgrey.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#service-coverage)
 
-Need to generate outputs for existing resources? Check out [Former2](https://github.com/iann0036/former2)
+**Check out [Former2](https://github.com/iann0036/former2) for a better maintained, more flexible solution**
 
 > Records actions made in the AWS Management Console and outputs the equivalent CLI/SDK commands and CloudFormation/Terraform templates.
 
